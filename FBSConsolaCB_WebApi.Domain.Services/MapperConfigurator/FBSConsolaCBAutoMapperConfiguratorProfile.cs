@@ -1,4 +1,5 @@
-﻿using FBS_Core.Identity.Domain.Services.MapperConfigurator;
+﻿using FBS_Core.Base.Domain.Models.Filtro;
+using FBS_Core.Identity.Domain.Services.MapperConfigurator;
 using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.DAL.Nomenclador;
 using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
@@ -23,6 +24,14 @@ namespace FBSConsolaCB_WebApi.Domain.Services.MapperConfigurator
             CreateMap<Catalogo, CatalogoModel>().ReverseMap();
 
             CreateMap<TipoCatalogo, TipoCatalogoModel>().ReverseMap();
+
+            CreateMap<PaginacionModel, FuenteDatosModel<EmpresaModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<AreaTrabajoModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<OficinaModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<CargoModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<CorresponsalModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<CatalogoModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<TipoCatalogoModel>>();
         }
     }
 }
