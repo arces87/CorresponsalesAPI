@@ -20,9 +20,10 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
         private readonly ICargoRepository _cargoRepository;
         private readonly ICatalogoRepository _catalogoRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
         public CorresponsalService(ICorresponsalRepository repository, ICatalogoRepository catalogoRepository, IUserRepository userRepository,
-            IAreaTrabajoRepository areaTrabajoRepository, IOficinaRepository oficinaRepository, ICargoRepository cargoRepository)
+            IAreaTrabajoRepository areaTrabajoRepository, IOficinaRepository oficinaRepository, ICargoRepository cargoRepository, IMapper mapper)
         {
             _repository = repository;
             _catalogoRepository = catalogoRepository;
@@ -30,16 +31,17 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
             _areaTrabajoRepository = areaTrabajoRepository;
             _oficinaRepository = oficinaRepository;
             _cargoRepository = cargoRepository;
+            _mapper = mapper;
         }
 
         public FuenteDatosModel<CorresponsalModel> List(PaginacionModel filtro)
         {
             IEnumerable<Corresponsal> _model = _repository.GetAllWithAssociations();
-            var _fuente = Mapper.Map<FuenteDatosModel<CorresponsalModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<CorresponsalModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<Corresponsal>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<CorresponsalModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<CorresponsalModel>>(_model);
             return _fuente;
         }
 
@@ -48,14 +50,14 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
             var _model = _repository.GetWithAssociations(Id);
             if (_model != null)
             {
-                return Mapper.Map<CorresponsalModel>(_model);
+                return _mapper.Map<CorresponsalModel>(_model);
             }
             return null;
         }
 
         public CorresponsalModel Create(CorresponsalModel model)
         {
-            var _model = Mapper.Map<Corresponsal>(model);
+            var _model = _mapper.Map<Corresponsal>(model);
             var _segundoNombre = _model.SegundoNombre != null && _model.SegundoNombre != "" ? " " + _model.SegundoNombre : "";
             var _segundoApellido = _model.SegundoApellido != null && _model.SegundoApellido != "" ? " " + _model.SegundoApellido : "";
             _model.NombreUnido = _model.PrimerNombre + _segundoNombre + " " + _model.PrimerApellido + _segundoApellido;
@@ -67,12 +69,12 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
 
             _repository.Add(_model);
 
-            return Mapper.Map<CorresponsalModel>(_model);
+            return _mapper.Map<CorresponsalModel>(_model);
         }
         public CorresponsalModel Update(CorresponsalModel model)
         {
             var _model = _repository.Get(model.Id);
-            Mapper.Map(model, _model);
+            _mapper.Map(model, _model);
             var _segundoNombre = _model.SegundoNombre != null && _model.SegundoNombre != "" ? " " + _model.SegundoNombre : "";
             var _segundoApellido = _model.SegundoApellido != null && _model.SegundoApellido != "" ? " " + _model.SegundoApellido : "";
             _model.NombreUnido = _model.PrimerNombre + _segundoNombre + " " + _model.PrimerApellido + _segundoApellido;
@@ -83,7 +85,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
             _model.AreaTrabajo = _areaTrabajoRepository.Get(model.AreaTrabajo.Id);
 
             _repository.Update(_model);
-            return Mapper.Map<CorresponsalModel>(_model);
+            return _mapper.Map<CorresponsalModel>(_model);
         }
 
         public CorresponsalModel Delete(int Id)
@@ -92,7 +94,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
             if (_model != null)
             {
                 _model.EstaActivo = false;
-                return Mapper.Map<CorresponsalModel>(_model);
+                return _mapper.Map<CorresponsalModel>(_model);
             }
             return null;
         }

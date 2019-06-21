@@ -13,16 +13,17 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
     public class AreaTrabajoService : IAreaTrabajoService
     {
         private readonly IAreaTrabajoRepository _repository;
-
-        public AreaTrabajoService(IAreaTrabajoRepository repository)
+        private readonly IMapper _mapper;
+        public AreaTrabajoService(IAreaTrabajoRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public IEnumerable<AreaTrabajoModel> List()
         {
             var _model = _repository.GetAllActive();
-            return Mapper.Map<IEnumerable<AreaTrabajoModel>>(_model); ;
+            return _mapper.Map<IEnumerable<AreaTrabajoModel>>(_model); ;
 
         }
 
@@ -30,11 +31,11 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
         {
             IEnumerable<AreaTrabajo> _model = _repository.GetAllActive();
 
-            var _fuente = Mapper.Map<FuenteDatosModel<AreaTrabajoModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<AreaTrabajoModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<AreaTrabajo>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<AreaTrabajoModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<AreaTrabajoModel>>(_model);
             return _fuente;
         }
 
@@ -42,21 +43,21 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
         {
             var _model = _repository.Get(Id);
             if (_model != null)
-                return Mapper.Map<AreaTrabajoModel>(_model);
+                return _mapper.Map<AreaTrabajoModel>(_model);
             return null;
         }
 
         public AreaTrabajoModel Create(AreaTrabajoModel model)
         {
-            var _model = Mapper.Map<AreaTrabajo>(model);
+            var _model = _mapper.Map<AreaTrabajo>(model);
             _repository.Add(_model);
-            return Mapper.Map<AreaTrabajoModel>(_model); ;
+            return _mapper.Map<AreaTrabajoModel>(_model); ;
         }
 
         public AreaTrabajoModel Update(AreaTrabajoModel model)
         {
             var _model = _repository.Get(model.Id);
-            Mapper.Map(model, _model);
+            _mapper.Map(model, _model);
             _repository.Update(_model);
             return model;
         }
@@ -67,7 +68,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
             if (_model != null)
             {
                 _repository.Remove(_model);
-                return Mapper.Map<AreaTrabajoModel>(_model);
+                return _mapper.Map<AreaTrabajoModel>(_model);
             }
             return null;
         }

@@ -15,49 +15,52 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
         private readonly IEmpresaRepository _repository;
         private readonly IOficinaRepository _oficinaRepository;
         private readonly ICorresponsalRepository _corresponsalRepository;
+        private readonly IMapper _mapper;
 
-        public EmpresaService(IEmpresaRepository repository, IOficinaRepository oficinaRepository, ICorresponsalRepository corresponsalRepository)
+        public EmpresaService(IEmpresaRepository repository, IOficinaRepository oficinaRepository, ICorresponsalRepository corresponsalRepository,
+            IMapper mapper)
         {
             _repository = repository;
             _oficinaRepository = oficinaRepository;
             _corresponsalRepository = corresponsalRepository;
+            _mapper = mapper;
         }
 
         public IEnumerable<EmpresaModel> List()
         {
             var _model = _repository.GetAllActive();
-            return Mapper.Map<IEnumerable<EmpresaModel>>(_model);
+            return _mapper.Map<IEnumerable<EmpresaModel>>(_model);
 
         }
         public FuenteDatosModel<EmpresaModel> List(PaginacionModel filtro)
         {
             IEnumerable<Empresa> _model = _repository.GetAllActive();
 
-            var _fuente = Mapper.Map<FuenteDatosModel<EmpresaModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<EmpresaModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<Empresa>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<EmpresaModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<EmpresaModel>>(_model);
             return _fuente;
         }
         public EmpresaModel Get(int Id)
         {
             var _model = _repository.Get(Id);
             if (_model != null)
-                return Mapper.Map<EmpresaModel>(_model);
+                return _mapper.Map<EmpresaModel>(_model);
             return null;
         }
 
         public EmpresaModel Create(EmpresaModel model)
         {
-            var _model = Mapper.Map<Empresa>(model);
+            var _model = _mapper.Map<Empresa>(model);
             _repository.Add(_model);
-            return Mapper.Map<EmpresaModel>(_model);
+            return _mapper.Map<EmpresaModel>(_model);
         }
         public EmpresaModel Update(EmpresaModel model)
         {
             var _model = _repository.Get(model.Id);
-            Mapper.Map(model, _model);
+            _mapper.Map(model, _model);
             _repository.Update(_model);
             return model;
         }
@@ -80,7 +83,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
                         }
                     }
                 }
-                return Mapper.Map<EmpresaModel>(_model);
+                return _mapper.Map<EmpresaModel>(_model);
             }
             return null;
         }

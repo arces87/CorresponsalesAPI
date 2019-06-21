@@ -14,11 +14,13 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
     {
         private readonly ICatalogoRepository _repository;
         private readonly ITipoCatalogoRepository _tipoCatalogoRepository;
+        private readonly IMapper _mapper;
 
-        public CatalogoService(ICatalogoRepository repository, ITipoCatalogoRepository tipoCatalogoRepository)
+        public CatalogoService(ICatalogoRepository repository, ITipoCatalogoRepository tipoCatalogoRepository, IMapper mapper)
         {
             _repository = repository;
             _tipoCatalogoRepository = tipoCatalogoRepository;
+            _mapper = mapper;
         }
 
         public IEnumerable<CatalogoModel> List(int Tipo)
@@ -27,7 +29,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
             if (Tipo != 0)
                 _model = _model.Where(c => c.TipoCatalogo.Id == Tipo).ToList();
 
-            return Mapper.Map<IEnumerable<CatalogoModel>>(_model); ;
+            return _mapper.Map<IEnumerable<CatalogoModel>>(_model); ;
 
         }
 
@@ -35,11 +37,11 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
         {
             IEnumerable<Catalogo> _model = _repository.GetAllWithAssociations();
 
-            var _fuente = Mapper.Map<FuenteDatosModel<CatalogoModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<CatalogoModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<Catalogo>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<CatalogoModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<CatalogoModel>>(_model);
             return _fuente;
         }
 
@@ -47,22 +49,22 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
         {
             var _model = _repository.GetWithAssociations(Id);
             if (_model != null)
-                return Mapper.Map<CatalogoModel>(_model);
+                return _mapper.Map<CatalogoModel>(_model);
             return null;
         }
 
         public CatalogoModel Create(CatalogoModel model)
         {
-            var _model = Mapper.Map<Catalogo>(model);
+            var _model = _mapper.Map<Catalogo>(model);
             var _tipo = _tipoCatalogoRepository.Get(_model.TipoCatalogo.Id);
             _model.TipoCatalogo = _tipo;
             _repository.Add(_model);
-            return Mapper.Map<CatalogoModel>(_model);
+            return _mapper.Map<CatalogoModel>(_model);
         }
         public CatalogoModel Update(CatalogoModel model)
         {
             var _model = _repository.GetWithAssociations(model.Id);
-            Mapper.Map(model, _model);
+            _mapper.Map(model, _model);
             _model.TipoCatalogo = _tipoCatalogoRepository.Get(_model.TipoCatalogo.Id);
             _repository.Update(_model);
 
@@ -74,7 +76,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
             if (_model != null)
             {
                 _repository.Remove(_model);
-                return Mapper.Map<CatalogoModel>(_model);
+                return _mapper.Map<CatalogoModel>(_model);
             }
             return null;
         }

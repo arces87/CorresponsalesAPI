@@ -13,47 +13,49 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
     public class CargoService : ICargoService
     {
         private readonly ICargoRepository _repository;
+        private readonly IMapper _mapper;
 
-        public CargoService(ICargoRepository repository)
+        public CargoService(ICargoRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public IEnumerable<CargoModel> List()
         {
             var _model = _repository.GetAllActive();
-            return Mapper.Map<IEnumerable<CargoModel>>(_model);
+            return _mapper.Map<IEnumerable<CargoModel>>(_model);
 
         }
         public FuenteDatosModel<CargoModel> List(PaginacionModel filtro)
         {
             IEnumerable<Cargo> _model = _repository.GetAllActive();
 
-            var _fuente = Mapper.Map<FuenteDatosModel<CargoModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<CargoModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<Cargo>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<CargoModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<CargoModel>>(_model);
             return _fuente;
         }
         public CargoModel Get(int Id)
         {
             var _model = _repository.Get(Id);
             if (_model != null)
-                return Mapper.Map<CargoModel>(_model);
+                return _mapper.Map<CargoModel>(_model);
             return null;
         }
 
         public CargoModel Create(CargoModel model)
         {
-            var _model = Mapper.Map<Cargo>(model);
+            var _model = _mapper.Map<Cargo>(model);
             _repository.Add(_model);
-            return Mapper.Map<CargoModel>(_model);
+            return _mapper.Map<CargoModel>(_model);
         }
         public CargoModel Update(CargoModel model)
         {
             var _model = _repository.Get(model.Id);
-            Mapper.Map(model, _model);
+            _mapper.Map(model, _model);
             if (_model != null)
             {
                 _repository.Update(_model);
@@ -67,7 +69,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
             if (_model != null)
             {
                 _repository.Remove(_model);
-                return Mapper.Map<CargoModel>(_model);
+                return _mapper.Map<CargoModel>(_model);
             }
             return null;
         }

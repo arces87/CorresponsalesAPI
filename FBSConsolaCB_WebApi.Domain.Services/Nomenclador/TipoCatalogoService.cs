@@ -14,27 +14,29 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
     public class TipoCatalogoService : ITipoCatalogoService
     {
         private readonly ITipoCatalogoRepository _repository;
+        private readonly IMapper _mapper;
 
-        public TipoCatalogoService(ITipoCatalogoRepository repository)
+        public TipoCatalogoService(ITipoCatalogoRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public IEnumerable<TipoCatalogoModel> List()
         {
             var _model = _repository.GetAllActive();
-            return Mapper.Map<IEnumerable<TipoCatalogoModel>>(_model); ;
+            return _mapper.Map<IEnumerable<TipoCatalogoModel>>(_model); ;
 
         }
         public FuenteDatosModel<TipoCatalogoModel> List(PaginacionModel filtro)
         {
             IEnumerable<TipoCatalogo> _model = _repository.GetAllActive();
 
-            var _fuente = Mapper.Map<FuenteDatosModel<TipoCatalogoModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<TipoCatalogoModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<TipoCatalogo>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<TipoCatalogoModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<TipoCatalogoModel>>(_model);
             return _fuente;
         }
 
@@ -42,14 +44,14 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
         {
             var _model = _repository.Get(Id);
             if (_model != null)
-                return Mapper.Map<TipoCatalogoModel>(_model);
+                return _mapper.Map<TipoCatalogoModel>(_model);
             return null;
         }
 
         public async Task<TipoCatalogoModel> Update(TipoCatalogoModel model)
         {
             var _model = _repository.Get(model.Id);
-            Mapper.Map(model, _model);
+            _mapper.Map(model, _model);
             _repository.Update(_model);
 
             return model;

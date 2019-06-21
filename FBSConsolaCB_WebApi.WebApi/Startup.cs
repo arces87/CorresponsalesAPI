@@ -7,6 +7,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using FBS_Core.Identity.DAL.Seguridad;
 using FBSConsolaCB_WebApi.DAL;
+using FBSConsolaCB_WebApi.Domain.Services.MapperConfigurator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -99,7 +100,7 @@ namespace FBSConsolaCB_WebApi.WebApi
             //});
             #endregion
             services.AddCors();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(FBSConsolaCBAutoMapperConfiguratorProfile));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Autofac Configuration 

@@ -15,50 +15,53 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
         private readonly IOficinaRepository _repository;
         private readonly IEmpresaRepository _empresaRepository;
         private readonly ICorresponsalRepository _corresponsalRepository;
+        private readonly IMapper _mapper;
 
-        public OficinaService(IOficinaRepository repository, IEmpresaRepository empresaRepository, ICorresponsalRepository corresponsalRepository)
+        public OficinaService(IOficinaRepository repository, IEmpresaRepository empresaRepository, ICorresponsalRepository corresponsalRepository,
+            IMapper mapper)
         {
             _repository = repository;
             _corresponsalRepository = corresponsalRepository;
             _empresaRepository = empresaRepository;
+            _mapper = mapper;
         }
 
         public IEnumerable<OficinaModel> List()
         {
             var _oficinas = _repository.GetAllWithAssociations();
-            return Mapper.Map<IEnumerable<OficinaModel>>(_oficinas); ;
+            return _mapper.Map<IEnumerable<OficinaModel>>(_oficinas); ;
 
         }
         public FuenteDatosModel<OficinaModel> List(PaginacionModel filtro)
         {
             IEnumerable<Oficina> _model = _repository.GetAllWithAssociations();
 
-            var _fuente = Mapper.Map<FuenteDatosModel<OficinaModel>>(filtro);
+            var _fuente = _mapper.Map<FuenteDatosModel<OficinaModel>>(filtro);
             _fuente.TotalElementos = _model.Count();
             Filtro<Oficina>.ProcesarLista(ref _model, filtro);
 
-            _fuente.Datos = Mapper.Map<IEnumerable<OficinaModel>>(_model);
+            _fuente.Datos = _mapper.Map<IEnumerable<OficinaModel>>(_model);
             return _fuente;
         }
         public OficinaModel Get(int Id)
         {
             var _oficina = _repository.Get(Id);
             if (_oficina != null)
-                return Mapper.Map<OficinaModel>(_oficina);
+                return _mapper.Map<OficinaModel>(_oficina);
             return null;
         }
 
         public OficinaModel Create(OficinaModel oficina)
         {
-            var _oficina = Mapper.Map<Oficina>(oficina);
+            var _oficina = _mapper.Map<Oficina>(oficina);
             _oficina.Empresa = _empresaRepository.Get(oficina.Empresa.Id);
             _repository.Add(_oficina);
-            return Mapper.Map<OficinaModel>(_oficina); ;
+            return _mapper.Map<OficinaModel>(_oficina); ;
         }
         public OficinaModel Update(OficinaModel oficina)
         {
             var _oficina = _repository.Get(oficina.Id);
-            Mapper.Map(oficina, _oficina);
+            _mapper.Map(oficina, _oficina);
             _oficina.Empresa = _empresaRepository.Get(oficina.Empresa.Id);
             _repository.Update(_oficina);
 
@@ -75,7 +78,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
                 {
                     _corresponsalRepository.Remove(item);
                 }
-                return Mapper.Map<OficinaModel>(_oficina);
+                return _mapper.Map<OficinaModel>(_oficina);
             }
             return null;
         }
