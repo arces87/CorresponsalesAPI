@@ -4,12 +4,16 @@ using FBS_Core.Identity.Domain.Services.Seguridad;
 using FBS_Core.Identity.Infraestructure.Interfaces;
 using FBS_Core.Identity.Infraestructure.Repository;
 using FBSConsolaCB_WebApi.DAL;
+using FBSConsolaCB_WebApi.Domain.Services.Consola;
 using FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial;
+using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Consola;
 using FBSConsolaCB_WebApi.Domain.Services.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Nomenclador;
 using FBSConsolaCB_WebApi.Domain.Services.Nomenclador;
+using FBSConsolaCB_WebApi.Infraestructure.Interfaces.Consola;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.Nomenclador;
+using FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola;
 using FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Repositories.Nomenclador;
 
@@ -33,7 +37,9 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             builder.RegisterType<TipoCatalogoRepository>().As<ITipoCatalogoRepository>().InstancePerLifetimeScope();
             builder.RegisterType<CatalogoRepository>().As<ICatalogoRepository>().InstancePerLifetimeScope();
 
-            builder.RegisterType<FBSConsolaCBContext>().As<FBSIdentityDBContext>().SingleInstance();
+            builder.RegisterType<DispositivoRepository>().As<IDispositivoRepository>().InstancePerLifetimeScope();
+
+            builder.RegisterType<FBSConsolaCBContext>().As<FBSIdentityDBContext>().InstancePerLifetimeScope();
         }
 
         protected void LoadServices(ContainerBuilder builder)
@@ -51,6 +57,8 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
 
             builder.RegisterType<TipoCatalogoService>().As<ITipoCatalogoService>().InstancePerLifetimeScope();
             builder.RegisterType<CatalogoService>().As<ICatalogoService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<DispositivoService>().As<IDispositivoService>().InstancePerLifetimeScope();
         }
 
         protected override void Load(ContainerBuilder builder)

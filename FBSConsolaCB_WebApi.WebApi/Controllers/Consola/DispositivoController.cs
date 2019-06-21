@@ -1,48 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FBS_Core.Base.Domain.Models.Filtro;
-using FBS_Core.Identity.Domain.Models.Seguridad;
-using FBS_Core.Identity.Domain.Services.Interfaces.Seguridad;
+using FBSConsolaCB_WebApi.Domain.Models.Consola;
+using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Consola;
 using Microsoft.AspNetCore.Mvc;
-
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FBSConsolaCB_WebApi.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class RoleController : Controller
+    public class DispositivoController : Controller
     {
-        private readonly IRoleService _service;
+        private readonly IDispositivoService _service;
 
-        public RoleController(IRoleService service)
+        public DispositivoController(IDispositivoService service)
         {
             _service = service;
         }
 
-        [HttpGet]
-        public IEnumerable<RoleModel> Roles()
+        [HttpGet("{tipo}")]
+        public IEnumerable<DispositivoModel> List(int Tipo)
         {
-            return _service.GetRoles();
+            return _service.List(Tipo);
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<RoleModel> Get([FromBody] PaginacionModel filtro)
+        public FuenteDatosModel<DispositivoModel> Get([FromBody] PaginacionModel filtro)
         {
             return _service.List(filtro);
         }
 
-        [HttpGet("{Id}")]
-        public RoleModel GetRole(string Id)
+        [HttpGet("get/{id}")]
+        public DispositivoModel Get(int Id)
         {
-            return _service.GetRole(Id);
+            return _service.Get(Id);
         }
 
         [HttpPost]
-        public async Task<object> Create([FromBody] RoleModel model)
+        public DispositivoModel Create([FromBody] DispositivoModel model)
         {
-            var result = await _service.CreateRole(model);
+            var result = _service.Create(model);
 
             if (result != null)
             {
@@ -53,9 +51,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public object Update([FromBody] RoleModel model)
+        public DispositivoModel Update([FromBody] DispositivoModel model)
         {
-            var result = _service.UpdateRole(model);
+            var result = _service.Update(model);
 
             if (result != null)
             {
@@ -66,9 +64,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<object> Delete(string Id)
+        public DispositivoModel Delete(int Id)
         {
-            var result = await _service.DeleteRole(Id);
+            var result = _service.Delete(Id);
 
             if (result != null)
             {

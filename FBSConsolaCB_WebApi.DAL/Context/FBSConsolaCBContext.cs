@@ -1,4 +1,5 @@
-﻿using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
+﻿using FBSConsolaCB_WebApi.DAL.Consola;
+using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.DAL.Nomenclador;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,10 @@ namespace FBSConsolaCB_WebApi.DAL
         #region Nomencladores
         public DbSet<Catalogo> Catalogos { get; set; }
         public DbSet<TipoCatalogo> TiposCatalogos { get; set; }
+        #endregion
+
+        #region Consolas
+        public DbSet<Dispositivo> Dispositivos { get; set; }
         #endregion
     }
 }

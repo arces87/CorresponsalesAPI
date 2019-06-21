@@ -36,5 +36,20 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
             entity.EstaActivo = false;
             _context.SaveChanges();
         }
+
+        public override void Add(Oficina entity)
+        {
+            entity.Empresa = Context.Empresas.FirstOrDefault(c => c.Id == entity.Empresa.Id);
+            Context.Oficinas.Add(entity);
+            Context.SaveChanges();
+        }
+        public override void Update(Oficina entity)
+        {
+            entity.Empresa = Context.Empresas.FirstOrDefault(c => c.Id == entity.Empresa.Id);
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public FBSConsolaCBContext Context { get { return _context as FBSConsolaCBContext; } }
     }
 }

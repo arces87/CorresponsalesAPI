@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FBS_Core.Identity.Domain.Models.Seguridad;
 using FBS_Core.Identity.Domain.Services.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Mvc;

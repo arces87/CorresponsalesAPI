@@ -13,13 +13,11 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
     public class CatalogoService : ICatalogoService
     {
         private readonly ICatalogoRepository _repository;
-        private readonly ITipoCatalogoRepository _tipoCatalogoRepository;
         private readonly IMapper _mapper;
 
-        public CatalogoService(ICatalogoRepository repository, ITipoCatalogoRepository tipoCatalogoRepository, IMapper mapper)
+        public CatalogoService(ICatalogoRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _tipoCatalogoRepository = tipoCatalogoRepository;
             _mapper = mapper;
         }
 
@@ -56,8 +54,6 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
         public CatalogoModel Create(CatalogoModel model)
         {
             var _model = _mapper.Map<Catalogo>(model);
-            var _tipo = _tipoCatalogoRepository.Get(_model.TipoCatalogo.Id);
-            _model.TipoCatalogo = _tipo;
             _repository.Add(_model);
             return _mapper.Map<CatalogoModel>(_model);
         }
@@ -65,7 +61,6 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Nomenclador
         {
             var _model = _repository.GetWithAssociations(model.Id);
             _mapper.Map(model, _model);
-            _model.TipoCatalogo = _tipoCatalogoRepository.Get(_model.TipoCatalogo.Id);
             _repository.Update(_model);
 
             return model;

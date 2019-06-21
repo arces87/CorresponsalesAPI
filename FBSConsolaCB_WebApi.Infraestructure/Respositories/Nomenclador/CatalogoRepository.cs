@@ -34,5 +34,20 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Nomenclador
             entity.EstaActivo = false;
             _context.SaveChanges();
         }
+
+        public override void Add(Catalogo entity)
+        {
+            entity.TipoCatalogo = Context.TiposCatalogos.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
+            Context.Catalogos.Add(entity);
+            Context.SaveChanges();
+        }
+        public override void Update(Catalogo entity)
+        {
+            entity.TipoCatalogo = Context.TiposCatalogos.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public FBSConsolaCBContext Context { get { return _context as FBSConsolaCBContext; } }
     }
 }
