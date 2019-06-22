@@ -4,14 +4,16 @@ using FBSConsolaCB_WebApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FBSConsolaCB_WebApi.WebApi.Migrations
 {
     [DbContext(typeof(FBSConsolaCBContext))]
-    partial class FBSConsolaCBContextModelSnapshot : ModelSnapshot
+    [Migration("20190622164312_AgregandoDispositivo")]
+    partial class AgregandoDispositivo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
