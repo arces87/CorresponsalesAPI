@@ -19,10 +19,10 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
             _service = service;
         }
 
-        [HttpGet("{tipo}")]
-        public IEnumerable<DispositivoModel> List(int Tipo)
+        [HttpGet]
+        public IEnumerable<DispositivoModel> List()
         {
-            return _service.List(Tipo);
+            return _service.List();
         }
 
         [HttpPost("lista")]
