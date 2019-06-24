@@ -2,6 +2,7 @@
 using FBS_Core.Identity.Domain.Services.MapperConfigurator;
 using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.DAL.Nomenclador;
+using FBSConsolaCB_WebApi.Domain.Models.Consola;
 using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Domain.Models.Nomenclador;
 
@@ -32,6 +33,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.MapperConfigurator
             CreateMap<PaginacionModel, FuenteDatosModel<CorresponsalModel>>();
             CreateMap<PaginacionModel, FuenteDatosModel<CatalogoModel>>();
             CreateMap<PaginacionModel, FuenteDatosModel<TipoCatalogoModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<DispositivoModel>>();
         }
     }
 }
