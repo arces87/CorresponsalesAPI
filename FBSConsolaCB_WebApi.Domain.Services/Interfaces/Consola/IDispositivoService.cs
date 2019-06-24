@@ -6,7 +6,7 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Interfaces.Consola
 {
     public interface IDispositivoService
     {
-        IEnumerable<DispositivoModel> List(int Tipo);
+        IEnumerable<DispositivoModel> List();
         FuenteDatosModel<DispositivoModel> List(PaginacionModel filtro);
         DispositivoModel Get(int Id);
         DispositivoModel Create(DispositivoModel role);

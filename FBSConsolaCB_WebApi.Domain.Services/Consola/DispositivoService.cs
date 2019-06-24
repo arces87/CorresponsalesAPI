@@ -21,13 +21,10 @@ namespace FBSConsolaCB_WebApi.Domain.Services.Consola
             _mapper = mapper;
         }
 
-        public IEnumerable<DispositivoModel> List(int Tipo)
+        public IEnumerable<DispositivoModel> List()
         {
             var _model = _repository.GetAllWithAssociations();
-            if (Tipo != 0)
-                _model = _model.Where(c => c.TipoDispositivo.Id == Tipo).ToList();
-
-            return _mapper.Map<IEnumerable<DispositivoModel>>(_model); ;
+            return _mapper.Map<IEnumerable<DispositivoModel>>(_model);
 
         }
 
