@@ -30,6 +30,6 @@ namespace FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
-        public IEnumerable<Corresponsal> Corresponsales { get; set; }
+        public IEnumerable<Persona> Personas { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace FBSConsolaCB_WebApi.DAL.Consola
         public Catalogo TipoDispositivo { get; set; }
 
         [ForeignKey("CORRESPONSALID")]
-        public Corresponsal Corresponsal { get; set; }
+        public Persona Persona { get; set; }
 
         [Column("ESTAACTIVO")]
         public bool EstaActivo { get; set; }

@@ -9,6 +9,7 @@ using FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Consola;
 using FBSConsolaCB_WebApi.Domain.Services.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Nomenclador;
+using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Seguridad;
 using FBSConsolaCB_WebApi.Domain.Services.Nomenclador;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.Consola;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
@@ -29,10 +30,8 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             builder.RegisterType<PermisoRepository>().As<IPermisoRepository>().InstancePerLifetimeScope();
 
             builder.RegisterType<EmpresaRepository>().As<IEmpresaRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<AreaTrabajoRepository>().As<IAreaTrabajoRepository>().InstancePerLifetimeScope();
             builder.RegisterType<OficinaRepository>().As<IOficinaRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<CargoRepository>().As<ICargoRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<CorresponsalRepository>().As<ICorresponsalRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<PersonaRepository>().As<IPersonaRepository>().InstancePerLifetimeScope();
 
             builder.RegisterType<TipoCatalogoRepository>().As<ITipoCatalogoRepository>().InstancePerLifetimeScope();
             builder.RegisterType<CatalogoRepository>().As<ICatalogoRepository>().InstancePerLifetimeScope();
@@ -48,17 +47,17 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             builder.RegisterType<RoleService>().As<IRoleService>().InstancePerLifetimeScope();
             builder.RegisterType<PermisoService>().As<IPermisoService>().InstancePerLifetimeScope();
             builder.RegisterType<MenuService>().As<IMenuService>().InstancePerLifetimeScope();
+            builder.RegisterType<UsuarioService>().As<IUsuarioService>().InstancePerLifetimeScope();
 
             builder.RegisterType<EmpresaService>().As<IEmpresaService>().InstancePerLifetimeScope();
-            builder.RegisterType<AreaTrabajoService>().As<IAreaTrabajoService>().InstancePerLifetimeScope();
             builder.RegisterType<OficinaService>().As<IOficinaService>().InstancePerLifetimeScope();
-            builder.RegisterType<CargoService>().As<ICargoService>().InstancePerLifetimeScope();
-            builder.RegisterType<CorresponsalService>().As<ICorresponsalService>().InstancePerLifetimeScope();
+            builder.RegisterType<PersonaService>().As<IPersonaService>().InstancePerLifetimeScope();
 
             builder.RegisterType<TipoCatalogoService>().As<ITipoCatalogoService>().InstancePerLifetimeScope();
             builder.RegisterType<CatalogoService>().As<ICatalogoService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DispositivoService>().As<IDispositivoService>().InstancePerLifetimeScope();
+            
         }
 
         protected override void Load(ContainerBuilder builder)

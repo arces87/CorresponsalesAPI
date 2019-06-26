@@ -3,13 +3,15 @@ using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
 
 namespace FBSConsolaCB_WebApi.Domain.Services.Interfaces.EstructuraEmpresarial
 {
-    public interface ICorresponsalService
+    public interface IPersonaService
     {
-        FuenteDatosModel<CorresponsalModel> List(PaginacionModel filtro);
+        FuenteDatosModel<PersonaModel> List(PaginacionModel filtro);
         object Get(int Id);
         CorresponsalModel Create(CorresponsalModel model);
+        SupervisorModel Create(SupervisorModel model);
         CorresponsalModel Update(CorresponsalModel model);
-        CorresponsalModel Delete(int Id);
+        SupervisorModel Update(SupervisorModel model);
+        PersonaModel Delete(int Id);
 
 
     }

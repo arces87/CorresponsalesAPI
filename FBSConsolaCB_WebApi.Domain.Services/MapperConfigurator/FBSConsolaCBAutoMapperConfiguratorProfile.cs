@@ -13,15 +13,15 @@ namespace FBSConsolaCB_WebApi.Domain.Services.MapperConfigurator
     {
         public FBSConsolaCBAutoMapperConfiguratorProfile() : base()
         {
+            CreateMap<Persona, PersonaModel>().ReverseMap();
+
             CreateMap<Corresponsal, CorresponsalModel>().ReverseMap();
+
+            CreateMap<Supervisor, SupervisorModel>().ReverseMap();
 
             CreateMap<Empresa, EmpresaModel>().ReverseMap();
 
-            CreateMap<AreaTrabajo, AreaTrabajoModel>().ReverseMap();
-
             CreateMap<Oficina, OficinaModel>().ReverseMap();
-
-            CreateMap<Cargo, CargoModel>().ReverseMap();
 
             CreateMap<Catalogo, CatalogoModel>().ReverseMap();
 
@@ -30,10 +30,8 @@ namespace FBSConsolaCB_WebApi.Domain.Services.MapperConfigurator
             CreateMap<Dispositivo, DispositivoModel>().ReverseMap();
 
             CreateMap<PaginacionModel, FuenteDatosModel<EmpresaModel>>();
-            CreateMap<PaginacionModel, FuenteDatosModel<AreaTrabajoModel>>();
             CreateMap<PaginacionModel, FuenteDatosModel<OficinaModel>>();
-            CreateMap<PaginacionModel, FuenteDatosModel<CargoModel>>();
-            CreateMap<PaginacionModel, FuenteDatosModel<CorresponsalModel>>();
+            CreateMap<PaginacionModel, FuenteDatosModel<PersonaModel>>();
             CreateMap<PaginacionModel, FuenteDatosModel<CatalogoModel>>();
             CreateMap<PaginacionModel, FuenteDatosModel<TipoCatalogoModel>>();
             CreateMap<PaginacionModel, FuenteDatosModel<DispositivoModel>>();

@@ -1,13 +1,14 @@
 ﻿using FBS_Core.Identity.DAL.Seguridad;
 using FBSConsolaCB_WebApi.DAL.Nomenclador;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial
 {
-    [Table("CORRESPONSAL", Schema = "ESTRUCTURAEMPRESARIAL")]
-    public class Corresponsal
+    [Table("SUPERVISOR", Schema = "ESTRUCTURAEMPRESARIAL")]
+    public class Supervisor
     {
         [Key]
         [ForeignKey(nameof(Persona))]
@@ -16,20 +17,7 @@ namespace FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial
 
         public Persona Persona { get; set; }
 
-        [Column("FECHANACIMIENTO")]
-        public DateTime FechaNacimiento { get; set; }
-
-        [Column("DIRECCION")]
-        public string Direccion { get; set; }
-
-        [Column("LATITUD")]
-        public float Latitud { get; set; }
-
-        [Column("LONGITUD")]
-        public float Longitud { get; set; }
-
-        [ForeignKey("SUPERVISORID")]
-        public Supervisor Supervisor { get; set; }
+        public IEnumerable<Corresponsal> Corresponsales { get; set; }
 
         [Column("ESTAACTIVO")]
         public bool EstaActivo { get; set; }

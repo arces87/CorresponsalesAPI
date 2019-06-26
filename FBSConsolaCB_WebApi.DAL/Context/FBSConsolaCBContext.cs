@@ -19,11 +19,11 @@ namespace FBSConsolaCB_WebApi.DAL
 
         #region Estructura Empresarial
         public DbSet<Empresa> Empresas { get; set; }
-        public DbSet<AreaTrabajo> AreasTrabajos { get; set; }
         public DbSet<Oficina> Oficinas { get; set; }
-        public DbSet<Corresponsal> Corresponsales { get; set; }
+        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Supervisor> Supervisores { get; set; }
 
-        public DbSet<Cargo> Cargos { get; set; }
+        public DbSet<Corresponsal> Corresponsales { get; set; }
 
         #endregion
 

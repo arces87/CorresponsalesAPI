@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using FBS_Core.Base.Domain.Models.Filtro;
 using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Domain.Services.Interfaces.EstructuraEmpresarial;
@@ -10,35 +9,31 @@ using Microsoft.AspNetCore.Mvc;
 namespace FBSConsolaCB_WebApi.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class AreaTrabajoController : Controller
+    public class PersonaController : Controller
     {
-        private readonly IAreaTrabajoService _service;
+        private readonly IPersonaService _service;
 
-        public AreaTrabajoController(IAreaTrabajoService service)
+        public PersonaController(IPersonaService service)
         {
             _service = service;
         }
 
-        [HttpGet]
-        public IEnumerable<AreaTrabajoModel> Get()
-        {
-            return _service.List();
-        }
-
         [HttpPost("lista")]
-        public FuenteDatosModel<AreaTrabajoModel> Get([FromBody] PaginacionModel filtro)
+        public FuenteDatosModel<PersonaModel> Get([FromBody] PaginacionModel filtro)
         {
             return _service.List(filtro);
         }
 
+
         [HttpGet("{id}")]
-        public AreaTrabajoModel Get(int Id)
+        public object Get(int Id)
         {
-            return _service.Get(Id);
+            var temp = _service.Get(Id);
+            return temp;
         }
 
-        [HttpPost]
-        public AreaTrabajoModel Create([FromBody] AreaTrabajoModel model)
+        [HttpPost("corresponsal")]
+        public CorresponsalModel Create([FromBody] CorresponsalModel model)
         {
             var result = _service.Create(model);
 
@@ -50,8 +45,35 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
-        [HttpPut]
-        public AreaTrabajoModel Update([FromBody] AreaTrabajoModel model)
+        [HttpPost("supervisor")]
+        public SupervisorModel Create([FromBody] SupervisorModel model)
+        {
+            var result = _service.Create(model);
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+        }
+
+        [HttpPut("corresponsal")]
+        public CorresponsalModel Update([FromBody] CorresponsalModel model)
+        {
+            var result = _service.Update(model);
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+        }
+
+
+        [HttpPut("supervisor")]
+        public SupervisorModel Update([FromBody] SupervisorModel model)
         {
             var result = _service.Update(model);
 
@@ -64,7 +86,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public AreaTrabajoModel Delete(int Id)
+        public PersonaModel Delete(int Id)
         {
             var result = _service.Delete(Id);
 

@@ -21,19 +21,20 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
         public IEnumerable<Dispositivo> GetAllWithAssociations()
         {
             return _context.Set<Dispositivo>().Where(a => a.EstaActivo == true)
-                .Include(c => c.Corresponsal).Include(d => d.TipoDispositivo);
+                .Include(c => c.Persona).Include(d => d.TipoDispositivo);
         }
         public override void Add(Dispositivo entity)
         {
             entity.TipoDispositivo = Context.Catalogos.FirstOrDefault(c => c.Id == entity.TipoDispositivo.Id);
-            entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
+            entity.Persona = Context.Personas.FirstOrDefault(c => c.Id == entity.Persona.Id);
+            entity.EstaActivo = true;
             Context.Dispositivos.Add(entity);
             Context.SaveChanges();
         }
         public override void Update(Dispositivo entity)
         {
             entity.TipoDispositivo = Context.Catalogos.FirstOrDefault(c => c.Id == entity.TipoDispositivo.Id);
-            entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
+            entity.Persona = Context.Personas.FirstOrDefault(c => c.Id == entity.Persona.Id);
             _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
         }
@@ -41,7 +42,7 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
         public Dispositivo GetWithAssociations(int Id)
         {
             return _context.Set<Dispositivo>().Where(a => a.EstaActivo == true)
-                .Include(c => c.Corresponsal).Include(d => d.TipoDispositivo).FirstOrDefault(c => c.Id == Id);
+                .Include(c => c.Persona).Include(d => d.TipoDispositivo).FirstOrDefault(c => c.Id == Id);
         }
 
         public override void Remove(Dispositivo entity)

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using FBS_Core.Base.Domain.Models.Filtro;
 using FBS_Core.Identity.Domain.Models.Seguridad;
 using FBS_Core.Identity.Domain.Services.Interfaces.Seguridad;
+using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
+using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,9 +15,9 @@ namespace GeNe.WebApi.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly IUserService _service;
+        private readonly IUsuarioService _service;
 
-        public AccountController(IUserService service)
+        public AccountController(IUsuarioService service)
         {
             _service = service;
         }
@@ -37,9 +39,9 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<object> Login([FromBody] UserModel model)
+        public async Task<PersonaModel> Login([FromBody] UserModel model)
         {
-            var result = await _service.Login(model);
+            var result = await _service.Autenticar(model);
 
             if (result != null)
             {
@@ -74,6 +76,6 @@ namespace GeNe.WebApi.Controllers
 
             throw new ApplicationException("INVALID_USER_DATA");
         }
-       
+
     }
 }

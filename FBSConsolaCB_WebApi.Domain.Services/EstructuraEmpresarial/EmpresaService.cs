@@ -14,10 +14,10 @@ namespace FBSConsolaCB_WebApi.Domain.Services.EstructuraEmpresarial
     {
         private readonly IEmpresaRepository _repository;
         private readonly IOficinaRepository _oficinaRepository;
-        private readonly ICorresponsalRepository _corresponsalRepository;
+        private readonly IPersonaRepository _corresponsalRepository;
         private readonly IMapper _mapper;
 
-        public EmpresaService(IEmpresaRepository repository, IOficinaRepository oficinaRepository, ICorresponsalRepository corresponsalRepository,
+        public EmpresaService(IEmpresaRepository repository, IOficinaRepository oficinaRepository, IPersonaRepository corresponsalRepository,
             IMapper mapper)
         {
             _repository = repository;

@@ -18,7 +18,7 @@ namespace FBSConsolaCB_WebApi.Domain.Models.Consola
 
         public CatalogoModel TipoDispositivo { get; set; }
 
-        public CorresponsalModel Corresponsal { get; set; }
+        public PersonaModel Corresponsal { get; set; }
 
         public bool EstaActivo { get; set; }
     }
