@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FBS_Core.Identity.Domain.Models.Seguridad;
-using FBS_Core.Identity.Domain.Services.Interfaces.Seguridad;
+using System.Threading.Tasks;
+using FBS.Identidad.Dominio.Modelos.Seguridad;
+using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,35 +12,35 @@ namespace GeNe.WebApi.Controllers
     [Route("api/[controller]")]
     public class MenuController : Controller
     {
-        private readonly IMenuService _service;
+        private readonly IServicioMenu _servicio;
 
-        public MenuController(IMenuService service)
+        public MenuController(IServicioMenu service)
         {
-            _service = service;
+            _servicio = service;
         }
 
         [HttpGet]
-        public IEnumerable<MenuModel> GetMenu()
+        public async Task<IEnumerable<ModeloMenu>> GetMenu()
         {
-            return _service.List();
+            return await _servicio.List();
         }
 
         [HttpGet("Usuario/{idUsuario}")]
-        public IEnumerable<MenuModel> GetMenuUsuario(string idUsuario)
+        public async Task<IEnumerable<ModeloMenu>> GetMenuUsuario(string idUsuario)
         {
-            return _service.GetMenuUsuario(idUsuario);
+            return await _servicio.GetMenuUsuario(idUsuario);
         }
 
         [HttpGet("{id}")]
-        public MenuModel GetMenu(int Id)
+        public async Task<ModeloMenu> GetMenu(int Id)
         {
-            return _service.Get(Id);
+            return await _servicio.Get(Id);
         }
 
         [HttpPost]
-        public MenuModel Create([FromBody] MenuModel model)
+        public async Task<ModeloMenu> Create([FromBody] ModeloMenu model)
         {
-            var result = _service.Create(model);
+            var result = await _servicio.Create(model);
 
             if (result != null)
             {
@@ -50,9 +51,9 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPut]
-        public MenuModel Update([FromBody] MenuModel model)
+        public async Task<ModeloMenu> Update([FromBody] ModeloMenu model)
         {
-            var result = _service.Update(model);
+            var result = await _servicio.Update(model);
 
             if (result != null)
             {
@@ -63,9 +64,9 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public MenuModel Delete(int Id)
+        public async Task<ModeloMenu> Delete(int Id)
         {
-            var result = _service.Delete(Id);
+            var result = await _servicio.Delete(Id);
 
             if (result != null)
             {

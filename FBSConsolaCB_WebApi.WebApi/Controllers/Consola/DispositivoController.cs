@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBSConsolaCB_WebApi.Domain.Models.Consola;
-using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Consola;
+using System.Threading.Tasks;
+using FBS.Dominio.Modelos.Filtro;
+using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Consola;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,35 +13,35 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class DispositivoController : Controller
     {
-        private readonly IDispositivoService _service;
+        private readonly IServicioDispositivo _service;
 
-        public DispositivoController(IDispositivoService service)
+        public DispositivoController(IServicioDispositivo servicio)
         {
-            _service = service;
+            _service = servicio;
         }
 
         [HttpGet]
-        public IEnumerable<DispositivoModel> List()
+        public async Task<IEnumerable<ModeloDispositivo>> List()
         {
-            return _service.List();
+            return await _service.List();
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<DispositivoModel> Get([FromBody] PaginacionModel filtro)
+        public async Task<ModeloFuenteDatos<ModeloDispositivo>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return await _service.List(filtro);
         }
 
         [HttpGet("get/{id}")]
-        public DispositivoModel Get(int Id)
+        public async Task<ModeloDispositivo> Get(int Id)
         {
-            return _service.Get(Id);
+            return await _service.Get(Id);
         }
 
         [HttpPost]
-        public DispositivoModel Create([FromBody] DispositivoModel model)
+        public async Task<ModeloDispositivo> Create([FromBody] ModeloDispositivo model)
         {
-            var result = _service.Create(model);
+            var result = await _service.Create(model);
 
             if (result != null)
             {
@@ -51,9 +52,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public DispositivoModel Update([FromBody] DispositivoModel model)
+        public async Task<ModeloDispositivo> Update([FromBody] ModeloDispositivo model)
         {
-            var result = _service.Update(model);
+            var result = await _service.Update(model);
 
             if (result != null)
             {
@@ -64,9 +65,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public DispositivoModel Delete(int Id)
+        public async Task<ModeloDispositivo> Delete(int Id)
         {
-            var result = _service.Delete(Id);
+            var result = await _service.Delete(Id);
 
             if (result != null)
             {

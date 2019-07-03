@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using FBS_Core.Identity.DAL.Seguridad;
+using FBS.Identidad.DAL.Seguridad;
 using FBSConsolaCB_WebApi.DAL;
-using FBSConsolaCB_WebApi.Domain.Services.MapperConfigurator;
+using FBSConsolaCB_WebApi.Dominio.Servicios.MapperConfigurator;
+using FBSConsolaCB_WebApi.WebApi.AutofacConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,9 +32,9 @@ namespace FBSConsolaCB_WebApi.WebApi
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<FBSConsolaCBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("FBSConsolaCB_WebApi.WebApi")));
+            services.AddDbContext<ContextoFBSConsolaCB>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("FBSConsolaCB_WebApi.WebApi")));
 
             #region Swagger Configuration
             services.AddSwaggerGen(swagger =>
@@ -66,8 +65,8 @@ namespace FBSConsolaCB_WebApi.WebApi
             #endregion
 
             #region Authentication Configuration
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<FBSConsolaCBContext>()
+            services.AddIdentity<Usuario, Rol>()
+                .AddEntityFrameworkStores<ContextoFBSConsolaCB>()
                 .AddDefaultTokenProviders();
             //Add Jwt Token Handler
             services.AddAuthentication(x =>
@@ -90,8 +89,8 @@ namespace FBSConsolaCB_WebApi.WebApi
 
             //services.AddAuthorization(options =>
             //{
-            //    var _context = services.BuildServiceProvider().GetService<GeNeDBContext>();
-            //    foreach (var item in _context.Permisos)
+            //    var _contexto = services.BuildServiceProvider().GetService<GeNeDBContext>();
+            //    foreach (var item in _contexto.Permisos)
             //    {
             //        options.AddPolicy(item.Nombre,
             //            policy => policy.RequireClaim(item.Descripcion, item.Identificador));
@@ -103,12 +102,9 @@ namespace FBSConsolaCB_WebApi.WebApi
             services.AddAutoMapper(typeof(FBSConsolaCBAutoMapperConfiguratorProfile));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            #region Autofac Configuration 
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<AutofacConfiguration.AutofacConfiguration>();
-            containerBuilder.Populate(services);
-            var container = containerBuilder.Build();
-            return new AutofacServiceProvider(container);
+            #region Configuracion Inyeccion Dependencia 
+            ConfiguracionInyeccionDependencia.LoadRepositories(services);
+            ConfiguracionInyeccionDependencia.LoadServices(services);
             #endregion
         }
 

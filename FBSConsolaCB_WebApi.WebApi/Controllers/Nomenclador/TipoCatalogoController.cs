@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBSConsolaCB_WebApi.Domain.Models.Nomenclador;
-using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Nomenclador;
+using FBS.Dominio.Modelos.Filtro;
+using FBSConsolaCB_WebApi.Dominio.Modelos.Nomenclador;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Nomenclador;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,25 +21,25 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TipoCatalogoModel> Get()
+        public async Task<IEnumerable<ModeloTipoCatalogo>> Get()
         {
-            return _service.List();
+            return await _service.List();
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<TipoCatalogoModel> Get([FromBody] PaginacionModel filtro)
+        public async Task<ModeloFuenteDatos<ModeloTipoCatalogo>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return await _service.List(filtro);
         }
 
         [HttpGet("{id}")]
-        public TipoCatalogoModel Get(int Id)
+        public async Task<ModeloTipoCatalogo> Get(int Id)
         {
-            return _service.Get(Id);
+            return await _service.Get(Id);
         }
 
         [HttpPut]
-        public async Task<object> Update([FromBody] TipoCatalogoModel model)
+        public async Task<object> Update([FromBody] ModeloTipoCatalogo model)
         {
             var result = await _service.Update(model);
 

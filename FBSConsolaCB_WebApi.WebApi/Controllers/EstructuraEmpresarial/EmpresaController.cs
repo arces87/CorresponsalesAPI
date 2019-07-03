@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
-using FBSConsolaCB_WebApi.Domain.Services.Interfaces.EstructuraEmpresarial;
+using System.Threading.Tasks;
+using FBS.Dominio.Modelos.Filtro;
+using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,27 +21,27 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<EmpresaModel> Get()
+        public async Task<IEnumerable<ModeloEmpresa>> Get()
         {
-            return _service.List();
+            return await _service.List();
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<EmpresaModel> Get([FromBody] PaginacionModel filtro)
+        public async Task<ModeloFuenteDatos<ModeloEmpresa>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return await _service.List(filtro);
         }
 
         [HttpGet("{id}")]
-        public EmpresaModel Get(int Id)
+        public async Task<ModeloEmpresa> Get(int Id)
         {
-            return _service.Get(Id);
+            return await _service.Get(Id);
         }
 
         [HttpPost]
-        public EmpresaModel Create([FromBody] EmpresaModel model)
+        public async Task<ModeloEmpresa> Create([FromBody] ModeloEmpresa model)
         {
-            var result = _service.Create(model);
+            var result = await _service.Create(model);
 
             if (result != null)
             {
@@ -51,9 +52,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public EmpresaModel Update([FromBody] EmpresaModel model)
+        public async Task<ModeloEmpresa> Update([FromBody] ModeloEmpresa model)
         {
-            var result = _service.Update(model);
+            var result = await _service.Update(model);
 
             if (result != null)
             {
@@ -64,9 +65,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public EmpresaModel Delete(int Id)
+        public async Task<ModeloEmpresa> Delete(int Id)
         {
-            var result = _service.Delete(Id);
+            var result = await _service.Delete(Id);
 
             if (result != null)
             {

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBS_Core.Identity.Domain.Models.Seguridad;
-using FBS_Core.Identity.Domain.Services.Interfaces.Seguridad;
-using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
-using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Seguridad;
+using FBS.Dominio.Modelos.Filtro;
+using FBS.Identidad.Dominio.Modelos.Seguridad;
+using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,20 +14,20 @@ namespace GeNe.WebApi.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly IUsuarioService _service;
+        private readonly IServicioUsuarioLocal _service;
 
-        public AccountController(IUsuarioService service)
+        public AccountController(IServicioUsuarioLocal service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public IEnumerable<UserModel> Users()
+        public IEnumerable<ModeloUsuario> Users()
         {
             return _service.Users();
         }
         [HttpPost("lista")]
-        public FuenteDatosModel<UserModel> Get([FromBody] PaginacionModel filtro)
+        public ModeloFuenteDatos<ModeloUsuario> Get([FromBody] ModeloPaginacion filtro)
         {
             return _service.List(filtro);
         }
@@ -39,7 +38,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<PersonaModel> Login([FromBody] UserModel model)
+        public async Task<ModeloPersona> Login([FromBody] ModeloUsuario model)
         {
             var result = await _service.Autenticar(model);
 
@@ -52,7 +51,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<object> Register([FromBody] UserModel model)
+        public async Task<object> Register([FromBody] ModeloUsuario model)
         {
             var result = await _service.CreateUser(model);
 
@@ -65,7 +64,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<object> Update([FromBody] UserModel model)
+        public async Task<object> Update([FromBody] ModeloUsuario model)
         {
             var result = await _service.UpdateUser(model);
 

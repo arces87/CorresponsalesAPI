@@ -1,7 +1,8 @@
 ﻿using System;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBSConsolaCB_WebApi.Domain.Models.EstructuraEmpresarial;
-using FBSConsolaCB_WebApi.Domain.Services.Interfaces.EstructuraEmpresarial;
+using System.Threading.Tasks;
+using FBS.Dominio.Modelos.Filtro;
+using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,23 +20,23 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<PersonaModel> Get([FromBody] PaginacionModel filtro)
+        public async Task<ModeloFuenteDatos<ModeloPersona>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return await _service.List(filtro);
         }
 
 
         [HttpGet("{id}")]
-        public object Get(int Id)
+        public async Task<object> Get(int Id)
         {
-            var temp = _service.Get(Id);
+            var temp = await _service.Get(Id);
             return temp;
         }
 
         [HttpPost("corresponsal")]
-        public CorresponsalModel Create([FromBody] CorresponsalModel model)
+        public async Task<ModeloCorresponsal> Create([FromBody] ModeloCorresponsal model)
         {
-            var result = _service.Create(model);
+            var result = await _service.Create(model);
 
             if (result != null)
             {
@@ -46,9 +47,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPost("supervisor")]
-        public SupervisorModel Create([FromBody] SupervisorModel model)
+        public async Task<ModeloSupervisor> Create([FromBody] ModeloSupervisor model)
         {
-            var result = _service.Create(model);
+            var result = await _service.Create(model);
 
             if (result != null)
             {
@@ -59,9 +60,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut("corresponsal")]
-        public CorresponsalModel Update([FromBody] CorresponsalModel model)
+        public async Task<ModeloCorresponsal> Update([FromBody] ModeloCorresponsal model)
         {
-            var result = _service.Update(model);
+            var result = await _service.Update(model);
 
             if (result != null)
             {
@@ -73,9 +74,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
 
 
         [HttpPut("supervisor")]
-        public SupervisorModel Update([FromBody] SupervisorModel model)
+        public async Task<ModeloSupervisor> Update([FromBody] ModeloSupervisor model)
         {
-            var result = _service.Update(model);
+            var result = await _service.Update(model);
 
             if (result != null)
             {
@@ -86,9 +87,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public PersonaModel Delete(int Id)
+        public async Task<ModeloPersona> Delete(int Id)
         {
-            var result = _service.Delete(Id);
+            var result = await _service.Delete(Id);
 
             if (result != null)
             {

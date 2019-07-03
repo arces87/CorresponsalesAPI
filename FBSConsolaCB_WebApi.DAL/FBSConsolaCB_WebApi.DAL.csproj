@@ -9,11 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="FBS_Core.Base.DAL">
-      <HintPath>..\..\..\FBS_Core\FBS_Core.Identity.Domain.Services\bin\Debug\netcoreapp2.2\FBS_Core.Base.DAL.dll</HintPath>
+    <Reference Include="FBS.DAL">
+      <HintPath>..\..\..\FBS_Core\FBS.DAL\bin\Debug\netcoreapp2.2\FBS.DAL.dll</HintPath>
     </Reference>
-    <Reference Include="FBS_Core.Identity.DAL">
-      <HintPath>..\..\..\FBS_Core\FBS_Core.Identity.DAL\bin\Debug\netcoreapp2.2\FBS_Core.Identity.DAL.dll</HintPath>
+    <Reference Include="FBS.Identidad.DAL">
+      <HintPath>..\..\..\FBS_Core\FBS.Identidad.DAL\bin\Debug\netcoreapp2.2\FBS.Identidad.DAL.dll</HintPath>
     </Reference>
   </ItemGroup>
 

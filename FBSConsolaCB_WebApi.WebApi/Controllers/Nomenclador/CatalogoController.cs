@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBSConsolaCB_WebApi.Domain.Models.Nomenclador;
-using FBSConsolaCB_WebApi.Domain.Services.Interfaces.Nomenclador;
+using System.Threading.Tasks;
+using FBS.Dominio.Modelos.Filtro;
+using FBSConsolaCB_WebApi.Dominio.Modelos.Nomenclador;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Nomenclador;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,27 +21,27 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet("{tipo}")]
-        public IEnumerable<CatalogoModel> List(int Tipo)
+        public async Task<IEnumerable<ModeloCatalogo>> List(int Tipo)
         {
-            return _service.List(Tipo);
+            return await _service.List(Tipo);
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<CatalogoModel> Get([FromBody] PaginacionModel filtro)
+        public async Task<ModeloFuenteDatos<ModeloCatalogo>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return await _service.List(filtro);
         }
 
         [HttpGet("get/{id}")]
-        public CatalogoModel Get(int Id)
+        public async Task<ModeloCatalogo> Get(int Id)
         {
-            return _service.Get(Id);
+            return await _service.Get(Id);
         }
 
         [HttpPost]
-        public CatalogoModel Create([FromBody] CatalogoModel model)
+        public async Task<ModeloCatalogo> Create([FromBody] ModeloCatalogo model)
         {
-            var result = _service.Create(model);
+            var result = await _service.Create(model);
 
             if (result != null)
             {
@@ -51,9 +52,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public CatalogoModel Update([FromBody] CatalogoModel model)
+        public async Task<ModeloCatalogo> Update([FromBody] ModeloCatalogo model)
         {
-            var result = _service.Update(model);
+            var result = await _service.Update(model);
 
             if (result != null)
             {
@@ -64,9 +65,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public CatalogoModel Delete(int Id)
+        public async Task<ModeloCatalogo> Delete(int Id)
         {
-            var result = _service.Delete(Id);
+            var result = await _service.Delete(Id);
 
             if (result != null)
             {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using FBS_Core.Base.Domain.Models.Filtro;
-using FBS_Core.Identity.Domain.Models.Seguridad;
-using FBS_Core.Identity.Domain.Services.Interfaces.Seguridad;
+using System.Threading.Tasks;
+using FBS.Dominio.Modelos.Filtro;
+using FBS.Identidad.Dominio.Modelos.Seguridad;
+using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeNe.WebApi.Controllers
@@ -9,23 +10,23 @@ namespace GeNe.WebApi.Controllers
     [Route("api/[controller]")]
     public class PermisoController : Controller
     {
-        private readonly IPermisoService _service;
+        private readonly IServicioPermiso _servicio;
 
-        public PermisoController(IPermisoService service)
+        public PermisoController(IServicioPermiso service)
         {
-            _service = service;
+            _servicio = service;
         }
 
         [HttpGet]
-        public IEnumerable<PermisoModel> Get()
+        public async Task<IEnumerable<ModeloPermiso>> Get()
         {
-            return _service.List();
+            return await _servicio.List();
         }
 
         [HttpPost("lista")]
-        public FuenteDatosModel<PermisoModel> Get([FromBody] PaginacionModel filtro)
+        public async Task<ModeloFuenteDatos<ModeloPermiso>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return await _servicio.List(filtro);
         }
     }
 }
