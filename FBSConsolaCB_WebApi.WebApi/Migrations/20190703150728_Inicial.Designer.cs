@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBSConsolaCB_WebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    [Migration("20190702201459_Init")]
-    partial class Init
+    [Migration("20190703150728_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -628,7 +628,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UsuarioTocken","Seguridad");
+                    b.ToTable("UsuarioToken","Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>

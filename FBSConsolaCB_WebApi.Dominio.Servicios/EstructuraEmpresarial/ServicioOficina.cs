@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
 {
-    public class OficinaService : IOficinaService
+    public class ServicioOficina : IServicioOficina
     {
         private readonly IRepositorioOficina _repositorio;
         private readonly IMapper _mapper;
 
-        public OficinaService(IRepositorioOficina Repositorio, IMapper mapper)
+        public ServicioOficina(IRepositorioOficina Repositorio, IMapper mapper)
         {
             _repositorio = Repositorio;
             _mapper = mapper;

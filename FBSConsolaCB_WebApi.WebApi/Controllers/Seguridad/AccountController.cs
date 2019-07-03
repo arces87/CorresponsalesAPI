@@ -14,33 +14,33 @@ namespace GeNe.WebApi.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly IServicioUsuarioLocal _service;
+        private readonly IServicioUsuarioLocal _servicio;
 
-        public AccountController(IServicioUsuarioLocal service)
+        public AccountController(IServicioUsuarioLocal servicio)
         {
-            _service = service;
+            _servicio = servicio;
         }
 
         [HttpGet]
         public IEnumerable<ModeloUsuario> Users()
         {
-            return _service.Users();
+            return _servicio.Users();
         }
         [HttpPost("lista")]
         public ModeloFuenteDatos<ModeloUsuario> Get([FromBody] ModeloPaginacion filtro)
         {
-            return _service.List(filtro);
+            return _servicio.List(filtro);
         }
         [HttpGet("{id}")]
         public async Task<object> GetUser(string Id)
         {
-            return await _service.GetUser(Id);
+            return await _servicio.GetUser(Id);
         }
 
         [HttpPost("Login")]
         public async Task<ModeloPersona> Login([FromBody] ModeloUsuario model)
         {
-            var result = await _service.Autenticar(model);
+            var result = await _servicio.Autenticar(model);
 
             if (result != null)
             {
@@ -53,7 +53,7 @@ namespace GeNe.WebApi.Controllers
         [HttpPost]
         public async Task<object> Register([FromBody] ModeloUsuario model)
         {
-            var result = await _service.CreateUser(model);
+            var result = await _servicio.CreateUser(model);
 
             if (result != null)
             {
@@ -66,7 +66,7 @@ namespace GeNe.WebApi.Controllers
         [HttpPut]
         public async Task<object> Update([FromBody] ModeloUsuario model)
         {
-            var result = await _service.UpdateUser(model);
+            var result = await _servicio.UpdateUser(model);
 
             if (result != null)
             {

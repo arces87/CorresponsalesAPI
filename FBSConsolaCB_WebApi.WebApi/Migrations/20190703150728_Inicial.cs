@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FBSConsolaCB_WebApi.WebApi.Migrations
 {
-    public partial class Init : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -330,7 +330,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsuarioTocken",
+                name: "UsuarioToken",
                 schema: "Seguridad",
                 columns: table => new
                 {
@@ -341,9 +341,9 @@ namespace FBSConsolaCB_WebApi.WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsuarioTocken", x => new { x.UsuarioId, x.Proveedor, x.Nombre });
+                    table.PrimaryKey("PK_UsuarioToken", x => new { x.UsuarioId, x.Proveedor, x.Nombre });
                     table.ForeignKey(
-                        name: "FK_UsuarioTocken_Usuario_UsuarioId",
+                        name: "FK_UsuarioToken_Usuario_UsuarioId",
                         column: x => x.UsuarioId,
                         principalSchema: "Seguridad",
                         principalTable: "Usuario",
@@ -766,7 +766,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Migrations
                 schema: "Seguridad");
 
             migrationBuilder.DropTable(
-                name: "UsuarioTocken",
+                name: "UsuarioToken",
                 schema: "Seguridad");
 
             migrationBuilder.DropTable(

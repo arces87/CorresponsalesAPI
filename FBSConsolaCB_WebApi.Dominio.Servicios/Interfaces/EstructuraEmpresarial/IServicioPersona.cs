@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial
 {
-    public interface IPersonaService
+    public interface IServicioPersona
     {
         Task<ModeloFuenteDatos<ModeloPersona>> List(ModeloPaginacion filtro);
         Task<object> Get(int Id);

@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
 {
-    public class EmpresaService : IEmpresaService
+    public class ServicioEmpresa : IServicioEmpresa
     {
         private readonly IRepositorioEmpresa _repositorio;
         private readonly IRepositorioOficina _oficinaRepositorio;
         private readonly IRepositorioPersona _corresponsalRepositorio;
         private readonly IMapper _mapper;
 
-        public EmpresaService(IRepositorioEmpresa Repositorio, IRepositorioOficina oficinaRepositorio, IRepositorioPersona corresponsalRepositorio,
+        public ServicioEmpresa(IRepositorioEmpresa Repositorio, IRepositorioOficina oficinaRepositorio, IRepositorioPersona corresponsalRepositorio,
             IMapper mapper)
         {
             _repositorio = Repositorio;

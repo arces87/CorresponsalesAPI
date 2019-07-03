@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Nomenclador
 {
-    public interface ITipoCatalogoService
+    public interface IServicioTipoCatalogo
     {
         Task<IEnumerable<ModeloTipoCatalogo>> List();
         Task<ModeloFuenteDatos<ModeloTipoCatalogo>> List(ModeloPaginacion filtro);

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
 {
-    public class DispositivoRepositorio : Repositorio<Dispositivo>, IRepositorioDispositivo
+    public class RepositorioDispositivo : Repositorio<Dispositivo>, IRepositorioDispositivo
     {
-        public DispositivoRepositorio(ContextoFBSConsolaCB context) : base(context)
+        public RepositorioDispositivo(ContextoFBSConsolaCB context) : base(context)
         {
 
         }

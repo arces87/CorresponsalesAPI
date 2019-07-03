@@ -11,26 +11,26 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.Nomenclador
 {
-    public class TipoCatalogoService : ITipoCatalogoService
+    public class ServicioTipoCatalogo : IServicioTipoCatalogo
     {
-        private readonly IRepositorioTipoCatalogo _Repositorio;
+        private readonly IRepositorioTipoCatalogo _repositorio;
         private readonly IMapper _mapper;
 
-        public TipoCatalogoService(IRepositorioTipoCatalogo Repositorio, IMapper mapper)
+        public ServicioTipoCatalogo(IRepositorioTipoCatalogo repositorio, IMapper mapper)
         {
-            _Repositorio = Repositorio;
+            _repositorio = repositorio;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<ModeloTipoCatalogo>> List()
         {
-            var _model = await _Repositorio.GetAllActive();
+            var _model = await _repositorio.GetAllActive();
             return _mapper.Map<IEnumerable<ModeloTipoCatalogo>>(_model); ;
 
         }
         public async Task<ModeloFuenteDatos<ModeloTipoCatalogo>> List(ModeloPaginacion filtro)
         {
-            IEnumerable<TipoCatalogo> _model = await _Repositorio.GetAllActive();
+            IEnumerable<TipoCatalogo> _model = await _repositorio.GetAllActive();
 
             var _fuente = _mapper.Map<ModeloFuenteDatos<ModeloTipoCatalogo>>(filtro);
             _fuente.TotalElementos = _model.Count();
@@ -42,7 +42,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Nomenclador
 
         public async Task<ModeloTipoCatalogo> Get(int Id)
         {
-            var _model = await _Repositorio.Get(Id);
+            var _model = await _repositorio.Get(Id);
             if (_model != null)
                 return _mapper.Map<ModeloTipoCatalogo>(_model);
             return null;
@@ -50,9 +50,9 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Nomenclador
 
         public async Task<ModeloTipoCatalogo> Update(ModeloTipoCatalogo model)
         {
-            var _model = await _Repositorio.Get(model.Id);
+            var _model = await _repositorio.Get(model.Id);
             _mapper.Map(model, _model);
-            await _Repositorio.Update(_model);
+            await _repositorio.Update(_model);
 
             return model;
         }

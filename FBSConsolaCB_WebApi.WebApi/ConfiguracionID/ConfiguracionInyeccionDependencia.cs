@@ -36,7 +36,10 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioTipoCatalogo, RepositorioTipoCatalogo>();
             services.AddScoped<IRepositorioCatalogo, RepositorioCatalogo>();
 
-            services.AddScoped<IRepositorioDispositivo, DispositivoRepositorio>();
+            services.AddScoped<IRepositorioDispositivo, RepositorioDispositivo>();
+            services.AddScoped<IRepositorioLimiteExistencia, RepositorioLimiteExistencia>();
+            services.AddScoped<IRepositorioLimiteTransaccional, RepositorioLimiteTransaccional>();
+            services.AddScoped<IRepositorioLog, RepositorioLog>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }
@@ -49,14 +52,17 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             services.AddScoped<IServicioMenu, ServicioMenu>();
             services.AddScoped<IServicioUsuarioLocal, ServicioUsuarioLocal>();
 
-            services.AddScoped<IEmpresaService, EmpresaService>();
-            services.AddScoped<IOficinaService, OficinaService>();
-            services.AddScoped<IPersonaService, PersonaService>();
+            services.AddScoped<IServicioEmpresa, ServicioEmpresa>();
+            services.AddScoped<IServicioOficina, ServicioOficina>();
+            services.AddScoped<IServicioPersona, ServicioPersona>();
 
-            services.AddScoped<ITipoCatalogoService, TipoCatalogoService>();
-            services.AddScoped<ICatalogoService, CatalogoService>();
+            services.AddScoped<IServicioTipoCatalogo, ServicioTipoCatalogo>();
+            services.AddScoped<IServicioCatalogo, ServicioCatalogo>();
 
             services.AddScoped<IServicioDispositivo, ServicioDispositivo>();
+            services.AddScoped<IServicioLimiteExistencia, ServicioLimiteExistencia>();
+            services.AddScoped<IServicioLimiteTransaccional, ServicioLimiteTransaccional>();
+            services.AddScoped<IServicioLog, ServicioLog>();
         }
     }
 }

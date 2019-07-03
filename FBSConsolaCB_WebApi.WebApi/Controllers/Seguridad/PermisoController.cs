@@ -12,9 +12,9 @@ namespace GeNe.WebApi.Controllers
     {
         private readonly IServicioPermiso _servicio;
 
-        public PermisoController(IServicioPermiso service)
+        public PermisoController(IServicioPermiso servicio)
         {
-            _servicio = service;
+            _servicio = servicio;
         }
 
         [HttpGet]

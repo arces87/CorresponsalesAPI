@@ -626,7 +626,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UsuarioTocken","Seguridad");
+                    b.ToTable("UsuarioToken","Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>

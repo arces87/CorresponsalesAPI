@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.Nomenclador
 {
-    public class CatalogoService : ICatalogoService
+    public class ServicioCatalogo : IServicioCatalogo
     {
         private readonly IRepositorioCatalogo _Repositorio;
         private readonly IMapper _mapper;
 
-        public CatalogoService(IRepositorioCatalogo Repositorio, IMapper mapper)
+        public ServicioCatalogo(IRepositorioCatalogo Repositorio, IMapper mapper)
         {
             _Repositorio = Repositorio;
             _mapper = mapper;

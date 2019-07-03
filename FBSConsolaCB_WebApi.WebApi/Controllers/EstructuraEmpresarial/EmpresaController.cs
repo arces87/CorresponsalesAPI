@@ -13,35 +13,35 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class EmpresaController : Controller
     {
-        private readonly IEmpresaService _service;
+        private readonly IServicioEmpresa _servicio;
 
-        public EmpresaController(IEmpresaService service)
+        public EmpresaController(IServicioEmpresa servicio)
         {
-            _service = service;
+            _servicio = servicio;
         }
 
         [HttpGet]
         public async Task<IEnumerable<ModeloEmpresa>> Get()
         {
-            return await _service.List();
+            return await _servicio.List();
         }
 
         [HttpPost("lista")]
         public async Task<ModeloFuenteDatos<ModeloEmpresa>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return await _service.List(filtro);
+            return await _servicio.List(filtro);
         }
 
         [HttpGet("{id}")]
         public async Task<ModeloEmpresa> Get(int Id)
         {
-            return await _service.Get(Id);
+            return await _servicio.Get(Id);
         }
 
         [HttpPost]
         public async Task<ModeloEmpresa> Create([FromBody] ModeloEmpresa model)
         {
-            var result = await _service.Create(model);
+            var result = await _servicio.Create(model);
 
             if (result != null)
             {
@@ -54,7 +54,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         [HttpPut]
         public async Task<ModeloEmpresa> Update([FromBody] ModeloEmpresa model)
         {
-            var result = await _service.Update(model);
+            var result = await _servicio.Update(model);
 
             if (result != null)
             {
@@ -67,7 +67,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ModeloEmpresa> Delete(int Id)
         {
-            var result = await _service.Delete(Id);
+            var result = await _servicio.Delete(Id);
 
             if (result != null)
             {

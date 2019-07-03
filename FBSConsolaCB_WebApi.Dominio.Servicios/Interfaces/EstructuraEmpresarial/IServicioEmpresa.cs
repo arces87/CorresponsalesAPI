@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial
 {
-    public interface IEmpresaService
+    public interface IServicioEmpresa
     {
         Task<IEnumerable<ModeloEmpresa>> List();
         Task<ModeloFuenteDatos<ModeloEmpresa>> List(ModeloPaginacion filtro);

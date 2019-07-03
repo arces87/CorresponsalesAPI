@@ -12,31 +12,31 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class PersonaController : Controller
     {
-        private readonly IPersonaService _service;
+        private readonly IServicioPersona _servicio;
 
-        public PersonaController(IPersonaService service)
+        public PersonaController(IServicioPersona servicio)
         {
-            _service = service;
+            _servicio = servicio;
         }
 
         [HttpPost("lista")]
         public async Task<ModeloFuenteDatos<ModeloPersona>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return await _service.List(filtro);
+            return await _servicio.List(filtro);
         }
 
 
         [HttpGet("{id}")]
         public async Task<object> Get(int Id)
         {
-            var temp = await _service.Get(Id);
+            var temp = await _servicio.Get(Id);
             return temp;
         }
 
         [HttpPost("corresponsal")]
         public async Task<ModeloCorresponsal> Create([FromBody] ModeloCorresponsal model)
         {
-            var result = await _service.Create(model);
+            var result = await _servicio.Create(model);
 
             if (result != null)
             {
@@ -49,7 +49,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         [HttpPost("supervisor")]
         public async Task<ModeloSupervisor> Create([FromBody] ModeloSupervisor model)
         {
-            var result = await _service.Create(model);
+            var result = await _servicio.Create(model);
 
             if (result != null)
             {
@@ -62,7 +62,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         [HttpPut("corresponsal")]
         public async Task<ModeloCorresponsal> Update([FromBody] ModeloCorresponsal model)
         {
-            var result = await _service.Update(model);
+            var result = await _servicio.Update(model);
 
             if (result != null)
             {
@@ -76,7 +76,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         [HttpPut("supervisor")]
         public async Task<ModeloSupervisor> Update([FromBody] ModeloSupervisor model)
         {
-            var result = await _service.Update(model);
+            var result = await _servicio.Update(model);
 
             if (result != null)
             {
@@ -89,7 +89,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ModeloPersona> Delete(int Id)
         {
-            var result = await _service.Delete(Id);
+            var result = await _servicio.Delete(Id);
 
             if (result != null)
             {

@@ -14,9 +14,9 @@ namespace GeNe.WebApi.Controllers
     {
         private readonly IServicioMenu _servicio;
 
-        public MenuController(IServicioMenu service)
+        public MenuController(IServicioMenu servicio)
         {
-            _servicio = service;
+            _servicio = servicio;
         }
 
         [HttpGet]

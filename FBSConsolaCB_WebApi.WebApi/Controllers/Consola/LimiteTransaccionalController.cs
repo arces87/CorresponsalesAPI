@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCB_WebApi.Dominio.Modelos.Nomenclador;
-using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Nomenclador;
+using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
+using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Consola;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,35 +11,35 @@ using Microsoft.AspNetCore.Mvc;
 namespace FBSConsolaCB_WebApi.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    public class CatalogoController : Controller
+    public class LimiteTransaccionalController : Controller
     {
-        private readonly IServicioCatalogo _servicio;
+        private readonly IServicioLimiteTransaccional _servicio;
 
-        public CatalogoController(IServicioCatalogo servicio)
+        public LimiteTransaccionalController(IServicioLimiteTransaccional servicio)
         {
             _servicio = servicio;
         }
 
-        [HttpGet("{tipo}")]
-        public async Task<IEnumerable<ModeloCatalogo>> List(int Tipo)
+        [HttpGet]
+        public async Task<IEnumerable<ModeloLimiteTransaccional>> List()
         {
-            return await _servicio.List(Tipo);
+            return await _servicio.List();
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloCatalogo>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ModeloFuenteDatos<ModeloLimiteTransaccional>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ModeloCatalogo> Get(int Id)
+        public async Task<ModeloLimiteTransaccional> Get(int Id)
         {
             return await _servicio.Get(Id);
         }
 
         [HttpPost]
-        public async Task<ModeloCatalogo> Create([FromBody] ModeloCatalogo model)
+        public async Task<ModeloLimiteTransaccional> Create([FromBody] ModeloLimiteTransaccional model)
         {
             var result = await _servicio.Create(model);
 
@@ -52,7 +52,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ModeloCatalogo> Update([FromBody] ModeloCatalogo model)
+        public async Task<ModeloLimiteTransaccional> Update([FromBody] ModeloLimiteTransaccional model)
         {
             var result = await _servicio.Update(model);
 
@@ -65,7 +65,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ModeloCatalogo> Delete(int Id)
+        public async Task<ModeloLimiteTransaccional> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);
 
