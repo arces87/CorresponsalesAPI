@@ -32,13 +32,13 @@ namespace GeNe.WebApi.Controllers
             return _servicio.List(filtro);
         }
         [HttpGet("{id}")]
-        public async Task<object> GetUser(string Id)
+        public async Task<ActionResult<object>> GetUser(string Id)
         {
             return await _servicio.GetUser(Id);
         }
 
         [HttpPost("Login")]
-        public async Task<ModeloPersona> Login([FromBody] ModeloUsuario model)
+        public async Task<ActionResult<ModeloPersona>> Login([FromBody] ModeloUsuario model)
         {
             var result = await _servicio.Autenticar(model);
 
@@ -51,7 +51,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<object> Register([FromBody] ModeloUsuario model)
+        public async Task<ActionResult<object>> Register([FromBody] ModeloUsuario model)
         {
             var result = await _servicio.CreateUser(model);
 
@@ -64,7 +64,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<object> Update([FromBody] ModeloUsuario model)
+        public async Task<ActionResult<object>> Update([FromBody] ModeloUsuario model)
         {
             var result = await _servicio.UpdateUser(model);
 

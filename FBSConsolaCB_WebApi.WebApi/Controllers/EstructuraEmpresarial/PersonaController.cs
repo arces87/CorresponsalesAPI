@@ -20,21 +20,21 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloPersona>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloPersona>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<object> Get(int Id)
+        public async Task<ActionResult<object>> Get(int Id)
         {
             var temp = await _servicio.Get(Id);
             return temp;
         }
 
         [HttpPost("corresponsal")]
-        public async Task<ModeloCorresponsal> Create([FromBody] ModeloCorresponsal model)
+        public async Task<ActionResult<ModeloCorresponsal>> Create([FromBody] ModeloCorresponsal model)
         {
             var result = await _servicio.Create(model);
 
@@ -47,7 +47,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPost("supervisor")]
-        public async Task<ModeloSupervisor> Create([FromBody] ModeloSupervisor model)
+        public async Task<ActionResult<ModeloSupervisor>> Create([FromBody] ModeloSupervisor model)
         {
             var result = await _servicio.Create(model);
 
@@ -60,7 +60,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut("corresponsal")]
-        public async Task<ModeloCorresponsal> Update([FromBody] ModeloCorresponsal model)
+        public async Task<ActionResult<ModeloCorresponsal>> Update([FromBody] ModeloCorresponsal model)
         {
             var result = await _servicio.Update(model);
 
@@ -74,7 +74,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
 
 
         [HttpPut("supervisor")]
-        public async Task<ModeloSupervisor> Update([FromBody] ModeloSupervisor model)
+        public async Task<ActionResult<ModeloSupervisor>> Update([FromBody] ModeloSupervisor model)
         {
             var result = await _servicio.Update(model);
 
@@ -87,7 +87,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ModeloPersona> Delete(int Id)
+        public async Task<ActionResult<ModeloPersona>> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
@@ -21,25 +22,26 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ModeloDispositivo>> List()
+        public async Task<ActionResult<IEnumerable<ModeloDispositivo>>> List()
         {
-            return await _servicio.List();
+            var resultado = await _servicio.List();
+            return resultado.ToList();
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloDispositivo>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloDispositivo>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ModeloDispositivo> Get(int Id)
+        public async Task<ActionResult<ModeloDispositivo>> Get(int Id)
         {
             return await _servicio.Get(Id);
         }
 
         [HttpPost]
-        public async Task<ModeloDispositivo> Create([FromBody] ModeloDispositivo model)
+        public async Task<ActionResult<ModeloDispositivo>> Create([FromBody] ModeloDispositivo model)
         {
             var result = await _servicio.Create(model);
 
@@ -52,7 +54,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ModeloDispositivo> Update([FromBody] ModeloDispositivo model)
+        public async Task<ActionResult<ModeloDispositivo>> Update([FromBody] ModeloDispositivo model)
         {
             var result = await _servicio.Update(model);
 
@@ -65,7 +67,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ModeloDispositivo> Delete(int Id)
+        public async Task<ActionResult<ModeloDispositivo>> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);
 

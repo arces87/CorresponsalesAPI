@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Identidad.Dominio.Modelos.Seguridad;
@@ -18,13 +19,14 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ModeloPermiso>> Get()
+        public async Task<ActionResult<IEnumerable<ModeloPermiso>>> Get()
         {
-            return await _servicio.List();
+            var resultado = await _servicio.List();
+            return resultado.ToList();
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloPermiso>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloPermiso>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }

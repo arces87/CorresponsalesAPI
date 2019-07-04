@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
 using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
@@ -21,25 +22,26 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ModeloOficina>> Get()
+        public async Task<ActionResult<IEnumerable<ModeloOficina>>> Get()
         {
-            return await _servicio.List();
+            var resultado = await _servicio.List();
+            return resultado.ToList();
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloOficina>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloOficina>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
         [HttpGet("{id}")]
-        public async Task<ModeloOficina> Get(int Id)
+        public async Task<ActionResult<ModeloOficina>> Get(int Id)
         {
             return await _servicio.Get(Id);
         }
 
         [HttpPost]
-        public async Task<ModeloOficina> Create([FromBody] ModeloOficina model)
+        public async Task<ActionResult<ModeloOficina>> Create([FromBody] ModeloOficina model)
         {
             var result = await _servicio.Create(model);
 
@@ -52,7 +54,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ModeloOficina> Update([FromBody] ModeloOficina model)
+        public async Task<ActionResult<ModeloOficina>> Update([FromBody] ModeloOficina model)
         {
             var result = await _servicio.Update(model);
 
@@ -65,7 +67,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ModeloOficina> Delete(int Id)
+        public async Task<ActionResult<ModeloOficina>> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);
 

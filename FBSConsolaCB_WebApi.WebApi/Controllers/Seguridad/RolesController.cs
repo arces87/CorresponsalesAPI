@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Identidad.Dominio.Modelos.Seguridad;
@@ -22,25 +23,26 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ModeloRol>> Roles()
+        public async Task<ActionResult<IEnumerable<ModeloRol>>> Roles()
         {
-            return await _servicio.GetRoles();
+            var resultado = await _servicio.GetRoles();
+            return resultado.ToList();
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloRol>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloRol>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
         [HttpGet("{Id}")]
-        public async Task<ModeloRol> GetRole(string Id)
+        public async Task<ActionResult<ModeloRol>> GetRole(string Id)
         {
             return await _servicio.GetRole(Id);
         }
 
         [HttpPost]
-        public async Task<object> Create([FromBody] ModeloRol model)
+        public async Task<ActionResult<object>> Create([FromBody] ModeloRol model)
         {
             var result = await _servicio.CreateRole(model);
 
@@ -53,7 +55,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<object> Update([FromBody] ModeloRol model)
+        public async Task<ActionResult<object>> Update([FromBody] ModeloRol model)
         {
             var result = await _servicio.UpdateRole(model);
 
@@ -66,7 +68,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<object> Delete(string Id)
+        public async Task<ActionResult<object>> Delete(string Id)
         {
             var result = await _servicio.DeleteRole(Id);
 

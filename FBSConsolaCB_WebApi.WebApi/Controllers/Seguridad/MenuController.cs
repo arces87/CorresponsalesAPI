@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FBS.Identidad.Dominio.Modelos.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
@@ -20,25 +21,27 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ModeloMenu>> GetMenu()
+        public async Task<ActionResult<IEnumerable<ModeloMenu>>> GetMenu()
         {
-            return await _servicio.List();
+            var resultado = await _servicio.List();
+            return resultado.ToList();
         }
 
         [HttpGet("Usuario/{idUsuario}")]
-        public async Task<IEnumerable<ModeloMenu>> GetMenuUsuario(string idUsuario)
+        public async Task<ActionResult<IEnumerable<ModeloMenu>>> GetMenuUsuario(string idUsuario)
         {
-            return await _servicio.GetMenuUsuario(idUsuario);
+            var resultado = await _servicio.GetMenuUsuario(idUsuario);
+            return resultado.ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ModeloMenu> GetMenu(int Id)
+        public async Task<ActionResult<ModeloMenu>> GetMenu(int Id)
         {
             return await _servicio.Get(Id);
         }
 
         [HttpPost]
-        public async Task<ModeloMenu> Create([FromBody] ModeloMenu model)
+        public async Task<ActionResult<ModeloMenu>> Create([FromBody] ModeloMenu model)
         {
             var result = await _servicio.Create(model);
 
@@ -51,7 +54,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ModeloMenu> Update([FromBody] ModeloMenu model)
+        public async Task<ActionResult<ModeloMenu>> Update([FromBody] ModeloMenu model)
         {
             var result = await _servicio.Update(model);
 
@@ -64,7 +67,7 @@ namespace GeNe.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ModeloMenu> Delete(int Id)
+        public async Task<ActionResult<ModeloMenu>> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
@@ -21,25 +22,26 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ModeloLimiteTransaccional>> List()
+        public async Task<ActionResult<IEnumerable<ModeloLimiteTransaccional>>> List()
         {
-            return await _servicio.List();
+            var resultado = await _servicio.List();
+            return resultado.ToList();
         }
 
         [HttpPost("lista")]
-        public async Task<ModeloFuenteDatos<ModeloLimiteTransaccional>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloLimiteTransaccional>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ModeloLimiteTransaccional> Get(int Id)
+        public async Task<ActionResult<ModeloLimiteTransaccional>> Get(int Id)
         {
             return await _servicio.Get(Id);
         }
 
         [HttpPost]
-        public async Task<ModeloLimiteTransaccional> Create([FromBody] ModeloLimiteTransaccional model)
+        public async Task<ActionResult<ModeloLimiteTransaccional>> Create([FromBody] ModeloLimiteTransaccional model)
         {
             var result = await _servicio.Create(model);
 
@@ -52,7 +54,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ModeloLimiteTransaccional> Update([FromBody] ModeloLimiteTransaccional model)
+        public async Task<ActionResult<ModeloLimiteTransaccional>> Update([FromBody] ModeloLimiteTransaccional model)
         {
             var result = await _servicio.Update(model);
 
@@ -65,7 +67,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ModeloLimiteTransaccional> Delete(int Id)
+        public async Task<ActionResult<ModeloLimiteTransaccional>> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);
 
