@@ -1,5 +1,6 @@
 ﻿using FBS.Identidad.DAL.Seguridad;
 using FBSConsolaCB_WebApi.DAL.Nomenclador;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,6 +25,10 @@ namespace FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial
         public int NumeroIdentificador { get; set; }
 
         public string Identificacion { get; set; }
+
+        public string Direccion { get; set; }
+
+        public DateTime? FechaNacimiento { get; set; }
 
         public string CorreoElectronico { get; set; }
 

@@ -13,10 +13,6 @@ namespace FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial
 
         public Persona Persona { get; set; }
 
-        public DateTime FechaNacimiento { get; set; }
-
-        public string Direccion { get; set; }
-
         public float Latitud { get; set; }
 
         public float Longitud { get; set; }

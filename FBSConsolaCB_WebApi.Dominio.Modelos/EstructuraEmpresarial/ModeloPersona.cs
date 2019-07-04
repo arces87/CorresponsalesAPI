@@ -1,5 +1,6 @@
 ﻿using FBS.Identidad.Dominio.Modelos.Seguridad;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Nomenclador;
+using System;
 
 namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
 {
@@ -13,6 +14,8 @@ namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
         public string NombreUnido { get; set; }
         public int NumeroIdentificador { get; set; }
         public string Identificacion { get; set; }
+        public string Direccion { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public bool EstaActivo { get; set; }
         public bool Interno { get; set; }
         public ModeloOficina Oficina { get; set; }
