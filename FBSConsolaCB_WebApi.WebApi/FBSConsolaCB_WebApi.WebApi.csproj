@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <Reference Include="FBS.Dominio.Modelos">
-      <HintPath>..\..\..\FBS_Core\FBS.Dominio.Modelos\bin\Debug\netcoreapp2.2\FBS.Dominio.Modelos.dll</HintPath>
+      <HintPath>..\..\..\FBS_Core\FBS.Dominio.Modelos\bin\Debug\netstandard2.0\FBS.Dominio.Modelos.dll</HintPath>
     </Reference>
     <Reference Include="FBS.Dominio.Servicios">
       <HintPath>..\..\..\FBS_Core\FBS.Dominio.Servicios\bin\Debug\netcoreapp2.2\FBS.Dominio.Servicios.dll</HintPath>
@@ -31,7 +31,7 @@
       <HintPath>..\..\..\FBS_Core\FBS.Identidad.DAL\bin\Debug\netcoreapp2.2\FBS.Identidad.DAL.dll</HintPath>
     </Reference>
     <Reference Include="FBS.Identidad.Dominio.Modelos">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Modelos\bin\Debug\netcoreapp2.2\FBS.Identidad.Dominio.Modelos.dll</HintPath>
+      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Modelos\bin\Debug\netstandard2.0\FBS.Identidad.Dominio.Modelos.dll</HintPath>
     </Reference>
     <Reference Include="FBS.Identidad.Dominio.Servicios">
       <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Servicios\bin\Debug\netcoreapp2.2\FBS.Identidad.Dominio.Servicios.dll</HintPath>

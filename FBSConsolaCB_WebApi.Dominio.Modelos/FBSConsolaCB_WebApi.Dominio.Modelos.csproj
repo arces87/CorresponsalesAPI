@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Reference Include="FBS.Identidad.Dominio.Modelos">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Modelos\bin\Debug\netcoreapp2.2\FBS.Identidad.Dominio.Modelos.dll</HintPath>
+      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Modelos\bin\Debug\netstandard2.0\FBS.Identidad.Dominio.Modelos.dll</HintPath>
     </Reference>
   </ItemGroup>
 

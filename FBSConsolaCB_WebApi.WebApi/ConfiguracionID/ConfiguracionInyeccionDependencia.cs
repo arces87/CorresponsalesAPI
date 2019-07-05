@@ -46,6 +46,7 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services)
         {
+
             services.AddScoped<IServicioUsuario, ServicioUsuario>();
             services.AddScoped<IServicioRol, ServicioRol>();
             services.AddScoped<IServicioPermiso, ServicioPermiso>();
