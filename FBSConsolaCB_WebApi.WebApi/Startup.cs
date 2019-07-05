@@ -5,7 +5,7 @@ using System.Text;
 using AutoMapper;
 using FBS.Identidad.DAL.Seguridad;
 using FBSConsolaCB_WebApi.DAL;
-using FBSConsolaCB_WebApi.Dominio.Servicios.MapperConfigurator;
+using FBSConsolaCB_WebApi.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCB_WebApi.WebApi.AutofacConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -99,7 +99,7 @@ namespace FBSConsolaCB_WebApi.WebApi
             //});
             #endregion
             services.AddCors();
-            services.AddAutoMapper(typeof(FBSConsolaCBAutoMapperConfiguratorProfile));
+            services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

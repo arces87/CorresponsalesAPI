@@ -7,11 +7,11 @@ using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
 using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Nomenclador;
 
-namespace FBSConsolaCB_WebApi.Dominio.Servicios.MapperConfigurator
+namespace FBSConsolaCB_WebApi.Dominio.Servicios.ConfiguracionMapeo
 {
-    public class FBSConsolaCBAutoMapperConfiguratorProfile : ConfiguracionAutoMapper
+    public class ConfiguracionPerfilAutoMapperFBSConsolaCB : ConfiguracionAutoMapper
     {
-        public FBSConsolaCBAutoMapperConfiguratorProfile() : base()
+        public ConfiguracionPerfilAutoMapperFBSConsolaCB() : base()
         {
             CreateMap<Persona, ModeloPersona>().ReverseMap();
 
@@ -32,6 +32,8 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.MapperConfigurator
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloEmpresa>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloOficina>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloPersona>>();
+            CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloSupervisor>>();
+            CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloCorresponsal>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloCatalogo>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloTipoCatalogo>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloDispositivo>>();

@@ -9,6 +9,8 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial
     {
         Task<IEnumerable<Persona>> GetAllActive();
         Task<IEnumerable<Persona>> GetAllWithAssociations();
+        Task<IEnumerable<Supervisor>> GetSupervisoresWithAssociations();
+        Task<IEnumerable<Corresponsal>> GetCorresponsalesWithAssociations();
         Task<object> GetWithAssociations(int Id);
         Task<Persona> GetForUserName(string userName);
 

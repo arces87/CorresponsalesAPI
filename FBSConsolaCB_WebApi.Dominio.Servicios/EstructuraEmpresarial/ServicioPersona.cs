@@ -33,6 +33,28 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
             return _fuente;
         }
 
+        public async Task<ModeloFuenteDatos<ModeloSupervisor>> ListaSupervisores(ModeloPaginacion filtro)
+        {
+            IEnumerable<Supervisor> _model = await _repositorio.GetSupervisoresWithAssociations();
+            var _fuente = _mapper.Map<ModeloFuenteDatos<ModeloSupervisor>>(filtro);
+            _fuente.TotalElementos = _model.Count();
+            Filtro<Supervisor>.ProcesarLista(ref _model, filtro);
+
+            _fuente.Datos = _mapper.Map<IEnumerable<ModeloSupervisor>>(_model);
+            return _fuente;
+        }
+
+        public async Task<ModeloFuenteDatos<ModeloCorresponsal>> ListaCorresponsales(ModeloPaginacion filtro)
+        {
+            IEnumerable<Corresponsal> _model = await _repositorio.GetCorresponsalesWithAssociations();
+            var _fuente = _mapper.Map<ModeloFuenteDatos<ModeloCorresponsal>>(filtro);
+            _fuente.TotalElementos = _model.Count();
+            Filtro<Corresponsal>.ProcesarLista(ref _model, filtro);
+
+            _fuente.Datos = _mapper.Map<IEnumerable<ModeloCorresponsal>>(_model);
+            return _fuente;
+        }
+
         public async Task<object> Get(int Id)
         {
             var _model = await _repositorio.GetWithAssociations(Id);

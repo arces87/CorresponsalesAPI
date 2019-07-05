@@ -25,6 +25,18 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
             return await _servicio.List(filtro);
         }
 
+        [HttpPost("lista/corresponsales")]
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloCorresponsal>>> ListaCorresponsales([FromBody] ModeloPaginacion filtro)
+        {
+            return await _servicio.ListaCorresponsales(filtro);
+        }
+
+        [HttpPost("lista/supervisores")]
+        public async Task<ActionResult<ModeloFuenteDatos<ModeloSupervisor>>> ListaSupervisores([FromBody] ModeloPaginacion filtro)
+        {
+            return await _servicio.ListaSupervisores(filtro);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> Get(int Id)

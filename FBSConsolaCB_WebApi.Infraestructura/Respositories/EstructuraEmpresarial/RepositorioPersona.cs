@@ -28,6 +28,22 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
                 .Include(c => c.Usuario).ToListAsync();
         }
 
+        public async Task<IEnumerable<Supervisor>> GetSupervisoresWithAssociations()
+        {
+            return await _contexto.Set<Supervisor>().Where(r => r.EstaActivo == true)
+                .Include(c => c.Persona).ThenInclude(c => c.TipoIdentificacion)
+                .Include(c => c.Persona).ThenInclude(c => c.Oficina)
+                .Include(c => c.Persona).ThenInclude(c => c.Usuario).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Corresponsal>> GetCorresponsalesWithAssociations()
+        {
+            return await _contexto.Set<Corresponsal>().Where(r => r.EstaActivo == true)
+                .Include(c => c.Persona).ThenInclude(c => c.TipoIdentificacion)
+                .Include(c => c.Persona).ThenInclude(c => c.Oficina)
+                .Include(c => c.Persona).ThenInclude(c => c.Usuario).ToListAsync();
+        }
+
         public async Task<object> GetWithAssociations(int Id)
         {
             var _persona = await _contexto.Set<Persona>().Where(r => r.EstaActivo == true)
@@ -68,7 +84,6 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
 
         public override async Task Add(Persona entity)
         {
-            entity.Usuario = Context.Users.FirstOrDefault(c => c.Id == entity.Usuario.Id);
             entity.Oficina = Context.Oficinas.FirstOrDefault(c => c.Id == entity.Oficina.Id);
             entity.TipoIdentificacion = Context.Catalogos.FirstOrDefault(c => c.Id == entity.TipoIdentificacion.Id);
             entity.EstaActivo = true;
@@ -78,7 +93,6 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
 
         public async Task Add(Supervisor entity)
         {
-            entity.Persona.Usuario = Context.Users.FirstOrDefault(c => c.Id == entity.Persona.Usuario.Id);
             entity.Persona.Oficina = Context.Oficinas.FirstOrDefault(c => c.Id == entity.Persona.Oficina.Id);
             entity.Persona.TipoIdentificacion = Context.Catalogos.FirstOrDefault(c => c.Id == entity.Persona.TipoIdentificacion.Id);
             entity.EstaActivo = true;
@@ -89,7 +103,6 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
 
         public async Task Add(Corresponsal entity)
         {
-            entity.Persona.Usuario = Context.Users.FirstOrDefault(c => c.Id == entity.Persona.Usuario.Id);
             entity.Persona.Oficina = Context.Oficinas.FirstOrDefault(c => c.Id == entity.Persona.Oficina.Id);
             entity.Persona.TipoIdentificacion = Context.Catalogos.FirstOrDefault(c => c.Id == entity.Persona.TipoIdentificacion.Id);
             entity.Supervisor = Context.Supervisores.FirstOrDefault(c => c.Id == entity.Supervisor.Id);
