@@ -31,7 +31,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Consola
             var user = (ModeloUsuario)(await Login(model));
             if (user.Token != null)
             {
-                var corresponsal = _repositorio.GetForUserName(user.UserName);
+                var corresponsal = await _repositorio.GetForUserName(user.UserName);
                 var _model = _mapper.Map<ModeloPersona>(corresponsal);
                 _model.Usuario = user;
                 return _model;
