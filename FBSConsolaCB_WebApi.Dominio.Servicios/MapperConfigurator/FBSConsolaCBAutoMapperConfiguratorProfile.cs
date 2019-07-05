@@ -35,6 +35,9 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.MapperConfigurator
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloCatalogo>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloTipoCatalogo>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloDispositivo>>();
+            CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloLog>>();
+            CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloLimiteExistencia>>();
+            CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloLimiteTransaccional>>();
         }
     }
 }
