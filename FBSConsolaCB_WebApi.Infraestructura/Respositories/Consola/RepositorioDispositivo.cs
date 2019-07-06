@@ -22,12 +22,11 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
         public async Task<IEnumerable<Dispositivo>> GetAllWithAssociations()
         {
             return await _contexto.Set<Dispositivo>().Where(a => a.EstaActivo == true)
-                .Include(c => c.Corresponsal).Include(d => d.TipoDispositivo).ToListAsync();
+                .Include(d => d.TipoDispositivo).ToListAsync();
         }
         public override async Task Add(Dispositivo entity)
         {
             entity.TipoDispositivo = Context.Catalogos.FirstOrDefault(c => c.Id == entity.TipoDispositivo.Id);
-            entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
             entity.EstaActivo = true;
             Context.Dispositivos.Add(entity);
             await Context.SaveChangesAsync();
@@ -35,21 +34,28 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
         public override async Task Update(Dispositivo entity)
         {
             entity.TipoDispositivo = Context.Catalogos.FirstOrDefault(c => c.Id == entity.TipoDispositivo.Id);
-            entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
             _contexto.Entry(entity).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
-            
+
         }
 
         public async Task<Dispositivo> GetWithAssociations(int Id)
         {
             return await _contexto.Set<Dispositivo>().Where(a => a.EstaActivo == true)
-                .Include(c => c.Corresponsal).Include(d => d.TipoDispositivo).FirstOrDefaultAsync(c => c.Id == Id);
+               .Include(d => d.TipoDispositivo).FirstOrDefaultAsync(c => c.Id == Id);
         }
 
         public override async Task Remove(Dispositivo entity)
         {
             entity.EstaActivo = false;
+            await _contexto.SaveChangesAsync();
+        }
+
+        public async Task Asignar(int idDispositivo, int idCorresponsal)
+        {
+            var dispositivo = Context.Dispositivos.FirstOrDefault(d => d.Id == idDispositivo);
+            var corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == idCorresponsal);
+            _contexto.Set<DispositivoCorresponsal>().Add(new DispositivoCorresponsal() { Dispositivo = dispositivo, Corresponsal = corresponsal });
             await _contexto.SaveChangesAsync();
         }
 

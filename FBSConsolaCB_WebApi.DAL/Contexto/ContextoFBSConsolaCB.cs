@@ -34,6 +34,7 @@ namespace FBSConsolaCB_WebApi.DAL
 
         #region Consolas
         public DbSet<Dispositivo> Dispositivos { get; set; }
+        public DbSet<DispositivoCorresponsal> DispositivosCorresponsales { get; set; }
         public DbSet<LimiteTransaccional> LimitesTransaccionales { get; set; }
         public DbSet<LimiteExistencia> LimitesExistencias { get; set; }
         public DbSet<Log> Logs { get; set; }

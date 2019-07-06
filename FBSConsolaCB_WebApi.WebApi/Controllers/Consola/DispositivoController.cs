@@ -53,6 +53,17 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
+        [HttpPost]
+        public async Task<ActionResult<ModeloAsignarDispositivo>> Asignar([FromBody] ModeloAsignarDispositivo model)
+        {
+            var result = await _servicio.Asignar(model);
+            if (result != null)
+            {
+                return result;
+            }
+            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+        }
+
         [HttpPut]
         public async Task<ActionResult<ModeloDispositivo>> Update([FromBody] ModeloDispositivo model)
         {

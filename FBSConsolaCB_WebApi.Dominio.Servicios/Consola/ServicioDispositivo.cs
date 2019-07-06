@@ -54,6 +54,13 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Consola
             await _repositorio.Add(_model);
             return _mapper.Map<ModeloDispositivo>(_model);
         }
+
+        public async Task<ModeloAsignarDispositivo> Asignar(ModeloAsignarDispositivo model)
+        {
+            await _repositorio.Asignar(model.DispositivoId,model.CorresponsalId);
+            return model;
+        }
+
         public async Task<ModeloDispositivo> Update(ModeloDispositivo model)
         {
             var _model = await _repositorio.GetWithAssociations(model.Id);
