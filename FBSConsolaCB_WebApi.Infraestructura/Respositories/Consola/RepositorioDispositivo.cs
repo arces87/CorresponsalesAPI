@@ -58,6 +58,12 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
             _contexto.Set<DispositivoCorresponsal>().Add(new DispositivoCorresponsal() { Dispositivo = dispositivo, Corresponsal = corresponsal });
             await _contexto.SaveChangesAsync();
         }
+        public async Task Desasignar(int idDispositivo, int idCorresponsal)
+        {
+            var asignacion = Context.DispositivosCorresponsales.FirstOrDefault(d => d.Dispositivo.Id == idDispositivo && d.Corresponsal.Id == idCorresponsal);
+            _contexto.Set<DispositivoCorresponsal>().Remove(asignacion);
+            await _contexto.SaveChangesAsync();
+        }
 
         public ContextoFBSConsolaCB Context { get { return _contexto as ContextoFBSConsolaCB; } }
     }

@@ -11,6 +11,7 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Interfaces.Consola
         Task<IEnumerable<Dispositivo>> GetAllWithAssociations();
         Task<Dispositivo> GetWithAssociations(int Id);
         Task Asignar(int idDispositivo, int idCorresponsal);
+        Task Desasignar(int idDispositivo, int idCorresponsal);
 
     }
 }

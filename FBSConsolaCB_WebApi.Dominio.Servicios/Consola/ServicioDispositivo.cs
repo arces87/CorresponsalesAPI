@@ -60,6 +60,11 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Consola
             await _repositorio.Asignar(model.DispositivoId,model.CorresponsalId);
             return model;
         }
+        public async Task<ModeloAsignarDispositivo> Desasignar(ModeloAsignarDispositivo model)
+        {
+            await _repositorio.Desasignar(model.DispositivoId, model.CorresponsalId);
+            return model;
+        }
 
         public async Task<ModeloDispositivo> Update(ModeloDispositivo model)
         {

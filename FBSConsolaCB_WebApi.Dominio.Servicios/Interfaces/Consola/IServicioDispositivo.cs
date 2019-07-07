@@ -14,5 +14,6 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.Consola
         Task<ModeloAsignarDispositivo> Asignar(ModeloAsignarDispositivo modelo);
         Task<ModeloDispositivo> Update(ModeloDispositivo modelo);
         Task<ModeloDispositivo> Delete(int Id);
+        Task<ModeloAsignarDispositivo> Desasignar(ModeloAsignarDispositivo model);
     }
 }

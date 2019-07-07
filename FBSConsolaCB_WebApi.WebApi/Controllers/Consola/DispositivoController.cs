@@ -53,7 +53,7 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
-        [HttpPost]
+        [HttpPost("asignacion")]
         public async Task<ActionResult<ModeloAsignarDispositivo>> Asignar([FromBody] ModeloAsignarDispositivo model)
         {
             var result = await _servicio.Asignar(model);
@@ -87,6 +87,17 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
                 return result;
             }
 
+            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+        }
+
+        [HttpDelete("asignacion")]
+        public async Task<ActionResult<ModeloAsignarDispositivo>> Desasignar([FromBody] ModeloAsignarDispositivo model)
+        {
+            var result = await _servicio.Desasignar(model);
+            if (result != null)
+            {
+                return result;
+            }
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
     }
