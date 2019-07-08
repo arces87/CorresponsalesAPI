@@ -62,8 +62,16 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
             else
             {
                 var _supervisor = await _contexto.Set<Supervisor>().Where(s => s.Id == Id).FirstOrDefaultAsync();
-                _supervisor.Persona = _persona;
-                return _supervisor;
+                if (_supervisor != null)
+                {
+                    _supervisor.Persona = _persona;
+                    return _supervisor;
+                }
+                else
+                {
+                    return _persona;
+                }
+
             }
         }
 
