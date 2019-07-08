@@ -1,4 +1,5 @@
-﻿using FBS.Infraestructura.Repositorio;
+﻿using FBS.Identidad.DAL.Seguridad;
+using FBS.Infraestructura.Repositorio;
 using FBSConsolaCB_WebApi.DAL;
 using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
@@ -87,6 +88,8 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
         public override async Task Remove(Persona entity)
         {
             entity.EstaActivo = false;
+            var usuario = _contexto.Set<Usuario>().FirstOrDefault(u => u.Id == entity.Usuario.Id);
+            usuario.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 
