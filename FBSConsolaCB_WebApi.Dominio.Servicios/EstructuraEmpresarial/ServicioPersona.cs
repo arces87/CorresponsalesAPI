@@ -30,6 +30,14 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
             Filtro<Persona>.ProcesarLista(ref _model, filtro);
 
             _fuente.Datos = _mapper.Map<IEnumerable<ModeloPersona>>(_model);
+            foreach (var item in _fuente.Datos)
+            {
+                var supervisor = await _repositorio.GetWithAssociations(item.Id);
+                if (supervisor != null)
+                    item.Tipo = "Supervisor";
+                else
+                    item.Tipo = "Corresponsal";
+            }
             return _fuente;
         }
 

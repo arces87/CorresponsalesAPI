@@ -17,7 +17,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
         public string Direccion { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public bool EstaActivo { get; set; }
-        public bool Interno { get; set; }
+        public string Tipo { get; set; }
         public ModeloOficina Oficina { get; set; }
 
         public ModeloCatalogo TipoIdentificacion { get; set; }
