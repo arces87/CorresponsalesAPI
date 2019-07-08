@@ -32,11 +32,13 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
             _fuente.Datos = _mapper.Map<IEnumerable<ModeloPersona>>(_model);
             foreach (var item in _fuente.Datos)
             {
-                var supervisor = await _repositorio.GetWithAssociations(item.Id);
-                if (supervisor != null)
+                var persona = await _repositorio.GetWithAssociations(item.Id);
+                if (persona is Supervisor)
                     item.Tipo = "Supervisor";
-                else
+                else if (persona is Corresponsal)
                     item.Tipo = "Corresponsal";
+                else
+                    item.Tipo = "Administrador";
             }
             return _fuente;
         }
