@@ -7,9 +7,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
         public int Id { get; set; }
 
         public ModeloPersona Persona { get; set; }
-
-        public IEnumerable<ModeloCorresponsal> Corresponsales { get; set; }
-
+        
         public bool EstaActivo { get; set; }
     }
 }

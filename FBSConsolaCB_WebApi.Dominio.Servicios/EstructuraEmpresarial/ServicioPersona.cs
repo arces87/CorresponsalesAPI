@@ -72,8 +72,10 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
             {
                 if (_model is Corresponsal)
                     return _mapper.Map<ModeloCorresponsal>(_model);
-                else
+                else if (_model is Supervisor)
                     return _mapper.Map<ModeloSupervisor>(_model);
+                else
+                    return _mapper.Map<ModeloPersona>(_model);
             }
             return null;
         }
