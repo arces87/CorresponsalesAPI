@@ -2,6 +2,7 @@
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
 using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
+using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
 using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
@@ -71,7 +72,13 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
             if (_model != null)
             {
                 if (_model is Corresponsal)
-                    return _mapper.Map<ModeloCorresponsal>(_model);
+                {
+                    var corresponsal = _mapper.Map<ModeloCorresponsal>(_model);
+                    var dispositivo = _repositorio.ObtenerDispositivo(corresponsal.Id);
+                    if (dispositivo != null)
+                        corresponsal.Dispositivo = _mapper.Map<ModeloDispositivo>(dispositivo);
+                    return corresponsal;
+                }
                 else if (_model is Supervisor)
                     return _mapper.Map<ModeloSupervisor>(_model);
                 else

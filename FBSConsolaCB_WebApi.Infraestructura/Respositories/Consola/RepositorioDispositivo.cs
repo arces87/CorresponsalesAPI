@@ -1,6 +1,7 @@
 ﻿using FBS.Infraestructura.Repositorio;
 using FBSConsolaCB_WebApi.DAL;
 using FBSConsolaCB_WebApi.DAL.Consola;
+using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.Consola;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -63,6 +64,14 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola
             var asignacion = Context.DispositivosCorresponsales.FirstOrDefault(d => d.Dispositivo.Id == idDispositivo && d.Corresponsal.Id == idCorresponsal);
             _contexto.Set<DispositivoCorresponsal>().Remove(asignacion);
             await _contexto.SaveChangesAsync();
+        }
+
+        public async Task<Corresponsal> ObtenerCorresponsal(int idDispositivo)
+        {
+            var dispositivo = await Context.DispositivosCorresponsales.FirstOrDefaultAsync(c => c.Dispositivo.Id == idDispositivo);
+            if (dispositivo != null)
+                return await Context.Corresponsales.FirstOrDefaultAsync(d => d.Id == dispositivo.Corresponsal.Id);
+            return null;
         }
 
         public ContextoFBSConsolaCB Context { get { return _contexto as ContextoFBSConsolaCB; } }

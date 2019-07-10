@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
+using System;
 
 namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
 {
@@ -15,5 +16,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
         public ModeloSupervisor Supervisor { get; set; }
         
         public bool EstaActivo { get; set; }
+
+        public ModeloDispositivo Dispositivo { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FBS.Identidad.DAL.Seguridad;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCB_WebApi.DAL;
+using FBSConsolaCB_WebApi.DAL.Consola;
 using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using Microsoft.EntityFrameworkCore;
@@ -142,6 +143,14 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
             _contexto.Entry(entity.Persona).State = EntityState.Modified;
             _contexto.Entry(entity).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
+        }
+
+        public async Task<Dispositivo> ObtenerDispositivo(int idCorresponsal)
+        {
+            var dispositivo = await Context.DispositivosCorresponsales.FirstOrDefaultAsync(c => c.Corresponsal.Id == idCorresponsal);
+            if (dispositivo != null)
+                return await Context.Dispositivos.FirstOrDefaultAsync(d => d.Id == dispositivo.Dispositivo.Id);
+            return null;
         }
 
         public ContextoFBSConsolaCB Context { get { return _contexto as ContextoFBSConsolaCB; } }
