@@ -104,7 +104,7 @@ namespace FBSConsolaCB_WebApi.WebApi
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
-            ConfiguracionInyeccionDependencia.LoadServices(services);
+            ConfiguracionInyeccionDependencia.LoadServices(services, Configuration);
             #endregion
         }
 

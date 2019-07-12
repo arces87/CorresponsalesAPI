@@ -18,5 +18,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial
         public bool EstaActivo { get; set; }
 
         public ModeloDispositivo Dispositivo { get; set; }
+
+        public bool EstaBloqueado { get; set; }
     }
 }

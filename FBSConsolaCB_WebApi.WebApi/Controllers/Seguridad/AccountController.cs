@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace GeNe.WebApi.Controllers
+namespace FBSConsolaCB_WebApi.WebApi
 {
     [Route("api/[controller]")]
     public class AccountController : Controller

@@ -6,7 +6,7 @@ using FBS.Identidad.Dominio.Modelos.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeNe.WebApi.Controllers
+namespace FBSConsolaCB_WebApi.WebApi
 {
     [Route("api/[controller]")]
     public class PermisoController : Controller

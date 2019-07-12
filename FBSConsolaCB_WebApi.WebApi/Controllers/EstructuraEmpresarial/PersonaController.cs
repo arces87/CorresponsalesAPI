@@ -33,6 +33,20 @@ namespace FBSConsolaCB_WebApi.WebApi.Controllers
             return temp;
         }
 
+        [HttpGet("DevuelveDatosPersonaIdentificacion")]
+        public Task<ModeloPersona> DevuelveDatosPersonaIdentificacion(string identificacion)
+        {
+            var rusultado = _servicio.DevuelveDatosPersonaIdentificacion(identificacion);
+            return rusultado;
+        }
+
+        [HttpGet("CambiarEstadoCorresponsal")]
+        public Task<ModeloCorresponsal> CambiarEstadoCorresponsal(int id)
+        {
+            var rusultado = _servicio.CambiarEstadoCorresponsal(id);
+            return rusultado;
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<ModeloPersona>> Delete(int Id)
         {

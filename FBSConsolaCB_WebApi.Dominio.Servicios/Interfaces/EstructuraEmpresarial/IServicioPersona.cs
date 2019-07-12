@@ -15,7 +15,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial
         Task<ModeloCorresponsal> Update(ModeloCorresponsal model);
         Task<ModeloSupervisor> Update(ModeloSupervisor model);
         Task<ModeloPersona> Delete(int Id);
-
-
+        Task<ModeloPersona> DevuelveDatosPersonaIdentificacion(string identificacion);
+        Task<ModeloCorresponsal> CambiarEstadoCorresponsal(int id);
     }
 }

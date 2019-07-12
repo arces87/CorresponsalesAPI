@@ -38,6 +38,9 @@
     <Reference Include="FBS.Infraestructura">
       <HintPath>..\..\..\FBS_Core\FBS.Infraestructura\bin\Debug\netcoreapp2.2\FBS.Infraestructura.dll</HintPath>
     </Reference>
+    <Reference Include="FBS_Financial_Services_Banca">
+      <HintPath>..\FBSConsolaCB_WebApi.WebApi\Resources\dll\FBS_Financial_Services_Banca.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

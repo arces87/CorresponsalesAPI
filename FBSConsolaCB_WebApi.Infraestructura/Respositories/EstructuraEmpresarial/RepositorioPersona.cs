@@ -121,6 +121,7 @@ namespace FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial
             entity.Persona.TipoIdentificacion = Context.Catalogos.FirstOrDefault(c => c.Id == entity.Persona.TipoIdentificacion.Id);
             entity.Supervisor = Context.Supervisores.FirstOrDefault(c => c.Id == entity.Supervisor.Id);
             entity.EstaActivo = true;
+            entity.Persona.Usuario.LockoutEnabled = true;
             entity.Persona.EstaActivo = true;
             Context.Corresponsales.Add(entity);
             await Context.SaveChangesAsync();

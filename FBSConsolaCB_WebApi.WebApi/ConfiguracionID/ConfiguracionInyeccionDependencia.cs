@@ -16,7 +16,11 @@ using FBSConsolaCB_WebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCB_WebApi.Infraestructure.Repositories.Consola;
 using FBSConsolaCB_WebApi.Infraestructure.Repositories.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Repositories.Nomenclador;
+using Financial_Services_Banca;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Net.Http;
 
 namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
 {
@@ -44,7 +48,7 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }
 
-        internal static void LoadServices(IServiceCollection services)
+        internal static void LoadServices(IServiceCollection services, IConfiguration configuration)
         {
 
             services.AddScoped<IServicioUsuario, ServicioUsuario>();
@@ -64,6 +68,11 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             services.AddScoped<IServicioLimiteExistencia, ServicioLimiteExistencia>();
             services.AddScoped<IServicioLimiteTransaccional, ServicioLimiteTransaccional>();
             services.AddScoped<IServicioLog, ServicioLog>();
+
+            var httpClient = new HttpClient();
+            var configuracionFinancial = configuration["FinancialServerConfig"];
+            httpClient.BaseAddress = new Uri(configuracionFinancial["DireccionIp"] + ":" + configuracionFinancial["Puerto"]);
+            services.AddSingleton<IFBSBancaApi>(new FBSBancaApi(httpClient, false));
         }
     }
 }

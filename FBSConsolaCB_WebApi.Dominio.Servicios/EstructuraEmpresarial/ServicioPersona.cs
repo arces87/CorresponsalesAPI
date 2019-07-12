@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
+using FBS.Identidad.Infraestructura.Interfaces;
 using FBSConsolaCB_WebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
 using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
+using Financial_Services_Banca;
+using Financial_Services_Banca.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,11 +19,17 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
     {
         private readonly IRepositorioPersona _repositorio;
         private readonly IMapper _mapper;
+        private readonly IFBSBancaApi _bancaVirtual;
+        private readonly IRepositorioUsuario _repositorioUsuario;
 
-        public ServicioPersona(IRepositorioPersona repositorio, IMapper mapper)
+        public ServicioPersona(IRepositorioPersona repositorio, IMapper mapper,
+            IFBSBancaApi bancaVirtual,
+            IRepositorioUsuario repositorioUsuario)
         {
             _repositorio = repositorio;
             _mapper = mapper;
+            _bancaVirtual = bancaVirtual;
+            _repositorioUsuario = repositorioUsuario;
         }
 
         public async Task<ModeloFuenteDatos<ModeloPersona>> List(ModeloPaginacion filtro)
@@ -140,6 +149,32 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.EstructuraEmpresarial
                 return _mapper.Map<ModeloPersona>(_model);
             }
             return null;
+        }
+
+        public async Task<ModeloPersona> DevuelveDatosPersonaIdentificacion(string identificacion)
+        {
+            var parametro = new PorIdentificacionSocioME()
+            {
+                Identificacion = identificacion
+            };
+            var _retorno = await _bancaVirtual.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(parametro);
+            var contenido = _retorno.Body;
+
+            if (contenido != null)
+            {
+                var retorno = _mapper.Map<ModeloPersona>(contenido);
+                return retorno;
+            }
+            return null;
+        }
+
+        public async Task<ModeloCorresponsal> CambiarEstadoCorresponsal(int id)
+        {
+            var corresponsal = await _repositorio.GetWithAssociations(id);
+            var usuario = (corresponsal as Corresponsal).Persona.Usuario;
+            usuario.LockoutEnabled = !usuario.LockoutEnabled;
+            await _repositorioUsuario.Update(usuario);
+            return _mapper.Map<ModeloCorresponsal>(corresponsal as Corresponsal);
         }
 
     }

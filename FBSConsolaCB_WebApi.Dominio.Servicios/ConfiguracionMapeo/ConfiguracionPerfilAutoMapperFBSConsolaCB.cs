@@ -6,6 +6,7 @@ using FBSConsolaCB_WebApi.DAL.Nomenclador;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Consola;
 using FBSConsolaCB_WebApi.Dominio.Modelos.EstructuraEmpresarial;
 using FBSConsolaCB_WebApi.Dominio.Modelos.Nomenclador;
+using Financial_Services_Banca.Models;
 
 namespace FBSConsolaCB_WebApi.Dominio.Servicios.ConfiguracionMapeo
 {
@@ -14,8 +15,15 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.ConfiguracionMapeo
         public ConfiguracionPerfilAutoMapperFBSConsolaCB() : base()
         {
             CreateMap<Persona, ModeloPersona>().ReverseMap();
+            CreateMap<InformacionPersonaMS, ModeloPersona>()
+                .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Nombres.Split()[0]))
+                .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Nombres.Split().Length > 1 ? d.Nombres.Split()[1] : ""))
+                .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Apellidos.Split()[0]))
+                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Apellidos.Split().Length > 1 ? d.Nombres.Split()[1] : ""))
+                .ForMember(m => m.FechaNacimiento, opt => opt.MapFrom(d => d.FechaNacimientoCreacion));
 
-            CreateMap<Corresponsal, ModeloCorresponsal>().ReverseMap();
+            CreateMap<Corresponsal, ModeloCorresponsal>()
+                .ForMember(m => m.EstaBloqueado, opt => opt.MapFrom(c => c.Persona.Usuario.LockoutEnabled)).ReverseMap();
 
             CreateMap<Supervisor, ModeloSupervisor>().ReverseMap();
 
@@ -28,6 +36,8 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<TipoCatalogo, ModeloTipoCatalogo>().ReverseMap();
 
             CreateMap<Dispositivo, ModeloDispositivo>().ReverseMap();
+            CreateMap<LimiteExistencia, ModeloLimiteExistencia>().ReverseMap();
+            CreateMap<LimiteTransaccional, ModeloLimiteTransaccional>().ReverseMap();
 
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloEmpresa>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloOficina>>();
