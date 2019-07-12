@@ -50,7 +50,6 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddScoped<IServicioUsuario, ServicioUsuario>();
             services.AddScoped<IServicioRol, ServicioRol>();
             services.AddScoped<IServicioPermiso, ServicioPermiso>();
@@ -70,7 +69,7 @@ namespace FBSConsolaCB_WebApi.WebApi.AutofacConfiguration
             services.AddScoped<IServicioLog, ServicioLog>();
 
             var httpClient = new HttpClient();
-            var configuracionFinancial = configuration["FinancialServerConfig"];
+            var configuracionFinancial = configuration.GetSection("FinancialServerConfig");
             httpClient.BaseAddress = new Uri(configuracionFinancial["DireccionIp"] + ":" + configuracionFinancial["Puerto"]);
             services.AddSingleton<IFBSBancaApi>(new FBSBancaApi(httpClient, false));
         }
