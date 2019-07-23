@@ -1,0 +1,66 @@
+﻿using System.Threading.Tasks;
+using FBSConsolaCBWebApi.Dominio.Modelos.Consola;
+using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace FBSConsolaCBWebApi.WebApi.Controllers
+{
+    [Route("api/[controller]")]
+    public class DispositivoController : Controller
+    {
+        private readonly IMediator _mediador;
+
+        public DispositivoController(IMediator mediador)
+        {
+            _mediador = mediador;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ModeloObtenerListaDispositivo>> List()
+        {
+            return await _mediador.Send(new ObtenerListaDispositivoQuery());
+        }
+
+        [HttpGet("get/{id}")]
+        public async Task<ActionResult<ObtenerModeloDispositivo>> Get(int Id)
+        {
+            return await _mediador.Send(new ObtenerDispositivoQuery() { Id = Id });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Create([FromBody] CrearDispositivoCommand model)
+        {
+            return await _mediador.Send(model);
+        }
+
+        [HttpPost("asignacion")]
+        public async Task<ActionResult<ModeloAsignarDispositivo>> Asignar([FromBody] AsignarDispositivoCommand model)
+        {
+            await _mediador.Publish(model);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<bool>> Update([FromBody] ModificarDispositivoCommand model)
+        {
+            return Ok(await _mediador.Send(model));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<int>> Delete(int Id)
+        {
+            return Ok(await _mediador.Send(new EliminarDispositivoCommand() { Id = Id }));
+        }
+
+        [HttpDelete("asignacion")]
+        public async Task<ActionResult<ModeloAsignarDispositivo>> Desasignar([FromBody] DesasignarDispositivoCommand model)
+        {
+            await _mediador.Publish(model);
+            return Ok();
+        }
+    }
+}
