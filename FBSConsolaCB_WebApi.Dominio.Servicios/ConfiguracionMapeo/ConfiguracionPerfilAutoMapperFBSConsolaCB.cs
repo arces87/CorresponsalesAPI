@@ -38,6 +38,7 @@ namespace FBSConsolaCB_WebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<Dispositivo, ModeloDispositivo>().ReverseMap();
             CreateMap<LimiteExistencia, ModeloLimiteExistencia>().ReverseMap();
             CreateMap<LimiteTransaccional, ModeloLimiteTransaccional>().ReverseMap();
+            CreateMap<Log, ModeloLog>().ReverseMap();
 
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloEmpresa>>();
             CreateMap<ModeloPaginacion, ModeloFuenteDatos<ModeloOficina>>();
