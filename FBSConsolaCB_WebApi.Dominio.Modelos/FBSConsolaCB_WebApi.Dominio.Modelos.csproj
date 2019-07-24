@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="FBS.Identidad.Dominio.Modelos">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Modelos\bin\Debug\netstandard2.0\FBS.Identidad.Dominio.Modelos.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Modelos\FBS.Identidad.Dominio.Modelos.csproj" />
   </ItemGroup>
 
 </Project>

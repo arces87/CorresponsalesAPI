@@ -1,0 +1,3 @@
+[submodule "FBS_Core"]
+	path = FBS_Core
+	url = http://186.5.29.66:8080/tfs/GitFreelance/_git/FBSCore
