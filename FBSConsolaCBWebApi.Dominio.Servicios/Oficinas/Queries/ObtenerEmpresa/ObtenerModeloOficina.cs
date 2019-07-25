@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Oficinas.Queries
+﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Oficinas.Queries
 {
     public class ObtenerModeloOficina
     {

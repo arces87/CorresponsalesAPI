@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCBWebApi.Dominio.Modelos.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
+﻿using System.Threading.Tasks;
 using FBSConsolaCBWebApi.Dominio.Servicios.Oficinas.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Oficinas.Queries;
 using MediatR;
