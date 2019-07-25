@@ -18,31 +18,31 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet]
+        [HttpGet(Name ="Alerta_ListarAlertas")]
         public async Task<ActionResult<ModeloObtenerListaAlerta>> List()
         {
             return await _mediador.Send(new ObtenerListaAlertaQuery());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("get/{id}", Name = "Alerta_ObtenerAlerta")]
         public async Task<ActionResult<ObtenerModeloAlerta>> Get(int Id)
         {
             return await _mediador.Send(new ObtenerAlertaQuery() { Id = Id });
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Alerta_CrearAlerta")]
         public async Task<ActionResult<int>> Create([FromBody] CrearAlertaCommand model)
         {
             return await _mediador.Send(model);
         }
 
-        [HttpPut]
+        [HttpPut(Name = "Alerta_ActualizarAlerta")]
         public async Task<ActionResult<bool>> Update([FromBody] ModificarAlertaCommand model)
         {
             return Ok(await _mediador.Send(model));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}",Name = "Alerta_EliminarAlerta")]
         public async Task<ActionResult<int>> Delete(int Id)
         {
             return Ok(await _mediador.Send(new EliminarAlertaCommand() { Id = Id }));

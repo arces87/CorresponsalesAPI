@@ -18,31 +18,31 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet("{tipo}")]
+        [HttpGet("{tipo}", Name = "Catalogo_ListarCatalogos")]
         public async Task<ActionResult<ModeloObtenerListaCatalogo>> List(int Tipo)
         {
             return await _mediador.Send(new ObtenerListaCatalogoQuery());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("get/{id}", Name = "Catalogo_ObtenerCatalogo")]
         public async Task<ActionResult<ObtenerModeloCatalogo>> Get(int Id)
         {
             return await _mediador.Send(new ObtenerCatalogoQuery() { Id = Id });
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Catalogo_CrearCatalogo")]
         public async Task<ActionResult<int>> Create([FromBody] CrearCatalogoCommand modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
 
-        [HttpPut]
+        [HttpPut(Name = "Catalogo_ActualizarCatalogo")]
         public async Task<ActionResult<int>> Update([FromBody] ModificarCatalogoCommand modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "Catalogo_EliminarCatalogo")]
         public async Task<ActionResult<int>> Delete(int Id)
         {
             return Ok(await _mediador.Send(new EliminarCatalogoCommand() { Id = Id }));

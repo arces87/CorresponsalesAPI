@@ -17,13 +17,13 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "Log_ListarLogs")]
         public async Task<ActionResult<ModeloObtenerListaLog>> List()
         {
             return await _mediador.Send(new ObtenerListaLogQuery());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("get/{id}", Name = "Log_ObtenerLog")]
         public async Task<ActionResult<ObtenerModeloLog>> Get(int Id)
         {
             return await _mediador.Send(new ObtenerLogQuery() { Id = Id });

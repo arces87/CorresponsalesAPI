@@ -18,17 +18,11 @@ namespace FBSConsolaCBWebApi.WebApi
             _servicio = servicio;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "Permiso_ListarPermisos")]
         public async Task<ActionResult<IEnumerable<ModeloPermiso>>> Get()
         {
             var resultado = await _servicio.List();
             return resultado.ToList();
-        }
-
-        [HttpPost("lista")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloPermiso>>> Get([FromBody] ModeloPaginacion filtro)
-        {
-            return await _servicio.List(filtro);
         }
     }
 }

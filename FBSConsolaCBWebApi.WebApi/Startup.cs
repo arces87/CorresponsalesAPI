@@ -115,11 +115,15 @@ namespace FBSConsolaCBWebApi.WebApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             #region Swagger Configuration
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = httpReq.Host.Value);
+            });
 
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
+
             });
             #endregion
 

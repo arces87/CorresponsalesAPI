@@ -18,44 +18,44 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "Dispositivo_ListarDispositivos")]
         public async Task<ActionResult<ModeloObtenerListaDispositivo>> List()
         {
             return await _mediador.Send(new ObtenerListaDispositivoQuery());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("get/{id}", Name = "Dispositivo_ObtenerDispositivo")]
         public async Task<ActionResult<ObtenerModeloDispositivo>> Get(int Id)
         {
             return await _mediador.Send(new ObtenerDispositivoQuery() { Id = Id });
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Dispositivo_CrearDispositivo")]
         public async Task<ActionResult<int>> Create([FromBody] CrearDispositivoCommand model)
         {
             return await _mediador.Send(model);
         }
 
-        [HttpPost("asignacion")]
+        [HttpPost("asignacion", Name = "Dispositivo_AsignarDispositivo")]
         public async Task<ActionResult> Asignar([FromBody] AsignarDispositivoCommand model)
         {
             await _mediador.Publish(model);
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut (Name = "Dispositivo_ActualizarDispositivo")]
         public async Task<ActionResult<bool>> Update([FromBody] ModificarDispositivoCommand model)
         {
             return Ok(await _mediador.Send(model));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "Dispositivo_EliminarDispositivo")]
         public async Task<ActionResult<int>> Delete(int Id)
         {
             return Ok(await _mediador.Send(new EliminarDispositivoCommand() { Id = Id }));
         }
 
-        [HttpDelete("asignacion")]
+        [HttpDelete("asignacion", Name = "Dispositivo_DesasignarDispositivo")]
         public async Task<ActionResult> Desasignar([FromBody] DesasignarDispositivoCommand model)
         {
             await _mediador.Publish(model);

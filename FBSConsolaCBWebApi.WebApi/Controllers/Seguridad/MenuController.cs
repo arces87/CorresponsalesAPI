@@ -20,27 +20,27 @@ namespace FBSConsolaCBWebApi.WebApi
             _servicio = servicio;
         }
 
-        [HttpGet]
+        [HttpGet (Name = "Menu_ListarMenus")]
         public async Task<ActionResult<IEnumerable<ModeloMenu>>> GetMenu()
         {
             var resultado = await _servicio.List();
             return resultado.ToList();
         }
 
-        [HttpGet("Usuario/{idUsuario}")]
+        [HttpGet("Usuario/{idUsuario}", Name = "Menu_ObtenerMenusUsuario")]
         public async Task<ActionResult<IEnumerable<ModeloMenu>>> GetMenuUsuario(string idUsuario)
         {
             var resultado = await _servicio.GetMenuUsuario(idUsuario);
             return resultado.ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "Menu_ObtenerMenu")]
         public async Task<ActionResult<ModeloMenu>> GetMenu(int Id)
         {
             return await _servicio.Get(Id);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Menu_CrearMenu")]
         public async Task<ActionResult<ModeloMenu>> Create([FromBody] ModeloMenu model)
         {
             var result = await _servicio.Create(model);
@@ -53,7 +53,7 @@ namespace FBSConsolaCBWebApi.WebApi
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
-        [HttpPut]
+        [HttpPut(Name = "Menu_ActualizarMenu")]
         public async Task<ActionResult<ModeloMenu>> Update([FromBody] ModeloMenu model)
         {
             var result = await _servicio.Update(model);
@@ -66,7 +66,7 @@ namespace FBSConsolaCBWebApi.WebApi
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "Menu_EliminarMenu")]
         public async Task<ActionResult<ModeloMenu>> Delete(int Id)
         {
             var result = await _servicio.Delete(Id);

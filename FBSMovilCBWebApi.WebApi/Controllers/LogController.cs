@@ -18,19 +18,19 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet]
+        [HttpGet("listarLogs", Name = "Log_ListarLog")]
         public async Task<ActionResult<ModeloObtenerListaLog>> List()
         {
             return await _mediador.Send(new ObtenerListaLogQuery());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("obtenerLog/{id}", Name = "Log_ObtenerLog")]
         public async Task<ActionResult<ObtenerModeloLog>> Get(int Id)
         {
             return await _mediador.Send(new ObtenerLogQuery() { Id = Id });
         }
 
-        [HttpPost]
+        [HttpPost("crearLog", Name = "Log_RegistrarLog")]
         public async Task<ActionResult<int>> Crear([FromBody] CrearLogCommand modelo)
         {
             return await _mediador.Send(modelo);

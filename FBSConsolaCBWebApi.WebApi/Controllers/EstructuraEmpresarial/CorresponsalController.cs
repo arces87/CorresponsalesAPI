@@ -19,32 +19,32 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpPost("lista")]
+        [HttpPost("lista", Name = "Corresponsal_ListarCorresponsal")]
         public async Task<ActionResult<ModeloObtenerListaCorresponsal>> ListaCorresponsales([FromBody] ModeloPaginacion filtro)
         {
             return await _mediador.Send(new ObtenerListaCorresponsalQuery());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "Corresponsal_ObtenerCorresponsal")]
         public async Task<ActionResult<ObtenerModeloCorresponsal>> Get(int Id)
         {
             return await _mediador.Send(new ObtenerCorresponsalQuery() { Id = Id });
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Corresponsal_CrearCorresponsal")]
         public async Task<ActionResult<int>> Create([FromBody] CrearCorresponsalCommand modelo)
         {
             return await _mediador.Send(modelo);
         }
 
-        [HttpPost("activar")]
+        [HttpPost("activar", Name = "Corresponsal_ActivarCorresponsal")]
         public async Task<ActionResult> Activar([FromBody] ActivarCorresponsalCommand modelo)
         {
             await _mediador.Publish(modelo);
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut(Name = "Corresponsal_ActualizarCorresponsal")]
         public async Task<ActionResult<int>> Update([FromBody] ModificarCorresponsalCommand modelo)
         {
             return await _mediador.Send(modelo);

@@ -22,26 +22,26 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _servicio = servicio;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "Rol_ListarRoles")]
         public async Task<ActionResult<IEnumerable<ModeloRol>>> Roles()
         {
             var resultado = await _servicio.GetRoles();
             return resultado.ToList();
         }
 
-        [HttpPost("lista")]
+        [HttpPost("lista", Name = "Rol_ListarRolesPaginado")]
         public async Task<ActionResult<ModeloFuenteDatos<ModeloRol>>> Get([FromBody] ModeloPaginacion filtro)
         {
             return await _servicio.List(filtro);
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{Id}", Name = "Rol_ObtenerRol")]
         public async Task<ActionResult<ModeloRol>> GetRole(string Id)
         {
             return await _servicio.GetRole(Id);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "Rol_CrearRol")]
         public async Task<ActionResult<object>> Create([FromBody] ModeloRol model)
         {
             var result = await _servicio.CreateRole(model);
@@ -54,7 +54,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
-        [HttpPut]
+        [HttpPut(Name = "Rol_ActualizarRol")]
         public async Task<ActionResult<object>> Update([FromBody] ModeloRol model)
         {
             var result = await _servicio.UpdateRole(model);
@@ -67,7 +67,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             throw new ApplicationException("INVALID_DATA_ATTEMPT");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "Rol_EliminarRol")]
         public async Task<ActionResult<object>> Delete(string Id)
         {
             var result = await _servicio.DeleteRole(Id);
