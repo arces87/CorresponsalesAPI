@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCBWebApi.Dominio.Modelos.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
+using FBSConsolaCBWebApi.Dominio.Servicios.Personas.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,52 +12,36 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class PersonaController : Controller
     {
-        private readonly IServicioPersona _servicio;
+        private readonly IMediator _mediador;
 
-        public PersonaController(IServicioPersona servicio)
+        public PersonaController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
         [HttpPost("lista")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloPersona>>> Get([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloObtenerListaPersona>> Get([FromBody] ModeloPaginacion filtro)
         {
-            return await _servicio.List(filtro);
+            return await _mediador.Send(new ObtenerListaPersonaQuery());
         }
 
-       
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<object>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloPersona>> Get(int Id)
         {
-            var temp = await _servicio.Get(Id);
-            return temp;
+            return await _mediador.Send(new ObtenerPersonaQuery() { Id = Id });
         }
 
-        [HttpGet("DevuelveDatosPersonaIdentificacion")]
-        public Task<ModeloPersona> DevuelveDatosPersonaIdentificacion(string identificacion)
+        [HttpGet("DevuelvePersonaIdentificacion")]
+        public async Task<ActionResult<ObtenerModeloPersonaIdentificacion>> DevuelveDatosPersonaIdentificacion(string identificacion)
         {
-            var rusultado = _servicio.DevuelveDatosPersonaIdentificacion(identificacion);
-            return rusultado;
-        }
-
-        [HttpGet("CambiarEstadoCorresponsal")]
-        public Task<ModeloCorresponsal> CambiarEstadoCorresponsal(int id)
-        {
-            var rusultado = _servicio.CambiarEstadoCorresponsal(id);
-            return rusultado;
+            return await _mediador.Send(new ObtenerPersonaIdentificacionQuery() { Identificacion = identificacion });
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ModeloPersona>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
-            var result = await _servicio.Delete(Id);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(new EliminarPersonaCommand() { Id = Id });
         }
     }
 }

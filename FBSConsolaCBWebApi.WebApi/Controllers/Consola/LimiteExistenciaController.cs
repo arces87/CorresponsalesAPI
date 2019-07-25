@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCBWebApi.Dominio.Modelos.Consola;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.Consola;
+﻿using System.Threading.Tasks;
+using FBSConsolaCBWebApi.Dominio.Servicios.LimitesExistencias.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.LimitesExistencias.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,69 +11,41 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class LimiteExistenciaController : Controller
     {
-        private readonly IServicioLimiteExistencia _servicio;
+        private readonly IMediator _mediador;
 
-        public LimiteExistenciaController(IServicioLimiteExistencia servicio)
+        public LimiteExistenciaController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ModeloLimiteExistencia>>> List()
+        public async Task<ActionResult<ModeloObtenerLimiteExistencia>> List()
         {
-            var resultado = await _servicio.List();
-            return resultado.ToList();
-        }
-
-        [HttpPost("lista")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloLimiteExistencia>>> Get([FromBody] ModeloPaginacion filtro)
-        {
-            return await _servicio.List(filtro);
+            return await _mediador.Send(new ObtenerListaLimiteExistenciaQuery());
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<ModeloLimiteExistencia>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloLimiteExistencia>> Get(int Id)
         {
-            return await _servicio.Get(Id);
+            return await _mediador.Send(new ObtenerLimiteExistenciaQuery() { Id = Id });
         }
 
         [HttpPost]
-        public async Task<ActionResult<ModeloLimiteExistencia>> Create([FromBody] ModeloLimiteExistencia model)
+        public async Task<ActionResult<int>> Create([FromBody] CrearLimiteExistenciaCommand modelo)
         {
-            var result = await _servicio.Create(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ModeloLimiteExistencia>> Update([FromBody] ModeloLimiteExistencia model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarLimiteExistenciaCommand modelo)
         {
-            var result = await _servicio.Update(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ModeloLimiteExistencia>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
-            var result = await _servicio.Delete(Id);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(new EliminarLimiteExistenciaCommand() { Id = Id });
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCBWebApi.Dominio.Modelos.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
+using FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,44 +12,42 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class CorresponsalController : Controller
     {
-        private readonly IServicioPersona _servicio;
+        private readonly IMediator _mediador;
 
-        public CorresponsalController(IServicioPersona servicio)
+        public CorresponsalController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
         [HttpPost("lista")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloCorresponsal>>> ListaCorresponsales([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloObtenerListaCorresponsal>> ListaCorresponsales([FromBody] ModeloPaginacion filtro)
         {
-            return await _servicio.ListaCorresponsales(filtro);
+            return await _mediador.Send(new ObtenerListaCorresponsalQuery());
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ObtenerModeloCorresponsal>> Get(int Id)
+        {
+            return await _mediador.Send(new ObtenerCorresponsalQuery() { Id = Id });
+        }
 
         [HttpPost]
-        public async Task<ActionResult<ModeloCorresponsal>> Create([FromBody] ModeloCorresponsal model)
+        public async Task<ActionResult<int>> Create([FromBody] CrearCorresponsalCommand modelo)
         {
-            var result = await _servicio.Create(model);
+            return await _mediador.Send(modelo);
+        }
 
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+        [HttpPost("activar")]
+        public async Task<ActionResult> Activar([FromBody] ActivarCorresponsalCommand modelo)
+        {
+            await _mediador.Publish(modelo);
+            return Ok();
         }
 
         [HttpPut]
-        public async Task<ActionResult<ModeloCorresponsal>> Update([FromBody] ModeloCorresponsal model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarCorresponsalCommand modelo)
         {
-            var result = await _servicio.Update(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
     }
 }

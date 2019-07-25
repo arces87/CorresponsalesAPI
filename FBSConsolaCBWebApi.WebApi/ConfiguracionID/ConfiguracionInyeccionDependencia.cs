@@ -3,13 +3,6 @@ using FBS.Identidad.Dominio.Servicios.Seguridad;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
-using FBSConsolaCBWebApi.Dominio.Servicios.Consola;
-using FBSConsolaCBWebApi.Dominio.Servicios.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.Consola;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.Nomenclador;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.Seguridad;
-using FBSConsolaCBWebApi.Dominio.Servicios.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
@@ -54,19 +47,7 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IServicioRol, ServicioRol>();
             services.AddScoped<IServicioPermiso, ServicioPermiso>();
             services.AddScoped<IServicioMenu, ServicioMenu>();
-            services.AddScoped<IServicioUsuarioLocal, ServicioUsuarioLocal>();
 
-            services.AddScoped<IServicioEmpresa, ServicioEmpresa>();
-            services.AddScoped<IServicioOficina, ServicioOficina>();
-            services.AddScoped<IServicioPersona, ServicioPersona>();
-
-            services.AddScoped<IServicioTipoCatalogo, ServicioTipoCatalogo>();
-            services.AddScoped<IServicioCatalogo, ServicioCatalogo>();
-
-            services.AddScoped<IServicioDispositivo, ServicioDispositivo>();
-            services.AddScoped<IServicioLimiteExistencia, ServicioLimiteExistencia>();
-            services.AddScoped<IServicioLimiteTransaccional, ServicioLimiteTransaccional>();
-            services.AddScoped<IServicioLog, ServicioLog>();
 
             var httpClient = new HttpClient();
             var configuracionFinancial = configuration.GetSection("FinancialServerConfig");

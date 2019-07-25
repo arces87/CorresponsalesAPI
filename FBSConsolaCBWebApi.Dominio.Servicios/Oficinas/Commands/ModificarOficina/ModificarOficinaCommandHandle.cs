@@ -11,7 +11,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Oficinas.Commands
         private readonly IRepositorioOficina _repositorio;
         private readonly IMapper _mapper;
 
-        public ModificarOficinaCommandHandle(IRepositorioEmpresa repositorio, IMapper mapper)
+        public ModificarOficinaCommandHandle(IRepositorioOficina repositorio, IMapper mapper)
         {
             _repositorio = repositorio;
             _mapper = mapper;

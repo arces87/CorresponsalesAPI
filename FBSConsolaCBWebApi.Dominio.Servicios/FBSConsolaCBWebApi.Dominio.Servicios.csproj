@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FBSConsolaCBWebApi.Dominio.Modelos\FBSConsolaCBWebApi.Dominio.Modelos.csproj" />
     <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />
   </ItemGroup>
 

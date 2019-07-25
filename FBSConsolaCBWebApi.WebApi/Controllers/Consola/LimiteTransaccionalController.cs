@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCBWebApi.Dominio.Modelos.Consola;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.Consola;
+﻿using System.Threading.Tasks;
+using FBSConsolaCBWebApi.Dominio.Servicios.LimitesTransaccionales.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.LimitesTransaccionales.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,69 +11,41 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class LimiteTransaccionalController : Controller
     {
-        private readonly IServicioLimiteTransaccional _servicio;
+        private readonly IMediator _mediador;
 
-        public LimiteTransaccionalController(IServicioLimiteTransaccional servicio)
+        public LimiteTransaccionalController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ModeloLimiteTransaccional>>> List()
+        public async Task<ActionResult<ModeloObtenerLimiteTransaccional>> List()
         {
-            var resultado = await _servicio.List();
-            return resultado.ToList();
-        }
-
-        [HttpPost("lista")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloLimiteTransaccional>>> Get([FromBody] ModeloPaginacion filtro)
-        {
-            return await _servicio.List(filtro);
+            return await _mediador.Send(new ObtenerListaLimiteTransaccionalQuery());
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<ModeloLimiteTransaccional>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloLimiteTransaccional>> Get(int Id)
         {
-            return await _servicio.Get(Id);
+            return await _mediador.Send(new ObtenerLimiteTransaccionalQuery() { Id = Id });
         }
 
         [HttpPost]
-        public async Task<ActionResult<ModeloLimiteTransaccional>> Create([FromBody] ModeloLimiteTransaccional model)
+        public async Task<ActionResult<int>> Create([FromBody] CrearLimiteTransaccionalCommand modelo)
         {
-            var result = await _servicio.Create(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ModeloLimiteTransaccional>> Update([FromBody] ModeloLimiteTransaccional model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarLimiteTransaccionalCommand modelo)
         {
-            var result = await _servicio.Update(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ModeloLimiteTransaccional>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
-            var result = await _servicio.Delete(Id);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(new EliminarLimiteTransaccionalCommand() { Id = Id });
         }
     }
 }

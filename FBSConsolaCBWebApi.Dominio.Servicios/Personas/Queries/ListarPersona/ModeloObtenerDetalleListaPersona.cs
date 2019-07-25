@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries
+﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries
 {
     public class ModeloObtenerDetalleListaPersona
     {
@@ -12,8 +10,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries
         public string NombreUnido { get; set; }
         public int NumeroIdentificador { get; set; }
         public string Identificacion { get; set; }
-        public string Direccion { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
         public bool EstaActivo { get; set; }
         public string Tipo { get; set; }
     }

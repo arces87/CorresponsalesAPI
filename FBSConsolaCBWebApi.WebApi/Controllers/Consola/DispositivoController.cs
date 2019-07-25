@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using FBSConsolaCBWebApi.Dominio.Modelos.Consola;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries;
 using MediatR;
@@ -38,7 +37,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("asignacion")]
-        public async Task<ActionResult<ModeloAsignarDispositivo>> Asignar([FromBody] AsignarDispositivoCommand model)
+        public async Task<ActionResult> Asignar([FromBody] AsignarDispositivoCommand model)
         {
             await _mediador.Publish(model);
             return Ok();
@@ -57,7 +56,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete("asignacion")]
-        public async Task<ActionResult<ModeloAsignarDispositivo>> Desasignar([FromBody] DesasignarDispositivoCommand model)
+        public async Task<ActionResult> Desasignar([FromBody] DesasignarDispositivoCommand model)
         {
             await _mediador.Publish(model);
             return Ok();

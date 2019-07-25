@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
-using FBSConsolaCBWebApi.Dominio.Modelos.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.Dominio.Servicios.Interfaces.EstructuraEmpresarial;
+using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,43 +12,35 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class SupervisorController : Controller
     {
-        private readonly IServicioPersona _servicio;
+        private readonly IMediator _mediador;
 
-        public SupervisorController(IServicioPersona servicio)
+        public SupervisorController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
         [HttpPost("lista")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloSupervisor>>> ListaSupervisores([FromBody] ModeloPaginacion filtro)
+        public async Task<ActionResult<ModeloObtenerListaSupervisor>> ListaSupervisores([FromBody] ModeloPaginacion filtro)
         {
-            return await _servicio.ListaSupervisores(filtro);
+            return await _mediador.Send(new ObtenerListaSupervisorQuery());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ObtenerModeloSupervisor>> Get(int Id)
+        {
+            return await _mediador.Send(new ObtenerSupervisorQuery() { Id = Id });
         }
 
         [HttpPost]
-        public async Task<ActionResult<ModeloSupervisor>> Create([FromBody] ModeloSupervisor model)
+        public async Task<ActionResult<int>> Create([FromBody] CrearSupervisorCommand modelo)
         {
-            var result = await _servicio.Create(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ModeloSupervisor>> Update([FromBody] ModeloSupervisor model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarSupervisorCommand modelo)
         {
-            var result = await _servicio.Update(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
     }
 }
