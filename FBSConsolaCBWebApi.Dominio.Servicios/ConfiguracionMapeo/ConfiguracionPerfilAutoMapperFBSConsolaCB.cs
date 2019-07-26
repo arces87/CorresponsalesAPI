@@ -90,12 +90,18 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region Alerta
             CreateMap<CrearAlertaCommand, Alerta>()
                 .ForMember(m => m.Destinatario, opt => opt.MapFrom(d => new Persona() { Id = d.IdDestinatario }))
-                .ForMember(m => m.Remitente, opt => opt.MapFrom(d => new Persona() { Id = d.IdRemitente }));
-            CreateMap<ModificarAlertaCommand, Alerta>();
+                .ForMember(m => m.Remitente, opt => opt.MapFrom(d => new Persona() { Id = d.IdRemitente }))
+                .ForMember(m => m.Categoria, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdCategoria }));
             CreateMap<EliminarAlertaCommand, Alerta>();
 
-            CreateMap<Alerta, ObtenerModeloAlerta>();
-            CreateMap<Alerta, ModeloObtenerDetalleListaAlerta>();
+            CreateMap<Alerta, ObtenerModeloAlerta>()
+                .ForMember(m => m.Destinatario, opt => opt.MapFrom(d => d.Destinatario.NombreUnido))
+                .ForMember(m => m.Remitente, opt => opt.MapFrom(d => d.Remitente.NombreUnido))
+                .ForMember(m => m.IdCategoria, opt => opt.MapFrom(d => d.Categoria.Id))
+                .ForMember(m => m.NombreCategoria, opt => opt.MapFrom(d => d.Categoria.Nombre));
+            CreateMap<Alerta, ModeloObtenerDetalleListaAlerta>()
+                .ForMember(m => m.Destinatario, opt => opt.MapFrom(d => d.Destinatario.NombreUnido))
+                .ForMember(m => m.Remitente, opt => opt.MapFrom(d => d.Remitente.NombreUnido));
             #endregion
 
             #region Empresa

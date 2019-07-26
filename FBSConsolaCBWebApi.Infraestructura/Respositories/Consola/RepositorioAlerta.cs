@@ -35,6 +35,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
         {
             entity.Destinatario = Context.Personas.FirstOrDefault(c => c.Id == entity.Destinatario.Id);
             entity.Remitente = Context.Personas.FirstOrDefault(c => c.Id == entity.Remitente.Id);
+            entity.Categoria = Context.Catalogos.FirstOrDefault(c => c.Id == entity.Categoria.Id);
             entity.EstaActivo = true;
             Context.Alertas.Add(entity);
             await Context.SaveChangesAsync();

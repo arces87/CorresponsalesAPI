@@ -11,6 +11,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
         public string Destinatario { get; set; }
 
         public string Remitente { get; set; }
+        public int Tipo { get; set; }
 
         public string Mensaje { get; set; }
 

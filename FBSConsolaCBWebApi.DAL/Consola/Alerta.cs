@@ -1,4 +1,5 @@
 ﻿using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
+using FBSConsolaCBWebApi.DAL.Nomenclador;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,8 @@ namespace FBSConsolaCBWebApi.DAL.Consola
         public int Estado { get; set; }
 
         public bool EstaActivo { get; set; }
+        public int Tipo { get; set; }
+        public Catalogo Categoria { get; set; }
 
         [Timestamp]
         public byte[] Concurrencia { get; set; }
