@@ -11,35 +11,15 @@
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.20" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />
+    <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="FBS.Dominio.Modelos">
-      <HintPath>..\..\..\FBS_Core\FBS.Dominio.Modelos\bin\Debug\netstandard2.0\FBS.Dominio.Modelos.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Dominio.Servicios">
-      <HintPath>..\..\..\FBS_Core\FBS.Dominio.Servicios\bin\Debug\netcoreapp2.2\FBS.Dominio.Servicios.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Identidad.DAL">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.DAL\bin\Debug\netcoreapp2.2\FBS.Identidad.DAL.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Identidad.Dominio.Modelos">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Modelos\bin\Debug\netstandard2.0\FBS.Identidad.Dominio.Modelos.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Identidad.Dominio.Servicios">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Dominio.Servicios\bin\Debug\netcoreapp2.2\FBS.Identidad.Dominio.Servicios.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Identidad.Infraestructura">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.Infraestructura\bin\Debug\netcoreapp2.2\FBS.Identidad.Infraestructura.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Infraestructura">
-      <HintPath>..\..\..\FBS_Core\FBS.Infraestructura\bin\Debug\netcoreapp2.2\FBS.Infraestructura.dll</HintPath>
-    </Reference>
     <Reference Include="FBS_Financial_Services_Banca">
       <HintPath>..\FBSConsolaCBWebApi.WebApi\Resources\dll\FBS_Financial_Services_Banca.dll</HintPath>
     </Reference>

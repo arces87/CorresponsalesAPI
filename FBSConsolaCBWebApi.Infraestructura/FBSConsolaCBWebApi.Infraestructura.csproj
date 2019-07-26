@@ -10,15 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FBSConsolaCBWebApi.DAL\FBSConsolaCBWebApi.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="FBS.Identidad.DAL">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.DAL\bin\Debug\netcoreapp2.2\FBS.Identidad.DAL.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Infraestructura">
-      <HintPath>..\..\..\FBS_Core\FBS.Infraestructura\bin\Debug\netcoreapp2.2\FBS.Infraestructura.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\FBS_Core\FBS.Identidad.DAL\FBS.Identidad.DAL.csproj" />
+    <ProjectReference Include="..\FBS_Core\FBS.Infraestructura\FBS.Infraestructura.csproj" />
   </ItemGroup>
 
 </Project>

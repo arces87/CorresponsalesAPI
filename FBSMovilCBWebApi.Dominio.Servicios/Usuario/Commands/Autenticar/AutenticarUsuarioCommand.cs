@@ -2,7 +2,7 @@
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands
 {
-    public class AutenticarUsuarioCommand : IRequest<ModeloUsuarioAutenticado>
+    public class AutenticarUsuarioCommand : IRequest<ModeloUsuarioAutenticadoMovil>
     {
         public string Usuario { get; set; }
         public string Contrasenna { get; set; }

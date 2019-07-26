@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FBS.Identidad.Dominio.Modelos.Seguridad;
-using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
+using FBS.Identidad.Dominio.Servicios.Menus.Commands;
+using FBS.Identidad.Dominio.Servicios.Menus.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,70 +14,47 @@ namespace FBSConsolaCBWebApi.WebApi
     [Route("api/[controller]")]
     public class MenuController : Controller
     {
-        private readonly IServicioMenu _servicio;
+        private readonly IMediator _mediador;
 
-        public MenuController(IServicioMenu servicio)
+        public MenuController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
-        [HttpGet (Name = "Menu_ListarMenus")]
-        public async Task<ActionResult<IEnumerable<ModeloMenu>>> GetMenu()
+        [HttpGet(Name = "Menu_ListarMenus")]
+        public async Task<ActionResult<ModeloObtenerListaMenu>> GetMenu()
         {
-            var resultado = await _servicio.List();
-            return resultado.ToList();
+            return await _mediador.Send(new ObtenerListaMenuQuery());
         }
 
         [HttpGet("Usuario/{idUsuario}", Name = "Menu_ObtenerMenusUsuario")]
-        public async Task<ActionResult<IEnumerable<ModeloMenu>>> GetMenuUsuario(string idUsuario)
+        public async Task<ActionResult<ModeloObtenerListaMenuUsuario>> GetMenuUsuario(string idUsuario)
         {
-            var resultado = await _servicio.GetMenuUsuario(idUsuario);
-            return resultado.ToList();
+            return await _mediador.Send(new ObtenerListaMenuUsuarioQuery() { IdUsuario = idUsuario });
         }
 
         [HttpGet("{id}", Name = "Menu_ObtenerMenu")]
-        public async Task<ActionResult<ModeloMenu>> GetMenu(int Id)
+        public async Task<ActionResult<ObtenerModeloMenu>> GetMenu(int Id)
         {
-            return await _servicio.Get(Id);
+            return await _mediador.Send(new ObtenerMenuQuery() { Id = Id });
         }
 
         [HttpPost(Name = "Menu_CrearMenu")]
-        public async Task<ActionResult<ModeloMenu>> Create([FromBody] ModeloMenu model)
+        public async Task<ActionResult<int>> Create([FromBody] CrearMenuCommand modelo)
         {
-            var result = await _servicio.Create(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpPut(Name = "Menu_ActualizarMenu")]
-        public async Task<ActionResult<ModeloMenu>> Update([FromBody] ModeloMenu model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarMenuCommand modelo)
         {
-            var result = await _servicio.Update(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpDelete("{id}", Name = "Menu_EliminarMenu")]
-        public async Task<ActionResult<ModeloMenu>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
-            var result = await _servicio.Delete(Id);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(new EliminarMenuCommand() { Id = Id });
         }
     }
 }

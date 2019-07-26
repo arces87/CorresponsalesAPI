@@ -1,5 +1,5 @@
-﻿using FBS.Identidad.Dominio.Modelos.Seguridad;
-using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
+﻿using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
+using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands;
@@ -38,12 +38,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Usuario
-            CreateMap<AutenticarUsuarioCommand, ModeloUsuario>()
-               .ForMember(m => m.UserName, opt => opt.MapFrom(d => d.Usuario))
-               .ForMember(m => m.PasswordHash, opt => opt.MapFrom(d => d.Contrasenna));
-            CreateMap<ModeloUsuario, ModeloUsuarioAutenticado>()
-                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.UserName))
-                .ForMember(m => m.Errores, opt => opt.MapFrom(d => d.Errors));
+            CreateMap<AutenticarUsuarioCommand, LoginUsuarioCommand>();
+            CreateMap<ModeloUsuarioAutenticado, ModeloUsuarioAutenticadoMovil>();
             #endregion
 
         }

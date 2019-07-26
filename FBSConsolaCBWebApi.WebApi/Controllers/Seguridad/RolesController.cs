@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FBS.Dominio.Modelos.Filtro;
-using FBS.Identidad.Dominio.Modelos.Seguridad;
-using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
+using FBS.Identidad.Dominio.Servicios.Roles.Commands;
+using FBS.Identidad.Dominio.Servicios.Roles.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -15,69 +16,41 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
     [Route("api/[controller]")]
     public class RoleController : Controller
     {
-        private readonly IServicioRol _servicio;
+        private readonly IMediator _mediador;
 
-        public RoleController(IServicioRol servicio)
+        public RoleController(IMediator mediador)
         {
-            _servicio = servicio;
+            _mediador = mediador;
         }
 
         [HttpGet(Name = "Rol_ListarRoles")]
-        public async Task<ActionResult<IEnumerable<ModeloRol>>> Roles()
+        public async Task<ActionResult<ModeloObtenerListaRol>> Roles()
         {
-            var resultado = await _servicio.GetRoles();
-            return resultado.ToList();
-        }
-
-        [HttpPost("lista", Name = "Rol_ListarRolesPaginado")]
-        public async Task<ActionResult<ModeloFuenteDatos<ModeloRol>>> Get([FromBody] ModeloPaginacion filtro)
-        {
-            return await _servicio.List(filtro);
+            return await _mediador.Send(new ObtenerListaRolQuery());
         }
 
         [HttpGet("{Id}", Name = "Rol_ObtenerRol")]
-        public async Task<ActionResult<ModeloRol>> GetRole(string Id)
+        public async Task<ActionResult<ObtenerModeloRol>> GetRole(string Id)
         {
-            return await _servicio.GetRole(Id);
+            return await _mediador.Send(new ObtenerRolQuery() { Id = Id });
         }
 
         [HttpPost(Name = "Rol_CrearRol")]
-        public async Task<ActionResult<object>> Create([FromBody] ModeloRol model)
+        public async Task<ActionResult<int>> Create([FromBody] CrearRolCommand modelo)
         {
-            var result = await _servicio.CreateRole(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpPut(Name = "Rol_ActualizarRol")]
-        public async Task<ActionResult<object>> Update([FromBody] ModeloRol model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarRolCommand modelo)
         {
-            var result = await _servicio.UpdateRole(model);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(modelo);
         }
 
         [HttpDelete("{id}", Name = "Rol_EliminarRol")]
-        public async Task<ActionResult<object>> Delete(string Id)
+        public async Task<ActionResult<bool>> Delete(string Id)
         {
-            var result = await _servicio.DeleteRole(Id);
-
-            if (result != null)
-            {
-                return result;
-            }
-
-            throw new ApplicationException("INVALID_DATA_ATTEMPT");
+            return await _mediador.Send(new EliminarRolCommand() { Id = Id });
         }
     }
 }

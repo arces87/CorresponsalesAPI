@@ -1,29 +1,28 @@
 ﻿using AutoMapper;
-using FBS.Identidad.Dominio.Modelos.Seguridad;
-using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
+using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands
 {
-    public class AutenticarUsuarioCommandHandle : IRequestHandler<AutenticarUsuarioCommand, ModeloUsuarioAutenticado>
+    public class AutenticarUsuarioCommandHandle : IRequestHandler<AutenticarUsuarioCommand, ModeloUsuarioAutenticadoMovil>
     {
-        private readonly IServicioUsuario _servicio;
+        private readonly IMediator _mediador;
         private readonly IMapper _mapper;
 
-        public AutenticarUsuarioCommandHandle(IServicioUsuario servicio, IMapper mapper)
+        public AutenticarUsuarioCommandHandle(IMediator mediador, IMapper mapper)
         {
-            _servicio = servicio;
+            _mediador = mediador;
             _mapper = mapper;
         }
 
-        public async Task<ModeloUsuarioAutenticado> Handle(AutenticarUsuarioCommand request, CancellationToken cancellationToken)
+        public async Task<ModeloUsuarioAutenticadoMovil> Handle(AutenticarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            var _usuario = _mapper.Map<ModeloUsuario>(request);
-            var usuarioAutenticado = (ModeloUsuario)(await _servicio.Login(_usuario));
+            var _usuario = _mapper.Map<LoginUsuarioCommand>(request);
+            var usuarioAutenticado = await _mediador.Send(_usuario);
 
-            return _mapper.Map<ModeloUsuarioAutenticado>(usuarioAutenticado);
+            return _mapper.Map<ModeloUsuarioAutenticadoMovil>(usuarioAutenticado);
         }
     }
 }

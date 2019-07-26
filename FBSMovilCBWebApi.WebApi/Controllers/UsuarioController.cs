@@ -19,9 +19,9 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("login", Name = "Usuario_Login")]
-        [Produces(typeof(ModeloUsuarioAutenticado))]
+        [Produces(typeof(ModeloUsuarioAutenticadoMovil))]
         //[SwaggerResponse(operationId: "getA")]
-        public async Task<ActionResult<ModeloUsuarioAutenticado>> Login([FromBody] AutenticarUsuarioCommand modelo)
+        public async Task<ActionResult<ModeloUsuarioAutenticadoMovil>> Login([FromBody] AutenticarUsuarioCommand modelo)
         {
             var result = await _mediador.Send(modelo);
 

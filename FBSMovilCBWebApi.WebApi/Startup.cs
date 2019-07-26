@@ -18,6 +18,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using FBS.Identidad.DAL.Seguridad;
 using FFBSMovilCBWebApi.WebApi.AutofacConfiguration;
+using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -99,7 +100,7 @@ namespace FBSMovilCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB));
-            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly);
+            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, typeof(ConfiguracionAutoMapper).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

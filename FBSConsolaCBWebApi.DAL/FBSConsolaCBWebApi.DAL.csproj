@@ -9,12 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="FBS.DAL">
-      <HintPath>..\..\..\FBS_Core\FBS.DAL\bin\Debug\netcoreapp2.2\FBS.DAL.dll</HintPath>
-    </Reference>
-    <Reference Include="FBS.Identidad.DAL">
-      <HintPath>..\..\..\FBS_Core\FBS.Identidad.DAL\bin\Debug\netcoreapp2.2\FBS.Identidad.DAL.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\FBS_Core\FBS.Identidad.DAL\FBS.Identidad.DAL.csproj" />
   </ItemGroup>
 
 </Project>

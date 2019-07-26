@@ -21,6 +21,7 @@ using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.WebApi.AutofacConfiguration;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
+using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
@@ -102,7 +103,7 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
-            services.AddMediatR(typeof(AsignarDispositivoCommand).Assembly);
+            services.AddMediatR(typeof(AsignarDispositivoCommand).Assembly, typeof(ConfiguracionAutoMapper).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

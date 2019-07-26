@@ -1,6 +1,4 @@
-﻿using FBS.Identidad.Dominio.Servicios.Interfaces.Seguridad;
-using FBS.Identidad.Dominio.Servicios.Seguridad;
-using FBS.Identidad.Infraestructura.Interfaces;
+﻿using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
@@ -27,10 +25,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IServicioUsuario, ServicioUsuario>();
-            services.AddScoped<IServicioRol, ServicioRol>();
-            services.AddScoped<IServicioPermiso, ServicioPermiso>();
-            services.AddScoped<IServicioMenu, ServicioMenu>();
+           
         }
     }
 }
