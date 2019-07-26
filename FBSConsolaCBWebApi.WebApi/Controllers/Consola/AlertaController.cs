@@ -35,13 +35,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(model);
         }
-
-        [HttpPut(Name = "Alerta_ActualizarAlerta")]
-        public async Task<ActionResult<bool>> Update([FromBody] ModificarAlertaCommand model)
-        {
-            return Ok(await _mediador.Send(model));
-        }
-
+        
         [HttpDelete("{id}",Name = "Alerta_EliminarAlerta")]
         public async Task<ActionResult<int>> Delete(int Id)
         {
