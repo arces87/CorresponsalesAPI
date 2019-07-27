@@ -1,5 +1,6 @@
 ﻿using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
+using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.DAL.Nomenclador;
@@ -25,6 +26,7 @@ using FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using Financial_Services_Banca.Models;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
@@ -249,6 +251,20 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #endregion
 
+            #region Usuarios
+            CreateMap<AutenticarUsuarioCommand, LoginUsuarioCommand>();
+            CreateMap<ModeloUsuarioAutenticado, ModeloAutenticacion>();
+            CreateMap<ModeloUsuarioRol, ModeloRolAutenticacion>();
+            CreateMap<Persona, ModeloAutenticacion>()
+                .ForMember(m => m.Usuario, opt => opt.Ignore())
+                .ForMember(m => m.CorreoElectronico, opt => opt.Ignore())
+                .ForMember(m => m.IdPersona, opt => opt.MapFrom(d => d.Id))
+                .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Oficina.Id))
+                .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Oficina.Nombre))
+                .ForMember(m => m.IdEmpresa, opt => opt.MapFrom(d => d.Oficina.Empresa.Id))
+                .ForMember(m => m.NombreEmpresa, opt => opt.MapFrom(d => d.Oficina.Empresa.Nombre));
+
+            #endregion
         }
     }
 }

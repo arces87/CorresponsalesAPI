@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +32,7 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpPost("Login", Name = "Usuario_AutenticarUsuario")]
-        public async Task<ActionResult<ModeloUsuarioAutenticado>> Login([FromBody] LoginUsuarioCommand modelo)
+        public async Task<ActionResult<ModeloAutenticacion>> Login([FromBody] AutenticarUsuarioCommand modelo)
         {
             return await _mediador.Send(modelo);
         }
