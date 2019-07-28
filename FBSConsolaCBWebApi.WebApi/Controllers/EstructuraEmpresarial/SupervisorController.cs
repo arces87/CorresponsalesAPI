@@ -20,7 +20,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Supervisor_ListarSupervisores")]
-        public async Task<ActionResult<ModeloObtenerListaSupervisor>> ListaSupervisores(ObtenerListaSupervisorQuery model)
+        public async Task<ActionResult<ModeloObtenerListaSupervisor>> ListaSupervisores([FromBody] ObtenerListaSupervisorQuery model)
         {
             return await _mediador.Send(model);
         }

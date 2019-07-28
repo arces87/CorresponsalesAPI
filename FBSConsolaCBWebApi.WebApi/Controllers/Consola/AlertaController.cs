@@ -19,7 +19,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name ="Alerta_ListarAlertas")]
-        public async Task<ActionResult<ModeloObtenerListaAlerta>> List(ObtenerListaAlertaQuery model)
+        public async Task<ActionResult<ModeloObtenerListaAlerta>> List([FromBody] ObtenerListaAlertaQuery model)
         {
             return await _mediador.Send(model);
         }

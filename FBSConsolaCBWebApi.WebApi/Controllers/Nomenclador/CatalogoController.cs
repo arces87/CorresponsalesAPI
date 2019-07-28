@@ -19,7 +19,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Catalogo_ListarCatalogos")]
-        public async Task<ActionResult<ModeloObtenerListaCatalogo>> List(ObtenerListaCatalogoQuery model)
+        public async Task<ActionResult<ModeloObtenerListaCatalogo>> List([FromBody] ObtenerListaCatalogoQuery model)
         {
             return await _mediador.Send(model);
         }

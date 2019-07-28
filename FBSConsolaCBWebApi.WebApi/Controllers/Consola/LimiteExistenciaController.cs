@@ -19,7 +19,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "LimiteExistencia_ListarLimiteExistencia")]
-        public async Task<ActionResult<ModeloObtenerLimiteExistencia>> List(ObtenerListaLimiteExistenciaQuery model)
+        public async Task<ActionResult<ModeloObtenerLimiteExistencia>> List([FromBody] ObtenerListaLimiteExistenciaQuery model)
         {
             return await _mediador.Send(model);
         }

@@ -19,7 +19,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Empresa_ListarEmpresas")]
-        public async Task<ActionResult<ModeloObtenerListaEmpresa>> Get(ObtenerListaEmpresaQuery model)
+        public async Task<ActionResult<ModeloObtenerListaEmpresa>> Get([FromBody] ObtenerListaEmpresaQuery model)
         {
             return await _mediador.Send(model);
         }
