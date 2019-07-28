@@ -19,13 +19,13 @@ namespace FBSConsolaCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpGet(Name = "Usuario_ListarUsuarios")]
+        [HttpGet("lista", Name = "Usuario_ListarUsuarios")]
         public async Task<ActionResult<ModeloObtenerListaUsuario>> Listar()
         {
             return await _mediador.Send(new ObtenerListaUsuarioQuery());
         }
 
-        [HttpGet("{id}", Name = "Usuario_ObtenerUsuario")]
+        [HttpGet(Name = "Usuario_ObtenerUsuario")]
         public async Task<ActionResult<ObtenerModeloUsuario>> GetUser(ObtenerUsuarioQuery modelo)
         {
             return await _mediador.Send(modelo);

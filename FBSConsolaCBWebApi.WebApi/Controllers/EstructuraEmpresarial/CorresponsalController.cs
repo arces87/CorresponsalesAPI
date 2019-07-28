@@ -25,7 +25,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpGet("{id}", Name = "Corresponsal_ObtenerCorresponsal")]
+        [HttpGet(Name = "Corresponsal_ObtenerCorresponsal")]
         public async Task<ActionResult<ObtenerModeloCorresponsal>> Get(ObtenerCorresponsalQuery modelo)
         {
             return await _mediador.Send(modelo);

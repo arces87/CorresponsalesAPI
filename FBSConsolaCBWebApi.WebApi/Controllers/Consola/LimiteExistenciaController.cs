@@ -24,7 +24,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpGet("get/{id}", Name = "LimiteExistencia_ObtenerLimiteExistencia")]
+        [HttpGet(Name = "LimiteExistencia_ObtenerLimiteExistencia")]
         public async Task<ActionResult<ObtenerModeloLimiteExistencia>> Get(ObtenerLimiteExistenciaQuery modelo)
         {
             return await _mediador.Send(modelo);
@@ -42,7 +42,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpDelete("{id}", Name = "LimiteExistencia_EliminarLimiteExistencia")]
+        [HttpDelete(Name = "LimiteExistencia_EliminarLimiteExistencia")]
         public async Task<ActionResult<bool>> Delete(EliminarLimiteExistenciaCommand modelo)
         {
             return await _mediador.Send(modelo);

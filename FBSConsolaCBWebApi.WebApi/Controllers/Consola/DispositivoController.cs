@@ -24,7 +24,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpGet("get/{id}", Name = "Dispositivo_ObtenerDispositivo")]
+        [HttpGet(Name = "Dispositivo_ObtenerDispositivo")]
         public async Task<ActionResult<ObtenerModeloDispositivo>> Get(ObtenerDispositivoQuery modelo)
         {
             return await _mediador.Send(modelo);
@@ -49,7 +49,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return Ok(await _mediador.Send(model));
         }
 
-        [HttpDelete("{id}", Name = "Dispositivo_EliminarDispositivo")]
+        [HttpDelete(Name = "Dispositivo_EliminarDispositivo")]
         public async Task<ActionResult<int>> Delete(EliminarDispositivoCommand modelo)
         {
             return Ok(await _mediador.Send(modelo));
