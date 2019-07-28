@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
-using FBSConsolaCBWebApi.DAL.Consola;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using System.Threading;

@@ -19,9 +19,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet(Name = "LimiteExistencia_ListarLimiteExistencia")]
-        public async Task<ActionResult<ModeloObtenerLimiteExistencia>> List()
+        public async Task<ActionResult<ModeloObtenerLimiteExistencia>> List(ObtenerListaLimiteExistenciaQuery model)
         {
-            return await _mediador.Send(new ObtenerListaLimiteExistenciaQuery());
+            return await _mediador.Send(model);
         }
 
         [HttpGet("get/{id}", Name = "LimiteExistencia_ObtenerLimiteExistencia")]

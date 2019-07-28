@@ -4,6 +4,11 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Oficinas.Queries
 {
     public class ModeloObtenerListaOficina
     {
-        public List<ModeloObtenerDetalleListaOficina> Empresas { get; set; }
+        public int Pagina { get; set; }
+
+        public int CantidadElementos { get; set; }
+
+        public int TotalElementos { get; set; }
+        public List<ModeloObtenerDetalleListaOficina> Oficinas { get; set; }
     }
 }

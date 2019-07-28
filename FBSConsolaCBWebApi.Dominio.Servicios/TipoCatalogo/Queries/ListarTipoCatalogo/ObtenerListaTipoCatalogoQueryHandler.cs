@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
+using FBSConsolaCBWebApi.DAL.Nomenclador;
+using FBS.Dominio.Modelos.Filtro;
+using FBS.Dominio.Servicios.Utilidades;
+using System.Linq;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries
 {
@@ -21,7 +25,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries
         public async Task<ModeloObtenerListaTipoCatalogo> Handle(ObtenerListaTipoCatalogoQuery request, CancellationToken cancellationToken)
         {
             var _model = await _repositorio.GetAllActive();
-            return new ModeloObtenerListaTipoCatalogo() { TiposCatalogos = _mapper.Map<List<ModeloObtenerDetalleListaTipoCatalogo>>(_model) };
+            var _retorno = new ModeloObtenerListaTipoCatalogo();
+            _retorno.TotalElementos = _model.Count();
+            Filtro<TipoCatalogo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            _retorno.TiposCatalogos = _mapper.Map<List<ModeloObtenerDetalleListaTipoCatalogo>>(_model);
+            _retorno.CantidadElementos = request.CantidadElementos;
+            _retorno.Pagina = request.Pagina;
+            return _retorno;
         }
     }
 }

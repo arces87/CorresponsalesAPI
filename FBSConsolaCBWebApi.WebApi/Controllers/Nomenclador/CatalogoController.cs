@@ -19,9 +19,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("{tipo}", Name = "Catalogo_ListarCatalogos")]
-        public async Task<ActionResult<ModeloObtenerListaCatalogo>> List(int Tipo)
+        public async Task<ActionResult<ModeloObtenerListaCatalogo>> List(ObtenerListaCatalogoQuery model)
         {
-            return await _mediador.Send(new ObtenerListaCatalogoQuery());
+            return await _mediador.Send(model);
         }
 
         [HttpGet("get/{id}", Name = "Catalogo_ObtenerCatalogo")]

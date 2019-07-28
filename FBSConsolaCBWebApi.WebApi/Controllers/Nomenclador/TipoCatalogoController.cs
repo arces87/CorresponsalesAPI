@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries;
 
@@ -20,9 +19,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet(Name = "TipoCatalogo_ListarTiposCatalogos")]
-        public async Task<ActionResult<ModeloObtenerListaTipoCatalogo>> Get()
+        public async Task<ActionResult<ModeloObtenerListaTipoCatalogo>> Get(ObtenerListaTipoCatalogoQuery model)
         {
-            return await _mediador.Send(new ObtenerListaTipoCatalogoQuery());
+            return await _mediador.Send(model);
         }
 
         [HttpGet("{id}", Name = "TipoCatalogo_ObtenerTipoCatalogo")]

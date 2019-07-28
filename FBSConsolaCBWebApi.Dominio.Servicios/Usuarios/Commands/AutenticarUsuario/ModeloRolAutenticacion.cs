@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
+﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
     public class ModeloRolAutenticacion
     {

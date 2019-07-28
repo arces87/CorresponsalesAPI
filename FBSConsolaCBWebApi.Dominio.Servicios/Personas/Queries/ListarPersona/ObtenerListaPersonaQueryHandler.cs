@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using FBS.Dominio.Modelos.Filtro;
+using FBS.Dominio.Servicios.Utilidades;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +25,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries
         public async Task<ModeloObtenerListaPersona> Handle(ObtenerListaPersonaQuery request, CancellationToken cancellationToken)
         {
             var _model = await _repositorio.GetAllWithAssociations();
+            var _retorno = new ModeloObtenerListaPersona();
+            _retorno.TotalElementos = _model.Count();
+            Filtro<Persona>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            _retorno.CantidadElementos = request.CantidadElementos;
+            _retorno.Pagina = request.Pagina;
+
             var _personas = _mapper.Map<List<ModeloObtenerDetalleListaPersona>>(_model);
             foreach (var item in _personas)
             {
@@ -33,7 +42,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries
                 else
                     item.Tipo = "Administrador";
             }
-            return new ModeloObtenerListaPersona() { Personas = _personas };
+            _retorno.Personas = _personas;
+            return _retorno;
         }
     }
 }
