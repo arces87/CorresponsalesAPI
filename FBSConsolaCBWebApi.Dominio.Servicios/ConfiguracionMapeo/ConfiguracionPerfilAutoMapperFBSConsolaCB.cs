@@ -27,6 +27,7 @@ using FBSConsolaCBWebApi.Dominio.Servicios.Personas.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using Financial_Services_Banca.Models;
 
@@ -270,6 +271,17 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Filtros
             CreateMap<ObtenerListaDispositivoQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaAlertaQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaCatalogoQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaCorresponsalQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaEmpresaQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaLimiteExistenciaQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaLimiteTransaccionalQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaLogQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaOficinaQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaPersonaQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaTipoCatalogoQuery, ModeloPaginacion>();
+            CreateMap<ObtenerListaSupervisorQuery, ModeloPaginacion>();
             #endregion
         }
     }

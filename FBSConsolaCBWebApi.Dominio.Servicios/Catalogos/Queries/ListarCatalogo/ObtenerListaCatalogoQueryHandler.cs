@@ -24,7 +24,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries
 
         public async Task<ModeloObtenerListaCatalogo> Handle(ObtenerListaCatalogoQuery request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllActive();
+            var _model = await _repositorio.GetAllWithAssociations();
             var _retorno = new ModeloObtenerListaCatalogo();
             _retorno.TotalElementos = _model.Count();
             Filtro<Catalogo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
