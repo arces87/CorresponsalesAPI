@@ -19,9 +19,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "LimiteTransaccion_ListarLimitesTransacciones")]
-        public async Task<ActionResult<ModeloObtenerLimiteTransaccional>> List([FromBody] ObtenerListaLimiteTransaccionalQuery model)
+        public async Task<ActionResult<ModeloObtenerLimiteTransaccional>> List([FromBody] ObtenerListaLimiteTransaccionalQuery modelo)
         {
-            return await _mediador.Send(model);
+            return await _mediador.Send(modelo);
         }
 
         [HttpGet("get/{id}", Name = "LimiteTransaccion_ObtenerLimiteTransaccion")]

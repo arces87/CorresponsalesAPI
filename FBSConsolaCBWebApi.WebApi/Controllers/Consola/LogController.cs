@@ -18,9 +18,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Log_ListarLogs")]
-        public async Task<ActionResult<ModeloObtenerListaLog>> List([FromBody] ObtenerListaLogQuery model)
+        public async Task<ActionResult<ModeloObtenerListaLog>> List([FromBody] ObtenerListaLogQuery modelo)
         {
-            return await _mediador.Send(model);
+            return await _mediador.Send(modelo);
         }
 
         [HttpGet("get/{id}", Name = "Log_ObtenerLog")]

@@ -20,9 +20,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Corresponsal_ListarCorresponsal")]
-        public async Task<ActionResult<ModeloObtenerListaCorresponsal>> ListaCorresponsales([FromBody] ObtenerListaCorresponsalQuery model)
+        public async Task<ActionResult<ModeloObtenerListaCorresponsal>> ListaCorresponsales([FromBody] ObtenerListaCorresponsalQuery modelo)
         {
-            return await _mediador.Send(model);
+            return await _mediador.Send(modelo);
         }
 
         [HttpGet("{id}", Name = "Corresponsal_ObtenerCorresponsal")]
