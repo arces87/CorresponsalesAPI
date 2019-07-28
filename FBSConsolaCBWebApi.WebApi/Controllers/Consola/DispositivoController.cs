@@ -19,9 +19,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet(Name = "Dispositivo_ListarDispositivos")]
-        public async Task<ActionResult<ModeloObtenerListaDispositivo>> List()
+        public async Task<ActionResult<ModeloObtenerListaDispositivo>> List(ObtenerListaDispositivoQuery modelo)
         {
-            return await _mediador.Send(new ObtenerListaDispositivoQuery());
+            return await _mediador.Send(modelo);
         }
 
         [HttpGet("get/{id}", Name = "Dispositivo_ObtenerDispositivo")]
