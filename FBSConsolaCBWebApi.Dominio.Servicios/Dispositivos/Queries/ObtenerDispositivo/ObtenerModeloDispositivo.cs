@@ -11,8 +11,9 @@
         public string Mac { get; set; }
 
         public string NumeroSerie { get; set; }
+        public int IdTipoDispositivo { get; set; }
 
-        public string TipoDispositivo { get; set; }
+        public string NombreTipoDispositivo { get; set; }
 
         public bool EstaActivo { get; set; }
     }

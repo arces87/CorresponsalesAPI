@@ -12,7 +12,7 @@
 
         public string NumeroSerie { get; set; }
 
-        public string TipoDispositivo { get; set; }
+        public string NombreTipoDispositivo { get; set; }
 
         public string Corresponsal { get; set; }
 

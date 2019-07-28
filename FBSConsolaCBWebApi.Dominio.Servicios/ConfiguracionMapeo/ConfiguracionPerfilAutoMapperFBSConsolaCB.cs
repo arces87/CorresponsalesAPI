@@ -41,9 +41,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoDispositivo }));
             CreateMap<EliminarDispositivoCommand, Dispositivo>();
             CreateMap<Dispositivo, ObtenerModeloDispositivo>()
-                .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Nombre));
+                .ForMember(m => m.IdTipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Id))
+                .ForMember(m => m.NombreTipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Nombre));
             CreateMap<Dispositivo, ModeloObtenerDetalleListaDispositivo>()
-                .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Nombre));
+                .ForMember(m => m.NombreTipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Nombre));
             #endregion
             #region LimiteExistencia
             CreateMap<CrearLimiteExistenciaCommand, LimiteExistencia>()
