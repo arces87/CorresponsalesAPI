@@ -20,7 +20,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
 
         public async Task<bool> Handle(EliminarDispositivoCommand request, CancellationToken cancellationToken)
         {
-            var _model = _mapper.Map<Dispositivo>(request);
+            var _model = await _repositorio.Get(request.Id);
+            _mapper.Map(request, _model);
             await _repositorio.Remove(_model);
             return true;
         }
