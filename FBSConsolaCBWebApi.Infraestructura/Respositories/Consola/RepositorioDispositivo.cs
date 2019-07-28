@@ -28,7 +28,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var dispositivos = await conexion.QueryAsync<Dispositivo>("SELECT * FROM Consola.Dispositivo where EstaActivo='true'");
+                var dispositivos = await conexion.QueryAsync<Dispositivo>("SELECT * FROM Consola.Dispositivo where Consola.Dispositivo.EstaActivo='true'");
                 return dispositivos;
             }
         }
@@ -39,7 +39,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
                 conexion.Open();
                 var dispositivos = await conexion
                     .QueryAsync<Dispositivo, Catalogo, Dispositivo>(@"SELECT * FROM Consola.Dispositivo d 
-                        join Nomenclador.Catalogo t on d.TipoDispositivoId = t.Id where EstaActivo='true'",
+                        join Nomenclador.Catalogo t on d.TipoDispositivoId = t.Id where d.EstaActivo='true'",
                     (dispositivo, tipoCatalogo) =>
                     {
                         dispositivo.TipoDispositivo = tipoCatalogo;
