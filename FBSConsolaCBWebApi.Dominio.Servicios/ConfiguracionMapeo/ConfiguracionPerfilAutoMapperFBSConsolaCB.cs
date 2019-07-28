@@ -1,4 +1,5 @@
-﻿using FBS.Identidad.DAL.Seguridad;
+﻿using FBS.Dominio.Modelos.Filtro;
+using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Consola;
@@ -265,6 +266,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.IdEmpresa, opt => opt.MapFrom(d => d.Oficina.Empresa.Id))
                 .ForMember(m => m.NombreEmpresa, opt => opt.MapFrom(d => d.Oficina.Empresa.Nombre));
 
+            #endregion
+
+            #region Filtros
+            CreateMap<ObtenerListaDispositivoQuery, ModeloPaginacion>();
             #endregion
         }
     }

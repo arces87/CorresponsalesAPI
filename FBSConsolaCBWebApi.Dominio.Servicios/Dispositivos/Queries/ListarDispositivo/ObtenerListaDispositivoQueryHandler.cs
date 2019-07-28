@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using FBS.Dominio.Modelos.Filtro;
+using FBS.Dominio.Servicios.Utilidades;
+using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +25,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
         public async Task<ModeloObtenerListaDispositivo> Handle(ObtenerListaDispositivoQuery request, CancellationToken cancellationToken)
         {
             var _model = await _repositorio.GetAllActive();
-            return new ModeloObtenerListaDispositivo() { Dispositivos = _mapper.Map<List<ModeloObtenerDetalleListaDispositivo>>(_model) };
+            var _retorno = new ModeloObtenerListaDispositivo();
+            _retorno.TotalElementos = _model.Count();
+            Filtro<Dispositivo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            _retorno.Dispositivos = _mapper.Map<List<ModeloObtenerDetalleListaDispositivo>>(_model);
+            _retorno.CantidadElementos = request.CantidadElementos;
+            _retorno.Pagina = request.Pagina;
+            return _retorno;
         }
     }
 }
