@@ -26,9 +26,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "Supervisor_ObtenerSupervisor")]
-        public async Task<ActionResult<ObtenerModeloSupervisor>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloSupervisor>> Get(ObtenerSupervisorQuery modelo)
         {
-            return await _mediador.Send(new ObtenerSupervisorQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Supervisor_CrearSupervisor")]

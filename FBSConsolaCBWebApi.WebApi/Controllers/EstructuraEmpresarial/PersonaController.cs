@@ -27,9 +27,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
 
 
         [HttpGet("{id}", Name = "Persona_ObtenerPersona")]
-        public async Task<ActionResult<ObtenerModeloPersona>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloPersona>> Get(ObtenerPersonaQuery modelo)
         {
-            return await _mediador.Send(new ObtenerPersonaQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpGet("DevuelvePersonaIdentificacion", Name = "Persona_ObtenerPersonaIdentificacion")]
@@ -39,9 +39,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}", Name = "Persona_EliminarPersona")]
-        public async Task<ActionResult<bool>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(EliminarPersonaCommand modelo)
         {
-            return await _mediador.Send(new EliminarPersonaCommand() { Id = Id });
+            return await _mediador.Send(modelo);
         }
     }
 }

@@ -26,9 +26,9 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpGet("{id}", Name = "Usuario_ObtenerUsuario")]
-        public async Task<ActionResult<ObtenerModeloUsuario>> GetUser(string Id)
+        public async Task<ActionResult<ObtenerModeloUsuario>> GetUser(ObtenerUsuarioQuery modelo)
         {
-            return await _mediador.Send(new ObtenerUsuarioQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost("Login", Name = "Usuario_AutenticarUsuario")]

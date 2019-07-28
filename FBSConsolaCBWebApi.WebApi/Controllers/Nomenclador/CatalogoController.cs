@@ -25,9 +25,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("get/{id}", Name = "Catalogo_ObtenerCatalogo")]
-        public async Task<ActionResult<ObtenerModeloCatalogo>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloCatalogo>> Get(ObtenerCatalogoQuery modelo)
         {
-            return await _mediador.Send(new ObtenerCatalogoQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Catalogo_CrearCatalogo")]
@@ -43,9 +43,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}", Name = "Catalogo_EliminarCatalogo")]
-        public async Task<ActionResult<int>> Delete(int Id)
+        public async Task<ActionResult<int>> Delete(EliminarCatalogoCommand modelo)
         {
-            return Ok(await _mediador.Send(new EliminarCatalogoCommand() { Id = Id }));
+            return Ok(await _mediador.Send(modelo));
         }
     }
 }

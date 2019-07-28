@@ -26,9 +26,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("{id}", Name = "Corresponsal_ObtenerCorresponsal")]
-        public async Task<ActionResult<ObtenerModeloCorresponsal>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloCorresponsal>> Get(ObtenerCorresponsalQuery modelo)
         {
-            return await _mediador.Send(new ObtenerCorresponsalQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Corresponsal_CrearCorresponsal")]

@@ -25,9 +25,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("get/{id}", Name = "LimiteTransaccion_ObtenerLimiteTransaccion")]
-        public async Task<ActionResult<ObtenerModeloLimiteTransaccional>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloLimiteTransaccional>> Get(ObtenerLimiteTransaccionalQuery modelo)
         {
-            return await _mediador.Send(new ObtenerLimiteTransaccionalQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "LimiteTransaccion_CrearLimiteTransaccion")]
@@ -43,9 +43,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete("{id}", Name = "LimiteTransaccion_EliminarLimiteTransaccion")]
-        public async Task<ActionResult<bool>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(EliminarLimiteTransaccionalCommand modelo)
         {
-            return await _mediador.Send(new EliminarLimiteTransaccionalCommand() { Id = Id });
+            return await _mediador.Send(modelo);
         }
     }
 }

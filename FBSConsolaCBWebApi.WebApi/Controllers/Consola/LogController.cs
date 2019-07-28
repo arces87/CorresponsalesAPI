@@ -24,9 +24,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("get/{id}", Name = "Log_ObtenerLog")]
-        public async Task<ActionResult<ObtenerModeloLog>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloLog>> Get(ObtenerLogQuery modelo)
         {
-            return await _mediador.Send(new ObtenerLogQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
     }
 }

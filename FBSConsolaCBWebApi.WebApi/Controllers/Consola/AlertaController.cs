@@ -18,16 +18,16 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpPost("lista", Name ="Alerta_ListarAlertas")]
+        [HttpPost("lista", Name = "Alerta_ListarAlertas")]
         public async Task<ActionResult<ModeloObtenerListaAlerta>> List([FromBody] ObtenerListaAlertaQuery modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpGet("get/{id}", Name = "Alerta_ObtenerAlerta")]
-        public async Task<ActionResult<ObtenerModeloAlerta>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloAlerta>> Get(ObtenerAlertaQuery modelo)
         {
-            return await _mediador.Send(new ObtenerAlertaQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Alerta_CrearAlerta")]
@@ -35,11 +35,11 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(model);
         }
-        
-        [HttpDelete("{id}",Name = "Alerta_EliminarAlerta")]
-        public async Task<ActionResult<int>> Delete(int Id)
+
+        [HttpDelete("{id}", Name = "Alerta_EliminarAlerta")]
+        public async Task<ActionResult<int>> Delete(EliminarAlertaCommand modelo)
         {
-            return Ok(await _mediador.Send(new EliminarAlertaCommand() { Id = Id }));
+            return Ok(await _mediador.Send(modelo));
         }
     }
 }

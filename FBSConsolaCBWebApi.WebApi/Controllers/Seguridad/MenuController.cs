@@ -25,15 +25,15 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpGet("Usuario/{idUsuario}", Name = "Menu_ObtenerMenusUsuario")]
-        public async Task<ActionResult<ModeloObtenerListaMenuUsuario>> GetMenuUsuario(string idUsuario)
+        public async Task<ActionResult<ModeloObtenerListaMenuUsuario>> GetMenuUsuario(ObtenerListaMenuUsuarioQuery modelo)
         {
-            return await _mediador.Send(new ObtenerListaMenuUsuarioQuery() { IdUsuario = idUsuario });
+            return await _mediador.Send(modelo);
         }
 
         [HttpGet("{id}", Name = "Menu_ObtenerMenu")]
-        public async Task<ActionResult<ObtenerModeloMenu>> GetMenu(int Id)
+        public async Task<ActionResult<ObtenerModeloMenu>> GetMenu(ObtenerMenuQuery modelo)
         {
-            return await _mediador.Send(new ObtenerMenuQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Menu_CrearMenu")]
@@ -49,9 +49,9 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpDelete("{id}", Name = "Menu_EliminarMenu")]
-        public async Task<ActionResult<bool>> Delete(int Id)
+        public async Task<ActionResult<bool>> Delete(EliminarMenuCommand modelo)
         {
-            return await _mediador.Send(new EliminarMenuCommand() { Id = Id });
+            return await _mediador.Send(modelo);
         }
     }
 }

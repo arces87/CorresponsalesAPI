@@ -25,9 +25,9 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpGet("get/{id}", Name = "Dispositivo_ObtenerDispositivo")]
-        public async Task<ActionResult<ObtenerModeloDispositivo>> Get(int Id)
+        public async Task<ActionResult<ObtenerModeloDispositivo>> Get(ObtenerDispositivoQuery modelo)
         {
-            return await _mediador.Send(new ObtenerDispositivoQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Dispositivo_CrearDispositivo")]
@@ -43,16 +43,16 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPut (Name = "Dispositivo_ActualizarDispositivo")]
+        [HttpPut(Name = "Dispositivo_ActualizarDispositivo")]
         public async Task<ActionResult<bool>> Update([FromBody] ModificarDispositivoCommand model)
         {
             return Ok(await _mediador.Send(model));
         }
 
         [HttpDelete("{id}", Name = "Dispositivo_EliminarDispositivo")]
-        public async Task<ActionResult<int>> Delete(int Id)
+        public async Task<ActionResult<int>> Delete(EliminarDispositivoCommand modelo)
         {
-            return Ok(await _mediador.Send(new EliminarDispositivoCommand() { Id = Id }));
+            return Ok(await _mediador.Send(modelo));
         }
 
         [HttpDelete("asignacion", Name = "Dispositivo_DesasignarDispositivo")]
