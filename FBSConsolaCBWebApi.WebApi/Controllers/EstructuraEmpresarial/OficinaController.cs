@@ -18,7 +18,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet(Name = "Oficina_ListarOficinas")]
+        [HttpPost("lista", Name = "Oficina_ListarOficinas")]
         public async Task<ActionResult<ModeloObtenerListaOficina>> Get(ObtenerListaOficinaQuery model)
         {
             return await _mediador.Send(model);
