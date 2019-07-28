@@ -24,8 +24,8 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpGet(Name = "Alerta_ObtenerAlerta")]
-        public async Task<ActionResult<ObtenerModeloAlerta>> Get(ObtenerAlertaQuery modelo)
+        [HttpPost("obtener", Name = "Alerta_ObtenerAlerta")]
+        public async Task<ActionResult<ObtenerModeloAlerta>> Get([FromBody] ObtenerAlertaQuery modelo)
         {
             return await _mediador.Send(modelo);
         }
@@ -37,7 +37,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete(Name = "Alerta_EliminarAlerta")]
-        public async Task<ActionResult<int>> Delete(EliminarAlertaCommand modelo)
+        public async Task<ActionResult<int>> Delete([FromBody] EliminarAlertaCommand modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }

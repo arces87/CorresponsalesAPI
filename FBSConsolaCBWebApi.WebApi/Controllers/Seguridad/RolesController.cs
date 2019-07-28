@@ -25,8 +25,8 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(new ObtenerListaRolQuery());
         }
 
-        [HttpGet(Name = "Rol_ObtenerRol")]
-        public async Task<ActionResult<ObtenerModeloRol>> GetRole(ObtenerRolQuery modelo)
+        [HttpPost("obtener", Name = "Rol_ObtenerRol")]
+        public async Task<ActionResult<ObtenerModeloRol>> GetRole([FromBody] ObtenerRolQuery modelo)
         {
             return await _mediador.Send(modelo);
         }
@@ -44,7 +44,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete(Name = "Rol_EliminarRol")]
-        public async Task<ActionResult<bool>> Delete(EliminarRolCommand modelo)
+        public async Task<ActionResult<bool>> Delete([FromBody] EliminarRolCommand modelo)
         {
             return await _mediador.Send(modelo);
         }

@@ -26,8 +26,8 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
 
-        [HttpGet(Name = "Persona_ObtenerPersona")]
-        public async Task<ActionResult<ObtenerModeloPersona>> Get(ObtenerPersonaQuery modelo)
+        [HttpPost("obtener", Name = "Persona_ObtenerPersona")]
+        public async Task<ActionResult<ObtenerModeloPersona>> Get([FromBody] ObtenerPersonaQuery modelo)
         {
             return await _mediador.Send(modelo);
         }
@@ -39,7 +39,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpDelete(Name = "Persona_EliminarPersona")]
-        public async Task<ActionResult<bool>> Delete(EliminarPersonaCommand modelo)
+        public async Task<ActionResult<bool>> Delete([FromBody] EliminarPersonaCommand modelo)
         {
             return await _mediador.Send(modelo);
         }

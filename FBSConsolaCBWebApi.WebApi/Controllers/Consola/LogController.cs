@@ -23,8 +23,8 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpGet(Name = "Log_ObtenerLog")]
-        public async Task<ActionResult<ObtenerModeloLog>> Get(ObtenerLogQuery modelo)
+        [HttpPost("obtener", Name = "Log_ObtenerLog")]
+        public async Task<ActionResult<ObtenerModeloLog>> Get([FromBody] ObtenerLogQuery modelo)
         {
             return await _mediador.Send(modelo);
         }
