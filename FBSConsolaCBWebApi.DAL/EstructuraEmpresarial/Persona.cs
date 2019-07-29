@@ -33,15 +33,16 @@ namespace FBSConsolaCBWebApi.DAL.EstructuraEmpresarial
         public string CorreoElectronico { get; set; }
 
         public string Telefono { get; set; }
-        
+
         public bool EstaActivo { get; set; }
+        public string ImagenUrl { get; set; }
 
         public Catalogo TipoIdentificacion { get; set; }
 
         public Oficina Oficina { get; set; }
 
         public Usuario Usuario { get; set; }
-        
+
         [Timestamp]
         public byte[] Concurrencia { get; set; }
 

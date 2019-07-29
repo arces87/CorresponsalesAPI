@@ -100,8 +100,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<EliminarAlertaCommand, Alerta>();
 
             CreateMap<Alerta, ObtenerModeloAlerta>()
-                .ForMember(m => m.Destinatario, opt => opt.MapFrom(d => d.Destinatario.NombreUnido))
-                .ForMember(m => m.Remitente, opt => opt.MapFrom(d => d.Remitente.NombreUnido))
+                .ForMember(m => m.NombreDestinatario, opt => opt.MapFrom(d => d.Destinatario.NombreUnido))
+                .ForMember(m => m.IdDestinatario, opt => opt.MapFrom(d => d.Destinatario.Id))
+                .ForMember(m => m.NombreRemitente, opt => opt.MapFrom(d => d.Remitente.NombreUnido))
+                .ForMember(m => m.IdRemitente, opt => opt.MapFrom(d => d.Remitente.Id))
                 .ForMember(m => m.IdCategoria, opt => opt.MapFrom(d => d.Categoria.Id))
                 .ForMember(m => m.NombreCategoria, opt => opt.MapFrom(d => d.Categoria.Nombre));
             CreateMap<Alerta, ModeloObtenerDetalleListaAlerta>()
@@ -195,7 +197,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
                 .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
                 .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
-                .ForMember(m => m.Estado, opt => opt.MapFrom(d => d.Persona.Usuario.LockoutEnabled ? "BLOQUEADO" : "ACTIVO"));
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => !d.Persona.Usuario.LockoutEnabled));
 
             CreateMap<Corresponsal, ObtenerModeloCorresponsal>()
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
@@ -212,7 +214,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                 .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.Persona.NombreUnido))
-                .ForMember(m => m.Estado, opt => opt.MapFrom(d => d.Persona.Usuario.LockoutEnabled ? "BLOQUEADO" : "ACTIVO"));
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => !d.Persona.Usuario.LockoutEnabled));
 
             #endregion
 
@@ -257,6 +259,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
                 .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
                 .ForMember(m => m.IdTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Id))
+                .ForMember(m => m.NombreTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Persona.Usuario.UserName))
                 .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Persona.Usuario.Id))
                 .ForMember(m => m.CorreoElectronico, opt => opt.MapFrom(d => d.Persona.Usuario.Email))

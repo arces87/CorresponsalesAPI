@@ -29,7 +29,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
                 return tiposCatalogos.ToList();
             }
         }
-
+        
         public override async Task Remove(TipoCatalogo entity)
         {
             entity.EstaActivo = false;

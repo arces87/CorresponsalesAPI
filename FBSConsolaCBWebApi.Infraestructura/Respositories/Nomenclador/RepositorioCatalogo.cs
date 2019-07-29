@@ -71,6 +71,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
         public override async Task Add(Catalogo entity)
         {
             entity.TipoCatalogo = Context.TiposCatalogos.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
+            entity.EstaActivo = true;
             Context.Catalogos.Add(entity);
             await Context.SaveChangesAsync();
         }

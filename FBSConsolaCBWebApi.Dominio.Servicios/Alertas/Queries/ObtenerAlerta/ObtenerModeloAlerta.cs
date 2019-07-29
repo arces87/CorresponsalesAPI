@@ -8,9 +8,11 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
 
         public int IdConversacion { get; set; }
 
-        public string Destinatario { get; set; }
+        public string NombreDestinatario { get; set; }
+        public string IdDestinatario { get; set; }
 
-        public string Remitente { get; set; }
+        public string NombreRemitente { get; set; }
+        public string IdRemitente { get; set; }
         public int IdCategoria { get; set; }
         public string NombreCategoria { get; set; }
         public int Tipo { get; set; }

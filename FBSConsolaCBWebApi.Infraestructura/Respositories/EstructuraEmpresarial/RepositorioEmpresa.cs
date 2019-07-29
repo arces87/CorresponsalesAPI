@@ -19,7 +19,12 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
         {
             return await _contexto.Set<Empresa>().Where(a => a.EstaActivo == true).ToListAsync();
         }
-
+        public override async Task Add(Empresa entity)
+        {
+            entity.EstaActivo = true;
+            _contexto.Set<Empresa>().Add(entity);
+            await _contexto.SaveChangesAsync();
+        }
         public override async Task Remove(Empresa entity)
         {
             entity.EstaActivo = false;

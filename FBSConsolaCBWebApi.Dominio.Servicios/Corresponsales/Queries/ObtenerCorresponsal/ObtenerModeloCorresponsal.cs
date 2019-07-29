@@ -24,6 +24,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Queries
         public float Longitud { get; set; }
         public int IdSupervisor { get; set; }
         public string NombreSupervisor { get; set; }
-        public string Estado { get; set; }
+        public bool Estado { get; set; }
     }
 }
