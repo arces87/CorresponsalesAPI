@@ -148,6 +148,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Tipo Catalogo
             CreateMap<ModificarTipoCatalogoCommand, TipoCatalogo>();
+            CreateMap<TipoCatalogo, ModeloObtenerDetalleListaTipoCatalogo>();
+            CreateMap<TipoCatalogo, ObtenerModeloTipoCatalogo>();
             #endregion
 
             #region Persona

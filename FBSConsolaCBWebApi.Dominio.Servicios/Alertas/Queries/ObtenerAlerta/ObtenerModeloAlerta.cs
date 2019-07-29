@@ -13,6 +13,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
 
         public string NombreRemitente { get; set; }
         public string IdRemitente { get; set; }
+
         public int IdCategoria { get; set; }
         public string NombreCategoria { get; set; }
         public int Tipo { get; set; }
