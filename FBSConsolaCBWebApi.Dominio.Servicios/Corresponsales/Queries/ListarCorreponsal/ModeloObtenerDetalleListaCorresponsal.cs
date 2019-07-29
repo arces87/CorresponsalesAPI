@@ -10,5 +10,8 @@
         public string NombreUnido { get; set; }
         public int NumeroIdentificador { get; set; }
         public string Identificacion { get; set; }
+        public string Estado { get; set; }
+        public int IdOficina { get; set; }
+        public string NombreOficina { get; set; }
     }
 }

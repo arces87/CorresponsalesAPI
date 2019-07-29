@@ -192,7 +192,11 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Persona.PrimerApellido))
                 .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.NombreUnido))
                 .ForMember(m => m.NumeroIdentificador, opt => opt.MapFrom(d => d.Persona.NumeroIdentificador))
-                .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion));
+                .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
+                .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
+                .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => d.Persona.Usuario.LockoutEnabled ? "BLOQUEADO" : "ACTIVO"));
+
             CreateMap<Corresponsal, ObtenerModeloCorresponsal>()
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
                 .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre))
@@ -207,7 +211,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.IdTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Id))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
-                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.Persona.NombreUnido));
+                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.Persona.NombreUnido))
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => d.Persona.Usuario.LockoutEnabled ? "BLOQUEADO" : "ACTIVO"));
 
             #endregion
 
@@ -237,7 +242,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Persona.PrimerApellido))
                 .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.NombreUnido))
                 .ForMember(m => m.NumeroIdentificador, opt => opt.MapFrom(d => d.Persona.NumeroIdentificador))
-                .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion));
+                .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
+                .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
+                .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre));
             CreateMap<Supervisor, ObtenerModeloSupervisor>()
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
                 .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre))
@@ -250,6 +257,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
                 .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
                 .ForMember(m => m.IdTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Id))
+                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Persona.Usuario.UserName))
+                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Persona.Usuario.Id))
+                .ForMember(m => m.CorreoElectronico, opt => opt.MapFrom(d => d.Persona.Usuario.Email))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre));
 
             #endregion

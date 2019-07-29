@@ -20,6 +20,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries
         public string NombreOficina { get; set; }
         public int IdTipoIdentificacion { get; set; }
         public string Usuario { get; set; }
+        public string IdUsuario { get; set; }
+        public string CorreoElectronico { get; set; }
         public string NombreSupervisor { get; set; }
     }
 }
