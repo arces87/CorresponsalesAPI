@@ -19,7 +19,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries
 
         public async Task<ObtenerModeloSupervisor> Handle(ObtenerSupervisorQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ObtenerModeloSupervisor>(await _repositorio.GetWithAssociations(request.Id));
+            var supervisor = _mapper.Map<ObtenerModeloSupervisor>(await _repositorio.GetWithAssociations(request.Id));
+            return supervisor;
         }
     }
 }

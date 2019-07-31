@@ -352,6 +352,33 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Dispositivo",
+                schema: "Consola",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(nullable: true),
+                    Imei = table.Column<string>(nullable: true),
+                    Mac = table.Column<string>(nullable: true),
+                    NumeroSerie = table.Column<string>(nullable: true),
+                    TipoDispositivoId = table.Column<int>(nullable: true),
+                    EstaActivo = table.Column<bool>(nullable: false),
+                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dispositivo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dispositivo_Catalogo_TipoDispositivoId",
+                        column: x => x.TipoDispositivoId,
+                        principalSchema: "Nomenclador",
+                        principalTable: "Catalogo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Persona",
                 schema: "EstructuraEmpresarial",
                 columns: table => new
@@ -365,9 +392,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     NombreUnido = table.Column<string>(nullable: true),
                     NumeroIdentificador = table.Column<int>(nullable: false),
                     Identificacion = table.Column<string>(nullable: true),
+                    Direccion = table.Column<string>(nullable: true),
+                    FechaNacimiento = table.Column<DateTime>(nullable: true),
                     CorreoElectronico = table.Column<string>(nullable: true),
                     Telefono = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
+                    ImagenUrl = table.Column<string>(nullable: true),
                     TipoIdentificacionId = table.Column<int>(nullable: true),
                     OficinaId = table.Column<int>(nullable: true),
                     UsuarioId = table.Column<string>(nullable: true),
@@ -400,6 +430,51 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Alerta",
+                schema: "Consola",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    IdConversacion = table.Column<int>(nullable: false),
+                    DestinatarioId = table.Column<int>(nullable: true),
+                    RemitenteId = table.Column<int>(nullable: true),
+                    Asunto = table.Column<string>(nullable: true),
+                    Mensaje = table.Column<string>(nullable: true),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    Estado = table.Column<int>(nullable: false),
+                    EstaActivo = table.Column<bool>(nullable: false),
+                    Tipo = table.Column<int>(nullable: false),
+                    CategoriaId = table.Column<int>(nullable: true),
+                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alerta", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Alerta_Catalogo_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalSchema: "Nomenclador",
+                        principalTable: "Catalogo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alerta_Persona_DestinatarioId",
+                        column: x => x.DestinatarioId,
+                        principalSchema: "EstructuraEmpresarial",
+                        principalTable: "Persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alerta_Persona_RemitenteId",
+                        column: x => x.RemitenteId,
+                        principalSchema: "EstructuraEmpresarial",
+                        principalTable: "Persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Supervisor",
                 schema: "EstructuraEmpresarial",
                 columns: table => new
@@ -426,8 +501,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    FechaNacimiento = table.Column<DateTime>(nullable: false),
-                    Direccion = table.Column<string>(nullable: true),
                     Latitud = table.Column<float>(nullable: false),
                     Longitud = table.Column<float>(nullable: false),
                     SupervisorId = table.Column<int>(nullable: true),
@@ -454,36 +527,32 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dispositivo",
+                name: "DispositivoCorresponsal",
                 schema: "Consola",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(nullable: true),
-                    Imei = table.Column<string>(nullable: true),
-                    Mac = table.Column<string>(nullable: true),
-                    NumeroSerie = table.Column<string>(nullable: true),
-                    TipoDispositivoId = table.Column<int>(nullable: true),
+                    DispositivoId = table.Column<int>(nullable: true),
                     CorresponsalId = table.Column<int>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dispositivo", x => x.Id);
+                    table.PrimaryKey("PK_DispositivoCorresponsal", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dispositivo_Corresponsal_CorresponsalId",
+                        name: "FK_DispositivoCorresponsal_Corresponsal_CorresponsalId",
                         column: x => x.CorresponsalId,
                         principalSchema: "EstructuraEmpresarial",
                         principalTable: "Corresponsal",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Dispositivo_Catalogo_TipoDispositivoId",
-                        column: x => x.TipoDispositivoId,
-                        principalSchema: "Nomenclador",
-                        principalTable: "Catalogo",
+                        name: "FK_DispositivoCorresponsal_Dispositivo_DispositivoId",
+                        column: x => x.DispositivoId,
+                        principalSchema: "Consola",
+                        principalTable: "Dispositivo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -581,16 +650,40 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dispositivo_CorresponsalId",
+                name: "IX_Alerta_CategoriaId",
                 schema: "Consola",
-                table: "Dispositivo",
-                column: "CorresponsalId");
+                table: "Alerta",
+                column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alerta_DestinatarioId",
+                schema: "Consola",
+                table: "Alerta",
+                column: "DestinatarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alerta_RemitenteId",
+                schema: "Consola",
+                table: "Alerta",
+                column: "RemitenteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dispositivo_TipoDispositivoId",
                 schema: "Consola",
                 table: "Dispositivo",
                 column: "TipoDispositivoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DispositivoCorresponsal_CorresponsalId",
+                schema: "Consola",
+                table: "DispositivoCorresponsal",
+                column: "CorresponsalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DispositivoCorresponsal_DispositivoId",
+                schema: "Consola",
+                table: "DispositivoCorresponsal",
+                column: "DispositivoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LimiteExistencia_CorresponsalId",
@@ -726,7 +819,11 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Dispositivo",
+                name: "Alerta",
+                schema: "Consola");
+
+            migrationBuilder.DropTable(
+                name: "DispositivoCorresponsal",
                 schema: "Consola");
 
             migrationBuilder.DropTable(
@@ -768,6 +865,10 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
             migrationBuilder.DropTable(
                 name: "UsuarioToken",
                 schema: "Seguridad");
+
+            migrationBuilder.DropTable(
+                name: "Dispositivo",
+                schema: "Consola");
 
             migrationBuilder.DropTable(
                 name: "Corresponsal",

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    [Migration("20190706173516_ModificandoRelacionDispositivoCorresponsal")]
-    partial class ModificandoRelacionDispositivoCorresponsal
+    [Migration("20190730175702_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -210,6 +210,47 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasFilter("[NombreUsuarioNormalizado] IS NOT NULL");
 
                     b.ToTable("Usuario","Seguridad");
+                });
+
+            modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Consola.Alerta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Asunto");
+
+                    b.Property<int?>("CategoriaId");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<int?>("DestinatarioId");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<int>("Estado");
+
+                    b.Property<DateTime>("Fecha");
+
+                    b.Property<int>("IdConversacion");
+
+                    b.Property<string>("Mensaje");
+
+                    b.Property<int?>("RemitenteId");
+
+                    b.Property<int>("Tipo");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("DestinatarioId");
+
+                    b.HasIndex("RemitenteId");
+
+                    b.ToTable("Alerta","Consola");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Consola.Dispositivo", b =>
@@ -456,6 +497,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("Identificacion");
 
+                    b.Property<string>("ImagenUrl");
+
                     b.Property<string>("NombreUnido");
 
                     b.Property<int>("NumeroIdentificador");
@@ -668,6 +711,21 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.Identidad.DAL.Seguridad.Rol", "Rol")
                         .WithMany("RoleMenu")
                         .HasForeignKey("RolId");
+                });
+
+            modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Consola.Alerta", b =>
+                {
+                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId");
+
+                    b.HasOne("FBSConsolaCBWebApi.DAL.EstructuraEmpresarial.Persona", "Destinatario")
+                        .WithMany()
+                        .HasForeignKey("DestinatarioId");
+
+                    b.HasOne("FBSConsolaCBWebApi.DAL.EstructuraEmpresarial.Persona", "Remitente")
+                        .WithMany()
+                        .HasForeignKey("RemitenteId");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Consola.Dispositivo", b =>

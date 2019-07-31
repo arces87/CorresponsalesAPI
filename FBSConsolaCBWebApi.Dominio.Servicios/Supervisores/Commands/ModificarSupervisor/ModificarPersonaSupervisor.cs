@@ -13,6 +13,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Commands
         public int NumeroIdentificador { get; set; }
         public string Identificacion { get; set; }
         public string Direccion { get; set; }
+        public string CorreoElectronico { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public bool EstaActivo { get; set; }
         public string Tipo { get; set; }

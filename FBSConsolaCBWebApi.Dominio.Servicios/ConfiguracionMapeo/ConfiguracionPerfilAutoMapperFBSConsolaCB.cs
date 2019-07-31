@@ -192,20 +192,22 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             CreateMap<Corresponsal, ModeloObtenerDetalleListaCorresponsal>()
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
-                .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre))
+                .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre == null ? "" : d.Persona.SegundoNombre))
                 .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Persona.PrimerApellido))
-                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.NombreUnido))
+                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.SegundoApellido))
                 .ForMember(m => m.NumeroIdentificador, opt => opt.MapFrom(d => d.Persona.NumeroIdentificador))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
                 .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
                 .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
+                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Supervisor.Persona.Usuario.UserName))
+                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Supervisor.Persona.Usuario.Id))
                 .ForMember(m => m.Estado, opt => opt.MapFrom(d => !d.Persona.Usuario.LockoutEnabled));
 
             CreateMap<Corresponsal, ObtenerModeloCorresponsal>()
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
-                .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre))
+                .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre == null ? "" : d.Persona.SegundoNombre))
                 .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Persona.PrimerApellido))
-                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.NombreUnido))
+                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.SegundoApellido))
                 .ForMember(m => m.NumeroIdentificador, opt => opt.MapFrom(d => d.Persona.NumeroIdentificador))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
                 .ForMember(m => m.Direccion, opt => opt.MapFrom(d => d.Persona.Direccion))
@@ -213,9 +215,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
                 .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
                 .ForMember(m => m.IdTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Id))
+                .ForMember(m => m.NombreTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                 .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.Persona.NombreUnido))
+                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Supervisor.Persona.Usuario.UserName))
+                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Supervisor.Persona.Usuario.Id))
+                .ForMember(m => m.CorreoElectronico, opt => opt.MapFrom(d => d.Persona.CorreoElectronico))
                 .ForMember(m => m.Estado, opt => opt.MapFrom(d => !d.Persona.Usuario.LockoutEnabled));
 
             #endregion
@@ -244,7 +250,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
                 .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre))
                 .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Persona.PrimerApellido))
-                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.NombreUnido))
+                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.SegundoApellido))
                 .ForMember(m => m.NumeroIdentificador, opt => opt.MapFrom(d => d.Persona.NumeroIdentificador))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
                 .ForMember(m => m.IdOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Id))
@@ -253,7 +259,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.PrimerNombre, opt => opt.MapFrom(d => d.Persona.PrimerNombre))
                 .ForMember(m => m.SegundoNombre, opt => opt.MapFrom(d => d.Persona.SegundoNombre))
                 .ForMember(m => m.PrimerApellido, opt => opt.MapFrom(d => d.Persona.PrimerApellido))
-                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.NombreUnido))
+                .ForMember(m => m.SegundoApellido, opt => opt.MapFrom(d => d.Persona.SegundoApellido))
                 .ForMember(m => m.NumeroIdentificador, opt => opt.MapFrom(d => d.Persona.NumeroIdentificador))
                 .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.Identificacion))
                 .ForMember(m => m.Direccion, opt => opt.MapFrom(d => d.Persona.Direccion))
@@ -264,8 +270,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.NombreTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Persona.Usuario.UserName))
                 .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Persona.Usuario.Id))
-                .ForMember(m => m.CorreoElectronico, opt => opt.MapFrom(d => d.Persona.Usuario.Email))
-                .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre));
+                .ForMember(m => m.CorreoElectronico, opt => opt.MapFrom(d => d.Persona.Usuario.Email));
 
             #endregion
 

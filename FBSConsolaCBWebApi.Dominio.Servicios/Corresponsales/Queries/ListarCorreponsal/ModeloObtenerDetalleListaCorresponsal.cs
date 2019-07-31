@@ -13,5 +13,7 @@
         public bool Estado { get; set; }
         public int IdOficina { get; set; }
         public string NombreOficina { get; set; }
+        public string IdUsuario { get; set; }
+        public string Usuario { get; set; }
     }
 }
