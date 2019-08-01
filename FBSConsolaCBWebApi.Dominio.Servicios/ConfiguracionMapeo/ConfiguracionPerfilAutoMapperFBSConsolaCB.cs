@@ -52,7 +52,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
             #region LimiteExistencia
             CreateMap<CrearLimiteExistenciaCommand, LimiteExistencia>()
-               .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdCorresponsal }));
+               .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Corresponsal() { Id = d.IdCorresponsal }));
+            CreateMap<ModificarLimiteExistenciaCommand, LimiteExistencia>()
+               .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Corresponsal() { Id = d.IdCorresponsal }));
             CreateMap<EliminarLimiteExistenciaCommand, LimiteExistencia>();
             CreateMap<LimiteExistencia, ObtenerModeloLimiteExistencia>()
                 .ForMember(m => m.IdCorresponsal, opt => opt.MapFrom(d => d.Corresponsal.Id))
@@ -64,7 +66,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region LimiteTransaccional
             CreateMap<CrearLimiteTransaccionalCommand, LimiteTransaccional>()
-               .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdCorresponsal }))
+               .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Corresponsal() { Id = d.IdCorresponsal }))
+               .ForMember(m => m.Operacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdOperacion }));
+            CreateMap<ModificarLimiteTransaccionalCommand, LimiteTransaccional>()
+               .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Corresponsal() { Id = d.IdCorresponsal }))
                .ForMember(m => m.Operacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdOperacion }));
             CreateMap<EliminarLimiteTransaccionalCommand, LimiteTransaccional>();
             CreateMap<LimiteTransaccional, ObtenerModeloLimiteTransaccional>()
@@ -216,11 +221,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.NombreOficina, opt => opt.MapFrom(d => d.Persona.Oficina.Nombre))
                 .ForMember(m => m.IdTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Id))
                 .ForMember(m => m.NombreTipoIdentificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
-                .ForMember(m => m.Identificacion, opt => opt.MapFrom(d => d.Persona.TipoIdentificacion.Nombre))
                 .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                 .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.Persona.NombreUnido))
-                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Supervisor.Persona.Usuario.UserName))
-                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Supervisor.Persona.Usuario.Id))
+                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => d.Persona.Usuario.UserName))
+                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Persona.Usuario.Id))
                 .ForMember(m => m.CorreoElectronico, opt => opt.MapFrom(d => d.Persona.CorreoElectronico))
                 .ForMember(m => m.Estado, opt => opt.MapFrom(d => !d.Persona.Usuario.LockoutEnabled));
 

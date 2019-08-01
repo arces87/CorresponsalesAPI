@@ -19,7 +19,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Queries
 
         public async Task<ObtenerModeloCorresponsal> Handle(ObtenerCorresponsalQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ObtenerModeloCorresponsal>(await _repositorio.GetWithAssociations(request.Id));
+            var corresponsal = await _repositorio.GetWithAssociations(request.Id);
+            return _mapper.Map<ObtenerModeloCorresponsal>(corresponsal);
         }
     }
 }
