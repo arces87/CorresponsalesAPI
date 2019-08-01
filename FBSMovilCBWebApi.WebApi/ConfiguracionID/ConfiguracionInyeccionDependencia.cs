@@ -1,4 +1,6 @@
-﻿using FBS.Identidad.Infraestructura.Interfaces;
+﻿using FBS.Dominio.Servicios.CorreoElectronico;
+using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
+using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
@@ -25,7 +27,12 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuration)
         {
-           
+            var configuracionCorreo = configuration.GetSection("ConfiguracionCorreo");
+            var servidorSmtp = configuracionCorreo["ServidorSmtp"];
+            var puertoSmtp = int.Parse(configuracionCorreo["PuertoSmtp"]);
+            var usuario = configuracionCorreo["Usuario"];
+            var contrasenna = configuracionCorreo["Password"];
+            services.AddSingleton<IServicioCorreoElectronico>(new ServicioCorreoElectronico(servidorSmtp, puertoSmtp, usuario, contrasenna));
         }
     }
 }

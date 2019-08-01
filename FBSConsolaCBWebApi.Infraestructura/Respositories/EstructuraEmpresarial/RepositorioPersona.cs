@@ -93,7 +93,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
 
         public override async Task Remove(Persona entity)
         {
-            entity.EstaActivo = false;
+            var persona = _contexto.Set<Persona>().FirstOrDefault(o => o.Id == entity.Id);
+            persona.EstaActivo = false;
             var usuario = _contexto.Set<Usuario>().FirstOrDefault(u => u.Id == entity.Usuario.Id);
             usuario.EstaActivo = false;
             await _contexto.SaveChangesAsync();
@@ -160,6 +161,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
                 return await Context.Dispositivos.FirstOrDefaultAsync(d => d.Id == dispositivo.Dispositivo.Id);
             return null;
         }
+
 
         public ContextoFBSConsolaCB Context { get { return _contexto as ContextoFBSConsolaCB; } }
     }
