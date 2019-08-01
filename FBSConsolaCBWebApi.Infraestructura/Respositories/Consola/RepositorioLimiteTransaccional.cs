@@ -50,7 +50,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
 
         public override async Task Remove(LimiteTransaccional entity)
         {
-            entity.EstaActivo = false;
+            var limite = _contexto.Set<LimiteTransaccional>().FirstOrDefault(o => o.Id == entity.Id);
+            limite.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 

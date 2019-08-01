@@ -41,6 +41,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region Dispositivo
             CreateMap<CrearDispositivoCommand, Dispositivo>()
                .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoDispositivo }));
+            CreateMap<ModificarDispositivoCommand, Dispositivo>()
+               .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoDispositivo }));
             CreateMap<EliminarDispositivoCommand, Dispositivo>();
             CreateMap<Dispositivo, ObtenerModeloDispositivo>()
                 .ForMember(m => m.IdTipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Id))

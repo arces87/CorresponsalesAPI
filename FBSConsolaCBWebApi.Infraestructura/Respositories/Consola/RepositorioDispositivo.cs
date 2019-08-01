@@ -83,8 +83,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
 
         public override async Task Remove(Dispositivo entity)
         {
-            entity.EstaActivo = false;
-            _contexto.Entry(entity).State = EntityState.Modified;
+            var dispositivo = _contexto.Set<Dispositivo>().FirstOrDefault(o => o.Id == entity.Id);
+            dispositivo.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 

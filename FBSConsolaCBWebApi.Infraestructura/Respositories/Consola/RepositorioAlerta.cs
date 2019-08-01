@@ -54,7 +54,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
 
         public override async Task Remove(Alerta entity)
         {
-            entity.EstaActivo = false;
+            var alerta = _contexto.Set<Alerta>().FirstOrDefault(o => o.Id == entity.Id);
+            alerta.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 
