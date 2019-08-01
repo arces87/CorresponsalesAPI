@@ -27,7 +27,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
         }
         public override async Task Remove(Empresa entity)
         {
-            entity.EstaActivo = false;
+            var empresa = _contexto.Set<Oficina>().FirstOrDefault(o => o.Id == entity.Id);
+            empresa.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
     }
