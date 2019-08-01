@@ -95,6 +95,15 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
         {
             var persona = _contexto.Set<Persona>().FirstOrDefault(o => o.Id == entity.Id);
             persona.EstaActivo = false;
+            var corresponsal = _contexto.Set<Corresponsal>().FirstOrDefault(o => o.Id == entity.Id);
+            if (corresponsal != null)
+                corresponsal.EstaActivo = false;
+            else
+            {
+                var supervisor = _contexto.Set<Supervisor>().FirstOrDefault(o => o.Id == entity.Id);
+                if (supervisor != null)
+                    supervisor.EstaActivo = false;
+            }
             var usuario = _contexto.Set<Usuario>().FirstOrDefault(u => u.Id == entity.Usuario.Id);
             usuario.EstaActivo = false;
             await _contexto.SaveChangesAsync();
