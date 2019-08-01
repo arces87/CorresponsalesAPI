@@ -31,7 +31,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
             }
         }
 
-        public override async Task Add(Alerta entity)
+        public override async Task<string> Add(Alerta entity)
         {
             entity.Destinatario = Context.Personas.FirstOrDefault(c => c.Id == entity.Destinatario.Id);
             entity.Remitente = Context.Personas.FirstOrDefault(c => c.Id == entity.Remitente.Id);
@@ -39,6 +39,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
             entity.EstaActivo = true;
             Context.Alertas.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
 
         public override async Task<Alerta> Get(int Id)

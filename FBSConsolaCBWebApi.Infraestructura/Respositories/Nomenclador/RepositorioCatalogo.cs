@@ -69,12 +69,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
             await _contexto.SaveChangesAsync();
         }
 
-        public override async Task Add(Catalogo entity)
+        public override async Task<string> Add(Catalogo entity)
         {
             entity.TipoCatalogo = Context.TiposCatalogos.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
             entity.EstaActivo = true;
             Context.Catalogos.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
         public override async Task Update(Catalogo entity)
         {

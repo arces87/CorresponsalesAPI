@@ -75,13 +75,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
                 return consolas.FirstOrDefault();
             }
         }
-        public override async Task Add(Log entity)
+        public override async Task<string> Add(Log entity)
         {
             entity.Operacion = Context.Catalogos.FirstOrDefault(c => c.Id == entity.Operacion.Id);
             entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
             entity.EstaActivo = true;
             Context.Logs.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
 
 

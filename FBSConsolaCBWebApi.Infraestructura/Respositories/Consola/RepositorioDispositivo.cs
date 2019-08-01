@@ -59,12 +59,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
             }
         }
 
-        public override async Task Add(Dispositivo entity)
+        public override async Task<string> Add(Dispositivo entity)
         {
             entity.TipoDispositivo = Context.Catalogos.FirstOrDefault(c => c.Id == entity.TipoDispositivo.Id);
             entity.EstaActivo = true;
             Context.Dispositivos.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
         public override async Task Update(Dispositivo entity)
         {

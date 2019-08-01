@@ -21,8 +21,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Empresas.Commands
         public async Task<int> Handle(CrearEmpresaCommand request, CancellationToken cancellationToken)
         {
             var _model = _mapper.Map<Empresa>(request);
-            await _repositorio.Add(_model);
-            return 0;
+            var identificador = await _repositorio.Add(_model);
+            return int.Parse(identificador);
         }
     }
 }

@@ -169,14 +169,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Corresponsales
-            CreateMap<CrearRolCorresponsal, Rol>();
-            CreateMap<CrearUsuarioCorresponsal, Usuario>()
-                .ForMember(m => m.UserName, opt => opt.MapFrom(d => d.Usuario))
-                .ForMember(m => m.Email, opt => opt.MapFrom(d => d.CorreoElectronico))
-                .ForMember(m => m.PasswordHash, opt => opt.MapFrom(d => d.Contrasenna));
+            CreateMap<CrearRolCorresponsal, CrearUsuarioRol>();
+            CreateMap<CrearUsuarioCorresponsal, CrearUsuarioCommand>();
             CreateMap<CrearPersonaCorresponsal, Persona>()
                 .ForMember(m => m.Oficina, opt => opt.MapFrom(d => new Oficina() { Id = d.IdOficina }))
-                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }));
+                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }))
+                .ForMember(m => m.Usuario, opt => opt.Ignore());
             CreateMap<CrearCorresponsalCommand, Corresponsal>()
                 .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Supervisor() { Id = d.IdSupervisor }));
             CreateMap<ModificarRolCorresponsal, Rol>();
@@ -227,14 +225,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Supervisores
-            CreateMap<CrearRolSupervisor, Rol>();
-            CreateMap<CrearUsuarioSupervisor, Usuario>()
-                .ForMember(m => m.UserName, opt => opt.MapFrom(d => d.Usuario))
-                .ForMember(m => m.Email, opt => opt.MapFrom(d => d.CorreoElectronico))
-                .ForMember(m => m.PasswordHash, opt => opt.MapFrom(d => d.Contrasenna));
+            CreateMap<CrearRolSupervisor, CrearUsuarioRol>();
+            CreateMap<CrearUsuarioSupervisor, CrearUsuarioCommand>();
             CreateMap<CrearPersonaSupervisor, Persona>()
                 .ForMember(m => m.Oficina, opt => opt.MapFrom(d => new Oficina() { Id = d.IdOficina }))
-                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }));
+                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }))
+                .ForMember(m => m.Usuario, opt => opt.Ignore());
             CreateMap<CrearSupervisorCommand, Supervisor>();
             CreateMap<ModificarRolSupervisor, Rol>();
             CreateMap<ModificarUsuarioSupervisor, Usuario>()

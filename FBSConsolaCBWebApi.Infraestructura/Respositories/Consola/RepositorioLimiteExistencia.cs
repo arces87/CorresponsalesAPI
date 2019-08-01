@@ -24,12 +24,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
             return await _contexto.Set<LimiteExistencia>().Where(a => a.EstaActivo == true)
                 .Include(c => c.Corresponsal).ToListAsync();
         }
-        public override async Task Add(LimiteExistencia entity)
+        public override async Task<string> Add(LimiteExistencia entity)
         {
             entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
             entity.EstaActivo = true;
             Context.LimitesExistencias.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
         public override async Task Update(LimiteExistencia entity)
         {

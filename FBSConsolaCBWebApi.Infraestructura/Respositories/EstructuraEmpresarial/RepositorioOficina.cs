@@ -39,12 +39,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
             await _contexto.SaveChangesAsync();
         }
 
-        public override async Task Add(Oficina entity)
+        public override async Task<string> Add(Oficina entity)
         {
             entity.EstaActivo = true;
             entity.Empresa = Context.Empresas.FirstOrDefault(c => c.Id == entity.Empresa.Id);
             Context.Oficinas.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
         public override async Task Update(Oficina entity)
         {

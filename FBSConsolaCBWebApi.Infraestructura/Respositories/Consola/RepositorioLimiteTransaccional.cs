@@ -24,13 +24,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Consola
             return await _contexto.Set<LimiteTransaccional>().Where(a => a.EstaActivo == true)
                 .Include(c => c.Corresponsal).Include(d => d.Operacion).ToListAsync();
         }
-        public override async Task Add(LimiteTransaccional entity)
+        public override async Task<string> Add(LimiteTransaccional entity)
         {
             entity.Operacion = Context.Catalogos.FirstOrDefault(c => c.Id == entity.Operacion.Id);
             entity.Corresponsal = Context.Corresponsales.FirstOrDefault(c => c.Id == entity.Corresponsal.Id);
             entity.EstaActivo = true;
             Context.LimitesTransaccionales.Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id.ToString();
         }
         public override async Task Update(LimiteTransaccional entity)
         {

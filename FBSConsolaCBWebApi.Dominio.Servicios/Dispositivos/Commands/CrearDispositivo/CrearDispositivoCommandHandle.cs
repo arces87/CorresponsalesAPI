@@ -21,8 +21,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
         public async Task<int> Handle(CrearDispositivoCommand request, CancellationToken cancellationToken)
         {
             var _model = _mapper.Map<Dispositivo>(request);
-            await _repositorio.Add(_model);
-            return 0;
+            var identificador = await _repositorio.Add(_model);
+            return int.Parse(identificador != "" ? identificador : "0");
         }
     }
 }
