@@ -44,13 +44,13 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPut(Name = "Dispositivo_ActualizarDispositivo")]
-        public async Task<ActionResult<bool>> Update([FromBody] ModificarDispositivoCommand model)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarDispositivoCommand model)
         {
             return Ok(await _mediador.Send(model));
         }
 
         [HttpDelete(Name = "Dispositivo_EliminarDispositivo")]
-        public async Task<ActionResult<int>> Delete([FromBody] EliminarDispositivoCommand modelo)
+        public async Task<ActionResult<bool>> Delete([FromBody] EliminarDispositivoCommand modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
