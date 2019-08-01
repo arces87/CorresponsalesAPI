@@ -15,5 +15,6 @@
         public string NombreOficina { get; set; }
         public string IdUsuario { get; set; }
         public string Usuario { get; set; }
+        public bool UsuarioActivo { get; set; }
     }
 }

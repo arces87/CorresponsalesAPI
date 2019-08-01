@@ -19,18 +19,45 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("login", Name = "Usuario_Login")]
-        [Produces(typeof(ModeloUsuarioAutenticadoMovil))]
-        //[SwaggerResponse(operationId: "getA")]
-        public async Task<ActionResult<ModeloUsuarioAutenticadoMovil>> Login([FromBody] AutenticarUsuarioCommand modelo)
+        [Produces(typeof(ProcesarLoginMS))]
+        public async Task<ActionResult<ProcesarLoginMS>> Login([FromBody] DatosLoginME modelo)
         {
-            var result = await _mediador.Send(modelo);
-
-            if (result != null)
+            try
             {
-                return result;
+                return await _mediador.Send(modelo);
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+        [HttpPost("generarOtp", Name = "Usuario_GenerarOtp")]
+        [Produces(typeof(ProcesarLoginMS))]
+        public async Task<ActionResult<ProcesarOtpMS>> ComprobarOtp([FromBody] DatosOtpME modelo)
+        {
+            try
+            {
+                return await _mediador.Send(modelo);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+        [HttpPost("comprobarOtp", Name = "Usuario_ComprobarOtp")]
+        [Produces(typeof(ProcesarLoginMS))]
+        public async Task<ActionResult<ProcesarValidarOtpMS>> GenerarOtp([FromBody] DatosValidarOTPME modelo)
+        {
+            try
+            {
+                return await _mediador.Send(modelo);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ namespace FBSConsolaCBWebApi.DAL.EstructuraEmpresarial
         public float Longitud { get; set; }
 
         public Supervisor Supervisor { get; set; }
+        public bool UsuarioActivo { get; set; }
 
         public bool EstaActivo { get; set; }
 

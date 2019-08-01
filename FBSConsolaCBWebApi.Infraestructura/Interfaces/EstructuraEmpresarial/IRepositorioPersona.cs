@@ -14,7 +14,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial
         Task<IEnumerable<Corresponsal>> GetCorresponsalesWithAssociations();
         Task<object> GetWithAssociations(int Id);
         Task<Persona> GetForUserName(string userName);
-
+        Task<bool> GetEstadoCorresponsalPorIdUsuario(string idUsuario);
         Task Add(Supervisor entity);
         Task Add(Corresponsal entity);
         Task Update(Supervisor entity);

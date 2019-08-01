@@ -45,6 +45,11 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial
                 .Include(c => c.Persona).ThenInclude(c => c.Oficina)
                 .Include(c => c.Persona).ThenInclude(c => c.Usuario).ToListAsync();
         }
+        public async Task<bool> GetEstadoCorresponsalPorIdUsuario(string idUsuario)
+        {
+            var corresponsal = await _contexto.Set<Corresponsal>().FirstOrDefaultAsync(c => c.Persona.Usuario.UserName == idUsuario);
+            return corresponsal.UsuarioActivo;
+        }
 
         public async Task<object> GetWithAssociations(int Id)
         {

@@ -28,5 +28,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Queries
         public int IdSupervisor { get; set; }
         public string NombreSupervisor { get; set; }
         public bool Estado { get; set; }
+        public bool UsuarioActivo { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Commands
         public async Task Handle(ActivarCorresponsalCommand request, CancellationToken cancellationToken)
         {
             var corresponsal = await _repositorio.GetWithAssociations(request.IdCorresponsal) as Corresponsal;
+            corresponsal.UsuarioActivo = !corresponsal.UsuarioActivo;
             var usuario = corresponsal.Persona.Usuario;
             usuario.LockoutEnabled = !usuario.LockoutEnabled;
             await _repositorioUsuario.Update(usuario);
