@@ -1,5 +1,4 @@
-﻿using MediatR;
-using System;
+﻿using System;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands
 {

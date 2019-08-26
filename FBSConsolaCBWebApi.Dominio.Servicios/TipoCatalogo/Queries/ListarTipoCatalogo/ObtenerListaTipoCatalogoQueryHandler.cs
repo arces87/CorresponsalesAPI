@@ -7,7 +7,6 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.DAL.Nomenclador;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
-using System.Linq;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries
 {
@@ -26,8 +25,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries
         {
             var _model = await _repositorio.GetAllActive();
             var _retorno = new ModeloObtenerListaTipoCatalogo();
-            _retorno.TotalElementos = _model.Count();
-            Filtro<TipoCatalogo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            var totalElementos = 0;
+            Filtro<TipoCatalogo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.TiposCatalogos = _mapper.Map<List<ModeloObtenerDetalleListaTipoCatalogo>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;

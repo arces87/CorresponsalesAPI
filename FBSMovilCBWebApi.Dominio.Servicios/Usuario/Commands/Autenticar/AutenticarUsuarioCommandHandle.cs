@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
-using FBS.Identidad.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using Microsoft.Extensions.Configuration;

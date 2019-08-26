@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
-using FBS.Identidad.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
+﻿using FBS.Identidad.Infraestructura.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using OtpNet;
 using System;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

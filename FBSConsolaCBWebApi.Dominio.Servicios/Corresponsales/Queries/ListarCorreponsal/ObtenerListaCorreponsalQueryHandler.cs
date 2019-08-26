@@ -5,7 +5,6 @@ using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,8 +25,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Queries
         {
             var _model = await _repositorio.GetCorresponsalesWithAssociations();
             var _retorno = new ModeloObtenerListaCorresponsal();
-            _retorno.TotalElementos = _model.Count();
-            Filtro<Corresponsal>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            var totalElementos = 0;
+            Filtro<Corresponsal>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.Personas = _mapper.Map<List<ModeloObtenerDetalleListaCorresponsal>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;

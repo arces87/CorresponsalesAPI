@@ -5,7 +5,6 @@ using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,8 +25,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.LimitesTransaccionales.Queries
         {
             var _model = await _repositorio.GetAllActive();
             var _retorno = new ModeloObtenerLimiteTransaccional();
-            _retorno.TotalElementos = _model.Count();
-            Filtro<LimiteTransaccional>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            var totalElementos = 0;
+            Filtro<LimiteTransaccional>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.Limites = _mapper.Map<List<ModeloObtenerDetalleListaLimiteTransaccional>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;

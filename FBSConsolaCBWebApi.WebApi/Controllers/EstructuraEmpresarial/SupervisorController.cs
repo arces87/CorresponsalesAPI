@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using FBS.Dominio.Modelos.Filtro;
 using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries;
 using MediatR;

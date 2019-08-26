@@ -5,7 +5,6 @@ using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,8 +25,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.LimitesExistencias.Queries
         {
             var _model = await _repositorio.GetAllActive();
             var _retorno = new ModeloObtenerLimiteExistencia();
-            _retorno.TotalElementos = _model.Count();
-            Filtro<LimiteExistencia>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            var totalElementos = 0;
+            Filtro<LimiteExistencia>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.Limites = _mapper.Map<List<ModeloObtenerDetalleListaLimiteExistencia>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;

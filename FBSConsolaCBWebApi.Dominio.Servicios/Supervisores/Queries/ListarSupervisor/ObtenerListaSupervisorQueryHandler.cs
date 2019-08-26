@@ -5,7 +5,6 @@ using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,8 +25,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Queries
         {
             var _model = await _repositorio.GetSupervisoresWithAssociations();
             var _retorno = new ModeloObtenerListaSupervisor();
-            _retorno.TotalElementos = _model.Count();
-            Filtro<Supervisor>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            var totalElementos = 0;
+            Filtro<Supervisor>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.Personas = _mapper.Map<List<ModeloObtenerDetalleListaSupervisor>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
-using FBS.Identidad.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;

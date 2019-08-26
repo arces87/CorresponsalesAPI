@@ -19,10 +19,10 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet("lista", Name = "Rol_ListarRoles")]
-        public async Task<ActionResult<ModeloObtenerListaRol>> Roles()
+        [HttpPost("lista", Name = "Rol_ListarRoles")]
+        public async Task<ActionResult<ModeloObtenerListaRol>> Roles([FromBody] ObtenerListaRolQuery modelo)
         {
-            return await _mediador.Send(new ObtenerListaRolQuery());
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtener", Name = "Rol_ObtenerRol")]

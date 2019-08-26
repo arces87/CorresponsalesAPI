@@ -50,8 +50,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var catalogos = await conexion.QueryAsync<Catalogo, TipoCatalogo, Catalogo>(@"SELECT * FROM Nomenclador.Catalogo c join Nomenclador.TipoCatalogo t" +
-                    "on c.TipoCatalogoId = t.Id where EstaActivo='true' and Id = @Id",
+                var catalogos = await conexion.QueryAsync<Catalogo, TipoCatalogo, Catalogo>(@"SELECT * FROM Nomenclador.Catalogo " +
+                    "join Nomenclador.TipoCatalogo on Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id " +
+                    "where Nomenclador.Catalogo.EstaActivo='true' and Nomenclador.Catalogo.Id = @Id",
                     (catalogo, tipoCatalogo) =>
                     {
                         catalogo.TipoCatalogo = tipoCatalogo;

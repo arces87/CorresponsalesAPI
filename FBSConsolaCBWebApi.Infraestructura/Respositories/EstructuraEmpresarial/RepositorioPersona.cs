@@ -1,5 +1,4 @@
-﻿using FBS.Identidad.DAL.Seguridad;
-using FBS.Infraestructura.Repositorio;
+﻿using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;

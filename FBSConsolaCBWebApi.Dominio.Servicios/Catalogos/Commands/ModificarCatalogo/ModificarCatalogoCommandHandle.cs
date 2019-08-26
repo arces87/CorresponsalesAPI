@@ -19,7 +19,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands
 
         public async Task<int> Handle(ModificarCatalogoCommand request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetWithAssociations(request.Id);
+            var _model = await _repositorio.Get(request.Id);
             _mapper.Map(request, _model);
             await _repositorio.Update(_model);
             return _model.Id;

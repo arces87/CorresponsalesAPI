@@ -5,7 +5,6 @@ using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,8 +25,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Empresas.Queries
         {
             var _model = await _repositorio.GetAllActive();
             var _retorno = new ModeloObtenerListaEmpresa();
-            _retorno.TotalElementos = _model.Count();
-            Filtro<Empresa>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request));
+            var totalElementos = 0;
+            Filtro<Empresa>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.Empresas = _mapper.Map<List<ModeloObtenerDetalleListaEmpresa>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
