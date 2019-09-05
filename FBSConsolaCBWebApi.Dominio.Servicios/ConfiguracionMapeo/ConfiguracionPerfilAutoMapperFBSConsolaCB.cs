@@ -45,9 +45,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ModeloUsuarioRol, ModeloRolAutenticacion>();
             CreateMap<Agente, ModeloAutenticacion>()
                 .ForMember(m => m.Usuario, opt => opt.Ignore())
-                .ForMember(m => m.CorreoElectronico, opt => opt.Ignore())
-                .ForMember(m => m.IdPersona, opt => opt.MapFrom(d => d.Id));
-
+                .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Id));
             #endregion
 
             #region Filtros
