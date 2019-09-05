@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    [Migration("20190801144506_Inicial")]
+    [Migration("20190904162809_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,11 +21,54 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("FBS.DAL.Nomenclador.Catalogo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<Guid?>("TipoCatalogoId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TipoCatalogoId");
+
+                    b.ToTable("Catalogo","Nomenclador");
+                });
+
+            modelBuilder.Entity("FBS.DAL.Nomenclador.TipoCatalogo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<string>("Nombre");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoCatalogo","Nomenclador");
+                });
+
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
@@ -35,7 +78,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("Icono");
 
-                    b.Property<int?>("MenuId")
+                    b.Property<Guid?>("MenuId")
                         .HasColumnName("MenuPadreId");
 
                     b.Property<string>("Nombre");
@@ -53,9 +96,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Permiso", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
@@ -118,9 +160,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.RolMenu", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
@@ -128,7 +169,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<bool>("EstaActivo");
 
-                    b.Property<int?>("MenuId");
+                    b.Property<Guid?>("MenuId");
 
                     b.Property<string>("RolId");
 
@@ -150,6 +191,9 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnName("AccesosFallidos");
 
+                    b.Property<bool>("CambioContrasenia")
+                        .HasColumnName("CambioContrasenia");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("Concurrencia");
@@ -166,25 +210,42 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasColumnName("EstaActivo")
                         .HasDefaultValue(true);
 
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnName("FechaCreacion");
+
+                    b.Property<string>("Imagen")
+                        .HasColumnName("Imagen")
+                        .HasMaxLength(256);
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnName("BloqueoActivo");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnName("FinBloqueo");
 
+                    b.Property<string>("NombreCompleto")
+                        .HasColumnName("NombreCompleto")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NombreMostrar")
+                        .HasColumnName("NombreMostrar")
+                        .HasMaxLength(256);
+
                     b.Property<string>("NormalizedEmail")
                         .HasColumnName("CorreoElectronicoNormalizado")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnName("NombreUsuarioNormalizado")
+                        .HasColumnName("CodigoNormalizado")
                         .HasMaxLength(256);
 
+                    b.Property<Guid?>("OperadoraId");
+
                     b.Property<string>("PasswordHash")
-                        .HasColumnName("Contrasenna");
+                        .HasColumnName("Contrasenia");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnName("Telefono");
+                        .HasColumnName("TelefonoCelular");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnName("TelefonoConfirmado");
@@ -196,7 +257,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasColumnName("DobleVerificacion");
 
                     b.Property<string>("UserName")
-                        .HasColumnName("Usuario")
+                        .HasColumnName("Codigo")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -207,7 +268,9 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex")
-                        .HasFilter("[NombreUsuarioNormalizado] IS NOT NULL");
+                        .HasFilter("[CodigoNormalizado] IS NOT NULL");
+
+                    b.HasIndex("OperadoraId");
 
                     b.ToTable("Usuario","Seguridad");
                 });
@@ -220,7 +283,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("Asunto");
 
-                    b.Property<int?>("CategoriaId");
+                    b.Property<Guid?>("CategoriaId");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
@@ -273,7 +336,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("NumeroSerie");
 
-                    b.Property<int?>("TipoDispositivoId");
+                    b.Property<Guid?>("TipoDispositivoId");
 
                     b.HasKey("Id");
 
@@ -348,7 +411,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<double>("Monto");
 
-                    b.Property<int?>("OperacionId");
+                    b.Property<Guid?>("OperacionId");
 
                     b.HasKey("Id");
 
@@ -379,7 +442,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("Json");
 
-                    b.Property<int?>("OperacionId");
+                    b.Property<Guid?>("OperacionId");
 
                     b.Property<string>("Transaccion");
 
@@ -517,7 +580,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("Telefono");
 
-                    b.Property<int?>("TipoIdentificacionId");
+                    b.Property<Guid?>("TipoIdentificacionId");
 
                     b.Property<string>("UsuarioId");
 
@@ -545,52 +608,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Supervisor","EstructuraEmpresarial");
-                });
-
-            modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<string>("Nombre");
-
-                    b.Property<int?>("TipoCatalogoId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TipoCatalogoId");
-
-                    b.ToTable("Catalogo","Nomenclador");
-                });
-
-            modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Nomenclador.TipoCatalogo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<string>("Nombre");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TipoCatalogo","Nomenclador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -697,6 +714,13 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.ToTable("UsuarioToken","Seguridad");
                 });
 
+            modelBuilder.Entity("FBS.DAL.Nomenclador.Catalogo", b =>
+                {
+                    b.HasOne("FBS.DAL.Nomenclador.TipoCatalogo", "TipoCatalogo")
+                        .WithMany("Catalogos")
+                        .HasForeignKey("TipoCatalogoId");
+                });
+
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>
                 {
                     b.HasOne("FBS.Identidad.DAL.Seguridad.Menu")
@@ -715,9 +739,17 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasForeignKey("RolId");
                 });
 
+            modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Usuario", b =>
+                {
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Operadora")
+                        .WithMany()
+                        .HasForeignKey("OperadoraId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Consola.Alerta", b =>
                 {
-                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", "Categoria")
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Categoria")
                         .WithMany()
                         .HasForeignKey("CategoriaId");
 
@@ -732,7 +764,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Consola.Dispositivo", b =>
                 {
-                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", "TipoDispositivo")
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "TipoDispositivo")
                         .WithMany()
                         .HasForeignKey("TipoDispositivoId");
                 });
@@ -761,7 +793,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("CorresponsalId");
 
-                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", "Operacion")
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Operacion")
                         .WithMany()
                         .HasForeignKey("OperacionId");
                 });
@@ -772,7 +804,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("CorresponsalId");
 
-                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", "Operacion")
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Operacion")
                         .WithMany()
                         .HasForeignKey("OperacionId");
                 });
@@ -802,7 +834,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .WithMany("Personas")
                         .HasForeignKey("OficinaId");
 
-                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", "TipoIdentificacion")
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "TipoIdentificacion")
                         .WithMany()
                         .HasForeignKey("TipoIdentificacionId");
 
@@ -817,13 +849,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Nomenclador.Catalogo", b =>
-                {
-                    b.HasOne("FBSConsolaCBWebApi.DAL.Nomenclador.TipoCatalogo", "TipoCatalogo")
-                        .WithMany("Catalogos")
-                        .HasForeignKey("TipoCatalogoId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

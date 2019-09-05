@@ -9,6 +9,9 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
+                name: "Nomenclador");
+
+            migrationBuilder.EnsureSchema(
                 name: "Seguridad");
 
             migrationBuilder.EnsureSchema(
@@ -16,9 +19,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             migrationBuilder.EnsureSchema(
                 name: "EstructuraEmpresarial");
-
-            migrationBuilder.EnsureSchema(
-                name: "Nomenclador");
 
             migrationBuilder.CreateTable(
                 name: "Empresa",
@@ -49,8 +49,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 schema: "Nomenclador",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     Nombre = table.Column<string>(nullable: true),
                     Descripcion = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
@@ -66,15 +65,14 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 schema: "Seguridad",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     Nombre = table.Column<string>(nullable: true),
                     Orden = table.Column<int>(nullable: false),
-                    EstaActivo = table.Column<bool>(nullable: false),
-                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true),
                     Icono = table.Column<string>(nullable: true),
                     Ruta = table.Column<string>(nullable: true),
-                    MenuPadreId = table.Column<int>(nullable: true)
+                    MenuPadreId = table.Column<Guid>(nullable: true),
+                    EstaActivo = table.Column<bool>(nullable: false),
+                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,13 +91,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 schema: "Seguridad",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     Nombre = table.Column<string>(nullable: true),
                     Descripcion = table.Column<string>(nullable: true),
                     Identificador = table.Column<string>(nullable: true),
-                    EstaActivo = table.Column<bool>(nullable: false),
                     UrlEndPoint = table.Column<string>(nullable: true),
+                    EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
@@ -115,41 +112,14 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Id = table.Column<string>(nullable: false),
                     Nombre = table.Column<string>(maxLength: 256, nullable: true),
                     NombreNormalizado = table.Column<string>(maxLength: 256, nullable: true),
-                    Concurrencia = table.Column<string>(nullable: true),
-                    EstaActivo = table.Column<bool>(nullable: false, defaultValue: true),
                     Descripcion = table.Column<string>(maxLength: 256, nullable: true),
-                    Tipo = table.Column<bool>(nullable: false)
+                    Tipo = table.Column<bool>(nullable: false),
+                    EstaActivo = table.Column<bool>(nullable: false, defaultValue: true),
+                    Concurrencia = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rol", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Usuario",
-                schema: "Seguridad",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Usuario = table.Column<string>(maxLength: 256, nullable: true),
-                    NombreUsuarioNormalizado = table.Column<string>(maxLength: 256, nullable: true),
-                    CorreoElectronico = table.Column<string>(maxLength: 256, nullable: true),
-                    CorreoElectronicoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
-                    CorreoElectronicoConfirmado = table.Column<bool>(nullable: false),
-                    Contrasenna = table.Column<string>(nullable: true),
-                    MarcaSeguridad = table.Column<string>(nullable: true),
-                    Concurrencia = table.Column<string>(nullable: true),
-                    Telefono = table.Column<string>(nullable: true),
-                    TelefonoConfirmado = table.Column<bool>(nullable: false),
-                    DobleVerificacion = table.Column<bool>(nullable: false),
-                    FinBloqueo = table.Column<DateTimeOffset>(nullable: true),
-                    BloqueoActivo = table.Column<bool>(nullable: false),
-                    AccesosFallidos = table.Column<int>(nullable: false),
-                    EstaActivo = table.Column<bool>(nullable: false, defaultValue: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Usuario", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,12 +153,11 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 schema: "Nomenclador",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     Nombre = table.Column<string>(nullable: true),
                     Descripcion = table.Column<string>(nullable: true),
+                    TipoCatalogoId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
-                    TipoCatalogoId = table.Column<int>(nullable: true),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
@@ -208,10 +177,9 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 schema: "Seguridad",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     RolId = table.Column<string>(nullable: true),
-                    MenuId = table.Column<int>(nullable: true),
+                    MenuId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -255,6 +223,124 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         principalTable: "Rol",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dispositivo",
+                schema: "Consola",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(nullable: true),
+                    Imei = table.Column<string>(nullable: true),
+                    Mac = table.Column<string>(nullable: true),
+                    NumeroSerie = table.Column<string>(nullable: true),
+                    TipoDispositivoId = table.Column<Guid>(nullable: true),
+                    EstaActivo = table.Column<bool>(nullable: false),
+                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dispositivo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dispositivo_Catalogo_TipoDispositivoId",
+                        column: x => x.TipoDispositivoId,
+                        principalSchema: "Nomenclador",
+                        principalTable: "Catalogo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuario",
+                schema: "Seguridad",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Codigo = table.Column<string>(maxLength: 256, nullable: true),
+                    NombreCompleto = table.Column<string>(maxLength: 256, nullable: true),
+                    NombreMostrar = table.Column<string>(maxLength: 256, nullable: true),
+                    Contrasenia = table.Column<string>(nullable: true),
+                    FechaCreacion = table.Column<DateTime>(nullable: false),
+                    Imagen = table.Column<string>(maxLength: 256, nullable: true),
+                    CorreoElectronico = table.Column<string>(maxLength: 256, nullable: true),
+                    TelefonoCelular = table.Column<string>(nullable: true),
+                    OperadoraId = table.Column<Guid>(nullable: true),
+                    CambioContrasenia = table.Column<bool>(nullable: false),
+                    CodigoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
+                    CorreoElectronicoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
+                    CorreoElectronicoConfirmado = table.Column<bool>(nullable: false),
+                    TelefonoConfirmado = table.Column<bool>(nullable: false),
+                    DobleVerificacion = table.Column<bool>(nullable: false),
+                    BloqueoActivo = table.Column<bool>(nullable: false),
+                    FinBloqueo = table.Column<DateTimeOffset>(nullable: true),
+                    AccesosFallidos = table.Column<int>(nullable: false),
+                    MarcaSeguridad = table.Column<string>(nullable: true),
+                    EstaActivo = table.Column<bool>(nullable: false, defaultValue: true),
+                    Concurrencia = table.Column<string>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Usuario_Catalogo_OperadoraId",
+                        column: x => x.OperadoraId,
+                        principalSchema: "Nomenclador",
+                        principalTable: "Catalogo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Persona",
+                schema: "EstructuraEmpresarial",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    PrimerNombre = table.Column<string>(nullable: true),
+                    SegundoNombre = table.Column<string>(nullable: true),
+                    PrimerApellido = table.Column<string>(nullable: true),
+                    SegundoApellido = table.Column<string>(nullable: true),
+                    NombreUnido = table.Column<string>(nullable: true),
+                    NumeroIdentificador = table.Column<int>(nullable: false),
+                    Identificacion = table.Column<string>(nullable: true),
+                    Direccion = table.Column<string>(nullable: true),
+                    FechaNacimiento = table.Column<DateTime>(nullable: true),
+                    CorreoElectronico = table.Column<string>(nullable: true),
+                    Telefono = table.Column<string>(nullable: true),
+                    EstaActivo = table.Column<bool>(nullable: false),
+                    ImagenUrl = table.Column<string>(nullable: true),
+                    TipoIdentificacionId = table.Column<Guid>(nullable: true),
+                    OficinaId = table.Column<int>(nullable: true),
+                    UsuarioId = table.Column<string>(nullable: true),
+                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Persona", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Persona_Oficina_OficinaId",
+                        column: x => x.OficinaId,
+                        principalSchema: "EstructuraEmpresarial",
+                        principalTable: "Oficina",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Persona_Catalogo_TipoIdentificacionId",
+                        column: x => x.TipoIdentificacionId,
+                        principalSchema: "Nomenclador",
+                        principalTable: "Catalogo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Persona_Usuario_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalSchema: "Seguridad",
+                        principalTable: "Usuario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -352,84 +438,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dispositivo",
-                schema: "Consola",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(nullable: true),
-                    Imei = table.Column<string>(nullable: true),
-                    Mac = table.Column<string>(nullable: true),
-                    NumeroSerie = table.Column<string>(nullable: true),
-                    TipoDispositivoId = table.Column<int>(nullable: true),
-                    EstaActivo = table.Column<bool>(nullable: false),
-                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dispositivo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Dispositivo_Catalogo_TipoDispositivoId",
-                        column: x => x.TipoDispositivoId,
-                        principalSchema: "Nomenclador",
-                        principalTable: "Catalogo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Persona",
-                schema: "EstructuraEmpresarial",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PrimerNombre = table.Column<string>(nullable: true),
-                    SegundoNombre = table.Column<string>(nullable: true),
-                    PrimerApellido = table.Column<string>(nullable: true),
-                    SegundoApellido = table.Column<string>(nullable: true),
-                    NombreUnido = table.Column<string>(nullable: true),
-                    NumeroIdentificador = table.Column<int>(nullable: false),
-                    Identificacion = table.Column<string>(nullable: true),
-                    Direccion = table.Column<string>(nullable: true),
-                    FechaNacimiento = table.Column<DateTime>(nullable: true),
-                    CorreoElectronico = table.Column<string>(nullable: true),
-                    Telefono = table.Column<string>(nullable: true),
-                    EstaActivo = table.Column<bool>(nullable: false),
-                    ImagenUrl = table.Column<string>(nullable: true),
-                    TipoIdentificacionId = table.Column<int>(nullable: true),
-                    OficinaId = table.Column<int>(nullable: true),
-                    UsuarioId = table.Column<string>(nullable: true),
-                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Persona", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Persona_Oficina_OficinaId",
-                        column: x => x.OficinaId,
-                        principalSchema: "EstructuraEmpresarial",
-                        principalTable: "Oficina",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Persona_Catalogo_TipoIdentificacionId",
-                        column: x => x.TipoIdentificacionId,
-                        principalSchema: "Nomenclador",
-                        principalTable: "Catalogo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Persona_Usuario_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalSchema: "Seguridad",
-                        principalTable: "Usuario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Alerta",
                 schema: "Consola",
                 columns: table => new
@@ -445,7 +453,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Estado = table.Column<int>(nullable: false),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Tipo = table.Column<int>(nullable: false),
-                    CategoriaId = table.Column<int>(nullable: true),
+                    CategoriaId = table.Column<Guid>(nullable: true),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
@@ -592,7 +600,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Monto = table.Column<double>(nullable: false),
                     Dias = table.Column<int>(nullable: false),
                     CorresponsalId = table.Column<int>(nullable: true),
-                    OperacionId = table.Column<int>(nullable: true),
+                    OperacionId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -626,7 +634,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Fecha = table.Column<DateTime>(nullable: false),
                     Canal = table.Column<string>(nullable: true),
                     Json = table.Column<string>(nullable: true),
-                    OperacionId = table.Column<int>(nullable: true),
+                    OperacionId = table.Column<Guid>(nullable: true),
                     CorresponsalId = table.Column<int>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
@@ -800,9 +808,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 name: "UserNameIndex",
                 schema: "Seguridad",
                 table: "Usuario",
-                column: "NombreUsuarioNormalizado",
+                column: "CodigoNormalizado",
                 unique: true,
-                filter: "[NombreUsuarioNormalizado] IS NOT NULL");
+                filter: "[CodigoNormalizado] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuario_OperadoraId",
+                schema: "Seguridad",
+                table: "Usuario",
+                column: "OperadoraId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsuarioPermiso_UsuarioId",
@@ -896,16 +910,16 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 schema: "EstructuraEmpresarial");
 
             migrationBuilder.DropTable(
-                name: "Catalogo",
-                schema: "Nomenclador");
-
-            migrationBuilder.DropTable(
                 name: "Usuario",
                 schema: "Seguridad");
 
             migrationBuilder.DropTable(
                 name: "Empresa",
                 schema: "EstructuraEmpresarial");
+
+            migrationBuilder.DropTable(
+                name: "Catalogo",
+                schema: "Nomenclador");
 
             migrationBuilder.DropTable(
                 name: "TipoCatalogo",

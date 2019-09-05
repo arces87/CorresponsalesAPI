@@ -43,7 +43,7 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpPut(Name = "Menu_ActualizarMenu")]
-        public async Task<ActionResult<int>> Update([FromBody] ModificarMenuCommand modelo)
+        public async Task<ActionResult<string>> Update([FromBody] ModificarMenuCommand modelo)
         {
             return await _mediador.Send(modelo);
         }
