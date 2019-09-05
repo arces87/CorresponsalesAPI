@@ -52,7 +52,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands
                     DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
                         Direccion = usuario.Email,
-                        Nombre = persona.NombreUnido}
+                        Nombre = persona.NombreAgente}
                     },
                     DireccionesRemitente = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {

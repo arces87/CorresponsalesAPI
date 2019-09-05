@@ -4,7 +4,6 @@ using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
-using FBSConsolaCBWebApi.Infraestructure.Repositories.Consola;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

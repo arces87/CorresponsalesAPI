@@ -1,5 +1,5 @@
-﻿using FBSConsolaCBWebApi.DAL.Consola;
-using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
+﻿using FBSConsolaCBWebApi.DAL.Canales;
+using FBSConsolaCBWebApi.DAL.Corresponsales;
 using Microsoft.EntityFrameworkCore;
 
 namespace FBSConsolaCBWebApi.DAL
@@ -16,23 +16,20 @@ namespace FBSConsolaCBWebApi.DAL
             base.OnModelCreating(modelBuilder);
         }
 
-        #region Estructura Empresarial
-        public DbSet<Empresa> Empresas { get; set; }
-        public DbSet<Oficina> Oficinas { get; set; }
-        public DbSet<Persona> Personas { get; set; }
-        public DbSet<Supervisor> Supervisores { get; set; }
-
-        public DbSet<Corresponsal> Corresponsales { get; set; }
+        #region Corresponsales
+        public DbSet<Cuenta> Cuentas { get; set; }
+        public DbSet<Alerta> Alertas { get; set; }
+        public DbSet<Agente> Agentes { get; set; }
+        public DbSet<Transaccion> Transacciones { get; set; }
 
         #endregion
 
-        #region Consolas
+        #region Canales
         public DbSet<Dispositivo> Dispositivos { get; set; }
-        public DbSet<DispositivoCorresponsal> DispositivosCorresponsales { get; set; }
-        public DbSet<LimiteTransaccional> LimitesTransaccionales { get; set; }
-        public DbSet<LimiteExistencia> LimitesExistencias { get; set; }
+        public DbSet<Geolocalizacion> Geolocalizaciones { get; set; }
+        public DbSet<AgenteGeolocalizacion> AgentesGeolocalizaciones { get; set; }
         public DbSet<Log> Logs { get; set; }
-        public DbSet<Alerta> Alertas { get; set; }
+        public DbSet<Imagen> Imagenes { get; set; }
         #endregion
     }
 }

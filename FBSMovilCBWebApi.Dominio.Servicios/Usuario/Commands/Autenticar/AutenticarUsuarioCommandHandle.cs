@@ -39,7 +39,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands
             {
                 GuidID = request.User.GuidID,
                 TieneOtp = false,
-                EsPrimeraVez = await _repositorioPersona.GetEstadoCorresponsalPorIdUsuario(request.User.UsuarioLogin)
             };
 
             return usuario;

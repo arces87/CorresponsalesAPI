@@ -1,5 +1,5 @@
 ﻿using FBS.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.DAL.Consola;
+using FBSConsolaCBWebApi.DAL.Canales;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

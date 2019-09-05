@@ -4,9 +4,9 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
+namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries
 {
-    public class ObtenerTipoCatalogoQueryHandler : IRequestHandler<ObtenerDispositivoQuery, ObtenerModeloDispositivo>
+    public class ObtenerTipoCatalogoQueryHandler : IRequestHandler<ObtenerTipoCatalogoQuery, ObtenerModeloTipoCatalogo>
     {
         private readonly IRepositorioTipoCatalogo _repositorio;
         private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
             _mapper = mapper;
         }
 
-        public async Task<ObtenerModeloDispositivo> Handle(ObtenerDispositivoQuery request, CancellationToken cancellationToken)
+        public async Task<ObtenerModeloTipoCatalogo> Handle(ObtenerTipoCatalogoQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ObtenerModeloDispositivo>(await _repositorio.Get(request.Id));
+            return _mapper.Map<ObtenerModeloTipoCatalogo>(await _repositorio.Get(request.Id));
         }
     }
 }

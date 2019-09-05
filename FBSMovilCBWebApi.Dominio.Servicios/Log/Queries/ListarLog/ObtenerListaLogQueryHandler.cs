@@ -2,7 +2,6 @@
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +21,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries
         public async Task<ModeloObtenerListaLog> Handle(ObtenerListaLogQuery request, CancellationToken cancellationToken)
         {
             var _model = await _repositorio.GetAllWithAssociations();
-            _model = _model.Where(m => m.Corresponsal.Id == request.IdCorresponsal);
             return new ModeloObtenerListaLog() { Logs = _mapper.Map<List<ModeloObtenerDetalleListaLog>>(_model) };
         }
     }
