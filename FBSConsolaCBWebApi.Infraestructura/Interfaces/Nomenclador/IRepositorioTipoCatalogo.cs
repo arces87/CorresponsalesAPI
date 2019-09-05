@@ -1,5 +1,5 @@
-﻿using FBS.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
+﻿using FBS.DAL.Nomenclador;
+using FBS.Infraestructura.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

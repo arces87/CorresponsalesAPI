@@ -1,10 +1,10 @@
-﻿using FBS.Dominio.Modelos.Filtro;
+﻿using FBS.DAL.Nomenclador;
+using FBS.Dominio.Modelos.Filtro;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
 using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
@@ -30,6 +30,7 @@ using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using Financial_Services_Banca.Models;
+using System;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 {
@@ -40,9 +41,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Dispositivo
             CreateMap<CrearDispositivoCommand, Dispositivo>()
-               .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoDispositivo }));
+               .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoDispositivo) }));
             CreateMap<ModificarDispositivoCommand, Dispositivo>()
-               .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoDispositivo }));
+               .ForMember(m => m.TipoDispositivo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoDispositivo) }));
             CreateMap<EliminarDispositivoCommand, Dispositivo>();
             CreateMap<Dispositivo, ObtenerModeloDispositivo>()
                 .ForMember(m => m.IdTipoDispositivo, opt => opt.MapFrom(d => d.TipoDispositivo.Id))
@@ -67,10 +68,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region LimiteTransaccional
             CreateMap<CrearLimiteTransaccionalCommand, LimiteTransaccional>()
                .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Corresponsal() { Id = d.IdCorresponsal }))
-               .ForMember(m => m.Operacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdOperacion }));
+               .ForMember(m => m.Operacion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdOperacion) }));
             CreateMap<ModificarLimiteTransaccionalCommand, LimiteTransaccional>()
                .ForMember(m => m.Corresponsal, opt => opt.MapFrom(d => new Corresponsal() { Id = d.IdCorresponsal }))
-               .ForMember(m => m.Operacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdOperacion }));
+               .ForMember(m => m.Operacion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdOperacion) }));
             CreateMap<EliminarLimiteTransaccionalCommand, LimiteTransaccional>();
             CreateMap<LimiteTransaccional, ObtenerModeloLimiteTransaccional>()
                 .ForMember(m => m.IdCorresponsal, opt => opt.MapFrom(d => d.Corresponsal.Id))
@@ -86,9 +87,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Catalogo
             CreateMap<CrearCatalogoCommand, Catalogo>()
-                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = d.IdTipoCatalogo }));
+                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
             CreateMap<ModificarCatalogoCommand, Catalogo>()
-                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = d.IdTipoCatalogo }));
+                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
             CreateMap<EliminarCatalogoCommand, Catalogo>();
 
             CreateMap<Catalogo, ObtenerModeloCatalogo>()
@@ -103,7 +104,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<CrearAlertaCommand, Alerta>()
                 .ForMember(m => m.Destinatario, opt => opt.MapFrom(d => new Persona() { Id = d.IdDestinatario }))
                 .ForMember(m => m.Remitente, opt => opt.MapFrom(d => new Persona() { Id = d.IdRemitente }))
-                .ForMember(m => m.Categoria, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdCategoria }));
+                .ForMember(m => m.Categoria, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdCategoria) }));
             CreateMap<EliminarAlertaCommand, Alerta>();
 
             CreateMap<Alerta, ObtenerModeloAlerta>()
@@ -180,7 +181,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<CrearUsuarioCorresponsal, CrearUsuarioCommand>();
             CreateMap<CrearPersonaCorresponsal, Persona>()
                 .ForMember(m => m.Oficina, opt => opt.MapFrom(d => new Oficina() { Id = d.IdOficina }))
-                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }))
+                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoIdentificacion) }))
                 .ForMember(m => m.Usuario, opt => opt.Ignore());
             CreateMap<CrearCorresponsalCommand, Corresponsal>()
                 .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Supervisor() { Id = d.IdSupervisor }));
@@ -191,7 +192,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.PasswordHash, opt => opt.MapFrom(d => d.Contrasenna));
             CreateMap<ModificarPersonaCorresponsal, Persona>()
                 .ForMember(m => m.Oficina, opt => opt.MapFrom(d => new Oficina() { Id = d.IdOficina }))
-                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }));
+                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoIdentificacion) }));
             CreateMap<ModificarCorresponsalCommand, Corresponsal>()
                 .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Supervisor() { Id = d.IdSupervisor }));
 
@@ -235,7 +236,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<CrearUsuarioSupervisor, CrearUsuarioCommand>();
             CreateMap<CrearPersonaSupervisor, Persona>()
                 .ForMember(m => m.Oficina, opt => opt.MapFrom(d => new Oficina() { Id = d.IdOficina }))
-                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }))
+                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoIdentificacion) }))
                 .ForMember(m => m.Usuario, opt => opt.Ignore());
             CreateMap<CrearSupervisorCommand, Supervisor>();
             CreateMap<ModificarRolSupervisor, Rol>();
@@ -245,7 +246,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(m => m.PasswordHash, opt => opt.MapFrom(d => d.Contrasenna));
             CreateMap<ModificarPersonaSupervisor, Persona>()
                 .ForMember(m => m.Oficina, opt => opt.MapFrom(d => new Oficina() { Id = d.IdOficina }))
-                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = d.IdTipoIdentificacion }));
+                .ForMember(m => m.TipoIdentificacion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoIdentificacion) }));
             CreateMap<ModificarSupervisorCommand, Supervisor>();
 
             CreateMap<Supervisor, ModeloObtenerDetalleListaSupervisor>()

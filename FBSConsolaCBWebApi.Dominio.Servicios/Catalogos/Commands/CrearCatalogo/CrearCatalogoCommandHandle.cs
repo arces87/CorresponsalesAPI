@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
+using FBS.DAL.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using MediatR;
 using System.Threading;

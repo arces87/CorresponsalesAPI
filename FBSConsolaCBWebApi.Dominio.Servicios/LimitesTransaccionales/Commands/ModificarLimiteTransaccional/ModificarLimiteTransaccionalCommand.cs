@@ -8,6 +8,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.LimitesTransaccionales.Commands
         public double Monto { get; set; }
         public int Dias { get; set; }
         public int IdCorresponsal { get; set; }
-        public int IdOperacion { get; set; }
+        public string IdOperacion { get; set; }
     }
 }

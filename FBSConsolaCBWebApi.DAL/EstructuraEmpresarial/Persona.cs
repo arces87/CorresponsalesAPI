@@ -1,5 +1,5 @@
-﻿using FBS.Identidad.DAL.Seguridad;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
+﻿using FBS.DAL.Nomenclador;
+using FBS.Identidad.DAL.Seguridad;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -2,7 +2,7 @@
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands
 {
-    public class ModificarTipoCatalogoCommand : IRequest<int>
+    public class ModificarTipoCatalogoCommand : IRequest<string>
     {
         public int Id { get; set; }
         public string Nombre { get; set; }

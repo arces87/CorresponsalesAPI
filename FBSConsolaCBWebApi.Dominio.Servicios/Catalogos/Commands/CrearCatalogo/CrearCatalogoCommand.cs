@@ -8,6 +8,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands
 
         public string Descripcion { get; set; }
 
-        public int IdTipoCatalogo { get; set; }
+        public string IdTipoCatalogo { get; set; }
     }
 }

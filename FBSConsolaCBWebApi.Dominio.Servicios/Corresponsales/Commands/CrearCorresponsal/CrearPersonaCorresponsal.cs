@@ -16,7 +16,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Corresponsales.Commands
         public bool EstaActivo { get; set; }
         public string Tipo { get; set; }
         public int IdOficina { get; set; }
-        public int IdTipoIdentificacion { get; set; }
+        public string IdTipoIdentificacion { get; set; }
         public CrearUsuarioCorresponsal Usuario { get; set; }
     }
 }

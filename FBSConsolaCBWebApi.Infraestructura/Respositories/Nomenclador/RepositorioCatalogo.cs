@@ -1,7 +1,7 @@
 ﻿using Dapper;
+using FBS.DAL.Nomenclador;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -72,7 +72,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
 
         public override async Task<string> Add(Catalogo entity)
         {
-            entity.TipoCatalogo = Context.TiposCatalogos.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
+            entity.TipoCatalogo = Context.TiposCatalogo.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
             entity.EstaActivo = true;
             Context.Catalogos.Add(entity);
             await Context.SaveChangesAsync();
@@ -80,7 +80,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
         }
         public override async Task Update(Catalogo entity)
         {
-            entity.TipoCatalogo = Context.TiposCatalogos.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
+            entity.TipoCatalogo = Context.TiposCatalogo.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
             _contexto.Entry(entity).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }

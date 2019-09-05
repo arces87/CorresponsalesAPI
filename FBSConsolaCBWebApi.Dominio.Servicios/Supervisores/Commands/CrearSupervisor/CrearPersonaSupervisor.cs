@@ -16,7 +16,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Supervisores.Commands
         public bool EstaActivo { get; set; }
         public string Tipo { get; set; }
         public int IdOficina { get; set; }
-        public int IdTipoIdentificacion { get; set; }
+        public string IdTipoIdentificacion { get; set; }
         public CrearUsuarioSupervisor Usuario { get; set; }
     }
 }

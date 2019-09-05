@@ -1,9 +1,9 @@
 ﻿using Dapper;
+using FBS.DAL.Nomenclador;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.DAL.Consola;
 using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;

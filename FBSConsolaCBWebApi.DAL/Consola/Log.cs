@@ -1,5 +1,5 @@
-﻿using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
+﻿using FBS.DAL.Nomenclador;
+using FBSConsolaCBWebApi.DAL.EstructuraEmpresarial;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

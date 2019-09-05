@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands
 {
-    public class ModificarCatalogoCommandHandle : IRequestHandler<ModificarCatalogoCommand, int>
+    public class ModificarCatalogoCommandHandle : IRequestHandler<ModificarCatalogoCommand, string>
     {
         private readonly IRepositorioCatalogo _repositorio;
         private readonly IMapper _mapper;
@@ -17,12 +17,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(ModificarCatalogoCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(ModificarCatalogoCommand request, CancellationToken cancellationToken)
         {
             var _model = await _repositorio.Get(request.Id);
             _mapper.Map(request, _model);
             await _repositorio.Update(_model);
-            return _model.Id;
+            return _model.Id.ToString();
         }
     }
 }

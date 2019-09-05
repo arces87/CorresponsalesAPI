@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using FBS.Infraestructura.Repositorio;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
 using FBSConsolaCBWebApi.DAL;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
+using FBS.DAL.Nomenclador;
 
 namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
 {

@@ -13,6 +13,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
 
         public string NumeroSerie { get; set; }
 
-        public int IdTipoDispositivo { get; set; }
+        public string IdTipoDispositivo { get; set; }
     }
 }

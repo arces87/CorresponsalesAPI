@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
-using FBSConsolaCBWebApi.DAL.Nomenclador;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
+using FBS.DAL.Nomenclador;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries
 {

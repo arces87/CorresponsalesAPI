@@ -10,7 +10,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Commands
         public int IdDestinatario { get; set; }
 
         public int IdRemitente { get; set; }
-        public int IdCategoria { get; set; }
+        public string IdCategoria { get; set; }
         public int Tipo { get; set; }
         public string Asunto { get; set; }
 
