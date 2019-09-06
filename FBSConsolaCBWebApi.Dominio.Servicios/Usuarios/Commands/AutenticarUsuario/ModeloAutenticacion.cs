@@ -12,6 +12,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
         public string Errores { get; set; }
         public string Token { get; set; }
         public IEnumerable<ModeloRolAutenticacion> Roles { get; set; }
-        public int IdAgente { get; set; }
+        public string IdAgente { get; set; }
     }
 }
