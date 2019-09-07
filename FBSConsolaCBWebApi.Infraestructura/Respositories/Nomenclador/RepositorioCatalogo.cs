@@ -45,7 +45,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
                 return catalogos.ToList();
             }
         }
-        public async Task<Catalogo> GetWithAssociations(int Id)
+        public async Task<Catalogo> GetWithAssociations(string Id)
         {
             using (var conexion = Conexion)
             {
@@ -63,25 +63,25 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
             }
         }
 
-        public override async Task Remove(Catalogo entity)
+        public override async Task Remove(Catalogo entidad)
         {
-            var catalogo = _contexto.Set<Catalogo>().FirstOrDefault(o => o.Id == entity.Id);
+            var catalogo = _contexto.Set<Catalogo>().FirstOrDefault(o => o.Id == entidad.Id);
             catalogo.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 
-        public override async Task<string> Add(Catalogo entity)
+        public override async Task<string> Add(Catalogo entidad)
         {
-            entity.TipoCatalogo = Context.TiposCatalogo.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
-            entity.EstaActivo = true;
-            Context.Catalogos.Add(entity);
+            entidad.TipoCatalogo = Context.TiposCatalogo.FirstOrDefault(c => c.Id == entidad.TipoCatalogo.Id);
+            entidad.EstaActivo = true;
+            Context.Catalogos.Add(entidad);
             await Context.SaveChangesAsync();
-            return entity.Id.ToString();
+            return entidad.Id.ToString();
         }
-        public override async Task Update(Catalogo entity)
+        public override async Task Update(Catalogo entidad)
         {
-            entity.TipoCatalogo = Context.TiposCatalogo.FirstOrDefault(c => c.Id == entity.TipoCatalogo.Id);
-            _contexto.Entry(entity).State = EntityState.Modified;
+            entidad.TipoCatalogo = Context.TiposCatalogo.FirstOrDefault(c => c.Id == entidad.TipoCatalogo.Id);
+            _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
 

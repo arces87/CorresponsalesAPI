@@ -19,37 +19,37 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpGet("lista", Name = "Menu_ListarMenus")]
-        public async Task<ActionResult<ModeloObtenerListaMenu>> GetMenu()
+        public async Task<ActionResult<ListaMenuMS>> GetMenu()
         {
-            return await _mediador.Send(new ObtenerListaMenuQuery());
+            return await _mediador.Send(new ListaMenuME());
         }
 
         [HttpPost("Usuario", Name = "Menu_ObtenerMenusUsuario")]
-        public async Task<ActionResult<ModeloObtenerListaMenuUsuario>> GetMenuUsuario([FromBody] ObtenerListaMenuUsuarioQuery modelo)
+        public async Task<ActionResult<ListaMenuUsuarioMS>> GetMenuUsuario([FromBody] ListaMenuUsuarioME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtener", Name = "Menu_ObtenerMenu")]
-        public async Task<ActionResult<ObtenerModeloMenu>> GetMenu([FromBody] ObtenerMenuQuery modelo)
+        public async Task<ActionResult<ObtenerMenuMS>> GetMenu([FromBody] ObtenerMenuME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Menu_CrearMenu")]
-        public async Task<ActionResult<int>> Create([FromBody] CrearMenuCommand modelo)
+        public async Task<ActionResult<string>> Create([FromBody] CrearMenuME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPut(Name = "Menu_ActualizarMenu")]
-        public async Task<ActionResult<string>> Update([FromBody] ModificarMenuCommand modelo)
+        public async Task<ActionResult<string>> Update([FromBody] ModificarMenuME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpDelete(Name = "Menu_EliminarMenu")]
-        public async Task<ActionResult<bool>> Delete([FromBody] EliminarMenuCommand modelo)
+        public async Task<ActionResult<bool>> Delete([FromBody] EliminarMenuME modelo)
         {
             return await _mediador.Send(modelo);
         }

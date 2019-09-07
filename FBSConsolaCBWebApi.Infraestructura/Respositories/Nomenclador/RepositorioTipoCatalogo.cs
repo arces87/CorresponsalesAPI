@@ -30,14 +30,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
             }
         }
 
-        public override async Task Remove(TipoCatalogo entity)
+        public override async Task Remove(TipoCatalogo entidad)
         {
-            var tipo = _contexto.Set<TipoCatalogo>().FirstOrDefault(o => o.Id == entity.Id);
+            var tipo = _contexto.Set<TipoCatalogo>().FirstOrDefault(o => o.Id == entidad.Id);
             tipo.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 
-        public override async Task<TipoCatalogo> Get(int Id)
+        public override async Task<TipoCatalogo> Get(string Id)
         {
             using (var conexion = Conexion)
             {

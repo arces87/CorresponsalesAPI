@@ -14,8 +14,4 @@
     <ProjectReference Include="..\FBS_Core\FBS.Infraestructura\FBS.Infraestructura.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Respositories\Consola\" />
-  </ItemGroup>
-
 </Project>

@@ -19,31 +19,31 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Catalogo_ListarCatalogos")]
-        public async Task<ActionResult<ModeloObtenerListaCatalogo>> List([FromBody] ObtenerListaCatalogoQuery modelo)
+        public async Task<ActionResult<ListarCatalogoMS>> List([FromBody] ListarCatalogoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtener", Name = "Catalogo_ObtenerCatalogo")]
-        public async Task<ActionResult<ObtenerModeloCatalogo>> Get([FromBody] ObtenerCatalogoQuery modelo)
+        public async Task<ActionResult<ObtenerCatalogoMS>> Get([FromBody] ObtenerCatalogoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("crear", Name = "Catalogo_CrearCatalogo")]
-        public async Task<ActionResult<int>> Create([FromBody] CrearCatalogoCommand modelo)
+        public async Task<ActionResult<int>> Create([FromBody] CrearCatalogoME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
 
         [HttpPut("actualizar", Name = "Catalogo_ActualizarCatalogo")]
-        public async Task<ActionResult<int>> Update([FromBody] ModificarCatalogoCommand modelo)
+        public async Task<ActionResult<int>> Update([FromBody] ModificarCatalogoME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
 
         [HttpDelete("eliminar", Name = "Catalogo_EliminarCatalogo")]
-        public async Task<ActionResult<int>> Delete([FromBody] EliminarCatalogoCommand modelo)
+        public async Task<ActionResult<int>> Delete([FromBody] EliminarCatalogoME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }

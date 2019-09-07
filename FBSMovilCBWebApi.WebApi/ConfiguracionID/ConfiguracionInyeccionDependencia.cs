@@ -3,7 +3,6 @@ using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

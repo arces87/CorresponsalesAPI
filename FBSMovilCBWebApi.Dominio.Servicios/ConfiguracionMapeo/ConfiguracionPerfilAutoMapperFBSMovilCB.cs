@@ -28,10 +28,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Usuario
-            CreateMap<UsuarioME, LoginUsuarioCommand>()
+            CreateMap<UsuarioME, LoginUsuarioME>()
                 .ForMember(l => l.Contrasenna, opt => opt.MapFrom(p => p.Password))
                 .ForMember(l => l.Usuario, opt => opt.MapFrom(p => p.UsuarioLogin));
-            CreateMap<ModeloUsuarioAutenticado, ProcesarLoginMS>();
+            CreateMap<ModeloLoginUsuario, ProcesarLoginMS>();
             #endregion
 
         }

@@ -103,7 +103,7 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
-            services.AddMediatR(typeof(CrearCatalogoCommand).Assembly, typeof(ConfiguracionAutoMapper).Assembly);
+            services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

@@ -2,9 +2,12 @@
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
+using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands;
@@ -18,39 +21,61 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
         {
 
 
-            #region Catalogo
-            CreateMap<CrearCatalogoCommand, Catalogo>()
-                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
-            CreateMap<ModificarCatalogoCommand, Catalogo>()
-                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
-            CreateMap<EliminarCatalogoCommand, Catalogo>();
+            #region Dispositivos
+            CreateMap<CrearDispositivoME, Dispositivo>()
+                .ForMember(m => m.Marca, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdMarca) }))
+                .ForMember(m => m.SistemaOperativo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdSistemaOperativo) }));
+            CreateMap<ModificarDispositivoME, Dispositivo>()
+                .ForMember(m => m.Marca, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdMarca) }))
+                .ForMember(m => m.SistemaOperativo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdSistemaOperativo) }));
+            CreateMap<EliminarDispositivoME, Dispositivo>();
 
-            CreateMap<Catalogo, ObtenerModeloCatalogo>()
+            CreateMap<Dispositivo, ObtenerDispositivoMS>()
+               .ForMember(m => m.IdMarca, opt => opt.MapFrom(d => d.Marca.Id))
+               .ForMember(m => m.NombreMarca, opt => opt.MapFrom(d => d.Marca.Nombre))
+               .ForMember(m => m.IdSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Id))
+               .ForMember(m => m.NombreSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Nombre));
+            CreateMap<Dispositivo, ModeloListaDispositivo>()
+               .ForMember(m => m.IdMarca, opt => opt.MapFrom(d => d.Marca.Id))
+               .ForMember(m => m.NombreMarca, opt => opt.MapFrom(d => d.Marca.Nombre))
+               .ForMember(m => m.IdSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Id))
+               .ForMember(m => m.NombreSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Nombre));
+            #endregion
+
+            #region Catalogo
+            CreateMap<CrearCatalogoME, Catalogo>()
+                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
+            CreateMap<ModificarCatalogoME, Catalogo>()
+                .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
+            CreateMap<EliminarCatalogoME, Catalogo>();
+
+            CreateMap<Catalogo, ObtenerCatalogoMS>()
                .ForMember(m => m.IdTipoCatalogo, opt => opt.MapFrom(d => d.TipoCatalogo.Id))
                .ForMember(m => m.NombreTipoCatalogo, opt => opt.MapFrom(d => d.TipoCatalogo.Nombre));
-            CreateMap<Catalogo, ModeloObtenerDetalleListaCatalogo>()
+            CreateMap<Catalogo, ModeloListaCatalogo>()
                .ForMember(m => m.IdTipoCatalogo, opt => opt.MapFrom(d => d.TipoCatalogo.Id))
                .ForMember(m => m.NombreTipoCatalogo, opt => opt.MapFrom(d => d.TipoCatalogo.Nombre));
             #endregion
+
             #region Tipo Catalogo
-            CreateMap<ModificarTipoCatalogoCommand, TipoCatalogo>();
-            CreateMap<TipoCatalogo, ModeloObtenerDetalleListaTipoCatalogo>();
-            CreateMap<TipoCatalogo, ObtenerModeloTipoCatalogo>();
+            CreateMap<ModificarTipoCatalogoME, TipoCatalogo>();
+            CreateMap<TipoCatalogo, ModeloListarTipoCatalogo>();
+            CreateMap<TipoCatalogo, ObtenerTipoCatalogoMS>();
             #endregion
 
 
             #region Usuarios
-            CreateMap<AutenticarUsuarioCommand, LoginUsuarioCommand>();
-            CreateMap<ModeloUsuarioAutenticado, ModeloAutenticacion>();
-            CreateMap<ModeloUsuarioRol, ModeloRolAutenticacion>();
-            CreateMap<Agente, ModeloAutenticacion>()
+            CreateMap<AutenticarUsuarioME, LoginUsuarioME>();
+            CreateMap<ModeloLoginUsuario, AutenticarUsuarioMS>();
+            CreateMap<LoginUsuarioRol, AutenticarUsuarioRol>();
+            CreateMap<Agente, AutenticarUsuarioMS>()
                 .ForMember(m => m.Usuario, opt => opt.Ignore())
                 .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Id));
             #endregion
 
             #region Filtros
-            CreateMap<ObtenerListaCatalogoQuery, ModeloPaginacion>();
-            CreateMap<ObtenerListaTipoCatalogoQuery, ModeloPaginacion>();
+            CreateMap<ListarCatalogoME, ModeloPaginacion>();
+            CreateMap<ListarTipoCatalogoME, ModeloPaginacion>();
             #endregion
         }
     }

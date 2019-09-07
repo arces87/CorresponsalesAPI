@@ -20,32 +20,32 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpGet("lista", Name = "Usuario_ListarUsuarios")]
-        public async Task<ActionResult<ModeloObtenerListaUsuario>> Listar()
+        public async Task<ActionResult<ListaUsuarioMS>> Listar()
         {
-            return await _mediador.Send(new ObtenerListaUsuarioQuery());
+            return await _mediador.Send(new ListaUsuarioME());
         }
 
         [HttpPost("obtener", Name = "Usuario_ObtenerUsuario")]
-        public async Task<ActionResult<ObtenerModeloUsuario>> GetUser([FromBody] ObtenerUsuarioQuery modelo)
+        public async Task<ActionResult<ModeloObtenerUsuario>> GetUser([FromBody] ObtenerUsuarioME modelo)
         {
             var usuario = await _mediador.Send(modelo);
             return usuario;
         }
 
         [HttpPost("Login", Name = "Usuario_AutenticarUsuario")]
-        public async Task<ActionResult<ModeloAutenticacion>> Login([FromBody] AutenticarUsuarioCommand modelo)
+        public async Task<ActionResult<AutenticarUsuarioMS>> Login([FromBody] AutenticarUsuarioME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Usuario_CrearUsuario")]
-        public async Task<ActionResult<string>> Crear([FromBody] CrearUsuarioCommand modelo)
+        public async Task<ActionResult<string>> Crear([FromBody] CrearUsuarioME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPut]
-        public async Task<ActionResult<string>> Update([FromBody] ModificarUsuarioCommand modelo)
+        public async Task<ActionResult<string>> Update([FromBody] ModificarUsuarioME modelo)
         {
             return await _mediador.Send(modelo);
         }

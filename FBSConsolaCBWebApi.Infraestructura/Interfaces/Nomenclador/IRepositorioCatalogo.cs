@@ -9,7 +9,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador
     {
         Task<IEnumerable<Catalogo>> GetAllActive();
         Task<IEnumerable<Catalogo>> GetAllWithAssociations();
-        Task<Catalogo> GetWithAssociations(int Id);
+        Task<Catalogo> GetWithAssociations(string Id);
 
     }
 }

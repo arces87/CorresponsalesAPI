@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

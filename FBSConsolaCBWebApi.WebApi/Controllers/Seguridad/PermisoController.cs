@@ -16,9 +16,9 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpGet(Name = "Permiso_ListarPermisos")]
-        public async Task<ActionResult<ModeloObtenerListaPermiso>> Get()
+        public async Task<ActionResult<ListaPermisoMS>> Get()
         {
-            return await _mediador.Send(new ObtenerListaPermisoQuery());
+            return await _mediador.Send(new ListaPermisoME());
         }
     }
 }

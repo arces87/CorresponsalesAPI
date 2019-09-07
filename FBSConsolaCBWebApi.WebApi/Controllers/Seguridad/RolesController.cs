@@ -20,31 +20,31 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Rol_ListarRoles")]
-        public async Task<ActionResult<ModeloObtenerListaRol>> Roles([FromBody] ObtenerListaRolQuery modelo)
+        public async Task<ActionResult<ListaRolMS>> Roles([FromBody] ListaRolME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtener", Name = "Rol_ObtenerRol")]
-        public async Task<ActionResult<ObtenerModeloRol>> GetRole([FromBody] ObtenerRolQuery modelo)
+        public async Task<ActionResult<ModeloObtenerRol>> GetRole([FromBody] ObtenerRolME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost(Name = "Rol_CrearRol")]
-        public async Task<ActionResult<int>> Create([FromBody] CrearRolCommand modelo)
+        public async Task<ActionResult<string>> Create([FromBody] CrearRolME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPut(Name = "Rol_ActualizarRol")]
-        public async Task<ActionResult<int>> Update([FromBody] ModificarRolCommand modelo)
+        public async Task<ActionResult<string>> Update([FromBody] ModificarRolME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpDelete(Name = "Rol_EliminarRol")]
-        public async Task<ActionResult<bool>> Delete([FromBody] EliminarRolCommand modelo)
+        public async Task<ActionResult<bool>> Delete([FromBody] EliminarRolME modelo)
         {
             return await _mediador.Send(modelo);
         }

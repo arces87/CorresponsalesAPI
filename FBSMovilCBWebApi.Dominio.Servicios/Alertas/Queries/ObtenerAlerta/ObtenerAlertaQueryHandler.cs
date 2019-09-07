@@ -2,7 +2,6 @@
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Consola;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries
 {

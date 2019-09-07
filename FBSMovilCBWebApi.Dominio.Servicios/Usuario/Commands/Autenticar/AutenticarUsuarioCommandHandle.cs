@@ -26,7 +26,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands
 
         public async Task<ProcesarLoginMS> Handle(DatosLoginME request, CancellationToken cancellationToken)
         {
-            var _usuario = _mapper.Map<LoginUsuarioCommand>(request);
+            var _usuario = _mapper.Map<LoginUsuarioME>(request);
             var usuarioAutenticado = await _mediador.Send(_usuario);
             if (usuarioAutenticado.Errores != null)
             {
