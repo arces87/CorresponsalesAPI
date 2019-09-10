@@ -22,6 +22,7 @@ using FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
+using FBS.Dominio.Servicios.GestionFicheros;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
@@ -103,7 +104,7 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
-            services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly);
+            services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 
