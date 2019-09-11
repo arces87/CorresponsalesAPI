@@ -22,12 +22,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("guardarFichero", Name = "GestionFichero_GuardarFichero")]
-        public async Task<ActionResult<string>> List([FromForm] GuardarFicheroME fichero)
+        public async Task<ActionResult<string>> List([FromForm] GuardarFicheroME ficheroSalvar)
         {
             var nombreDirectorio = Path.Combine("Resources", "Imagenes");
             var direccionSalvar = Path.Combine(Directory.GetCurrentDirectory(), nombreDirectorio);
-            fichero.DireccionGuardar = direccionSalvar;
-            return await _mediador.Send(fichero);
+            ficheroSalvar.DireccionGuardar = direccionSalvar;
+            return await _mediador.Send(ficheroSalvar);
         }
     }
 }

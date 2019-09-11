@@ -23,6 +23,7 @@ using FBSConsolaCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBS.Dominio.Servicios.GestionFicheros;
+using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
@@ -138,6 +139,8 @@ namespace FBSConsolaCBWebApi.WebApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseMiddleware<HttpStatusCodeExceptionMiddleware>();
+
             #region Statics Files Configurations
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()

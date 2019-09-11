@@ -38,6 +38,18 @@ namespace FBSConsolaCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("SolicitarCambioContrasenia", Name = "Usuario_SolicitarCambioContrasenia")]
+        public async Task<ActionResult<string>> SolicitarCambioContrasenia([FromBody] SolicitarCambioContraseniaME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("CambioContrasenia", Name = "Usuario_CambioContrasenia")]
+        public async Task<ActionResult<string>> CambioContrasenia([FromBody] CambioContraseniaME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost(Name = "Usuario_CrearUsuario")]
         public async Task<ActionResult<string>> Crear([FromBody] CrearUsuarioME modelo)
         {
