@@ -1,9 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
-using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries;
-using Microsoft.AspNetCore.Http;
 using FBS.Dominio.Servicios.GestionFicheros;
 using System.IO;
 

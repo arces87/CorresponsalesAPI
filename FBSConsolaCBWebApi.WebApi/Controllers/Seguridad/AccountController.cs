@@ -56,6 +56,18 @@ namespace FBSConsolaCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("ComprobarUsuario", Name = "Usuario_ComprobarUsuario")]
+        public async Task<ActionResult<bool>> ComprobarUsuario([FromBody] ComprobarUsuarioME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("ComprobarCorreoElectronico", Name = "Usuario_ComprobarCorreoElectronico")]
+        public async Task<ActionResult<bool>> Crear([FromBody] ComprobarCorreoElectronicoME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPut]
         public async Task<ActionResult<string>> Update([FromBody] ModificarUsuarioME modelo)
         {
