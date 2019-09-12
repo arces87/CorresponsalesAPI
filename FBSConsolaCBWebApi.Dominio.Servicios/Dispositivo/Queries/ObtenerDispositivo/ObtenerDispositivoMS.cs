@@ -1,4 +1,6 @@
-﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
+﻿using System.Collections.Generic;
+
+namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
 {
     public class ObtenerDispositivoMS
     {
@@ -15,5 +17,6 @@
         public string NombreMarca { get; set; }
         public string IdSistemaOperativo { get; set; }
         public string NombreSistemaOperativo { get; set; }
+        public IEnumerable<ObtenerDispositivoImagen> Imagenes { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Collections.Generic;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
 {
@@ -15,5 +16,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
         public string Imei { get; set; }
         public string IdMarca { get; set; }
         public string IdSistemaOperativo { get; set; }
+        public IEnumerable<ModificarDispositivoImagen> Imagenes { get; set; }
     }
 }

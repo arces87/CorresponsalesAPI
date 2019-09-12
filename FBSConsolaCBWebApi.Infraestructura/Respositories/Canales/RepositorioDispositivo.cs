@@ -37,9 +37,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
             {
                 conexion.Open();
                 var dispositivos = await conexion.QueryAsync<Dispositivo, Catalogo, Catalogo, Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
-                    "join Nomenclador.Catalogo on Canales.Dispositivo.MarcaId = Nomenclador.Catalogo.Id" +
-                    "join Nomenclador.Catalogo on Canales.Dispositivo.SistemaOperativoId = Nomenclador.Catalogo.Id" +
-                    " where Nomenclador.Catalogo.EstaActivo='true'",
+                    "join Nomenclador.Catalogo marca on Canales.Dispositivo.MarcaId = marca.Id " +
+                    "join Nomenclador.Catalogo sistemaOperativo on Canales.Dispositivo.SistemaOperativoId = sistemaOperativo.Id " +
+                    "where Canales.Dispositivo.EstaActivo='true'",
                     (dispositivo, marca, sistemaOperativo) =>
                     {
                         dispositivo.Marca = marca;
@@ -55,9 +55,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
             {
                 conexion.Open();
                 var dispositivos = await conexion.QueryAsync<Dispositivo, Catalogo, Catalogo, Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
-                    "join Nomenclador.Catalogo on Canales.Dispositivo.MarcaId = Nomenclador.Catalogo.Id" +
-                    "join Nomenclador.Catalogo on Canales.Dispositivo.SistemaOperativoId = Nomenclador.Catalogo.Id" +
-                    " where Nomenclador.Catalogo.EstaActivo='true' and Nomenclador.Catalogo.Id = @Id",
+                    "join Nomenclador.Catalogo marca on Canales.Dispositivo.MarcaId = marca.Id " +
+                    "join Nomenclador.Catalogo sistemaOperativo on Canales.Dispositivo.SistemaOperativoId = sistemaOperativo.Id " +
+                    "where Canales.Dispositivo.EstaActivo='true' and Canales.Dispositivo.Id = @Id",
                     (dispositivo, marca, sistemaOperativo) =>
                     {
                         dispositivo.Marca = marca;
@@ -67,6 +67,11 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
 
                 return dispositivos.FirstOrDefault();
             }
+        }
+
+        public override async Task<Dispositivo> Get(string Id)
+        {
+            return await Context.Dispositivos.FirstOrDefaultAsync(d => d.Id.ToString() == Id);
         }
 
         public override async Task Remove(Dispositivo entidad)

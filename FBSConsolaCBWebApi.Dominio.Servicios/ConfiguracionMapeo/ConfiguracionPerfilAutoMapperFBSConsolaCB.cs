@@ -40,6 +40,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreMarca, opt => opt.MapFrom(d => d.Marca.Nombre))
                .ForMember(m => m.IdSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Id))
                .ForMember(m => m.NombreSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Nombre));
+            CreateMap<Imagen, ObtenerDispositivoImagen>()
+              .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.DireccionImagen));
             #endregion
 
             #region Catalogo
@@ -76,6 +78,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region Filtros
             CreateMap<ListarCatalogoME, ModeloPaginacion>();
             CreateMap<ListarTipoCatalogoME, ModeloPaginacion>();
+            CreateMap<ListaDispositivoME, ModeloPaginacion>();
             #endregion
         }
     }

@@ -30,6 +30,7 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 
 
             services.AddScoped<IRepositorioDispositivo, RepositorioDispositivo>();
+            services.AddScoped<IRepositorioImagen, RepositorioImagen>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }
