@@ -68,7 +68,7 @@ namespace FBSConsolaCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
 
-        [HttpPut]
+        [HttpPut("ModificarUsuario", Name = "Usuario_ModificarUsuario")]
         public async Task<ActionResult<string>> Update([FromBody] ModificarUsuarioME modelo)
         {
             return await _mediador.Send(modelo);
