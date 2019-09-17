@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using FBS.DAL.Nomenclador;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.DAL.Canales;

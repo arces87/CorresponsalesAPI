@@ -2,9 +2,11 @@
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Canales;
+using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.EstructuraEmpresarial;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
 using Financial_Services_Banca;
@@ -31,6 +33,9 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 
             services.AddScoped<IRepositorioDispositivo, RepositorioDispositivo>();
             services.AddScoped<IRepositorioImagen, RepositorioImagen>();
+
+
+            services.AddScoped<IRepositorioAgente, RepositorioAgente>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }

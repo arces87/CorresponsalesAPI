@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
+﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands
 {
     public class CrearDispositivoImagen
     {

@@ -1,9 +1,12 @@
 ﻿using FBS.DAL.Nomenclador;
 using FBS.Dominio.Modelos.Filtro;
+using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
+using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
@@ -44,6 +47,33 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
               .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.DireccionImagen));
             #endregion
 
+            #region Dispositivos
+            CreateMap<CrearAgenteME, Agente>()
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
+                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }))
+                .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Usuario() { Id = d.IdSupervisor }));
+            CreateMap<ModificarAgenteME, Agente>()
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
+                .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }))
+                .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Usuario() { Id = d.IdSupervisor }));
+            CreateMap<EliminarAgenteME, Agente>();
+
+            CreateMap<Agente, ObtenerAgenteMS>()
+               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
+               .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
+               .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
+               .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
+            CreateMap<Agente, ModeloListaAgente>()
+              .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
+               .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
+               .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
+               .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
+            #endregion
+
             #region Catalogo
             CreateMap<CrearCatalogoME, Catalogo>()
                 .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
@@ -79,6 +109,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListarCatalogoME, ModeloPaginacion>();
             CreateMap<ListarTipoCatalogoME, ModeloPaginacion>();
             CreateMap<ListaDispositivoME, ModeloPaginacion>();
+            CreateMap<ListaAgenteME, ModeloPaginacion>();
             #endregion
         }
     }
