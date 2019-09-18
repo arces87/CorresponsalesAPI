@@ -110,8 +110,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var usuarios = await conexion.QueryAsync<Usuario, Agente, Usuario>(@"SELECT * FROM Corresponsales.Agente " +
-                    "left join Corresponsales.Agente estado on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
+                var usuarios = await conexion.QueryAsync<Usuario, Agente, Usuario>(@"SELECT * FROM Seguridad.Usuario " +
+                    "left join Corresponsales.Agente on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
                     "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.UsuarioId = null",
                     (usuario, agente) =>
                     {
@@ -126,8 +126,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var usuarios = await conexion.QueryAsync<Usuario, Agente, Usuario>(@"SELECT * FROM Corresponsales.Agente " +
-                    "left join Corresponsales.Agente estado on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
+                var usuarios = await conexion.QueryAsync<Usuario, Agente, Usuario>(@"SELECT * FROM Seguridad.Usuario " +
+                    "left join Corresponsales.Agente on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
                     "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.UsuarioId = null",
                     (usuario, agente) =>
                     {
