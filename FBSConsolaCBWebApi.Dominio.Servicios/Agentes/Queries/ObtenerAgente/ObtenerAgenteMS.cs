@@ -19,5 +19,9 @@
 
         public string IdDispositivo { get; set; }
         public string NombreDispositivo { get; set; }
+
+        public string TipoCuenta { get; set; }
+        public string NumeroCuenta { get; set; }
+        public double SaldoCuenta { get; set; }
     }
 }

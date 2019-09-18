@@ -47,7 +47,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
               .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.DireccionImagen));
             #endregion
 
-            #region Dispositivos
+            #region Agente
             CreateMap<CrearAgenteME, Agente>()
                 .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
                 .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }))
@@ -65,6 +65,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
                .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
+
+            CreateMap<Cuenta, ObtenerAgenteMS>()
+              .ForMember(m => m.TipoCuenta, opt => opt.MapFrom(d => d.Tipo))
+              .ForMember(m => m.SaldoCuenta, opt => opt.MapFrom(d => d.SaldoActual));
             CreateMap<Agente, ModeloListaAgente>()
               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
