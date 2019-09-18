@@ -24,6 +24,18 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("listaUsuariosDisponibles", Name = "Agente_ListarUsuariosDisponibles")]
+        public async Task<ActionResult<ListaUsuariosDiposniblesMS>> ListaUsuariosDisponibles([FromBody] ListaUsuariosDiposniblesME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("listaSupervisoresDisponibles", Name = "Agente_ListarSupervisoresDisponibles")]
+        public async Task<ActionResult<ListaSupervisoresDiposniblesMS>> ListaSupervisoresDisponibles([FromBody] ListaSupervisoresDiposniblesME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost("obtener", Name = "Agente_ObtenerAgente")]
         public async Task<ActionResult<ObtenerAgenteMS>> Get([FromBody] ObtenerAgenteME modelo)
         {

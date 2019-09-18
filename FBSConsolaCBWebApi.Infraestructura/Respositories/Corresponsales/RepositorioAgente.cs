@@ -105,6 +105,38 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             await _contexto.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Usuario>> GetUsuariosDisponibles()
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var usuarios = await conexion.QueryAsync<Usuario, Agente, Usuario>(@"SELECT * FROM Corresponsales.Agente " +
+                    "left join Corresponsales.Agente estado on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
+                    "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.UsuarioId = null",
+                    (usuario, agente) =>
+                    {
+                        return usuario;
+                    });
+                return usuarios.ToList();
+            }
+        }
+
+        public async Task<IEnumerable<Usuario>> GetSupervisoresDisponibles()
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var usuarios = await conexion.QueryAsync<Usuario, Agente, Usuario>(@"SELECT * FROM Corresponsales.Agente " +
+                    "left join Corresponsales.Agente estado on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
+                    "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.UsuarioId = null",
+                    (usuario, agente) =>
+                    {
+                        return usuario;
+                    });
+                return usuarios.ToList();
+            }
+        }
+
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
         public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));

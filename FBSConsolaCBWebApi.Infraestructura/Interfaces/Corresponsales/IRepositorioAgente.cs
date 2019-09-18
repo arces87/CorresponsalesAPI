@@ -1,4 +1,5 @@
-﻿using FBS.Infraestructura.Interfaces;
+﻿using FBS.Identidad.DAL.Seguridad;
+using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task<IEnumerable<Agente>> GetAllActive();
         Task<IEnumerable<Agente>> GetAllWithAssociations();
         Task<Agente> GetWithAssociations(string Id);
+        Task<IEnumerable<Usuario>> GetUsuariosDisponibles();
+        Task<IEnumerable<Usuario>> GetSupervisoresDisponibles();
 
     }
 }

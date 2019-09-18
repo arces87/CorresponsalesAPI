@@ -72,6 +72,14 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
                .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
+
+            CreateMap<Usuario, ModeloListaSupervisoresDiposnibles>()
+               .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Id))
+               .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.UserName));
+
+            CreateMap<Usuario, ModeloListaUsuariosDiposnibles>()
+              .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Id))
+              .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.UserName));
             #endregion
 
             #region Catalogo
@@ -110,6 +118,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListarTipoCatalogoME, ModeloPaginacion>();
             CreateMap<ListaDispositivoME, ModeloPaginacion>();
             CreateMap<ListaAgenteME, ModeloPaginacion>();
+            CreateMap<ListaSupervisoresDiposniblesME, ModeloPaginacion>();
+            CreateMap<ListaUsuariosDiposniblesME, ModeloPaginacion>();
             #endregion
         }
     }

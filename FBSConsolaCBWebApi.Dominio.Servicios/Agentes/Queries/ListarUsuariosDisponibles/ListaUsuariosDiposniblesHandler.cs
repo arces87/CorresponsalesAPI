@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
+using FBS.Identidad.DAL.Seguridad;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
@@ -10,25 +11,25 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 {
-    public class ListaAgenteHandler : IRequestHandler<ListaAgenteME, ListaAgenteMS>
+    public class ListaUsuariosDiposniblesHandler : IRequestHandler<ListaUsuariosDiposniblesME, ListaUsuariosDiposniblesMS>
     {
         private readonly IRepositorioAgente _repositorio;
         private readonly IMapper _mapper;
 
-        public ListaAgenteHandler(IRepositorioAgente repositorio, IMapper mapper)
+        public ListaUsuariosDiposniblesHandler(IRepositorioAgente repositorio, IMapper mapper)
         {
             _repositorio = repositorio;
             _mapper = mapper;
         }
 
-        public async Task<ListaAgenteMS> Handle(ListaAgenteME request, CancellationToken cancellationToken)
+        public async Task<ListaUsuariosDiposniblesMS> Handle(ListaUsuariosDiposniblesME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
-            var _retorno = new ListaAgenteMS();
+            var _model = await _repositorio.GetUsuariosDisponibles();
+            var _retorno = new ListaUsuariosDiposniblesMS();
             var totalElementos = 0;
-            Filtro<Agente>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            Filtro<Usuario>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
             _retorno.TotalElementos = totalElementos;
-            _retorno.Agentes = _mapper.Map<List<ModeloListaAgente>>(_model);
+            _retorno.Usuarios = _mapper.Map<List<ModeloListaUsuariosDiposnibles>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
             return _retorno;
