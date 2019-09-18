@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
+﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class ListaCuentaME
     {

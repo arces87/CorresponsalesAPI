@@ -1,6 +1,4 @@
 ﻿using Dapper;
-using FBS.DAL.Nomenclador;
-using FBS.Identidad.DAL.Seguridad;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.DAL.Corresponsales;

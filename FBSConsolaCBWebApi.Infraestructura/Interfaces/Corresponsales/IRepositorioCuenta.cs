@@ -1,5 +1,4 @@
-﻿using FBS.Identidad.DAL.Seguridad;
-using FBS.Infraestructura.Interfaces;
+﻿using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using System.Collections.Generic;
 using System.Threading.Tasks;

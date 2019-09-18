@@ -1,8 +1,5 @@
-﻿using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands;
-using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using System.Collections.Generic;
 
