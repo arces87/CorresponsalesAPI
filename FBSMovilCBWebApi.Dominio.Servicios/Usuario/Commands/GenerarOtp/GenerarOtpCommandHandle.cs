@@ -1,7 +1,6 @@
 ﻿using FBS.Dominio.Modelos.CorreoElectronico;
 using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using OtpNet;

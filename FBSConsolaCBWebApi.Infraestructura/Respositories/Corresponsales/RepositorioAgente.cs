@@ -137,6 +137,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             }
         }
 
+        public async Task<Agente> GetForUserName(string userName)
+        {
+            return await _contexto.Set<Agente>().Where(r => r.EstaActivo == true)
+                .Include(c => c.Usuario)
+                .FirstOrDefaultAsync(c => c.Usuario.UserName == userName);
+        }
+
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
         public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));

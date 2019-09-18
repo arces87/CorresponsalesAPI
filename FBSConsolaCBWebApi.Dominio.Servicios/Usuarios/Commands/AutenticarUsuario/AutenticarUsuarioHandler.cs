@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.EstructuraEmpresarial;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,11 +9,11 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
     public class AutenticarUsuarioHandler : IRequestHandler<AutenticarUsuarioME, AutenticarUsuarioMS>
     {
-        private readonly IRepositorioPersona _repositorio;
+        private readonly IRepositorioAgente _repositorio;
         private readonly IMediator _mediador;
         private readonly IMapper _mapper;
 
-        public AutenticarUsuarioHandler(IRepositorioPersona repositorio, IMediator mediador, IMapper mapper)
+        public AutenticarUsuarioHandler(IRepositorioAgente repositorio, IMediator mediador, IMapper mapper)
         {
             _repositorio = repositorio;
             _mediador = mediador;
