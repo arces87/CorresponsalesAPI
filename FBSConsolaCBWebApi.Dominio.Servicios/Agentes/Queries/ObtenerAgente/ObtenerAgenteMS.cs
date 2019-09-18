@@ -6,7 +6,7 @@
         public string NombreAgente { get; set; }
 
         public string JsonAgente { get; set; }
-
+        public string Identificacion { get; set; }
         public string Ubicacion { get; set; }
         public string IdEstado { get; set; }
         public string NombreEstado { get; set; }
