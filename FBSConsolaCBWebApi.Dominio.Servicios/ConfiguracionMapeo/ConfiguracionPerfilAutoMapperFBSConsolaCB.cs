@@ -50,10 +50,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region Agente
             CreateMap<CrearAgenteME, Agente>()
                 .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
+                .ForMember(m => m.Dispositivo, opt => opt.MapFrom(d => new Dispositivo() { Id = new Guid(d.IdDispositivo) }))
                 .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }))
                 .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Usuario() { Id = d.IdSupervisor }));
             CreateMap<ModificarAgenteME, Agente>()
                 .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
+                .ForMember(m => m.Dispositivo, opt => opt.MapFrom(d => new Dispositivo() { Id = new Guid(d.IdDispositivo) }))
                 .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }))
                 .ForMember(m => m.Supervisor, opt => opt.MapFrom(d => new Usuario() { Id = d.IdSupervisor }));
             CreateMap<EliminarAgenteME, Agente>();
@@ -63,17 +65,22 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
+               .ForMember(m => m.IdDispositivo, opt => opt.MapFrom(d => d.Dispositivo.Id))
+               .ForMember(m => m.NombreDispositivo, opt => opt.MapFrom(d => d.Dispositivo.Marca.Nombre +" - "+ d.Dispositivo.Modelo + " - " + d.Dispositivo.Imei))
                .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
 
             CreateMap<Cuenta, ObtenerAgenteMS>()
               .ForMember(m => m.TipoCuenta, opt => opt.MapFrom(d => d.Tipo))
               .ForMember(m => m.SaldoCuenta, opt => opt.MapFrom(d => d.SaldoActual));
+            CreateMap<Cuenta, ModeloListaAgente>();
             CreateMap<Agente, ModeloListaAgente>()
               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
+               .ForMember(m => m.IdDispositivo, opt => opt.MapFrom(d => d.Dispositivo.Id))
+               .ForMember(m => m.NombreDispositivo, opt => opt.MapFrom(d => d.Dispositivo.Marca.Nombre + " - " + d.Dispositivo.Modelo + " - " + d.Dispositivo.Imei))
                .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
 

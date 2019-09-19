@@ -13,11 +13,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
     public class ListaAgenteHandler : IRequestHandler<ListaAgenteME, ListaAgenteMS>
     {
         private readonly IRepositorioAgente _repositorio;
+        private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IMapper _mapper;
 
-        public ListaAgenteHandler(IRepositorioAgente repositorio, IMapper mapper)
+        public ListaAgenteHandler(IRepositorioAgente repositorio, IRepositorioCuenta repositorioCuenta, IMapper mapper)
         {
             _repositorio = repositorio;
+            _repositorioCuenta = repositorioCuenta;
             _mapper = mapper;
         }
 
@@ -31,6 +33,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
             _retorno.Agentes = _mapper.Map<List<ModeloListaAgente>>(_model);
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
+            foreach (var item in _retorno.Agentes)
+            {
+                var cuenta = await _repositorioCuenta.GetForAgente(item.Id);
+                if (cuenta != null)
+                    _mapper.Map(cuenta, item);
+            }
             return _retorno;
         }
     }

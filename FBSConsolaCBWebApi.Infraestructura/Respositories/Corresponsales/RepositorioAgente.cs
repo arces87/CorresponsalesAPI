@@ -3,7 +3,9 @@ using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
+using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
+using FBSConsolaCBWebApi.DAL.ModeloUsuario;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -37,18 +39,25 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var Agentes = await conexion.QueryAsync<Agente, Catalogo, Usuario, Usuario, Agente>(@"SELECT * FROM Corresponsales.Agente " +
-                    "join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
-                    "join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
-                    "join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo, " +
+                    "supervisor.Id, supervisor.Codigo FROM Corresponsales.Agente " +
+                    "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                    "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                    "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                    "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                    "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
                     "where Corresponsales.Agente.EstaActivo='true'",
-                    (agente, estado, usuario, supervisor) =>
-                    {
-                        agente.Estado = estado;
-                        agente.Usuario = usuario;
-                        agente.Supervisor = supervisor;
-                        return agente;
-                    });
+                   (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                   {
+                       dispositivo.Marca = marca;
+                       agente.Estado = estado;
+                       if (usuario != null)
+                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo };
+                       if (supervisor != null)
+                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo };
+                       agente.Dispositivo = dispositivo;
+                       return agente;
+                   });
                 return Agentes.ToList();
             }
         }
@@ -57,16 +66,23 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var agentes = await conexion.QueryAsync<Agente, Catalogo, Usuario, Usuario, Agente>(@"SELECT * FROM Corresponsales.Agente " +
-                     "join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
-                    "join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
-                    "join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo, " +
+                    "supervisor.Id, supervisor.Codigo FROM Corresponsales.Agente " +
+                    "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                    "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                    "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                    "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                    "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
                     "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.Id = @Id",
-                   (agente, estado, usuario, supervisor) =>
+                   (agente, estado, dispositivo, marca, usuario, supervisor) =>
                    {
+                       dispositivo.Marca = marca;
                        agente.Estado = estado;
-                       agente.Usuario = usuario;
-                       agente.Supervisor = supervisor;
+                       if (usuario != null)
+                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo };
+                       if (supervisor != null)
+                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo };
+                       agente.Dispositivo = dispositivo;
                        return agente;
                    }, param: new { Id });
 
@@ -89,6 +105,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         public override async Task<string> Add(Agente entidad)
         {
             entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
+            entidad.Dispositivo = Context.Dispositivos.FirstOrDefault(c => c.Id == entidad.Dispositivo.Id);
             entidad.Usuario = Context.Users.FirstOrDefault(c => c.Id == entidad.Usuario.Id);
             entidad.Supervisor = Context.Users.FirstOrDefault(c => c.Id == entidad.Supervisor.Id);
             entidad.EstaActivo = true;
@@ -99,6 +116,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         public override async Task Update(Agente entidad)
         {
             entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
+            entidad.Dispositivo = Context.Dispositivos.FirstOrDefault(c => c.Id == entidad.Dispositivo.Id);
             entidad.Usuario = Context.Users.FirstOrDefault(c => c.Id == entidad.Usuario.Id);
             entidad.Supervisor = Context.Users.FirstOrDefault(c => c.Id == entidad.Supervisor.Id);
             _contexto.Entry(entidad).State = EntityState.Modified;
