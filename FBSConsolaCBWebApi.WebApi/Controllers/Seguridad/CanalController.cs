@@ -17,7 +17,7 @@ namespace FBSConsolaCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpPost("obtenerJsonNegocio", Name = "Usuario_ObtenerJsonNegocio")]
+        [HttpPost("obtenerJsonNegocio", Name = "Canal_ObtenerJsonNegocio")]
         public async Task<ActionResult<JsonNegocioMS>> ObtenerJsonNegocio([FromBody] ObtenerJsonNegocioME modelo)
         {
             var usuario = await _mediador.Send(modelo);
