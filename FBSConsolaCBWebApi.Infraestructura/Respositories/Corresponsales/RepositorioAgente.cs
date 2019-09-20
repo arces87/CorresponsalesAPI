@@ -130,7 +130,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 conexion.Open();
                 var usuarios = await conexion.QueryAsync<Usuario>(@"SELECT Seguridad.Usuario.Id,Seguridad.Usuario.Codigo as UserName FROM Seguridad.Usuario " +
                     "left join Corresponsales.Agente on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
-                    "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.Id is null");
+                    "left join Seguridad.UsuarioRol on Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId " +
+                    "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.Id is null and Seguridad.UsuarioRol.RolId =@IdRol",
+                    param: new { IdRol = _configuracion["IdRolAgente"] });
                 return usuarios.ToList();
             }
         }
@@ -141,8 +143,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             {
                 conexion.Open();
                 var usuarios = await conexion.QueryAsync<Usuario>(@"SELECT Seguridad.Usuario.Id,Seguridad.Usuario.Codigo as UserName FROM Seguridad.Usuario " +
-                    "left join Corresponsales.Agente on Seguridad.Usuario.Id = Corresponsales.Agente.UsuarioId " +
-                    "where Seguridad.Usuario.EstaActivo='true' and Corresponsales.Agente.Id is null");
+                    "left join Seguridad.UsuarioRol on Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId " +
+                    "where Seguridad.Usuario.EstaActivo='true' and Seguridad.UsuarioRol.RolId =@IdRol",
+                    param: new { IdRol = _configuracion["IdRolSuperisor"] });
                 return usuarios.ToList();
             }
         }
