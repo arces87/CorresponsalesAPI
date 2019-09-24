@@ -73,13 +73,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
 
             CreateMap<Cuenta, ObtenerAgenteMS>()
-              .ForMember(m => m.TipoCuenta, opt => opt.MapFrom(d => d.Tipo))
-              .ForMember(m => m.SaldoCuenta, opt => opt.MapFrom(d => d.SaldoActual))
-              .ForMember(m => m.Id, opt => opt.Ignore());
+               .ForMember(m => m.TipoCuenta, opt => opt.MapFrom(d => d.Tipo))
+               .ForMember(m => m.SaldoCuenta, opt => opt.MapFrom(d => d.SaldoActual))
+               .ForMember(m => m.Id, opt => opt.Ignore());
             CreateMap<Cuenta, ModeloListaAgente>()
-                .ForMember(m => m.Id, opt => opt.Ignore());
+               .ForMember(m => m.Id, opt => opt.Ignore());
             CreateMap<Agente, ModeloListaAgente>()
-              .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
@@ -88,8 +88,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
 
+            CreateMap<Geolocalizacion, ModeloListaActivarAgente>()
+                .ForMember(m => m.Id, opt => opt.Ignore());
             CreateMap<Agente, ModeloListaActivarAgente>()
-              .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
@@ -138,6 +140,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente))
                .ForMember(m => m.IdTipo, opt => opt.MapFrom(d => d.Tipo.Nombre))
                .ForMember(m => m.NombreTipo, opt => opt.MapFrom(d => d.Tipo.Nombre));
+
             CreateMap<Alerta, ModeloListaAlerta>()
                 .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))

@@ -1,4 +1,6 @@
-﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
+﻿using System;
+
+namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 {
     public class ModeloListaActivarAgente
     {
@@ -17,5 +19,10 @@
 
         public string IdDispositivo { get; set; }
         public string NombreDispositivo { get; set; }
+
+        public double Latitud { get; set; }
+        public double Longitud { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public DateTime FechaBaja { get; set; }
     }
 }

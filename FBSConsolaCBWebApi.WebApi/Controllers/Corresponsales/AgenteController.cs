@@ -24,6 +24,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("listaActivar", Name = "Agente_ListarAgentesActivar")]
+        public async Task<ActionResult<ListaActivarAgenteMS>> ListaActivar([FromBody] ListaActivarAgenteME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost("listaUsuariosDisponibles", Name = "Agente_ListarUsuariosDisponibles")]
         public async Task<ActionResult<ListaUsuariosDiposniblesMS>> ListaUsuariosDisponibles([FromBody] ListaUsuariosDiposniblesME modelo)
         {
@@ -47,7 +53,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return Ok(await _mediador.Send(modelo));
         }
-
+        
         [HttpPut("actualizar", Name = "Agente_ActualizarAgente")]
         public async Task<ActionResult<int>> Update([FromBody] ModificarAgenteME modelo)
         {
@@ -56,6 +62,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
 
         [HttpDelete("eliminar", Name = "Agente_EliminarAgente")]
         public async Task<ActionResult<int>> Delete([FromBody] EliminarAgenteME modelo)
+        {
+            return Ok(await _mediador.Send(modelo));
+        }
+
+        [HttpPost("activar", Name = "Agente_ActivarAgente")]
+        public async Task<ActionResult<string>> Activar([FromBody] ActivarAgenteME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
