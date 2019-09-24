@@ -43,8 +43,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo, " +
-                    "supervisor.Id, supervisor.Codigo FROM Corresponsales.Agente " +
+                var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                    "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
                     "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
                     "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
                     "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
@@ -56,9 +56,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                        dispositivo.Marca = marca;
                        agente.Estado = estado;
                        if (usuario != null)
-                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo };
+                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
                        if (supervisor != null)
-                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo };
+                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
                        agente.Dispositivo = dispositivo;
                        return agente;
                    });
@@ -70,8 +70,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo, " +
-                    "supervisor.Id, supervisor.Codigo FROM Corresponsales.Agente " +
+                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                    "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
                     "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
                     "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
                     "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
@@ -83,9 +83,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                        dispositivo.Marca = marca;
                        agente.Estado = estado;
                        if (usuario != null)
-                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo };
+                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
                        if (supervisor != null)
-                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo };
+                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
                        agente.Dispositivo = dispositivo;
                        return agente;
                    }, param: new { Id });
@@ -100,8 +100,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             {
                 var IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoUbicado").Valor;
                 conexion.Open();
-                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo, " +
-                    "supervisor.Id, supervisor.Codigo FROM Corresponsales.Agente " +
+                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                    "supervisor.Id, supervisor.Codigo, supervisor.Imagen FROM Corresponsales.Agente " +
                     "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
                     "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
                     "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
@@ -113,9 +113,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                        dispositivo.Marca = marca;
                        agente.Estado = estado;
                        if (usuario != null)
-                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo };
+                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
                        if (supervisor != null)
-                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo };
+                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
                        agente.Dispositivo = dispositivo;
                        return agente;
                    }, param: new { IdEstado });
