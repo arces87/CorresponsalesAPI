@@ -4,7 +4,6 @@ using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Threading;

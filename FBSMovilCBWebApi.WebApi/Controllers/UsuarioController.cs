@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,46 +17,18 @@ namespace FBSMovilCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpPost("login", Name = "Usuario_Login")]
+
+        [HttpPost("login", Name = "Usuario_AutenticarUsuario")]
         [Produces(typeof(AutenticarUsuarioMS))]
         public async Task<ActionResult<AutenticarUsuarioMS>> Login([FromBody] AutenticarUsuarioME modelo)
         {
-            try
-            {
-                return await _mediador.Send(modelo);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        
-        [HttpPost("generarOtp", Name = "Usuario_GenerarOtp")]
-        [Produces(typeof(AutenticarUsuarioMS))]
-        public async Task<ActionResult<ProcesarOtpMS>> ComprobarOtp([FromBody] DatosOtpME modelo)
-        {
-            try
-            {
-                return await _mediador.Send(modelo);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return await _mediador.Send(modelo);
         }
 
-        [HttpPost("comprobarOtp", Name = "Usuario_ComprobarOtp")]
-        [Produces(typeof(AutenticarUsuarioMS))]
-        public async Task<ActionResult<ProcesarValidarOtpMS>> GenerarOtp([FromBody] DatosValidarOTPME modelo)
+        [HttpPost("solicitudActivacion", Name = "Usuario_SolicitudActivacion")]
+        public async Task<ActionResult> Activacion([FromBody] SolicitarActivacionME modelo)
         {
-            try
-            {
-                return await _mediador.Send(modelo);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(await _mediador.Send(modelo));
         }
     }
 }

@@ -36,7 +36,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta" +
+                var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
                     "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                     "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
@@ -56,7 +56,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta" +
+                var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
                     "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                     "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +

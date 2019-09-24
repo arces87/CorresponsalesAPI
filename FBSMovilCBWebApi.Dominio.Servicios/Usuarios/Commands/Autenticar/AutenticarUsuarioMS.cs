@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
+﻿namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
     public class AutenticarUsuarioMS
     {
