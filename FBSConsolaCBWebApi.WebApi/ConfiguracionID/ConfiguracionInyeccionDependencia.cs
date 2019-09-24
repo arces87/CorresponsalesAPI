@@ -35,6 +35,7 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 
             services.AddScoped<IRepositorioAgente, RepositorioAgente>();
             services.AddScoped<IRepositorioCuenta, RepositorioCuenta>();
+            services.AddScoped<IRepositorioAlerta, RepositorioAlerta>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }

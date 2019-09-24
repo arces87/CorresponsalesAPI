@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FBSConsolaCBWebApi.DAL.ModeloUsuario
+﻿namespace FBSConsolaCBWebApi.DAL.ModeloUsuario
 {
     public class UsuarioDapper
     {

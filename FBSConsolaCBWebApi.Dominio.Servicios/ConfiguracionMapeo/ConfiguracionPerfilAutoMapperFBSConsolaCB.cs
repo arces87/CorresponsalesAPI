@@ -7,6 +7,8 @@ using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
@@ -116,6 +118,24 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<TipoCatalogo, ObtenerTipoCatalogoMS>();
             #endregion
 
+            #region Alerta
+            CreateMap<ModificarAlertaME, Alerta>()
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }));
+            CreateMap<Alerta, ObtenerAlertaMS>()
+               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
+               .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente))
+               .ForMember(m => m.IdTipo, opt => opt.MapFrom(d => d.Tipo.Nombre))
+               .ForMember(m => m.NombreTipo, opt => opt.MapFrom(d => d.Tipo.Nombre));
+            CreateMap<Alerta, ModeloListaAlerta>()
+                .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
+               .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente))
+               .ForMember(m => m.IdTipo, opt => opt.MapFrom(d => d.Tipo.Nombre))
+               .ForMember(m => m.NombreTipo, opt => opt.MapFrom(d => d.Tipo.Nombre));
+            #endregion
 
             #region Usuarios
             CreateMap<AutenticarUsuarioME, LoginUsuarioME>();
