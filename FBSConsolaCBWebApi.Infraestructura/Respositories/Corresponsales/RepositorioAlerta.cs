@@ -40,7 +40,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                     "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                     "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
-                    "where Corresponsales.Alerta.EstaActivo='true'",
+                    "where alerta.EstaActivo='true'",
                    (alerta, estado, agente, tipo) =>
                    {
                        alerta.Estado = estado;
@@ -60,7 +60,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                     "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                     "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
-                    "where Corresponsales.Alerta.EstaActivo='true' and Corresponsales.Alerta.Id = @Id",
+                    "where alerta.EstaActivo='true' and alerta.Id = @Id",
                    (alerta, estado, agente, tipo) =>
                    {
                        alerta.Estado = estado;
