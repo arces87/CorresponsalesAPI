@@ -11,7 +11,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task<IEnumerable<Agente>> GetAllActive();
         Task<IEnumerable<Agente>> GetAllWithAssociations();
         Task<Agente> GetWithAssociations(string Id);
+        Task<IEnumerable<Agente>> GetForActivation();
         Task<Agente> GetForUserName(string userName);
+        Task Activar(string Id);
         Task<IEnumerable<Usuario>> GetUsuariosDisponibles();
         Task<IEnumerable<Usuario>> GetSupervisoresDisponibles();
 

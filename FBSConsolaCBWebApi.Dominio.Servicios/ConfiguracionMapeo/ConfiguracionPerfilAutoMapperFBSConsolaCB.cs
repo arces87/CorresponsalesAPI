@@ -88,6 +88,16 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
                .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
 
+            CreateMap<Agente, ModeloListaActivarAgente>()
+              .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Usuario.Id))
+               .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.Usuario.UserName))
+               .ForMember(m => m.IdDispositivo, opt => opt.MapFrom(d => d.Dispositivo.Id))
+               .ForMember(m => m.NombreDispositivo, opt => opt.MapFrom(d => d.Dispositivo.Marca.Nombre + " - " + d.Dispositivo.Modelo + " - " + d.Dispositivo.Imei))
+               .ForMember(m => m.IdSupervisor, opt => opt.MapFrom(d => d.Supervisor.Id))
+               .ForMember(m => m.NombreSupervisor, opt => opt.MapFrom(d => d.Supervisor.UserName));
+
             CreateMap<Usuario, ModeloListaSupervisoresDiposnibles>()
                .ForMember(m => m.IdUsuario, opt => opt.MapFrom(d => d.Id))
                .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.UserName));
