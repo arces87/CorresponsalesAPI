@@ -6,6 +6,7 @@ using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -33,6 +34,22 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
                     "where Canales.AgenteGeolocalizacion.AgenteId = @Id and Canales.Geolocalizacion.EstaActivo='true'", param: new { Id });
                 return geolocalizaciones.FirstOrDefault();
             }
+        }
+        public async Task AdicionarGeolocalizacionAgente(double latitud, double longitud, string idAgente)
+        {
+            var geolocalizacion = new Geolocalizacion() { Latitud = latitud, Longitud = longitud, FechaAlta = DateTime.Now };
+            Context.Geolocalizaciones.Add(geolocalizacion);
+            var agente = Context.Agentes.FirstOrDefault(a => a.Id == new Guid(idAgente));
+            var geolocalizacionAgente = new AgenteGeolocalizacion() { Agente = agente, Geolocalizacion = geolocalizacion };
+            Context.AgentesGeolocalizaciones.Add(geolocalizacionAgente);
+            await Context.SaveChangesAsync();
+        }
+        public override async Task Remove(Geolocalizacion entidad)
+        {
+            var geolocalizacion = _contexto.Set<Geolocalizacion>().FirstOrDefault(o => o.Id == entidad.Id);
+            geolocalizacion.FechaBaja = DateTime.Now;
+            geolocalizacion.EstaActivo = false;
+            await _contexto.SaveChangesAsync();
         }
 
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;

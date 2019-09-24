@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +19,8 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("login", Name = "Usuario_Login")]
-        [Produces(typeof(ProcesarLoginMS))]
-        public async Task<ActionResult<ProcesarLoginMS>> Login([FromBody] DatosLoginME modelo)
+        [Produces(typeof(AutenticarUsuarioMS))]
+        public async Task<ActionResult<AutenticarUsuarioMS>> Login([FromBody] AutenticarUsuarioME modelo)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace FBSMovilCBWebApi.WebApi
         }
         
         [HttpPost("generarOtp", Name = "Usuario_GenerarOtp")]
-        [Produces(typeof(ProcesarLoginMS))]
+        [Produces(typeof(AutenticarUsuarioMS))]
         public async Task<ActionResult<ProcesarOtpMS>> ComprobarOtp([FromBody] DatosOtpME modelo)
         {
             try
@@ -47,7 +47,7 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("comprobarOtp", Name = "Usuario_ComprobarOtp")]
-        [Produces(typeof(ProcesarLoginMS))]
+        [Produces(typeof(AutenticarUsuarioMS))]
         public async Task<ActionResult<ProcesarValidarOtpMS>> GenerarOtp([FromBody] DatosValidarOTPME modelo)
         {
             try

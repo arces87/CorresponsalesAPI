@@ -17,4 +17,8 @@
     <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Clientes\Queries\" />
+  </ItemGroup>
+
 </Project>

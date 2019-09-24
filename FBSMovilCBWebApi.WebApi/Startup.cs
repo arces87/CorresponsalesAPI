@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using FBS.Identidad.DAL.Seguridad;
 using FFBSMovilCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
+using FBSMovilCBWebApi.WebApi.ManejadorExcepciones;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -130,7 +131,7 @@ namespace FBSMovilCBWebApi.WebApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseMiddleware<HttpStatusCodeExceptionMiddleware>();
             #region Cors Configuration
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             #endregion

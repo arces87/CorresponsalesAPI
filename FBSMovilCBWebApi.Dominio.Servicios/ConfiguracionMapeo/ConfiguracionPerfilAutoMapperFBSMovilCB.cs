@@ -1,4 +1,5 @@
 ﻿using FBS.DAL.Nomenclador;
+using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Canales;
@@ -7,7 +8,7 @@ using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
-using FBSMovilCBWebApi.Dominio.Servicios.Usuario.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using System;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
@@ -31,16 +32,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Log
-            CreateMap<CrearLogCommand, Log>();
+            CreateMap<CrearLogME, Log>()
+               .ForMember(m => m.TipoAccion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoAccion) }))
+               .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }));
             CreateMap<Log, ObtenerModeloLog>();
             CreateMap<Log, ModeloObtenerDetalleListaLog>();
             #endregion
 
             #region Usuario
-            CreateMap<UsuarioME, LoginUsuarioME>()
-                .ForMember(l => l.Contrasenna, opt => opt.MapFrom(p => p.Password))
-                .ForMember(l => l.Usuario, opt => opt.MapFrom(p => p.UsuarioLogin));
-            CreateMap<ModeloLoginUsuario, ProcesarLoginMS>();
+            CreateMap<AutenticarUsuarioME, LoginUsuarioME>()
+                .ForMember(l => l.Contrasenna, opt => opt.MapFrom(p => p.Contrasenia))
+                .ForMember(l => l.Usuario, opt => opt.MapFrom(p => p.Usuario));
+            CreateMap<ModeloLoginUsuario, AutenticarUsuarioMS>();
             #endregion
 
         }

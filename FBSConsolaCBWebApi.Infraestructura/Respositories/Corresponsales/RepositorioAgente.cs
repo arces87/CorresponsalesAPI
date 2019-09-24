@@ -199,7 +199,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         public async Task<Agente> GetForUserName(string userName)
         {
             return await _contexto.Set<Agente>().Where(r => r.EstaActivo == true)
-                .Include(c => c.Usuario)
+                .Include(c => c.Usuario).Include(c => c.Dispositivo).Include(c => c.Estado)
                 .FirstOrDefaultAsync(c => c.Usuario.UserName == userName);
         }
 

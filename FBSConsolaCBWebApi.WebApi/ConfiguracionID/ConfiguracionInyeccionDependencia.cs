@@ -35,6 +35,7 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioDispositivo, RepositorioDispositivo>();
             services.AddScoped<IRepositorioImagen, RepositorioImagen>();
             services.AddScoped<IRepositorioGeolocalizacion, RepositorioGeolocalizacion>();
+            services.AddScoped<IRepositorioLog, RepositorioLog>();
 
 
             services.AddScoped<IRepositorioAgente, RepositorioAgente>();

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
