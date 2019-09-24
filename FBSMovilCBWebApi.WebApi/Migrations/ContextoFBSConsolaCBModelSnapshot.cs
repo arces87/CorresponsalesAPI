@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FBSConsolaCBWebApi.WebApi.Migrations
+namespace FBSMovilCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
     partial class ContextoFBSConsolaCBModelSnapshot : ModelSnapshot

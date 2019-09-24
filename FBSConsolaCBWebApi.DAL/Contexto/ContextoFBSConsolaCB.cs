@@ -27,6 +27,7 @@ namespace FBSConsolaCBWebApi.DAL
         #region Canales
         public DbSet<Dispositivo> Dispositivos { get; set; }
         public DbSet<Geolocalizacion> Geolocalizaciones { get; set; }
+        public DbSet<ImagenGeolocalizacion> ImagenesGeolocalizaciones { get; set; }
         public DbSet<AgenteGeolocalizacion> AgentesGeolocalizaciones { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Imagen> Imagenes { get; set; }

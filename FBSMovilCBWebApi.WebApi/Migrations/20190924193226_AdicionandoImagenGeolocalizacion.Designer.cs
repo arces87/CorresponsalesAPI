@@ -4,14 +4,16 @@ using FBSConsolaCBWebApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FBSConsolaCBWebApi.WebApi.Migrations
+namespace FBSMovilCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    partial class ContextoFBSConsolaCBModelSnapshot : ModelSnapshot
+    [Migration("20190924193226_AdicionandoImagenGeolocalizacion")]
+    partial class AdicionandoImagenGeolocalizacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
