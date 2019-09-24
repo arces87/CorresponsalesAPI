@@ -3,6 +3,8 @@ using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +19,6 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioMenu, RepositorioMenu>();
             services.AddScoped<IRepositorioPermiso, RepositorioPermiso>();
 
-            services.AddScoped<IRepositorioLog, RepositorioLog>();
             services.AddScoped<IRepositorioAlerta, RepositorioAlerta>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();

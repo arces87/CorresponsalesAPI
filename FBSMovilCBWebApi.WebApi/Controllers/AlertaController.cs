@@ -18,20 +18,14 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
             _mediador = mediador;
         }
 
-        [HttpGet("listarAlertas", Name = "Alerta_ListarAlertas")]
-        public async Task<ActionResult<ModeloObtenerListaAlerta>> List()
+        [HttpPost("listarAlertas", Name = "Alerta_ListarAlertas")]
+        public async Task<ActionResult<ListarAlertaMS>> List([FromBody] ListarAlertaME modelo)
         {
-            return await _mediador.Send(new ObtenerListaAlertaQuery());
-        }
-
-        [HttpGet("obtenerAlerta/{id}", Name = "Alerta_ObtenerAlerta")]
-        public async Task<ActionResult<ObtenerModeloAlerta>> Get(int Id)
-        {
-            return await _mediador.Send(new ObtenerAlertaQuery() { Id = Id });
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost("crearAlerta", Name = "Alerta_CrearAlerta")]
-        public async Task<ActionResult<int>> Create([FromBody] CrearAlertaCommand model)
+        public async Task<ActionResult<string>> Create([FromBody] CrearAlertaME model)
         {
             return await _mediador.Send(model);
         }

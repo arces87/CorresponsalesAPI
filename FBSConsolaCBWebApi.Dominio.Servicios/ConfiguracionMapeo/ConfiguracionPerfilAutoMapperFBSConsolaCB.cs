@@ -163,6 +163,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListaAgenteME, ModeloPaginacion>();
             CreateMap<ListaSupervisoresDiposniblesME, ModeloPaginacion>();
             CreateMap<ListaUsuariosDiposniblesME, ModeloPaginacion>();
+            CreateMap<ListarAlertaME, ModeloPaginacion>();
             #endregion
         }
     }

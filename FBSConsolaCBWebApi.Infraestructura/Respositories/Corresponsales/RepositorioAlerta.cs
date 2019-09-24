@@ -84,6 +84,17 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             catalogo.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
+        public override async Task<string> Add(Alerta entidad)
+        {
+            entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
+            entidad.Agente = Context.Agentes.FirstOrDefault(c => c.Id == entidad.Agente.Id);
+            entidad.Tipo = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Tipo.Id);
+            entidad.EstaActivo = true;
+            Context.Alertas.Add(entidad);
+            await Context.SaveChangesAsync();
+            return entidad.Id.ToString();
+        }
+
         public override async Task Update(Alerta entidad)
         {
             var alerta = Context.Alertas.FirstOrDefault(a => a.Id == entidad.Id);
