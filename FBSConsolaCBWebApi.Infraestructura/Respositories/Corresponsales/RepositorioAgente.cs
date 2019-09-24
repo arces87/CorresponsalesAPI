@@ -157,6 +157,16 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
+        public async Task UpdateEstado(Agente entidad)
+        {
+            var agente = Context.Agentes.Include(a => a.Estado)
+                .Include(a => a.Dispositivo)
+                .Include(a => a.Usuario)
+                .Include(a => a.Supervisor).FirstOrDefault(a => a.Id == entidad.Id);
+            agente.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
+            _contexto.Entry(agente).State = EntityState.Modified;
+            await _contexto.SaveChangesAsync();
+        }
 
         public async Task Activar(string Id)
         {

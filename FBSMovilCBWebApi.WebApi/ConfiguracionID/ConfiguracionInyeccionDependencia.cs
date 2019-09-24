@@ -27,6 +27,8 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
             services.AddScoped<IRepositorioAlerta, RepositorioAlerta>();
             services.AddScoped<IRepositorioLog, RepositorioLog>();
+            services.AddScoped<IRepositorioGeolocalizacion, RepositorioGeolocalizacion>();
+            services.AddScoped<IRepositorioAgente, RepositorioAgente>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }

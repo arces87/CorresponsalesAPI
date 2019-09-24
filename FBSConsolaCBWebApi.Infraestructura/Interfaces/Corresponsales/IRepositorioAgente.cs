@@ -16,6 +16,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task Activar(string Id);
         Task<IEnumerable<Usuario>> GetUsuariosDisponibles();
         Task<IEnumerable<Usuario>> GetSupervisoresDisponibles();
+        Task UpdateEstado(Agente entidad);
 
     }
 }

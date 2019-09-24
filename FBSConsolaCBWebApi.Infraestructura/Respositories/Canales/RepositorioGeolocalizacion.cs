@@ -26,7 +26,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var geolocalizaciones = await conexion.QueryAsync<Geolocalizacion>(@"SELECT * FROM Canales.Geolocalizacion " +
+                var geolocalizaciones = await conexion.QueryAsync<Geolocalizacion>(@"SELECT Canales.Geolocalizacion.* FROM Canales.Geolocalizacion " +
                     "join Canales.AgenteGeolocalizacion on Canales.Geolocalizacion.Id = Canales.AgenteGeolocalizacion.GeolocalizacionId " +
                     "where Canales.AgenteGeolocalizacion.AgenteId = @Id and Canales.Geolocalizacion.EstaActivo='true'", param: new { Id });
                 return geolocalizaciones.FirstOrDefault();
@@ -34,10 +34,10 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
         }
         public async Task AdicionarGeolocalizacionAgente(double latitud, double longitud, string idAgente)
         {
-            var geolocalizacion = new Geolocalizacion() { Latitud = latitud, Longitud = longitud, FechaAlta = DateTime.Now };
+            var geolocalizacion = new Geolocalizacion() { Latitud = latitud, Longitud = longitud, FechaAlta = DateTime.Now, EstaActivo = true };
             Context.Geolocalizaciones.Add(geolocalizacion);
             var agente = Context.Agentes.FirstOrDefault(a => a.Id == new Guid(idAgente));
-            var geolocalizacionAgente = new AgenteGeolocalizacion() { Agente = agente, Geolocalizacion = geolocalizacion };
+            var geolocalizacionAgente = new AgenteGeolocalizacion() { Agente = agente, Geolocalizacion = geolocalizacion, EstaActivo = true };
             Context.AgentesGeolocalizaciones.Add(geolocalizacionAgente);
             await Context.SaveChangesAsync();
         }
@@ -46,6 +46,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
             var geolocalizacion = _contexto.Set<Geolocalizacion>().FirstOrDefault(o => o.Id == entidad.Id);
             geolocalizacion.FechaBaja = DateTime.Now;
             geolocalizacion.EstaActivo = false;
+            var agenteGeolocalizacion = _contexto.Set<AgenteGeolocalizacion>().FirstOrDefault(o => o.Geolocalizacion.Id == entidad.Id && o.EstaActivo == true);
+            agenteGeolocalizacion.EstaActivo = false;
             await _contexto.SaveChangesAsync();
         }
 

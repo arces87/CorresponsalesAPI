@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
@@ -19,7 +20,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
-        public SolicitarActivacionHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper, IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
+        public SolicitarActivacionHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper,
+            IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -38,16 +40,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 {
                     if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
                     {
-                        var _usuario = _mapper.Map<LoginUsuarioME>(request);
-                        var usuarioAutenticado = await _mediador.Send(_usuario);
+
+                        var usuarioAutenticado = await _mediador.Send(new LoginUsuarioME() { Usuario = request.Usuario, Contrasenna = request.Contrasenia });
                         if (usuarioAutenticado.Errores == null)
                         {
+                            agente.Estado = new Catalogo() { Id = new Guid(idEstado) };
+                            await _repositorioAgente.UpdateEstado(agente);
                             var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
                             if (geolocalizacion != null) //Guardando Geolocalización
                             {
                                 await _repositorioGeolocalizacion.Remove(geolocalizacion);
                             }
                             await _repositorioGeolocalizacion.AdicionarGeolocalizacionAgente(request.Latitud, request.Longitud, agente.Id.ToString());
+                            return true;
                         }
                     }
 
