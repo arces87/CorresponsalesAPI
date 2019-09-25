@@ -3,5 +3,6 @@
     public class AutenticarUsuarioMS
     {
         public string Token { get; set; }
+        public ComisionesMS Comisiones { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Seguridad;
+using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.DAL.Canales;
@@ -44,6 +45,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                 .ForMember(l => l.Contrasenna, opt => opt.MapFrom(p => p.Contrasenia))
                 .ForMember(l => l.Usuario, opt => opt.MapFrom(p => p.Usuario));
             CreateMap<ModeloLoginUsuario, AutenticarUsuarioMS>();
+            CreateMap<ComisionOperacion, ComisionOperacionMS>();
             #endregion
 
         }

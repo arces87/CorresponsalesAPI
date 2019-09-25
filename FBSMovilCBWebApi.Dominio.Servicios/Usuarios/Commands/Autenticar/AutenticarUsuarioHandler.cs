@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
+using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -53,8 +55,20 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                 {
                                     var usuario = new AutenticarUsuarioMS()
                                     {
-                                        Token = usuarioAutenticado.Token
+                                        Token = usuarioAutenticado.Token,
+                                        Comisiones = new ComisionesMS()
                                     };
+                                    var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+                                    if (jsonNegocio != null)
+                                    {
+                                        if (jsonNegocio.CobroServicios != null)
+                                            usuario.Comisiones.CobroServicios = _mapper.Map<ComisionOperacionMS>(jsonNegocio.CobroServicios.Comisiones);
+                                        if (jsonNegocio.Deposito != null)
+                                            usuario.Comisiones.Deposito = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Deposito.Comisiones);
+                                        if (jsonNegocio.Retiro != null)
+                                            usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
+                                    }
+
                                     return usuario;
                                 }
                             }
