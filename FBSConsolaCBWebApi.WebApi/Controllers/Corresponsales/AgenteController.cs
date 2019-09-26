@@ -29,6 +29,11 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(modelo);
         }
+        [HttpPost("listaConsola", Name = "Agente_ListarAgentesConsola")]
+        public async Task<ActionResult<ListaAgenteConsolaMS>> ListaConsola([FromBody] ListaAgenteConsolaME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
 
         [HttpPost("listaUsuariosDisponibles", Name = "Agente_ListarUsuariosDisponibles")]
         public async Task<ActionResult<ListaUsuariosDiposniblesMS>> ListaUsuariosDisponibles([FromBody] ListaUsuariosDiposniblesME modelo)
@@ -53,7 +58,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return Ok(await _mediador.Send(modelo));
         }
-        
+
         [HttpPut("actualizar", Name = "Agente_ActualizarAgente")]
         public async Task<ActionResult<int>> Update([FromBody] ModificarAgenteME modelo)
         {

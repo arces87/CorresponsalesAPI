@@ -4,14 +4,16 @@ using FBSConsolaCBWebApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    partial class ContextoFBSConsolaCBModelSnapshot : ModelSnapshot
+    [Migration("20190926123511_ModificandoTransaccionIdCanal")]
+    partial class ModificandoTransaccionIdCanal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -605,8 +607,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<string>("Criptografia");
-
-                    b.Property<string>("Descripcion");
 
                     b.Property<bool>("EstaActivo");
 

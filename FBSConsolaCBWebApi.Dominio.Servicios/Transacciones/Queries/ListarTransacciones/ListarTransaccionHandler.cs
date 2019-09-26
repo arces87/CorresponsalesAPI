@@ -1,0 +1,39 @@
+﻿using AutoMapper;
+using FBS.DAL.Nomenclador;
+using FBS.Dominio.Modelos.Filtro;
+using FBS.Dominio.Servicios.Utilidades;
+using FBSConsolaCBWebApi.DAL.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
+using MediatR;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
+{
+    public class ListarTransaccionHandler : IRequestHandler<ListarTransaccionME, ListarTransaccionMS>
+    {
+        private readonly IRepositorioTransaccion _repositorio;
+        private readonly IMapper _mapper;
+
+        public ListarTransaccionHandler(IRepositorioTransaccion repositorio, IMapper mapper)
+        {
+            _repositorio = repositorio;
+            _mapper = mapper;
+        }
+
+        public async Task<ListarTransaccionMS> Handle(ListarTransaccionME request, CancellationToken cancellationToken)
+        {
+            var _model = await _repositorio.GetAllWithAssociations();
+            var _retorno = new ListarTransaccionMS();
+            var totalElementos = 0;
+            Filtro<Transaccion>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
+            _retorno.Transacciones = _mapper.Map<List<ModeloListaTransaccion>>(_model);
+            _retorno.CantidadElementos = request.CantidadElementos;
+            _retorno.Pagina = request.Pagina;
+            return _retorno;
+        }
+    }
+}

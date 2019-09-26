@@ -15,6 +15,8 @@ using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using System;
 
@@ -109,6 +111,24 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
               .ForMember(m => m.NombreUsuario, opt => opt.MapFrom(d => d.UserName));
             #endregion
 
+            #region Transacciones
+            CreateMap<CrearTransaccionME, Transaccion>()
+                .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
+                .ForMember(m => m.Agente, opt => opt.MapFrom(d => new Transaccion() { Id = new Guid(d.IdAgente) }));
+
+            CreateMap<Transaccion, ObtenerTransaccionMS>()
+               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
+               .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente));
+
+            CreateMap<Transaccion, ModeloListaTransaccion>()
+               .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+               .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+               .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
+               .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente));
+            #endregion
+
             #region Catalogo
             CreateMap<CrearCatalogoME, Catalogo>()
                 .ForMember(m => m.TipoCatalogo, opt => opt.MapFrom(d => new TipoCatalogo() { Id = new Guid(d.IdTipoCatalogo) }));
@@ -167,6 +187,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListaSupervisoresDiposniblesME, ModeloPaginacion>();
             CreateMap<ListaUsuariosDiposniblesME, ModeloPaginacion>();
             CreateMap<ListarAlertaME, ModeloPaginacion>();
+            CreateMap<ListarTransaccionME, ModeloPaginacion>();
+            CreateMap<ListaAgenteConsolaME, ModeloPaginacion>();
             #endregion
         }
     }

@@ -20,8 +20,11 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public string JsonDatos { get; set; }
         public Catalogo Estado { get; set; }
         public double Valor { get; set; }
-        public int CanalId { get; set; }
+        public double SaldoDisponible { get; set; }
+        public string Comisiones { get; set; }
+        public string CanalId { get; set; }
         public bool ReposicionRealizada { get; set; }
+        public string Descripcion { get; set; }
 
         public bool EstaActivo { get; set; }
         [Timestamp]
