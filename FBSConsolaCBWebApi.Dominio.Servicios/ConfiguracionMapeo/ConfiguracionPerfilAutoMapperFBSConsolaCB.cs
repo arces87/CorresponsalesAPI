@@ -127,6 +127,11 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
                .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
                .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente));
+            CreateMap<Transaccion, ModeloListaTransaccionAgente>()
+              .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
+              .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
+              .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
+              .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente));
             #endregion
 
             #region Catalogo

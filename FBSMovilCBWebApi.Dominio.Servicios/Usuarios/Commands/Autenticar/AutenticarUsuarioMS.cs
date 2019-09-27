@@ -3,6 +3,8 @@
     public class AutenticarUsuarioMS
     {
         public string Token { get; set; }
+        public bool ValidarOtpAgente { get; set; }
+        public bool ValidarOtpCliente { get; set; }
         public ComisionesMS Comisiones { get; set; }
     }
 }

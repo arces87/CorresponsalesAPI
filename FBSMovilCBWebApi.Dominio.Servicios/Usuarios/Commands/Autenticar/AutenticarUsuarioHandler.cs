@@ -65,7 +65,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     var usuario = new AutenticarUsuarioMS()
                                     {
                                         Token = usuarioAutenticado.Token,
-                                        Comisiones = new ComisionesMS()
+                                        Comisiones = new ComisionesMS(),
+                                        ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
+                                        ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente
                                     };
                                     var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
                                     if (jsonNegocio != null)
