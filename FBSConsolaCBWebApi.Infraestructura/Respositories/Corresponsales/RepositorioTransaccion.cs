@@ -105,7 +105,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 conexion.Open();
                 var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                   "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
-                  "left join Nomenclador.Catalogo tipo on transaccion.TipoId = tipo.Id " +
+                  "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
                   "where transaccion.EstaActivo='true' and agente.Id = @Id",
                     (transaccion, agente, estado) =>
                     {
@@ -125,8 +125,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 conexion.Open();
                 var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                   "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
-                  "left join Nomenclador.Catalogo tipo on transaccion.TipoId = tipo.Id " +
-                  "where transaccion.EstaActivo='true' and transaccion.tipo = @idTipo and agente.Id = @IdAgente " +
+                  "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                  "where transaccion.EstaActivo='true' and transaccion.Tipo = @idTipo and agente.Id = @IdAgente " +
                   "and transaccion.ReposicionRealizada = 'false'",
                     (transaccion, agente, estado) =>
                     {
