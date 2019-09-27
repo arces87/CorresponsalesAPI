@@ -12,6 +12,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands
         public string JsonDispositivo { get; set; }
         public string JsonLog { get; set; }
         public string IdTipoAccion { get; set; }
+        public string IdEstado { get; set; }
         public string RelacionadoId { get; set; }
     }
 }

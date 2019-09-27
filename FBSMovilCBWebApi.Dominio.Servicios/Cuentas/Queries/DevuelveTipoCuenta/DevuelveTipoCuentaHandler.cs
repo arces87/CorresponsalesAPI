@@ -17,11 +17,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             return new DevuelveTipoCuentaMS()
             {
                 TiposCuentas = new List<ModeloTipoCuenta>() {
-                new ModeloTipoCuenta() { Scuencial="12345",
+                new ModeloTipoCuenta() { Secuencial="12345",
                 Codigo="DE",
                 Nombre = "Débito"
                 },
-                new ModeloTipoCuenta() { Scuencial="12346",
+                new ModeloTipoCuenta() { Secuencial="12346",
                 Codigo="CR",
                 Nombre = "Crédito"
                 }}

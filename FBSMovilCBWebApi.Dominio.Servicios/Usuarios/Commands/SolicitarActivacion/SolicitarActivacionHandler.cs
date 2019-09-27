@@ -4,7 +4,9 @@ using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -32,6 +34,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
         public async Task<bool> Handle(SolicitarActivacionME request, CancellationToken cancellationToken)
         {
+            await _mediador.Send(new CrearLogME()
+            {
+                IdUsuario = request.Usuario,
+                JsonLog = JsonConvert.SerializeObject(request),
+                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdActivacion").Valor,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+            });
             try
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
@@ -52,6 +61,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                 await _repositorioGeolocalizacion.Remove(geolocalizacion);
                             }
                             await _repositorioGeolocalizacion.AdicionarGeolocalizacionAgente(request.Latitud, request.Longitud, agente.Id.ToString());
+                            await _mediador.Send(new CrearLogME()
+                            {
+                                IdUsuario = request.Usuario,
+                                JsonLog = JsonConvert.SerializeObject(request),
+                                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdActivacion").Valor,
+                                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                            });
                             return true;
                         }
                     }

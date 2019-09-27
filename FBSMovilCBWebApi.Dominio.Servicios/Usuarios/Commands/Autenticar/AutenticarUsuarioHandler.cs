@@ -4,6 +4,7 @@ using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
 using System;
@@ -21,7 +22,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
-        public AutenticarUsuarioHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper, IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
+        public AutenticarUsuarioHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper,
+            IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -32,6 +34,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
         public async Task<AutenticarUsuarioMS> Handle(AutenticarUsuarioME request, CancellationToken cancellationToken)
         {
+            await _mediador.Send(new CrearLogME()
+            {
+                IdUsuario = request.Usuario,
+                JsonLog = JsonConvert.SerializeObject(request),
+                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+            });
             try
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
@@ -68,7 +77,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         if (jsonNegocio.Retiro != null)
                                             usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
                                     }
-
+                                    await _mediador.Send(new CrearLogME()
+                                    {
+                                        IdUsuario = request.Usuario,
+                                        JsonLog = JsonConvert.SerializeObject(usuario),
+                                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
+                                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                                    });
                                     return usuario;
                                 }
                             }

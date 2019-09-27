@@ -35,7 +35,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region Log
             CreateMap<CrearLogME, Log>()
                .ForMember(m => m.TipoAccion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoAccion) }))
-               .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { Id = d.IdUsuario }));
+               .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
+               .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { UserName = d.IdUsuario }));
             CreateMap<Log, ObtenerModeloLog>();
             CreateMap<Log, ModeloObtenerDetalleListaLog>();
             #endregion

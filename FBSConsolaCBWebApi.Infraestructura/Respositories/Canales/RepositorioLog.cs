@@ -85,7 +85,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
         public override async Task<string> Add(Log entidad)
         {
             entidad.TipoAccion = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.TipoAccion.Id);
-            entidad.Usuario = Context.Users.FirstOrDefault(c => c.Id == entidad.Usuario.Id);
+            entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
+            entidad.Usuario = Context.Users.FirstOrDefault(c => c.UserName == entidad.Usuario.UserName);
             entidad.EstaActivo = true;
             Context.Logs.Add(entidad);
             await Context.SaveChangesAsync();
@@ -94,6 +95,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
         public override async Task Update(Log entidad)
         {
             entidad.TipoAccion = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.TipoAccion.Id);
+            entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
             entidad.Usuario = Context.Users.FirstOrDefault(c => c.Id == entidad.Usuario.Id);
             _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();

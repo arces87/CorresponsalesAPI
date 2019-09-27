@@ -1,6 +1,4 @@
-﻿using FBS.Dominio.Modelos.Filtro;
-using MediatR;
-using System.Collections.Generic;
+﻿using MediatR;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
 {

@@ -4,14 +4,16 @@ using FBSConsolaCBWebApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    partial class ContextoFBSConsolaCBModelSnapshot : ModelSnapshot
+    [Migration("20190927131356_ModificandoTipoDatoIdRelacionadoLog")]
+    partial class ModificandoTipoDatoIdRelacionadoLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -464,8 +466,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<bool>("EstaActivo");
 
-                    b.Property<Guid?>("EstadoId");
-
                     b.Property<DateTime>("Fecha");
 
                     b.Property<TimeSpan>("Hora");
@@ -481,8 +481,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<string>("UsuarioId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EstadoId");
 
                     b.HasIndex("TipoAccionId");
 
@@ -827,10 +825,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Log", b =>
                 {
-                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoId");
-
                     b.HasOne("FBS.DAL.Nomenclador.Catalogo", "TipoAccion")
                         .WithMany()
                         .HasForeignKey("TipoAccionId");

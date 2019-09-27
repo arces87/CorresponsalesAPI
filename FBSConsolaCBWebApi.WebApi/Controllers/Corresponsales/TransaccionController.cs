@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

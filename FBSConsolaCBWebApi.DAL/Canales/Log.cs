@@ -18,7 +18,8 @@ namespace FBSConsolaCBWebApi.DAL.Canales
         public string JsonDispositivo { get; set; }
         public string JsonLog { get; set; }
         public Catalogo TipoAccion { get; set; }
-        public int RelacionadoId { get; set; }
+        public Catalogo Estado { get; set; }
+        public string RelacionadoId { get; set; }
 
         public bool EstaActivo { get; set; }
         [Timestamp]

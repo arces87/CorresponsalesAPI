@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
-using FBS.DAL.Nomenclador;
-using FBS.Dominio.Modelos.Filtro;
-using FBS.Dominio.Servicios.Utilidades;
 using FBS.Identidad.DAL.Modelado;
-using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using MediatR;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
