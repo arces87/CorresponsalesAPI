@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
+using FBS.Identidad.DAL.Modelado;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,13 +16,18 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
     public class ListaAgenteConsolaHandler : IRequestHandler<ListaAgenteConsolaME, ListaAgenteConsolaMS>
     {
         private readonly IRepositorioAgente _repositorio;
-        private readonly IRepositorioCuenta _repositorioCuenta;
+        private readonly IRepositorioTransaccion _repositorioTransaccion;
+        private readonly IRepositorioAlerta _repositorioAlerta;
+        private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
 
-        public ListaAgenteConsolaHandler(IRepositorioAgente repositorio, IRepositorioCuenta repositorioCuenta, IMapper mapper)
+        public ListaAgenteConsolaHandler(IRepositorioAgente repositorio, IRepositorioAlerta repositorioAlerta, IRepositorioTransaccion repositorioTransaccion,
+            IJsonConfiguracion jsonConfiguracion, IMapper mapper)
         {
             _repositorio = repositorio;
-            _repositorioCuenta = repositorioCuenta;
+            _repositorioAlerta = repositorioAlerta;
+            _repositorioTransaccion = repositorioTransaccion;
+            _jsonConfiguracion = jsonConfiguracion;
             _mapper = mapper;
         }
 
@@ -30,19 +38,30 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
             var totalElementos = 0;
             Filtro<Agente>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
             _retorno.TotalElementos = totalElementos;
-            _retorno.Agentes = new List<ModeloListaAgenteConsola>() {
-                new ModeloListaAgenteConsola() {
-                    ExistenciaCaja =300,
-                    NumeroAlerta =1,
-                    Id="A8489002-0E14-4AEE-1224-08D73DFC44ED",
-                    NombreAgente="Agente",
-                    NumeroTransacciones=3,
-                    Ubicacion="Casa",
-                    ValorComision=4,
-                    ValorReposicion=300,
-                    Estado=true
+            _retorno.Agentes = new List<ModeloListaAgenteConsola>();
+            foreach (var item in _model)
+            {
+                var transacciones = await _repositorioTransaccion.GetForAgente(item.Id.ToString());
+                var comisiones = 0.0;
+                foreach (var transaccion in transacciones)
+                {
+                    var comision = JsonConvert.DeserializeObject<ComsionAgente>(transaccion.Comisiones);
+                    comisiones += comision.Agente + comision.Cooperativa + comision.AdministracionCanal;
                 }
-            };
+                var alertas = await _repositorioAlerta.GetForAgente(item.Id.ToString());
+                _retorno.Agentes.Add(new ModeloListaAgenteConsola()
+                {
+                    ExistenciaCaja = transacciones.Last().SaldoDisponible,
+                    NumeroAlerta = alertas.Count(),
+                    Id = item.Id.ToString(),
+                    NombreAgente = item.NombreAgente,
+                    NumeroTransacciones = transacciones.Count(),
+                    Ubicacion = item.Ubicacion,
+                    ValorComision = comisiones,
+                    ValorReposicion = transacciones.Sum(t => t.Valor),
+                    Estado = item.Estado.Id.ToString() == _jsonConfiguracion.Parametrizaciones.FirstOrDefault(j => j.Llave == "AgenteIdEstadoActivo").Valor ? true : false
+                });
+            }
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
             return _retorno;

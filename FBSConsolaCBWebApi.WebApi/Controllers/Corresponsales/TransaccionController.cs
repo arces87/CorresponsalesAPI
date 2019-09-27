@@ -23,6 +23,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("listaAgenteTipoTransaccion", Name = "Transaccion_ListarTransaccionesPorAgenteTipo")]
+        public async Task<ActionResult<ListarTransaccionAgenteMS>> ListarPorAgenteTipo([FromBody] ListarTransaccionAgenteME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost("listaTipoTransaccion", Name = "Transaccion_ListarTiposTransacciones")]
         public async Task<ActionResult<ListarTipoTransaccionMS>> ListarTiposTransacciones([FromBody] ListarTipoTransaccionME modelo)
         {

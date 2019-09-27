@@ -51,6 +51,26 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 return alertas.ToList();
             }
         }
+        public async Task<IEnumerable<Alerta>> GetForAgente(string IdAgente)
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                    "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
+                    "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
+                    "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                    "where alerta.EstaActivo='true' and agente.Id =@IdAgente",
+                   (alerta, estado, agente, tipo) =>
+                   {
+                       alerta.Estado = estado;
+                       alerta.Agente = agente;
+                       alerta.Tipo = tipo;
+                       return alerta;
+                   }, param: new { IdAgente });
+                return alertas.ToList();
+            }
+        }
         public async Task<Alerta> GetWithAssociations(string Id)
         {
             using (var conexion = Conexion)

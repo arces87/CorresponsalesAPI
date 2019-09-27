@@ -9,6 +9,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
     {
         Task<IEnumerable<Alerta>> GetAllActive();
         Task<IEnumerable<Alerta>> GetAllWithAssociations();
+        Task<IEnumerable<Alerta>> GetForAgente(string IdAgente);
         Task<Alerta> GetWithAssociations(string Id);
 
     }
