@@ -92,6 +92,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             CreateMap<Geolocalizacion, ModeloListaActivarAgente>()
                 .ForMember(m => m.Id, opt => opt.Ignore());
+            CreateMap<Cuenta, ModeloListaActivarAgente>()
+              .ForMember(m => m.Id, opt => opt.Ignore());
             CreateMap<Agente, ModeloListaActivarAgente>()
                .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
@@ -194,6 +196,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListarAlertaME, ModeloPaginacion>();
             CreateMap<ListarTransaccionME, ModeloPaginacion>();
             CreateMap<ListaAgenteConsolaME, ModeloPaginacion>();
+            CreateMap<ListaActivarAgenteME, ModeloPaginacion>();
             #endregion
         }
     }

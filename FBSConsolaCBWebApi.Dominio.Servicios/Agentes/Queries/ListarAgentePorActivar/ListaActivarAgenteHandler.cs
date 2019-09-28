@@ -15,12 +15,15 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
     {
         private readonly IRepositorioAgente _repositorio;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
+        private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IMapper _mapper;
 
-        public ListaActivarAgenteHandler(IRepositorioAgente repositorio, IRepositorioGeolocalizacion repositorioGeolocalizacion, IMapper mapper)
+        public ListaActivarAgenteHandler(IRepositorioAgente repositorio, IRepositorioGeolocalizacion repositorioGeolocalizacion,
+            IRepositorioCuenta repositorioCuenta, IMapper mapper)
         {
             _repositorio = repositorio;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
+            _repositorioCuenta = repositorioCuenta;
             _mapper = mapper;
         }
 
@@ -37,6 +40,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
                 var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(item.Id);
                 if (geolocalizacion != null)
                     _mapper.Map(geolocalizacion, item);
+                var cuenta = await _repositorioCuenta.GetForAgente(item.Id);
+                if (cuenta != null)
+                    _mapper.Map(cuenta, item);
             }
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;

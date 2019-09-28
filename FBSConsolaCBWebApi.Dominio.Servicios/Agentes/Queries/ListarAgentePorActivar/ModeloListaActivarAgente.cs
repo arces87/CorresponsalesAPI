@@ -19,6 +19,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 
         public string IdDispositivo { get; set; }
         public string NombreDispositivo { get; set; }
+        public string NumeroCuenta { get; set; }
 
         public double Latitud { get; set; }
         public double Longitud { get; set; }
