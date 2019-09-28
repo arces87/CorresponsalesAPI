@@ -196,7 +196,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         {
             using (var conexion = Conexion)
             {
-                var idRol = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRolSuperisor").Valor;
+                var idRol = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRolSupervisor").Valor;
                 conexion.Open();
                 var usuarios = await conexion.QueryAsync<Usuario>(@"SELECT Seguridad.Usuario.Id,Seguridad.Usuario.Codigo as UserName FROM Seguridad.Usuario " +
                     "left join Seguridad.UsuarioRol on Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId " +
