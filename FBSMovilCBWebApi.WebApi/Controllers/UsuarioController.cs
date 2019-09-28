@@ -30,5 +30,17 @@ namespace FBSMovilCBWebApi.WebApi
         {
             return Ok(await _mediador.Send(modelo));
         }
+
+        [HttpPost("solicitudOtp", Name = "Usuario_SolicitarOtp")]
+        public async Task<ActionResult> SolicitarOtp([FromBody] SolicitarOtpME modelo)
+        {
+            return Ok(await _mediador.Send(modelo));
+        }
+
+        [HttpPost("verificarOtp", Name = "Usuario_VerificarOtp")]
+        public async Task<ActionResult> VerificarOtp([FromBody] VerificarOtpME modelo)
+        {
+            return Ok(await _mediador.Send(modelo));
+        }
     }
 }
