@@ -3,6 +3,7 @@ using FBS.Dominio.Modelos.Filtro;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
+using FBS.Identidad.Dominio.Servicios.Usuarios.Queries;
 using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands;
@@ -197,6 +198,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListarTransaccionME, ModeloPaginacion>();
             CreateMap<ListaAgenteConsolaME, ModeloPaginacion>();
             CreateMap<ListaActivarAgenteME, ModeloPaginacion>();
+            CreateMap<ListaUsuarioME, ModeloPaginacion>();
             #endregion
         }
     }

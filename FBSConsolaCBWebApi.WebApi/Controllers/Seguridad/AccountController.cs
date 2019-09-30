@@ -19,10 +19,10 @@ namespace FBSConsolaCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpGet("lista", Name = "Usuario_ListarUsuarios")]
-        public async Task<ActionResult<ListaUsuarioMS>> Listar()
+        [HttpPost("lista", Name = "Usuario_ListarUsuarios")]
+        public async Task<ActionResult<ListaUsuarioMS>> Listar([FromBody] ListaUsuarioME modelo)
         {
-            return await _mediador.Send(new ListaUsuarioME());
+            return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtener", Name = "Usuario_ObtenerUsuario")]
