@@ -64,24 +64,40 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 nombreDestino = agente.NombreAgente;
             }
             if (cuentaDestino != "" && nombreDestino != "")
-                _correoElectronico.Enviar(new ModeloMensaje()
+                try
                 {
-                    Asunto = "OTP Banca Movil",
-                    Mensaje = "Su OTP para realizar la Operación es: " + totp.ComputeTotp(),
-                    DireccionesDestino = new List<ModeloCuentaCorreo>() {
+                    _correoElectronico.Enviar(new ModeloMensaje()
+                    {
+                        Asunto = "OTP Banca Movil",
+                        Mensaje = "Su OTP para realizar la Operación es: " + totp.ComputeTotp(),
+                        DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo(){
                             Direccion=cuentaDestino,
                             Nombre = nombreDestino
                         }
                     }
-                });
-            await _mediador.Send(new CrearLogME()
-            {
-                IdUsuario = request.Usuario,
-                JsonLog = JsonConvert.SerializeObject(request),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
-                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-            });
+                    });
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        IdUsuario = request.Usuario,
+                        JsonLog = JsonConvert.SerializeObject(request),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
+                }
+                catch (Exception)
+                {
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        IdUsuario = request.Usuario,
+                        JsonLog = JsonConvert.SerializeObject("No se ha podido enviar el correo electrónico"),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
+                    throw new Exception("No se ha podido enviar el Correo Electrónico");
+                    
+                }
+
             return true;
         }
     }

@@ -66,6 +66,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     {
                                         Token = usuarioAutenticado.Token,
                                         Comisiones = new ComisionesMS(),
+                                        Identificacion = agente.Identificacion,
                                         ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
                                         ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente
                                     };
