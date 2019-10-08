@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
@@ -30,6 +31,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands
         public async Task<string> Handle(CrearLogME request, CancellationToken cancellationToken)
         {
             var _model = _mapper.Map<Log>(request);
+            _model.Usuario = new Usuario() { UserName = _httpContext.HttpContext.User.Identity.Name };
             var logDispositivo = new LogDispositivo()
             {
                 Agente = _httpContext.HttpContext.Request.Headers["User-Agent"],

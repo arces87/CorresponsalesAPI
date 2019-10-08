@@ -1,31 +1,28 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using ServiciosFinancial;
+using ServiciosFinancial.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class DevuelveTipoCuentaHandler : IRequestHandler<DevuelveTipoCuentaME, DevuelveTipoCuentaMS>
+    public class DevuelveTipoCuentaHandler : IRequestHandler<DevuelveTipoCuentaME, TiposCuentaClienteMSL>
     {
+        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IMapper _mapper;
 
-        public DevuelveTipoCuentaHandler()
+        public DevuelveTipoCuentaHandler(IFBSCorresponsalesApi financialApi, IMapper mapper)
         {
+            _financialApi = financialApi;
+            _mapper = mapper;
         }
 
-        public async Task<DevuelveTipoCuentaMS> Handle(DevuelveTipoCuentaME request, CancellationToken cancellationToken)
+        public async Task<TiposCuentaClienteMSL> Handle(DevuelveTipoCuentaME request, CancellationToken cancellationToken)
         {
-            return new DevuelveTipoCuentaMS()
-            {
-                TiposCuentas = new List<ModeloTipoCuenta>() {
-                new ModeloTipoCuenta() { Secuencial="12345",
-                Codigo="DE",
-                Nombre = "Débito"
-                },
-                new ModeloTipoCuenta() { Secuencial="12346",
-                Codigo="CR",
-                Nombre = "Crédito"
-                }}
-            };
+            var respuesta = await _financialApi.Cuentas.DevuelveTiposDeCuentasDeUnClienteWithHttpMessagesAsync(_mapper.Map<PorSecuencialClienteDeUnaEmpresaProductoVista>(request));
+            return respuesta.Body;
         }
     }
 }

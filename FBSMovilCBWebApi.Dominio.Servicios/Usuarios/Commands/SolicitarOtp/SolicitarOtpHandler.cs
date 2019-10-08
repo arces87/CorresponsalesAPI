@@ -46,7 +46,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         {
             await _mediador.Send(new CrearLogME()
             {
-                IdUsuario = request.Usuario,
                 JsonLog = JsonConvert.SerializeObject(request),
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
@@ -79,7 +78,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     });
                     await _mediador.Send(new CrearLogME()
                     {
-                        IdUsuario = request.Usuario,
                         JsonLog = JsonConvert.SerializeObject(request),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
@@ -89,7 +87,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 {
                     await _mediador.Send(new CrearLogME()
                     {
-                        IdUsuario = request.Usuario,
                         JsonLog = JsonConvert.SerializeObject("No se ha podido enviar el correo electrónico"),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,

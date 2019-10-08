@@ -3,6 +3,7 @@ using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ServiciosFinancial.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,15 +20,15 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("crearCuenta", Name = "Cuenta_CrearCuenta")]
-        [Produces(typeof(CrearCuentaMS))]
-        public async Task<ActionResult<CrearCuentaMS>> CrearCuenta([FromBody] CrearCuentaME modelo)
+        [Produces(typeof(CreaCuentaMS))]
+        public async Task<ActionResult<CreaCuentaMS>> CrearCuenta([FromBody] CrearCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("buscarTipoCuenta", Name = "Cuenta_DevuelveTipoCuenta")]
-        [Produces(typeof(DevuelveTipoCuentaMS))]
-        public async Task<ActionResult<DevuelveTipoCuentaMS>> BuscarTipoCuenta([FromBody] DevuelveTipoCuentaME modelo)
+        [Produces(typeof(TiposCuentaClienteMSL))]
+        public async Task<ActionResult<TiposCuentaClienteMSL>> BuscarTipoCuenta([FromBody] DevuelveTipoCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }

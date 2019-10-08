@@ -1,12 +1,11 @@
 ﻿using MediatR;
+using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarRetiroME : IRequest<ProcesarRetiroMS>
+    public class ProcesarRetiroME : IRequest<RespuestaProcesoRetiroMS>
     {
-        public string Usuario { get; set; }
-        public string SecuencialCuenta { get; set; }
-        public double Monto { get; set; }
-        public string CodigoInsitucion { get; set; }
+        public string NumeroCuenta { get; set; }
+        public double Valor { get; set; }
     }
 }

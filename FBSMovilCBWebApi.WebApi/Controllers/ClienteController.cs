@@ -3,6 +3,7 @@ using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ServiciosFinancial.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,15 +20,15 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("crearCliente", Name = "Cliente_CrearCliente")]
-        [Produces(typeof(CrearClienteMS))]
-        public async Task<ActionResult<CrearClienteMS>> CrearCliente([FromBody] CrearClienteME modelo)
+        [Produces(typeof(CreaClienteMS))]
+        public async Task<ActionResult<CreaClienteMS>> CrearCliente([FromBody] CrearClienteME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("buscarCliente", Name = "Cliente_BuscarCliente")]
-        [Produces(typeof(BuscarClienteMS))]
-        public async Task<ActionResult<BuscarClienteMS>> BuscarCliente([FromBody] BuscarClienteME modelo)
+        [Produces(typeof(InformacionPersonaMS))]
+        public async Task<ActionResult<InformacionPersonaMS>> BuscarCliente([FromBody] BuscarClienteME modelo)
         {
             return await _mediador.Send(modelo);
         }

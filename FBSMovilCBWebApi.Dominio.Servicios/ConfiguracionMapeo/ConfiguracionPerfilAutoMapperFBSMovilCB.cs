@@ -7,9 +7,15 @@ using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
+using ServiciosFinancial.Models;
 using System;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
@@ -20,9 +26,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
         {
             #region Alerta
             CreateMap<CrearAlertaME, Alerta>()
-               .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
-               .ForMember(m => m.Agente, opt => opt.MapFrom(d => new Agente() { Id = new Guid(d.IdAgente) }))
-               .ForMember(m => m.Tipo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }));
+               .ForMember(m => m.Tipo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipo) }));
             CreateMap<Alerta, ModeloListaAlerta>()
                 .ForMember(m => m.IdEstado, opt => opt.MapFrom(d => d.Estado.Id))
                .ForMember(m => m.NombreEstado, opt => opt.MapFrom(d => d.Estado.Nombre))
@@ -35,8 +39,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #region Log
             CreateMap<CrearLogME, Log>()
                .ForMember(m => m.TipoAccion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoAccion) }))
-               .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }))
-               .ForMember(m => m.Usuario, opt => opt.MapFrom(d => new Usuario() { UserName = d.IdUsuario }));
+               .ForMember(m => m.Estado, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdEstado) }));
             CreateMap<Log, ObtenerModeloLog>();
             CreateMap<Log, ModeloObtenerDetalleListaLog>();
             #endregion
@@ -49,6 +52,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ComisionOperacion, ComisionOperacionMS>();
             #endregion
 
+
+            #region Servicios Financial
+            CreateMap<CrearCuentaME, CreaCuentaME>();
+            CreateMap<CrearClienteME, NuevaPersonaNaturalMinimoClienteME>();
+            CreateMap<BuscarClienteME, PorIdentificacionSocioME>();
+            CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVista>();
+            CreateMap<ProcesarDepositoME, PedidoDatosTransaccionDepositoME>();
+            #endregion
         }
     }
 }

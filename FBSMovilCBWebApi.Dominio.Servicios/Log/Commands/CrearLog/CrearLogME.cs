@@ -5,7 +5,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands
 {
     public class CrearLogME : IRequest<string>
     {
-        public string IdUsuario { get; set; }
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }
         public string Criptografia { get; set; }

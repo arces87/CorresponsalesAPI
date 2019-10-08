@@ -45,6 +45,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("obtenerRecaudaciones", Name = "Transaccion_ObtenerRecaudaciones")]
+        public async Task<ActionResult<ListarRecaudacionesMS>> ObtenerRecaudaciones([FromBody] ListarRecaudacionesME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost("obtener", Name = "Transaccion_ObtenerTransaccion")]
         public async Task<ActionResult<ObtenerTransaccionMS>> Get([FromBody] ObtenerTransaccionME modelo)
         {
