@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
+﻿namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
 {
     public class ListarRecaudacionesMS
     {

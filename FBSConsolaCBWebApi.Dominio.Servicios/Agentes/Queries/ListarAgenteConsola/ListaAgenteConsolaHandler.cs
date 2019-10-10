@@ -43,22 +43,24 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
             {
                 var transacciones = await _repositorioTransaccion.GetForAgente(item.Id.ToString());
                 var comisiones = 0.0;
+                transacciones = transacciones.Where(t => !t.ReposicionRealizada).ToList();
                 foreach (var transaccion in transacciones)
                 {
                     var comision = JsonConvert.DeserializeObject<ComsionAgente>(transaccion.Comisiones);
                     comisiones += comision.Agente + comision.Cooperativa + comision.AdministracionCanal;
                 }
                 var alertas = await _repositorioAlerta.GetForAgente(item.Id.ToString());
+                var saldoDisponible = await _repositorioTransaccion.GetSaldoActual(item.Id.ToString());
                 _retorno.Agentes.Add(new ModeloListaAgenteConsola()
                 {
-                    ExistenciaCaja = transacciones.Last().SaldoDisponible,
+                    ExistenciaCaja = saldoDisponible,
                     NumeroAlerta = alertas.Count(),
                     Id = item.Id.ToString(),
                     NombreAgente = item.NombreAgente,
-                    NumeroTransacciones = transacciones.Count(),
+                    NumeroTransacciones = transacciones != null ? transacciones.Count() : 0,
                     Ubicacion = item.Ubicacion,
                     ValorComision = comisiones,
-                    ValorReposicion = transacciones.Sum(t => t.Valor),
+                    ValorReposicion = transacciones != null ? transacciones.Sum(t => t.Valor) : 0,
                     Estado = item.Estado.Id.ToString() == _jsonConfiguracion.Parametrizaciones.FirstOrDefault(j => j.Llave == "AgenteIdEstadoActivo").Valor ? true : false
                 });
             }

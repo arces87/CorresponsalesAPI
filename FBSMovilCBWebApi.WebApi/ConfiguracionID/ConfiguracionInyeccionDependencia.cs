@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using ServiciosFinancial;
 using System.Net.Http;
+using ServiciosFacilito;
 
 namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 {
@@ -49,6 +50,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
             var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
             var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
+            jsonConfiguracion.IdCanal = configuracion["CanalBase"];
             services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
 
             var httpClient = new HttpClient
@@ -56,6 +58,11 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
                 BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+            var httpClientFacilito = new HttpClient
+            {
+                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFacilito").Valor)
+            };
+            services.AddSingleton<IFBSFacilitoAPI>(new FBSFacilitoAPI(httpClientFacilito, false));
         }
     }
 }

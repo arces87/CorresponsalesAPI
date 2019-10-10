@@ -68,6 +68,23 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 return transacciones.FirstOrDefault();
             }
         }
+        public async Task<double> GetSaldoActual(string IdAgente)
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var transacciones = await conexion.QueryAsync<Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
+                  "where transaccion.EstaActivo='true' and transaccion.ReposicionRealizada = 'false' and transaccion.AgenteId = @IdAgente " +
+                  "order by transaccion.FechaSistema",
+                  param: new { IdAgente });
+                var ultimaTransaccion = transacciones.LastOrDefault();
+                if (ultimaTransaccion != null)
+                {
+                    return ultimaTransaccion.SaldoDisponible;
+                }
+                return 0;
+            }
+        }
 
         public override async Task<Transaccion> Get(string Id)
         {

@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using FBS.Dominio.Modelos.Filtro;
-using FBS.Dominio.Servicios.Utilidades;
 using FBS.Identidad.DAL.Modelado;
-using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using System.Collections.Generic;
@@ -34,6 +31,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var valorRetiro = 0.0;
             var valorCobroServicio = 0.0;
             var _retorno = new ListarRecaudacionesMS();
+            _retorno.MontoCaja = await _repositorio.GetSaldoActual(request.IdAgente);
             if (idDeposito != null)
             {
 

@@ -32,9 +32,9 @@ namespace FBSMovilCBWebApi.WebApi
         {
             return await _mediador.Send(modelo);
         }
-        [HttpPost("buscarCuenta", Name = "Cuenta_DevuelveCuenta")]
-        [Produces(typeof(DevuelveCuentaMS))]
-        public async Task<ActionResult<DevuelveCuentaMS>> BuscarCuenta([FromBody] DevuelveCuentaME modelo)
+        [HttpPost("buscarCuentas", Name = "Cuenta_DevuelveCuentas")]
+        [Produces(typeof(ConsolidadoCuentasMSL))]
+        public async Task<ActionResult<ConsolidadoCuentasMSL>> BuscarCuenta([FromBody] DevuelveCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }

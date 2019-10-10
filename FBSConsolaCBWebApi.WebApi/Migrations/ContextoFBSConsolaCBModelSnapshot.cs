@@ -628,6 +628,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("NombreCliente");
 
+                    b.Property<string>("NumeroCuenta");
+
                     b.Property<bool>("ReposicionRealizada");
 
                     b.Property<double>("SaldoDisponible");

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using FBS.DAL.Nomenclador;
 using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
-using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
@@ -10,7 +8,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
 using OtpNet;
-using System;
 using System.Linq;
 using System.Text;
 using System.Threading;

@@ -1,36 +1,28 @@
 ﻿using MediatR;
-using System.Collections.Generic;
+using ServiciosFinancial;
+using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class DevuelveCuentaHandler : IRequestHandler<DevuelveCuentaME, DevuelveCuentaMS>
+    public class DevuelveCuentaHandler : IRequestHandler<DevuelveCuentaME, ConsolidadoCuentasMSL>
     {
+        private readonly IFBSCorresponsalesApi _financialApi;
 
-        public DevuelveCuentaHandler()
+        public DevuelveCuentaHandler(IFBSCorresponsalesApi financialApi)
         {
+            _financialApi = financialApi;
         }
 
-        public async Task<DevuelveCuentaMS> Handle(DevuelveCuentaME request, CancellationToken cancellationToken)
+        public async Task<ConsolidadoCuentasMSL> Handle(DevuelveCuentaME request, CancellationToken cancellationToken)
         {
-            return new DevuelveCuentaMS()
+            var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasWithHttpMessagesAsync(new PorClienteDeUnaEmpresaME()
             {
-                TiposCuentas = new List<ModeloCuenta>() {
-                new ModeloCuenta() {
-                    Secuencial ="12345",
-                    NoCuenta="45345324",
-                    Disponible = 200,
-                    TipoCuenta ="DE"
-
-                },
-                new ModeloCuenta() {
-                    Secuencial ="12346",
-                    NoCuenta="45365324",
-                    Disponible = 300,
-                    TipoCuenta ="CR"
-                }}
-            };
+                NumeroCliente = int.Parse(request.SecuencialCliente),
+                SecuencialEmpresa = 1
+            });
+            return respuesta.Body;
         }
     }
 }

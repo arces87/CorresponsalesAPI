@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
-using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;

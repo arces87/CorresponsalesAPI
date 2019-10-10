@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
+using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
+using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBSConsolaCBWebApi.DAL.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
@@ -18,12 +23,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IMapper _mapper;
-        public ProcesarRetiroHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi, IMapper mapper)
+        private readonly IRepositorioTransaccion _repositorioTransaccion;
+        private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IHttpContextAccessor _httpContext;
+
+        public ProcesarRetiroHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
+            IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente,
+            IHttpContextAccessor httpContext)
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
             _financialApi = financialApi;
             _mapper = mapper;
+            _repositorioTransaccion = repositorioTransaccion;
+            _repositorioAgente = repositorioAgente;
+            _httpContext = httpContext;
         }
 
         public async Task<RespuestaProcesoRetiroMS> Handle(ProcesarRetiroME request, CancellationToken cancellationToken)
@@ -34,6 +48,28 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
+            var agente = await _repositorioAgente.GetForUserName(_httpContext.HttpContext.User.Identity.Name);
+            var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
+            var transaccion = new Transaccion()
+            {
+                CanalId = _jsonConfiguracion.IdCanal,
+                Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
+                Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Retiro.Comisiones),
+                Agente = agente,
+                Descripcion = request.Descripcion,
+                FechaDispositivo = DateTime.Now,
+                FechaSistema = DateTime.Now,
+                HoraDispositivo = DateTime.Now.TimeOfDay,
+                IdentificacionCliente = request.IdentificacionCliente,
+                NombreCliente = request.NombreCliente,
+                NumeroCuenta = request.NumeroCuenta,
+                Valor = request.Valor,
+                JsonDatos = JsonConvert.SerializeObject(request),
+                SaldoDisponible = saldoActual - request.Valor,
+                Tipo = "Retiro",
+                EstaActivo = true
+            };
+            var idTransaccion = await _repositorioTransaccion.Add(transaccion);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -49,6 +85,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
+            transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
+            await _repositorioTransaccion.Update(transaccion);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),

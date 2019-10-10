@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
-using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
-using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ServiciosFinancial.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,11 +18,17 @@ namespace FBSMovilCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpPost("cerrarDia", Name = "HoaColecta_CerrarDia")]
-        public async Task<ActionResult> CerrarDia([FromBody] CerrarDiaME modelo)
+        [HttpPost("cerrarDia", Name = "HojaColecta_CerrarDia")]
+        public async Task<ActionResult<bool>> CerrarDia([FromBody] CerrarDiaME modelo)
         {
             await _mediador.Send(modelo);
-            return Ok();
+            return true;
+        }
+
+        [HttpPost("obtenerTransacciones", Name = "HojaColecta_ObtenerTransacciones")]
+        public async Task<ActionResult<ListarHojaColectaMS>> ObtenerTransacciones([FromBody] ListarHojaColectaME modelo)
+        {
+            return await _mediador.Send(modelo);
         }
     }
 }

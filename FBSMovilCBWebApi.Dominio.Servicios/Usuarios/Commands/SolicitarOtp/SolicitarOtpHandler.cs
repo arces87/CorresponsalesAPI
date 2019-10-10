@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using FBS.DAL.Nomenclador;
 using FBS.Dominio.Modelos.CorreoElectronico;
 using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
-using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;

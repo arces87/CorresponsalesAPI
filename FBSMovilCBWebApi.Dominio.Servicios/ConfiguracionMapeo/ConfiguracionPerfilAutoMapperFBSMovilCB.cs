@@ -1,5 +1,4 @@
 ﻿using FBS.DAL.Nomenclador;
-using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
@@ -11,10 +10,14 @@ using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
+using ServiciosFacilito.Models;
 using ServiciosFinancial.Models;
 using System;
 
@@ -52,6 +55,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ComisionOperacion, ComisionOperacionMS>();
             #endregion
 
+            #region Distribuidos
+            CreateMap<Catalogo, DistribuidoIdentificacion>();
+            #endregion
+
+            #region Transacciones
+            CreateMap<Transaccion, ModeloTransaccion>();
+            CreateMap<Transaccion, ModeloListarHojaColecta>();
+            #endregion
 
             #region Servicios Financial
             CreateMap<CrearCuentaME, CreaCuentaME>();
@@ -59,6 +70,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<BuscarClienteME, PorIdentificacionSocioME>();
             CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVista>();
             CreateMap<ProcesarDepositoME, PedidoDatosTransaccionDepositoME>();
+            #endregion
+
+            #region Servicios Facilito
+            CreateMap<ProcesarPagoME, PagoRequest>();
+            CreateMap<ObtenerProductosME, DatosServicioFacilitoRequest>();
+            CreateMap<ConsultaServiciosME, ConsultaRequest>();
             #endregion
         }
     }

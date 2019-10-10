@@ -43,8 +43,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             try
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-                var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
-                if (agente != null && agente.Estado.Id == new Guid(idEstado)) //Comprobacion de existencia del Agente y si se encuentra Activo
+                var idEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
+                var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
+                if (agente != null && (agente.Estado.Id == new Guid(idEstadoActivo) || agente.Estado.Id == new Guid(idEstadoCobrando))) //Comprobacion de existencia del Agente y si se encuentra Activo
                 {
                     if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
                     {

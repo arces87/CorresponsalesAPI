@@ -1,10 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
-using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
-using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ServiciosFinancial.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,10 +18,10 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("abrirDia", Name = "Menu_AbrirDia")]
-        public async Task<ActionResult> AbrirDia([FromBody] AbrirDiaME modelo)
+        public async Task<ActionResult<bool>> AbrirDia([FromBody] AbrirDiaME modelo)
         {
             await _mediador.Send(modelo);
-            return Ok();
+            return true;
         }
     }
 }
