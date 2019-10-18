@@ -70,7 +70,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         Identificacion = agente.Identificacion,
                                         ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
                                         ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente,
-                                        JsonNegocio = jsonNegocio
+                                        JsonNegocio = jsonNegocio,
+                                        Estado = agente.Estado.Nombre
                                     };
 
                                     if (jsonNegocio != null)
