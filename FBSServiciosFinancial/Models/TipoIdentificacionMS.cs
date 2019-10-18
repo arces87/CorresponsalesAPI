@@ -9,27 +9,25 @@ namespace ServiciosFinancial.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class ReferenciaBancariaInformacion
+    public partial class TipoIdentificacionMS
     {
         /// <summary>
-        /// Initializes a new instance of the ReferenciaBancariaInformacion
-        /// class.
+        /// Initializes a new instance of the TipoIdentificacionMS class.
         /// </summary>
-        public ReferenciaBancariaInformacion()
+        public TipoIdentificacionMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ReferenciaBancariaInformacion
-        /// class.
+        /// Initializes a new instance of the TipoIdentificacionMS class.
         /// </summary>
-        public ReferenciaBancariaInformacion(int? secuencial = default(int?), string banco = default(string), string tipoCuentaReferencia = default(string), string numeroCuenta = default(string))
+        public TipoIdentificacionMS(int? secuencial = default(int?), string codigo = default(string), string nombre = default(string), bool? paraPersonaNatural = default(bool?))
         {
             Secuencial = secuencial;
-            Banco = banco;
-            TipoCuentaReferencia = tipoCuentaReferencia;
-            NumeroCuenta = numeroCuenta;
+            Codigo = codigo;
+            Nombre = nombre;
+            ParaPersonaNatural = paraPersonaNatural;
             CustomInit();
         }
 
@@ -45,18 +43,18 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Banco")]
-        public string Banco { get; set; }
+        [JsonProperty(PropertyName = "Codigo")]
+        public string Codigo { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "TipoCuentaReferencia")]
-        public string TipoCuentaReferencia { get; set; }
+        [JsonProperty(PropertyName = "Nombre")]
+        public string Nombre { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "NumeroCuenta")]
-        public string NumeroCuenta { get; set; }
+        [JsonProperty(PropertyName = "ParaPersonaNatural")]
+        public bool? ParaPersonaNatural { get; set; }
 
     }
 }

@@ -46,7 +46,7 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static CreaClienteMS CreaCliente(this IClientes operations, NuevaPersonaNaturalMinimoClienteME request)
+            public static CreaClienteMS CreaCliente(this IClientes operations, CreaClienteME request)
             {
                 return operations.CreaClienteAsync(request).GetAwaiter().GetResult();
             }
@@ -59,9 +59,31 @@ namespace ServiciosFinancial
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CreaClienteMS> CreaClienteAsync(this IClientes operations, NuevaPersonaNaturalMinimoClienteME request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CreaClienteMS> CreaClienteAsync(this IClientes operations, CreaClienteME request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreaClienteWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            public static TiposIdentificacionMSL DevuelveTiposIdentificacion(this IClientes operations)
+            {
+                return operations.DevuelveTiposIdentificacionAsync().GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<TiposIdentificacionMSL> DevuelveTiposIdentificacionAsync(this IClientes operations, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.DevuelveTiposIdentificacionWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

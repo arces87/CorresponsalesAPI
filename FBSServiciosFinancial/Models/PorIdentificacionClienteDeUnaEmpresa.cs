@@ -9,25 +9,25 @@ namespace ServiciosFinancial.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PersonaOrganizacionGrupoPersonaIntegranteInformacion
+    public partial class PorIdentificacionClienteDeUnaEmpresa
     {
         /// <summary>
         /// Initializes a new instance of the
-        /// PersonaOrganizacionGrupoPersonaIntegranteInformacion class.
+        /// PorIdentificacionClienteDeUnaEmpresa class.
         /// </summary>
-        public PersonaOrganizacionGrupoPersonaIntegranteInformacion()
+        public PorIdentificacionClienteDeUnaEmpresa()
         {
             CustomInit();
         }
 
         /// <summary>
         /// Initializes a new instance of the
-        /// PersonaOrganizacionGrupoPersonaIntegranteInformacion class.
+        /// PorIdentificacionClienteDeUnaEmpresa class.
         /// </summary>
-        public PersonaOrganizacionGrupoPersonaIntegranteInformacion(string identificacion = default(string), string nombre = default(string))
+        public PorIdentificacionClienteDeUnaEmpresa(string identificacion = default(string), int? secuencialEmpresa = default(int?))
         {
             Identificacion = identificacion;
-            Nombre = nombre;
+            SecuencialEmpresa = secuencialEmpresa;
             CustomInit();
         }
 
@@ -43,8 +43,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Nombre")]
-        public string Nombre { get; set; }
+        [JsonProperty(PropertyName = "SecuencialEmpresa")]
+        public int? SecuencialEmpresa { get; set; }
 
     }
 }

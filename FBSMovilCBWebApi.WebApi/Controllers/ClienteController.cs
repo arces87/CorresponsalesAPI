@@ -2,6 +2,8 @@
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiciosFinancial.Models;
 
@@ -10,6 +12,7 @@ using ServiciosFinancial.Models;
 namespace FBSMovilCBWebApi.WebApi
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ClienteController : Controller
     {
         private readonly IMediator _mediador;

@@ -41,7 +41,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCliente").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(_mapper.Map<NuevaPersonaNaturalMinimoClienteME>(request));
+            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(_mapper.Map<CreaClienteME>(request));
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),

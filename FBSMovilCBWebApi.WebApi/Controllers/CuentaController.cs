@@ -2,6 +2,8 @@
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiciosFinancial.Models;
 
@@ -10,6 +12,7 @@ using ServiciosFinancial.Models;
 namespace FBSMovilCBWebApi.WebApi
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class CuentaController : Controller
     {
         private readonly IMediator _mediador;
@@ -20,8 +23,8 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("crearCuenta", Name = "Cuenta_CrearCuenta")]
-        [Produces(typeof(CreaCuentaMS))]
-        public async Task<ActionResult<CreaCuentaMS>> CrearCuenta([FromBody] CrearCuentaME modelo)
+        [Produces(typeof(CreaCuentaMSL))]
+        public async Task<ActionResult<CreaCuentaMSL>> CrearCuenta([FromBody] CrearCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }

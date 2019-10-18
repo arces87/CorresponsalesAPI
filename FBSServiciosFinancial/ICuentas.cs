@@ -53,6 +53,24 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
+        Task<HttpOperationResponse<ConsolidadoCuentasMSL>> DevuelveConsolidadoCuentasIdentificacionWithHttpMessagesAsync(PorIdentificacionClienteDeUnaEmpresa request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        /// <param name='request'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         Task<HttpOperationResponse<TiposCuentaClienteMSL>> DevuelveTiposDeCuentasDeUnClienteWithHttpMessagesAsync(PorSecuencialClienteDeUnaEmpresaProductoVista request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='request'>
         /// </param>
@@ -71,7 +89,7 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<RespuestaProcesoDepositoMS>> ProcesaDepositoWithHttpMessagesAsync(PedidoDatosTransaccionDepositoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProcesoDepositoMS>> ProcesaDepositoWithHttpMessagesAsync(PedidoDatosTransaccionDepositoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='request'>
         /// </param>
         /// <param name='customHeaders'>
@@ -89,7 +107,7 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<RespuestaProcesoRetiroMS>> ProcesaRetiroWithHttpMessagesAsync(PedidoDatosTransaccionRetiroME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProcesoRetiroMS>> ProcesaRetiroWithHttpMessagesAsync(PedidoDatosTransaccionRetiroME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='request'>
         /// </param>
         /// <param name='customHeaders'>
@@ -107,6 +125,6 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<CreaCuentaMS>> CreaCuentaWithHttpMessagesAsync(CreaCuentaME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<CreaCuentaMSL>> CreaCuentaWithHttpMessagesAsync(CreaCuentaME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

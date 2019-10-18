@@ -61,7 +61,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
                     Ubicacion = item.Ubicacion,
                     ValorComision = comisiones,
                     ValorReposicion = transacciones != null ? transacciones.Sum(t => t.Valor) : 0,
-                    Estado = item.Estado.Id.ToString() == _jsonConfiguracion.Parametrizaciones.FirstOrDefault(j => j.Llave == "AgenteIdEstadoActivo").Valor ? true : false
+                    Estado = item.Estado.Nombre
                 });
             }
             _retorno.CantidadElementos = request.CantidadElementos;

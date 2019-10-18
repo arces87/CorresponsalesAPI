@@ -62,15 +62,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                 var usuarioAutenticado = await _mediador.Send(_usuario);
                                 if (usuarioAutenticado.Errores == null)
                                 {
+                                    var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
                                     var usuario = new AutenticarUsuarioMS()
                                     {
                                         Token = usuarioAutenticado.Token,
                                         Comisiones = new ComisionesMS(),
                                         Identificacion = agente.Identificacion,
                                         ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
-                                        ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente
+                                        ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente,
+                                        JsonNegocio = jsonNegocio
                                     };
-                                    var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+
                                     if (jsonNegocio != null)
                                     {
                                         if (jsonNegocio.CobroServicios != null)

@@ -56,7 +56,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Distribuidos
-            CreateMap<Catalogo, DistribuidoIdentificacion>();
+            CreateMap<Catalogo, DistribuidoAlerta>();
             #endregion
 
             #region Transacciones
@@ -66,7 +66,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Servicios Financial
             CreateMap<CrearCuentaME, CreaCuentaME>();
-            CreateMap<CrearClienteME, NuevaPersonaNaturalMinimoClienteME>();
+            CreateMap<CrearClienteME, CreaClienteME>();
             CreateMap<BuscarClienteME, PorIdentificacionSocioME>();
             CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVista>();
             CreateMap<ProcesarDepositoME, PedidoDatosTransaccionDepositoME>();
@@ -74,8 +74,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Servicios Facilito
             CreateMap<ProcesarPagoME, PagoRequest>();
+            CreateMap<ProcesarRetiroME, PedidoDatosTransaccionRetiroME>();
             CreateMap<ObtenerProductosME, DatosServicioFacilitoRequest>();
             CreateMap<ConsultaServiciosME, ConsultaRequest>();
+            CreateMap<TipoIdentificacionMS, DistribuidoTipoIdentificacion>();
             #endregion
         }
     }

@@ -7,24 +7,26 @@
 namespace ServiciosFinancial.Models
 {
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
-    public partial class CreaClienteMS
+    public partial class CreaCuentaMSL
     {
         /// <summary>
-        /// Initializes a new instance of the CreaClienteMS class.
+        /// Initializes a new instance of the CreaCuentaMSL class.
         /// </summary>
-        public CreaClienteMS()
+        public CreaCuentaMSL()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CreaClienteMS class.
+        /// Initializes a new instance of the CreaCuentaMSL class.
         /// </summary>
-        public CreaClienteMS(bool? creaCliente = default(bool?))
+        public CreaCuentaMSL(IList<CuentaMS> cuentasCreadas = default(IList<CuentaMS>))
         {
-            CreaCliente = creaCliente;
+            CuentasCreadas = cuentasCreadas;
             CustomInit();
         }
 
@@ -35,8 +37,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "CreaCliente")]
-        public bool? CreaCliente { get; set; }
+        [JsonProperty(PropertyName = "CuentasCreadas")]
+        public IList<CuentaMS> CuentasCreadas { get; set; }
 
     }
 }

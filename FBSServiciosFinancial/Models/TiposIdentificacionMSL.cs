@@ -7,24 +7,26 @@
 namespace ServiciosFinancial.Models
 {
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
-    public partial class CodigoEstadoMS
+    public partial class TiposIdentificacionMSL
     {
         /// <summary>
-        /// Initializes a new instance of the CodigoEstadoMS class.
+        /// Initializes a new instance of the TiposIdentificacionMSL class.
         /// </summary>
-        public CodigoEstadoMS()
+        public TiposIdentificacionMSL()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CodigoEstadoMS class.
+        /// Initializes a new instance of the TiposIdentificacionMSL class.
         /// </summary>
-        public CodigoEstadoMS(string statusCode = default(string))
+        public TiposIdentificacionMSL(IList<TipoIdentificacionMS> tiposIdentificacion = default(IList<TipoIdentificacionMS>))
         {
-            StatusCode = statusCode;
+            TiposIdentificacion = tiposIdentificacion;
             CustomInit();
         }
 
@@ -35,8 +37,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "statusCode")]
-        public string StatusCode { get; set; }
+        [JsonProperty(PropertyName = "TiposIdentificacion")]
+        public IList<TipoIdentificacionMS> TiposIdentificacion { get; set; }
 
     }
 }

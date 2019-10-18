@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FBSMovilCBWebApi.WebApi
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class DistribuidosController : Controller
     {
         private readonly IMediator _mediador;
@@ -17,11 +20,11 @@ namespace FBSMovilCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpPost("obtenerDistribuidos", Name = "Distribuidos_ObtenerDistribuidos")]
+        [HttpGet("obtenerDistribuidos", Name = "Distribuidos_ObtenerDistribuidos")]
         [Produces(typeof(ObtenerDistribuidosMS))]
-        public async Task<ActionResult<ObtenerDistribuidosMS>> BuscarDistribuidos([FromBody] ObtenerDistribuidosME modelo)
+        public async Task<ActionResult<ObtenerDistribuidosMS>> BuscarDistribuidos()
         {
-            return await _mediador.Send(modelo);
+            return await _mediador.Send(new ObtenerDistribuidosME());
         }
     }
 }

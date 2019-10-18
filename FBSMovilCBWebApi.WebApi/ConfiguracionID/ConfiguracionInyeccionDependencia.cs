@@ -16,6 +16,8 @@ using System.Linq;
 using ServiciosFinancial;
 using System.Net.Http;
 using ServiciosFacilito;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
+using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
 
 namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 {
@@ -28,10 +30,13 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioMenu, RepositorioMenu>();
             services.AddScoped<IRepositorioPermiso, RepositorioPermiso>();
 
+            services.AddScoped<IRepositorioCatalogo, RepositorioCatalogo>();
+
             services.AddScoped<IRepositorioAlerta, RepositorioAlerta>();
             services.AddScoped<IRepositorioLog, RepositorioLog>();
             services.AddScoped<IRepositorioGeolocalizacion, RepositorioGeolocalizacion>();
             services.AddScoped<IRepositorioAgente, RepositorioAgente>();
+            services.AddScoped<IRepositorioTransaccion, RepositorioTransaccion>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
         }

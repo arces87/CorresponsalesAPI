@@ -46,6 +46,32 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
+            public static ConsolidadoCuentasMSL DevuelveConsolidadoCuentasIdentificacion(this ICuentas operations, PorIdentificacionClienteDeUnaEmpresa request)
+            {
+                return operations.DevuelveConsolidadoCuentasIdentificacionAsync(request).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<ConsolidadoCuentasMSL> DevuelveConsolidadoCuentasIdentificacionAsync(this ICuentas operations, PorIdentificacionClienteDeUnaEmpresa request, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.DevuelveConsolidadoCuentasIdentificacionWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
             public static TiposCuentaClienteMSL DevuelveTiposDeCuentasDeUnCliente(this ICuentas operations, PorSecuencialClienteDeUnaEmpresaProductoVista request)
             {
                 return operations.DevuelveTiposDeCuentasDeUnClienteAsync(request).GetAwaiter().GetResult();
@@ -72,7 +98,7 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static RespuestaProcesoDepositoMS ProcesaDeposito(this ICuentas operations, PedidoDatosTransaccionDepositoME request)
+            public static ProcesoDepositoMS ProcesaDeposito(this ICuentas operations, PedidoDatosTransaccionDepositoME request)
             {
                 return operations.ProcesaDepositoAsync(request).GetAwaiter().GetResult();
             }
@@ -85,7 +111,7 @@ namespace ServiciosFinancial
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<RespuestaProcesoDepositoMS> ProcesaDepositoAsync(this ICuentas operations, PedidoDatosTransaccionDepositoME request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProcesoDepositoMS> ProcesaDepositoAsync(this ICuentas operations, PedidoDatosTransaccionDepositoME request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ProcesaDepositoWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -98,7 +124,7 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static RespuestaProcesoRetiroMS ProcesaRetiro(this ICuentas operations, PedidoDatosTransaccionRetiroME request)
+            public static ProcesoRetiroMS ProcesaRetiro(this ICuentas operations, PedidoDatosTransaccionRetiroME request)
             {
                 return operations.ProcesaRetiroAsync(request).GetAwaiter().GetResult();
             }
@@ -111,7 +137,7 @@ namespace ServiciosFinancial
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<RespuestaProcesoRetiroMS> ProcesaRetiroAsync(this ICuentas operations, PedidoDatosTransaccionRetiroME request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProcesoRetiroMS> ProcesaRetiroAsync(this ICuentas operations, PedidoDatosTransaccionRetiroME request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ProcesaRetiroWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -124,7 +150,7 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static CreaCuentaMS CreaCuenta(this ICuentas operations, CreaCuentaME request)
+            public static CreaCuentaMSL CreaCuenta(this ICuentas operations, CreaCuentaME request)
             {
                 return operations.CreaCuentaAsync(request).GetAwaiter().GetResult();
             }
@@ -137,7 +163,7 @@ namespace ServiciosFinancial
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CreaCuentaMS> CreaCuentaAsync(this ICuentas operations, CreaCuentaME request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CreaCuentaMSL> CreaCuentaAsync(this ICuentas operations, CreaCuentaME request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreaCuentaWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
                 {

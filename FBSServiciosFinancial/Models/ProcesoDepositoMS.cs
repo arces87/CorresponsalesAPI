@@ -9,22 +9,21 @@ namespace ServiciosFinancial.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class RespuestaProcesoRetiroMS
+    public partial class ProcesoDepositoMS
     {
         /// <summary>
-        /// Initializes a new instance of the RespuestaProcesoRetiroMS class.
+        /// Initializes a new instance of the ProcesoDepositoMS class.
         /// </summary>
-        public RespuestaProcesoRetiroMS()
+        public ProcesoDepositoMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the RespuestaProcesoRetiroMS class.
+        /// Initializes a new instance of the ProcesoDepositoMS class.
         /// </summary>
-        public RespuestaProcesoRetiroMS(CodigoEstadoMS codigoEstado = default(CodigoEstadoMS), System.DateTime? fechaTransaccion = default(System.DateTime?), string numeroTransaccion = default(string), string numeroCuenta = default(string), double? valor = default(double?))
+        public ProcesoDepositoMS(System.DateTime? fechaTransaccion = default(System.DateTime?), string numeroTransaccion = default(string), string numeroCuenta = default(string), double? valor = default(double?))
         {
-            CodigoEstado = codigoEstado;
             FechaTransaccion = fechaTransaccion;
             NumeroTransaccion = numeroTransaccion;
             NumeroCuenta = numeroCuenta;
@@ -36,11 +35,6 @@ namespace ServiciosFinancial.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "CodigoEstado")]
-        public CodigoEstadoMS CodigoEstado { get; set; }
 
         /// <summary>
         /// </summary>

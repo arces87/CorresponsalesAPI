@@ -145,7 +145,7 @@ namespace ServiciosFinancial
                 NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
                 ContractResolver = new ReadOnlyJsonContractResolver(),
-                Converters = new  List<JsonConverter>
+                Converters = new List<JsonConverter>
                     {
                         new Iso8601TimeSpanConverter()
                     }

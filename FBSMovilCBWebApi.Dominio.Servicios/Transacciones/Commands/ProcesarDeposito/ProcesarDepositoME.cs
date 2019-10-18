@@ -3,7 +3,7 @@ using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarDepositoME : IRequest<RespuestaProcesoDepositoMS>
+    public class ProcesarDepositoME : IRequest<ProcesoDepositoMS>
     {
         public string NumeroCuenta { get; set; }
         public double Valor { get; set; }

@@ -8,10 +8,10 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
-using Financial_Services_Banca;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using ServiciosFinancial;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -49,15 +49,15 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuracion)
         {
-            var httpClient = new HttpClient();
-            var configuracionFinancial = configuracion.GetSection("FinancialServerConfig");
-            httpClient.BaseAddress = new Uri(configuracionFinancial["DireccionIp"] + ":" + configuracionFinancial["Puerto"]);
-            services.AddSingleton<IFBSBancaApi>(new FBSBancaApi(httpClient, false));
-
             var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
             var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
             var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
             services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
+            };
+            services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
         }
     }
 }

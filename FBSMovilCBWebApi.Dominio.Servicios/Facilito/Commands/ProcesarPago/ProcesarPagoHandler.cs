@@ -48,7 +48,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
-            var agente = await _repositorioAgente.GetForUserName(_httpContext.HttpContext.User.Identity.Name);
+            var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
             var transaccion = new Transaccion()
             {

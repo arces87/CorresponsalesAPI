@@ -19,10 +19,4 @@
     <ProjectReference Include="..\FBSConsolaCBWebApi.Dominio.Servicios\FBSConsolaCBWebApi.Dominio.Servicios.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="FBS_Financial_Services_Banca">
-      <HintPath>Resources\dll\FBS_Financial_Services_Banca.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

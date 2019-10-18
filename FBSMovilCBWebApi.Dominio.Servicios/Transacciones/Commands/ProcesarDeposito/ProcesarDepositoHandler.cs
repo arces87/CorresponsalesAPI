@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, RespuestaProcesoDepositoMS>
+    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, ProcesoDepositoMS>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -40,7 +40,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _httpContext = httpContext;
         }
 
-        public async Task<RespuestaProcesoDepositoMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
+        public async Task<ProcesoDepositoMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new CrearLogME()
             {
@@ -48,7 +48,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
-            var agente = await _repositorioAgente.GetForUserName(_httpContext.HttpContext.User.Identity.Name);
+            var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
             var transaccion = new Transaccion()
             {

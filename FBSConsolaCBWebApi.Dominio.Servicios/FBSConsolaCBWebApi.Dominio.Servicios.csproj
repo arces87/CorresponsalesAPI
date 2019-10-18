@@ -16,13 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />
+    <ProjectReference Include="..\FBSServiciosFinancial\FBSServiciosFinancial.csproj" />
     <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="FBS_Financial_Services_Banca">
-      <HintPath>..\FBSConsolaCBWebApi.WebApi\Resources\dll\FBS_Financial_Services_Banca.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {
-    public class CrearCuentaHandler : IRequestHandler<CrearCuentaME, CreaCuentaMS>
+    public class CrearCuentaHandler : IRequestHandler<CrearCuentaME, CreaCuentaMSL>
     {
         private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IHttpContextAccessor _httpContextAccesor;
@@ -30,7 +30,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
             _httpContextAccesor = httpContextAccesor;
         }
 
-        public async Task<CreaCuentaMS> Handle(CrearCuentaME request, CancellationToken cancellationToken)
+        public async Task<CreaCuentaMSL> Handle(CrearCuentaME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new CrearLogME()
             {

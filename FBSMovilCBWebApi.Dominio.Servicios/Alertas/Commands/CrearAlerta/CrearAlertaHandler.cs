@@ -35,7 +35,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
         public async Task<string> Handle(CrearAlertaME request, CancellationToken cancellationToken)
         {
             var _model = _mapper.Map<Alerta>(request);
-            var agente = await _repositorioAgente.GetForUserName(_httpContext.HttpContext.User.Identity.Name);
+            var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             _model.Agente = agente;
             _model.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAlertaNueva").Valor) };
             var identificador = await _repositorio.Add(_model);

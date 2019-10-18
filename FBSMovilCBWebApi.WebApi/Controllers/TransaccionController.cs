@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiciosFinancial.Models;
 
@@ -9,6 +11,7 @@ using ServiciosFinancial.Models;
 namespace FBSMovilCBWebApi.WebApi
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class TransaccionController : Controller
     {
         private readonly IMediator _mediador;
@@ -19,15 +22,15 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("procesarDeposito", Name = "Transaccion_ProcesarDeposito")]
-        [Produces(typeof(RespuestaProcesoDepositoMS))]
-        public async Task<ActionResult<RespuestaProcesoDepositoMS>> ProcesarDeposito([FromBody] ProcesarDepositoME modelo)
+        [Produces(typeof(ProcesoDepositoMS))]
+        public async Task<ActionResult<ProcesoDepositoMS>> ProcesarDeposito([FromBody] ProcesarDepositoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("procesarRetiro", Name = "Transaccion_ProcesarRetiro")]
-        [Produces(typeof(RespuestaProcesoRetiroMS))]
-        public async Task<ActionResult<RespuestaProcesoRetiroMS>> ProcesarRetiro([FromBody] ProcesarRetiroME modelo)
+        [Produces(typeof(ProcesoRetiroMS))]
+        public async Task<ActionResult<ProcesoRetiroMS>> ProcesarRetiro([FromBody] ProcesarRetiroME modelo)
         {
             return await _mediador.Send(modelo);
         }
