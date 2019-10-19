@@ -24,17 +24,17 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
 
                     b.Property<string>("Nombre");
 
                     b.Property<Guid?>("TipoCatalogoId");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -48,15 +48,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<string>("Descripcion");
+
+                    b.Property<string>("Nombre");
 
                     b.Property<bool>("EstaActivo");
 
-                    b.Property<string>("Nombre");
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -68,17 +68,17 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<bool>("EstaActivo");
-
                     b.Property<string>("JsonConfiguracion");
 
                     b.Property<string>("JsonNegocio");
 
                     b.Property<string>("Nombre");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -92,13 +92,13 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<Guid?>("CanalId");
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<string>("UsuarioId");
 
                     b.Property<bool>("EstaActivo");
 
-                    b.Property<string>("UsuarioId");
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -114,22 +114,22 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<string>("Icono");
-
                     b.Property<Guid?>("MenuId")
                         .HasColumnName("MenuPadreId");
+
+                    b.Property<string>("Icono");
 
                     b.Property<string>("Nombre");
 
                     b.Property<int>("Orden");
 
                     b.Property<string>("Ruta");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -143,19 +143,19 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
 
                     b.Property<string>("Identificador");
 
                     b.Property<string>("Nombre");
 
                     b.Property<string>("UrlEndPoint");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -168,19 +168,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnName("Concurrencia");
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnName("Descripcion")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EstaActivo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("EstaActivo")
-                        .HasDefaultValue(true);
-
                     b.Property<string>("Name")
                         .HasColumnName("Nombre")
                         .HasMaxLength(256);
@@ -189,8 +176,21 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasColumnName("NombreNormalizado")
                         .HasMaxLength(256);
 
+                    b.Property<string>("Descripcion")
+                        .HasColumnName("Descripcion")
+                        .HasMaxLength(256);
+
                     b.Property<bool>("Type")
                         .HasColumnName("Tipo");
+
+                    b.Property<bool>("EstaActivo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EstaActivo")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("Concurrencia");
 
                     b.HasKey("Id");
 
@@ -206,16 +206,16 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+                    
+                    b.Property<Guid?>("MenuId");
+
+                    b.Property<string>("RolId");
+
+                    b.Property<bool>("EstaActivo");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<Guid?>("MenuId");
-
-                    b.Property<string>("RolId");
 
                     b.HasKey("Id");
 
@@ -232,41 +232,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnName("AccesosFallidos");
+                    b.Property<Guid?>("OperadoraId");
 
-                    b.Property<bool>("CambioContrasenia")
-                        .HasColumnName("CambioContrasenia");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnName("Concurrencia");
-
-                    b.Property<string>("Email")
-                        .HasColumnName("CorreoElectronico")
+                    b.Property<string>("UserName")
+                        .HasColumnName("Codigo")
                         .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnName("CorreoElectronicoConfirmado");
-
-                    b.Property<bool>("EstaActivo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("EstaActivo")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnName("FechaCreacion");
-
-                    b.Property<string>("Imagen")
-                        .HasColumnName("Imagen")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnName("BloqueoActivo");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnName("FinBloqueo");
-
+                    
                     b.Property<string>("NombreCompleto")
                         .HasColumnName("NombreCompleto")
                         .HasMaxLength(256);
@@ -275,21 +246,36 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasColumnName("NombreMostrar")
                         .HasMaxLength(256);
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnName("CorreoElectronicoNormalizado")
+                    b.Property<string>("PasswordHash")
+                        .HasColumnName("Contrasenia");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnName("FechaCreacion");
+
+                    b.Property<string>("Imagen")
+                        .HasColumnName("Imagen")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Email")
+                        .HasColumnName("CorreoElectronico")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnName("TelefonoCelular");
+
+                    b.Property<bool>("CambioContrasenia")
+                        .HasColumnName("CambioContrasenia");
 
                     b.Property<string>("NormalizedUserName")
                         .HasColumnName("CodigoNormalizado")
                         .HasMaxLength(256);
 
-                    b.Property<Guid?>("OperadoraId");
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnName("CorreoElectronicoNormalizado")
+                        .HasMaxLength(256);
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnName("Contrasenia");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnName("TelefonoCelular");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnName("CorreoElectronicoConfirmado");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnName("TelefonoConfirmado");
@@ -300,9 +286,23 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnName("DobleVerificacion");
 
-                    b.Property<string>("UserName")
-                        .HasColumnName("Codigo")
-                        .HasMaxLength(256);
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnName("AccesosFallidos");
+                    
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnName("BloqueoActivo");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnName("FinBloqueo");
+                    
+                    b.Property<bool>("EstaActivo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EstaActivo")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("Concurrencia");
 
                     b.HasKey("Id");
 
@@ -326,13 +326,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<Guid?>("AgenteId");
 
+                    b.Property<Guid?>("GeolocalizacionId");
+
+                    b.Property<bool>("EstaActivo");
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<Guid?>("GeolocalizacionId");
 
                     b.HasKey("Id");
 
@@ -348,19 +347,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<Guid?>("SistemaOperativoId");
+
+                    b.Property<Guid?>("MarcaId");
 
                     b.Property<string>("DireccionImpresora");
-
-                    b.Property<bool>("EstaActivo");
-
+                    
                     b.Property<string>("Imei");
 
                     b.Property<string>("MacAddress");
-
-                    b.Property<Guid?>("MarcaId");
 
                     b.Property<string>("Modelo");
 
@@ -368,11 +363,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("Observaciones");
 
-                    b.Property<Guid?>("SistemaOperativoId");
-
                     b.Property<bool>("TieneImpresora");
 
                     b.Property<string>("Ubicacion");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -387,13 +386,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<bool>("EstaActivo");
-
+                    
                     b.Property<DateTime>("FechaAlta");
 
                     b.Property<DateTime>("FechaBaja");
@@ -401,6 +394,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<double>("Latitud");
 
                     b.Property<double>("Longitud");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -412,15 +411,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<Guid?>("DispositivoId");
 
                     b.Property<string>("DireccionImagen");
 
-                    b.Property<Guid?>("DispositivoId");
-
                     b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -434,15 +433,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<Guid?>("GeolocalizacionId");
 
                     b.Property<string>("DireccionImagen");
 
                     b.Property<bool>("EstaActivo");
 
-                    b.Property<Guid?>("GeolocalizacionId");
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -456,15 +455,11 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<Guid?>("EstadoId");
+
+                    b.Property<Guid?>("TipoAccionId");
 
                     b.Property<string>("Criptografia");
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<Guid?>("EstadoId");
 
                     b.Property<DateTime>("Fecha");
 
@@ -476,9 +471,13 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("RelacionadoId");
 
-                    b.Property<Guid?>("TipoAccionId");
-
                     b.Property<string>("UsuarioId");
+
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -496,15 +495,13 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<Guid?>("DispositivoId");
 
-                    b.Property<bool>("EstaActivo");
-
                     b.Property<Guid?>("EstadoId");
+
+                    b.Property<string>("UsuarioId");
+
+                    b.Property<string>("SupervisorId");
 
                     b.Property<string>("Identificacion");
 
@@ -512,11 +509,13 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("NombreAgente");
 
-                    b.Property<string>("SupervisorId");
-
                     b.Property<string>("Ubicacion");
 
-                    b.Property<string>("UsuarioId");
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -538,23 +537,23 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<Guid?>("AgenteId");
 
+                    b.Property<Guid?>("EstadoId");
+
+                    b.Property<Guid?>("TipoId");
+
                     b.Property<string>("Comentario");
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<Guid?>("EstadoId");
 
                     b.Property<DateTime>("Fecha");
 
                     b.Property<TimeSpan>("Hora");
 
-                    b.Property<Guid?>("TipoId");
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -574,17 +573,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<Guid?>("AgenteId");
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<string>("NumeroCuenta");
+                    
+                    b.Property<string>("Tipo");
 
                     b.Property<bool>("EstaActivo");
 
-                    b.Property<string>("NumeroCuenta");
-
-                    b.Property<double>("SaldoActual");
-
-                    b.Property<string>("Tipo");
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -600,21 +597,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<Guid?>("AgenteId");
 
+                    b.Property<Guid?>("EstadoId");
+
                     b.Property<string>("CanalId");
 
                     b.Property<string>("Comisiones");
 
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<string>("Criptografia");
 
                     b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<Guid?>("EstadoId");
 
                     b.Property<DateTime>("FechaDispositivo");
 
@@ -638,6 +629,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<double>("Valor");
 
+                    b.Property<bool>("EstaActivo");
+
+                    b.Property<byte[]>("Concurrencia")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.HasKey("Id");
 
                     b.HasIndex("AgenteId");
@@ -654,15 +651,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnName("RolId");
+
                     b.Property<string>("ClaimType")
                         .HasColumnName("Tipo");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnName("Valor");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnName("RolId");
 
                     b.HasKey("Id");
 
@@ -678,15 +675,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnName("UsuarioId");
+
                     b.Property<string>("ClaimType")
                         .HasColumnName("Tipo");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnName("Valor");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnName("UsuarioId");
 
                     b.HasKey("Id");
 
@@ -697,6 +694,11 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnName("UsuarioId");
+
                     b.Property<string>("LoginProvider")
                         .HasColumnName("Proveedor");
 
@@ -705,10 +707,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnName("NombreProveedor");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnName("UsuarioId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 

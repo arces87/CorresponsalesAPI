@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace FBSMovilCBWebApi.WebApi.Migrations
+namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
-    public partial class AdicionandoImagenGeolocalizacion : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,11 +77,11 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    MenuPadreId = table.Column<Guid>(nullable: true),
                     Nombre = table.Column<string>(nullable: true),
                     Orden = table.Column<int>(nullable: false),
                     Icono = table.Column<string>(nullable: true),
                     Ruta = table.Column<string>(nullable: true),
-                    MenuPadreId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -139,8 +139,8 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DireccionImagen = table.Column<string>(nullable: true),
                     GeolocalizacionId = table.Column<Guid>(nullable: true),
+                    DireccionImagen = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -239,6 +239,8 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    MarcaId = table.Column<Guid>(nullable: true),
+                    SistemaOperativoId = table.Column<Guid>(nullable: true),
                     MacAddress = table.Column<string>(nullable: true),
                     Modelo = table.Column<string>(nullable: true),
                     NumeroSerie = table.Column<string>(nullable: true),
@@ -247,8 +249,6 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                     Observaciones = table.Column<string>(nullable: true),
                     Ubicacion = table.Column<string>(nullable: true),
                     Imei = table.Column<string>(nullable: true),
-                    MarcaId = table.Column<Guid>(nullable: true),
-                    SistemaOperativoId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -277,27 +277,27 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    OperadoraId = table.Column<Guid>(nullable: true),
                     Codigo = table.Column<string>(maxLength: 256, nullable: true),
-                    CodigoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
-                    CorreoElectronico = table.Column<string>(maxLength: 256, nullable: true),
-                    CorreoElectronicoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
-                    CorreoElectronicoConfirmado = table.Column<bool>(nullable: false),
-                    Contrasenia = table.Column<string>(nullable: true),
-                    MarcaSeguridad = table.Column<string>(nullable: true),
-                    Concurrencia = table.Column<string>(nullable: true),
-                    TelefonoCelular = table.Column<string>(nullable: true),
-                    TelefonoConfirmado = table.Column<bool>(nullable: false),
-                    DobleVerificacion = table.Column<bool>(nullable: false),
-                    FinBloqueo = table.Column<DateTimeOffset>(nullable: true),
-                    BloqueoActivo = table.Column<bool>(nullable: false),
-                    AccesosFallidos = table.Column<int>(nullable: false),
                     NombreCompleto = table.Column<string>(maxLength: 256, nullable: true),
                     NombreMostrar = table.Column<string>(maxLength: 256, nullable: true),
+                    Contrasenia = table.Column<string>(nullable: true),
                     FechaCreacion = table.Column<DateTime>(nullable: false),
                     Imagen = table.Column<string>(maxLength: 256, nullable: true),
+                    CorreoElectronico = table.Column<string>(maxLength: 256, nullable: true),
+                    TelefonoCelular = table.Column<string>(nullable: true),
                     CambioContrasenia = table.Column<bool>(nullable: false),
-                    OperadoraId = table.Column<Guid>(nullable: true),
-                    EstaActivo = table.Column<bool>(nullable: false, defaultValue: true)
+                    CodigoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
+                    CorreoElectronicoNormalizado = table.Column<string>(maxLength: 256, nullable: true),
+                    CorreoElectronicoConfirmado = table.Column<bool>(nullable: false),
+                    TelefonoConfirmado = table.Column<bool>(nullable: false),
+                    MarcaSeguridad = table.Column<string>(nullable: true),
+                    DobleVerificacion = table.Column<bool>(nullable: false),
+                    AccesosFallidos = table.Column<int>(nullable: false),
+                    FinBloqueo = table.Column<DateTimeOffset>(nullable: true),
+                    BloqueoActivo = table.Column<bool>(nullable: false),
+                    EstaActivo = table.Column<bool>(nullable: false, defaultValue: true),
+                    Concurrencia = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -317,8 +317,8 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DireccionImagen = table.Column<string>(nullable: true),
                     DispositivoId = table.Column<Guid>(nullable: true),
+                    DireccionImagen = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -340,20 +340,28 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    TipoAccionId = table.Column<Guid>(nullable: true),
+                    EstadoId = table.Column<Guid>(nullable: true),
                     UsuarioId = table.Column<string>(nullable: true),
                     Fecha = table.Column<DateTime>(nullable: false),
                     Hora = table.Column<TimeSpan>(nullable: false),
                     Criptografia = table.Column<string>(nullable: true),
                     JsonDispositivo = table.Column<string>(nullable: true),
                     JsonLog = table.Column<string>(nullable: true),
-                    TipoAccionId = table.Column<Guid>(nullable: true),
-                    RelacionadoId = table.Column<int>(nullable: false),
+                    RelacionadoId = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Log", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Log_Catalogo_EstadoId",
+                        column: x => x.EstadoId,
+                        principalSchema: "Nomenclador",
+                        principalTable: "Catalogo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Log_Catalogo_TipoAccionId",
                         column: x => x.TipoAccionId,
@@ -376,14 +384,14 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    NombreAgente = table.Column<string>(nullable: true),
-                    JsonAgente = table.Column<string>(nullable: true),
-                    Identificacion = table.Column<string>(nullable: true),
-                    Ubicacion = table.Column<string>(nullable: true),
                     EstadoId = table.Column<Guid>(nullable: true),
                     UsuarioId = table.Column<string>(nullable: true),
                     SupervisorId = table.Column<string>(nullable: true),
                     DispositivoId = table.Column<Guid>(nullable: true),
+                    NombreAgente = table.Column<string>(nullable: true),
+                    JsonAgente = table.Column<string>(nullable: true),
+                    Identificacion = table.Column<string>(nullable: true),
+                    Ubicacion = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -580,12 +588,12 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Fecha = table.Column<DateTime>(nullable: false),
-                    Hora = table.Column<TimeSpan>(nullable: false),
-                    Descripcion = table.Column<string>(nullable: true),
                     EstadoId = table.Column<Guid>(nullable: true),
                     AgenteId = table.Column<Guid>(nullable: true),
                     TipoId = table.Column<Guid>(nullable: true),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    Hora = table.Column<TimeSpan>(nullable: false),
+                    Descripcion = table.Column<string>(nullable: true),
                     Comentario = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
@@ -622,10 +630,9 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AgenteId = table.Column<Guid>(nullable: true),
                     Tipo = table.Column<string>(nullable: true),
                     NumeroCuenta = table.Column<string>(nullable: true),
-                    SaldoActual = table.Column<double>(nullable: false),
-                    AgenteId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -647,17 +654,23 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    AgenteId = table.Column<Guid>(nullable: true),
+                    EstadoId = table.Column<Guid>(nullable: true),
                     FechaSistema = table.Column<DateTime>(nullable: false),
                     FechaDispositivo = table.Column<DateTime>(nullable: false),
                     HoraDispositivo = table.Column<TimeSpan>(nullable: false),
-                    AgenteId = table.Column<Guid>(nullable: true),
                     Criptografia = table.Column<string>(nullable: true),
                     Tipo = table.Column<string>(nullable: true),
                     JsonDatos = table.Column<string>(nullable: true),
-                    EstadoId = table.Column<Guid>(nullable: true),
                     Valor = table.Column<double>(nullable: false),
-                    CanalId = table.Column<int>(nullable: false),
+                    SaldoDisponible = table.Column<double>(nullable: false),
+                    Comisiones = table.Column<string>(nullable: true),
+                    CanalId = table.Column<string>(nullable: true),
                     ReposicionRealizada = table.Column<bool>(nullable: false),
+                    Descripcion = table.Column<string>(nullable: true),
+                    NombreCliente = table.Column<string>(nullable: true),
+                    IdentificacionCliente = table.Column<string>(nullable: true),
+                    NumeroCuenta = table.Column<string>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -715,6 +728,12 @@ namespace FBSMovilCBWebApi.WebApi.Migrations
                 schema: "Canales",
                 table: "ImagenGeolocalizacion",
                 column: "GeolocalizacionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Log_EstadoId",
+                schema: "Canales",
+                table: "Log",
+                column: "EstadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Log_TipoAccionId",

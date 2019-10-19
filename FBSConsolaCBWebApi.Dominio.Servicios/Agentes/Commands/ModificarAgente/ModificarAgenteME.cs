@@ -20,6 +20,5 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
 
         public string TipoCuenta { get; set; }
         public string NumeroCuenta { get; set; }
-        public double SaldoCuenta { get; set; }
     }
 }

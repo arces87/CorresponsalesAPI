@@ -10,6 +10,8 @@ namespace FBSConsolaCBWebApi.DAL.Canales
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        public Catalogo Marca { get; set; }
+        public Catalogo SistemaOperativo { get; set; }
         public string MacAddress { get; set; }
         public string Modelo { get; set; }
         public string NumeroSerie { get; set; }
@@ -18,8 +20,6 @@ namespace FBSConsolaCBWebApi.DAL.Canales
         public string Observaciones { get; set; }
         public string Ubicacion { get; set; }
         public string Imei { get; set; }
-        public Catalogo Marca { get; set; }
-        public Catalogo SistemaOperativo { get; set; }
 
         public bool EstaActivo { get; set; }
         [Timestamp]

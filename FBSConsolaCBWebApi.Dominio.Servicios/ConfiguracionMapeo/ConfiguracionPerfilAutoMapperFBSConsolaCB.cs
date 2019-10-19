@@ -77,7 +77,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             CreateMap<Cuenta, ObtenerAgenteMS>()
                .ForMember(m => m.TipoCuenta, opt => opt.MapFrom(d => d.Tipo))
-               .ForMember(m => m.SaldoCuenta, opt => opt.MapFrom(d => d.SaldoActual))
                .ForMember(m => m.Id, opt => opt.Ignore());
             CreateMap<Cuenta, ModeloListaAgente>()
                .ForMember(m => m.Id, opt => opt.Ignore());

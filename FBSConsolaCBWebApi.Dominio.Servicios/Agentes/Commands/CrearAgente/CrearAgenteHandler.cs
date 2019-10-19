@@ -29,8 +29,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
                 {
                     Agente = _model,
                     Tipo = request.TipoCuenta,
-                    NumeroCuenta = request.NumeroCuenta,
-                    SaldoActual = request.SaldoCuenta
+                    NumeroCuenta = request.NumeroCuenta
                 });
             return identificador;
         }

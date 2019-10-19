@@ -12,12 +12,6 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
-        public string NombreAgente { get; set; }
-
-        public string JsonAgente { get; set; }
-        public string Identificacion { get; set; }
-        public string Ubicacion { get; set; }
         public Catalogo Estado { get; set; }
 
         public Usuario Usuario { get; set; }
@@ -25,6 +19,12 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public Usuario Supervisor { get; set; }
 
         public Dispositivo Dispositivo { get; set; }
+
+        public string NombreAgente { get; set; }
+
+        public string JsonAgente { get; set; }
+        public string Identificacion { get; set; }
+        public string Ubicacion { get; set; }
 
         public bool EstaActivo { get; set; }
         [Timestamp]

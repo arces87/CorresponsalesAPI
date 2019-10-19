@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    [Migration("20190924193525_AdicionandoImagenGeolocalizacion")]
-    partial class AdicionandoImagenGeolocalizacion
+    [Migration("20191019135912_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -466,6 +466,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<bool>("EstaActivo");
 
+                    b.Property<Guid?>("EstadoId");
+
                     b.Property<DateTime>("Fecha");
 
                     b.Property<TimeSpan>("Hora");
@@ -474,13 +476,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("JsonLog");
 
-                    b.Property<int>("RelacionadoId");
+                    b.Property<string>("RelacionadoId");
 
                     b.Property<Guid?>("TipoAccionId");
 
                     b.Property<string>("UsuarioId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstadoId");
 
                     b.HasIndex("TipoAccionId");
 
@@ -598,13 +602,17 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<Guid?>("AgenteId");
 
-                    b.Property<int>("CanalId");
+                    b.Property<string>("CanalId");
+
+                    b.Property<string>("Comisiones");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<string>("Criptografia");
+
+                    b.Property<string>("Descripcion");
 
                     b.Property<bool>("EstaActivo");
 
@@ -616,9 +624,17 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<TimeSpan>("HoraDispositivo");
 
+                    b.Property<string>("IdentificacionCliente");
+
                     b.Property<string>("JsonDatos");
 
+                    b.Property<string>("NombreCliente");
+
+                    b.Property<string>("NumeroCuenta");
+
                     b.Property<bool>("ReposicionRealizada");
+
+                    b.Property<double>("SaldoDisponible");
 
                     b.Property<string>("Tipo");
 
@@ -819,6 +835,10 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Log", b =>
                 {
+                    b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Estado")
+                        .WithMany()
+                        .HasForeignKey("EstadoId");
+
                     b.HasOne("FBS.DAL.Nomenclador.Catalogo", "TipoAccion")
                         .WithMany()
                         .HasForeignKey("TipoAccionId");

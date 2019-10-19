@@ -10,15 +10,14 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
+        public Agente Agente { get; set; }
+        public Catalogo Estado { get; set; }
         public DateTime FechaSistema { get; set; }
         public DateTime FechaDispositivo { get; set; }
         public TimeSpan HoraDispositivo { get; set; }
-        public Agente Agente { get; set; }
         public string Criptografia { get; set; }
         public string Tipo { get; set; }
         public string JsonDatos { get; set; }
-        public Catalogo Estado { get; set; }
         public double Valor { get; set; }
         public double SaldoDisponible { get; set; }
         public string Comisiones { get; set; }

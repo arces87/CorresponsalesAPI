@@ -9,10 +9,9 @@ namespace FBSConsolaCBWebApi.DAL.Canales
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        public Geolocalizacion Geolocalizacion { get; set; }
 
         public string DireccionImagen { get; set; }
-
-        public Geolocalizacion Geolocalizacion { get; set; }
 
         public bool EstaActivo { get; set; }
 
