@@ -47,6 +47,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("listaDispositivosDisponibles", Name = "Agente_ListarDispositivosDisponibles")]
+        public async Task<ActionResult<ListaDispositivosDiposniblesMS>> ListarDispositivosDisponibles([FromBody] ListaDispositivosDiposniblesME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost("obtener", Name = "Agente_ObtenerAgente")]
         public async Task<ActionResult<ObtenerAgenteMS>> Get([FromBody] ObtenerAgenteME modelo)
         {

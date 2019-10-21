@@ -192,6 +192,18 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             }
         }
 
+        public async Task<IEnumerable<Dispositivo>> GetDispositivosDisponibles()
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var dispositivos = await conexion.QueryAsync<Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
+                    "left join Corresponsales.Agente on Canales.Dispositivo.Id = Corresponsales.Agente.DispositivoId " +
+                    "where Canales.Dispositivo.EstaActivo='true' and Corresponsales.Agente.Id is null");
+                return dispositivos.ToList();
+            }
+        }
+
         public async Task<IEnumerable<Usuario>> GetSupervisoresDisponibles()
         {
             using (var conexion = Conexion)

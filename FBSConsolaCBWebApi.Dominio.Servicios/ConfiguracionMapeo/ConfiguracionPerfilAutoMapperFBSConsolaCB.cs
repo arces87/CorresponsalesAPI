@@ -50,6 +50,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.NombreSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Nombre));
             CreateMap<Imagen, ObtenerDispositivoImagen>()
               .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.DireccionImagen));
+
+            CreateMap<Dispositivo, ModeloListaDispositivosDiposnibles>();
             #endregion
 
             #region Agente
@@ -194,6 +196,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListaAgenteME, ModeloPaginacion>();
             CreateMap<ListaSupervisoresDiposniblesME, ModeloPaginacion>();
             CreateMap<ListaUsuariosDiposniblesME, ModeloPaginacion>();
+            CreateMap<ListaDispositivosDiposniblesME, ModeloPaginacion>();
             CreateMap<ListarAlertaME, ModeloPaginacion>();
             CreateMap<ListarTransaccionME, ModeloPaginacion>();
             CreateMap<ListaAgenteConsolaME, ModeloPaginacion>();
