@@ -98,24 +98,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Permiso",
-                schema: "Seguridad",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Nombre = table.Column<string>(nullable: true),
-                    Descripcion = table.Column<string>(nullable: true),
-                    Identificador = table.Column<string>(nullable: true),
-                    UrlEndPoint = table.Column<string>(nullable: true),
-                    EstaActivo = table.Column<bool>(nullable: false),
-                    Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permiso", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Rol",
                 schema: "Seguridad",
                 columns: table => new
@@ -123,10 +105,10 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Id = table.Column<string>(nullable: false),
                     Nombre = table.Column<string>(maxLength: 256, nullable: true),
                     NombreNormalizado = table.Column<string>(maxLength: 256, nullable: true),
-                    Concurrencia = table.Column<string>(nullable: true),
                     Descripcion = table.Column<string>(maxLength: 256, nullable: true),
+                    Tipo = table.Column<bool>(nullable: false),
                     EstaActivo = table.Column<bool>(nullable: false, defaultValue: true),
-                    Tipo = table.Column<bool>(nullable: false)
+                    Concurrencia = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,9 +144,9 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    TipoCatalogoId = table.Column<Guid>(nullable: true),
                     Nombre = table.Column<string>(nullable: true),
                     Descripcion = table.Column<string>(nullable: true),
-                    TipoCatalogoId = table.Column<Guid>(nullable: true),
                     EstaActivo = table.Column<bool>(nullable: false),
                     Concurrencia = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
@@ -656,6 +638,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     AgenteId = table.Column<Guid>(nullable: true),
                     EstadoId = table.Column<Guid>(nullable: true),
+                    CanalId = table.Column<string>(nullable: true),
                     FechaSistema = table.Column<DateTime>(nullable: false),
                     FechaDispositivo = table.Column<DateTime>(nullable: false),
                     HoraDispositivo = table.Column<TimeSpan>(nullable: false),
@@ -665,7 +648,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     Valor = table.Column<double>(nullable: false),
                     SaldoDisponible = table.Column<double>(nullable: false),
                     Comisiones = table.Column<string>(nullable: true),
-                    CanalId = table.Column<string>(nullable: true),
                     ReposicionRealizada = table.Column<bool>(nullable: false),
                     Descripcion = table.Column<string>(nullable: true),
                     NombreCliente = table.Column<string>(nullable: true),
@@ -932,10 +914,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "CanalUsuario",
-                schema: "Seguridad");
-
-            migrationBuilder.DropTable(
-                name: "Permiso",
                 schema: "Seguridad");
 
             migrationBuilder.DropTable(

@@ -2,7 +2,6 @@
 using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

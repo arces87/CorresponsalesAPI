@@ -2,7 +2,6 @@
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiciosFinancial.Models;

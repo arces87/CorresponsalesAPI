@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

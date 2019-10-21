@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ServiciosFinancial.Models;
 

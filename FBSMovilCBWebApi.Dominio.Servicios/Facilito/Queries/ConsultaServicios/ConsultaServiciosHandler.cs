@@ -2,7 +2,6 @@
 using MediatR;
 using ServiciosFacilito;
 using ServiciosFacilito.Models;
-using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 

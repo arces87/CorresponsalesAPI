@@ -26,7 +26,6 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioRol, RepositorioRol>();
             services.AddScoped<IRepositorioMenu, RepositorioMenu>();
             services.AddScoped<IRepositorioCanal, RepositorioCanal>();
-            services.AddScoped<IRepositorioPermiso, RepositorioPermiso>();
 
             services.AddScoped<IRepositorioTipoCatalogo, RepositorioTipoCatalogo>();
             services.AddScoped<IRepositorioCatalogo, RepositorioCatalogo>();

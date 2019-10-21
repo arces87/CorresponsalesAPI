@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    [Migration("20191019135912_Inicial")]
+    [Migration("20191021151903_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,30 +138,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasIndex("MenuId");
 
                     b.ToTable("Menu","Seguridad");
-                });
-
-            modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Permiso", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<byte[]>("Concurrencia")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<string>("Descripcion");
-
-                    b.Property<bool>("EstaActivo");
-
-                    b.Property<string>("Identificador");
-
-                    b.Property<string>("Nombre");
-
-                    b.Property<string>("UrlEndPoint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Permiso","Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Rol", b =>
@@ -583,8 +559,6 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.Property<bool>("EstaActivo");
 
                     b.Property<string>("NumeroCuenta");
-
-                    b.Property<double>("SaldoActual");
 
                     b.Property<string>("Tipo");
 

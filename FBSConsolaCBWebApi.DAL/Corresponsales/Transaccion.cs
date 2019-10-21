@@ -12,6 +12,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public Guid Id { get; set; }
         public Agente Agente { get; set; }
         public Catalogo Estado { get; set; }
+        public string CanalId { get; set; }
         public DateTime FechaSistema { get; set; }
         public DateTime FechaDispositivo { get; set; }
         public TimeSpan HoraDispositivo { get; set; }
@@ -21,7 +22,6 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public double Valor { get; set; }
         public double SaldoDisponible { get; set; }
         public string Comisiones { get; set; }
-        public string CanalId { get; set; }
         public bool ReposicionRealizada { get; set; }
         public string Descripcion { get; set; }
         public string NombreCliente { get; set; }
