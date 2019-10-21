@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,12 @@ namespace FBSMovilCBWebApi.WebApi
         public async Task<ActionResult> VerificarOtp([FromBody] VerificarOtpME modelo)
         {
             return Ok(await _mediador.Send(modelo));
+        }
+
+        [HttpPost("CambioContrasenia", Name = "Usuario_CambioContrasenia")]
+        public async Task<ActionResult<string>> CambioContrasenia([FromBody] CambioContraseniaME modelo)
+        {
+            return await _mediador.Send(modelo);
         }
     }
 }
