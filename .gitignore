@@ -3,5 +3,8 @@
 obj/
 bin/
 *.pdf
+*.jpg
+*.JPG
+*.png
 PublishProfiles/
 /FBS_SST.WebApi/Properties/launchSettings.json

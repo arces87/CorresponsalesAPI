@@ -51,7 +51,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<Imagen, ObtenerDispositivoImagen>()
               .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.DireccionImagen));
 
-            CreateMap<Dispositivo, ModeloListaDispositivosDiposnibles>();
+            CreateMap<Dispositivo, ModeloListaDispositivosDiposnibles>()
+                 .ForMember(m => m.Marca, opt => opt.MapFrom(d => d.Marca.Nombre));
             #endregion
 
             #region Agente

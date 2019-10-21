@@ -38,31 +38,58 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 return Agentes.ToList();
             }
         }
-        public async Task<IEnumerable<Agente>> GetAllWithAssociations()
+        public async Task<IEnumerable<Agente>> GetAllWithAssociations(string IdSupervisor)
         {
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
-                    "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
-                    "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
-                    "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
-                    "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
-                    "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
-                    "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
-                    "where Corresponsales.Agente.EstaActivo='true'",
-                   (agente, estado, dispositivo, marca, usuario, supervisor) =>
-                   {
-                       dispositivo.Marca = marca;
-                       agente.Estado = estado;
-                       if (usuario != null)
-                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
-                       if (supervisor != null)
-                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
-                       agente.Dispositivo = dispositivo;
-                       return agente;
-                   });
-                return Agentes.ToList();
+                if (IdSupervisor != null && IdSupervisor != "")
+                {
+                    var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                        "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
+                        "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                        "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                        "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                        "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                        "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                        "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.SupervisorId = @IdSupervisor",
+                       (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                       {
+                           dispositivo.Marca = marca;
+                           agente.Estado = estado;
+                           if (usuario != null)
+                               agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                           if (supervisor != null)
+                               agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                           agente.Dispositivo = dispositivo;
+                           return agente;
+                       }, param: new { IdSupervisor });
+                    return Agentes.ToList();
+                }
+                else
+                {
+                    var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                       "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
+                       "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                       "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                       "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                       "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                       "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                       "where Corresponsales.Agente.EstaActivo='true'",
+                      (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                      {
+                          dispositivo.Marca = marca;
+                          agente.Estado = estado;
+                          if (usuario != null)
+                              agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                          if (supervisor != null)
+                              agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                          agente.Dispositivo = dispositivo;
+                          return agente;
+                      });
+                    return Agentes.ToList();
+                }
+
             }
         }
         public async Task<Agente> GetWithAssociations(string Id)
@@ -94,33 +121,117 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             }
         }
 
-        public async Task<IEnumerable<Agente>> GetForActivation()
+        public async Task<IEnumerable<Agente>> GetAllWithAssociationsConsola(string IdSupervisor)
+        {
+            using (var conexion = Conexion)
+            {
+                var IdEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
+                var IdEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
+                conexion.Open();
+                if (IdSupervisor != null && IdSupervisor != "")
+                {
+                    var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                        "supervisor.Id, supervisor.Codigo, supervisor.Imagen FROM Corresponsales.Agente " +
+                        "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                        "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                        "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                        "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                        "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                        "where Corresponsales.Agente.EstaActivo='true' and (Corresponsales.Agente.EstadoId = @IdEstadoActivo or Corresponsales.Agente.EstadoId = @IdEstadoCobrando) " +
+                        "and Corresponsales.Agente.SupervisorId = @IdSupervisor",
+                       (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                       {
+                           dispositivo.Marca = marca;
+                           agente.Estado = estado;
+                           if (usuario != null)
+                               agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                           if (supervisor != null)
+                               agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                           agente.Dispositivo = dispositivo;
+                           return agente;
+                       }, param: new { IdEstadoActivo, IdEstadoCobrando, IdSupervisor });
+                    return agentes.ToList();
+                }
+                else
+                {
+                    var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                        "supervisor.Id, supervisor.Codigo, supervisor.Imagen FROM Corresponsales.Agente " +
+                        "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                        "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                        "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                        "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                        "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                        "where Corresponsales.Agente.EstaActivo='true' and (Corresponsales.Agente.EstadoId = @IdEstadoActivo or Corresponsales.Agente.EstadoId = @IdEstadoCobrando)",
+                        (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                        {
+                            dispositivo.Marca = marca;
+                            agente.Estado = estado;
+                            if (usuario != null)
+                                agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                            if (supervisor != null)
+                                agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                            agente.Dispositivo = dispositivo;
+                            return agente;
+                        }, param: new { IdEstadoActivo, IdEstadoCobrando });
+                    return agentes.ToList();
+                }
+
+            }
+        }
+
+        public async Task<IEnumerable<Agente>> GetForActivation(string IdSupervisor)
         {
             using (var conexion = Conexion)
             {
                 var IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoUbicado").Valor;
                 conexion.Open();
-                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
-                    "supervisor.Id, supervisor.Codigo, supervisor.Imagen FROM Corresponsales.Agente " +
-                    "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
-                    "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
-                    "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
-                    "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
-                    "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
-                    "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.EstadoId = @IdEstado",
-                   (agente, estado, dispositivo, marca, usuario, supervisor) =>
-                   {
-                       dispositivo.Marca = marca;
-                       agente.Estado = estado;
-                       if (usuario != null)
-                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
-                       if (supervisor != null)
-                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
-                       agente.Dispositivo = dispositivo;
-                       return agente;
-                   }, param: new { IdEstado });
+                if (IdSupervisor != null && IdSupervisor != "")
+                {
+                    var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                        "supervisor.Id, supervisor.Codigo, supervisor.Imagen FROM Corresponsales.Agente " +
+                        "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                        "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                        "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                        "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                        "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                        "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.EstadoId = @IdEstado and Corresponsales.Agente.SupervisorId = @IdSupervisor",
+                       (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                       {
+                           dispositivo.Marca = marca;
+                           agente.Estado = estado;
+                           if (usuario != null)
+                               agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                           if (supervisor != null)
+                               agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                           agente.Dispositivo = dispositivo;
+                           return agente;
+                       }, param: new { IdEstado, IdSupervisor });
+                    return agentes.ToList();
+                }
+                else
+                {
+                    var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                        "supervisor.Id, supervisor.Codigo, supervisor.Imagen FROM Corresponsales.Agente " +
+                        "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                        "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                        "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                        "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                        "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                        "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.EstadoId = @IdEstado",
+                        (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                        {
+                            dispositivo.Marca = marca;
+                            agente.Estado = estado;
+                            if (usuario != null)
+                                agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                            if (supervisor != null)
+                                agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                            agente.Dispositivo = dispositivo;
+                            return agente;
+                        }, param: new { IdEstado });
+                    return agentes.ToList();
+                }
 
-                return agentes.ToList();
             }
         }
 

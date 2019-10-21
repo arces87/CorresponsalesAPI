@@ -33,7 +33,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 
         public async Task<ListaAgenteConsolaMS> Handle(ListaAgenteConsolaME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
+            var _model = await _repositorio.GetAllWithAssociationsConsola(request.IdSupervisor);
             var _retorno = new ListaAgenteConsolaMS();
             var totalElementos = 0;
             Filtro<Agente>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);

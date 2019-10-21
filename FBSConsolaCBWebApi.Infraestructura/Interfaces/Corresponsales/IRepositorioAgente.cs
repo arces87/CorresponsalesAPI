@@ -10,9 +10,10 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
     public interface IRepositorioAgente : IRepositorio<Agente>
     {
         Task<IEnumerable<Agente>> GetAllActive();
-        Task<IEnumerable<Agente>> GetAllWithAssociations();
+        Task<IEnumerable<Agente>> GetAllWithAssociations(string IdSupervisor);
+        Task<IEnumerable<Agente>> GetAllWithAssociationsConsola(string IdSupervisor);
         Task<Agente> GetWithAssociations(string Id);
-        Task<IEnumerable<Agente>> GetForActivation();
+        Task<IEnumerable<Agente>> GetForActivation(string IdSupervisor);
         Task<Agente> GetForUserName(string userName);
         Task<Agente> GetForId(string idUsuario);
         Task Activar(string Id);

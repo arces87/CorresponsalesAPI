@@ -1,4 +1,6 @@
-﻿using FBS.Identidad.DAL.Modelado;
+﻿using FBS.Dominio.Servicios.CorreoElectronico;
+using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
@@ -57,6 +59,16 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
                 BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+
+            var configuracionCorreo = configuracion.GetSection("ConfiguracionCorreo");
+            var servidorSmtp = configuracionCorreo["ServidorSmtp"];
+            var puertoSmtp = int.Parse(configuracionCorreo["PuertoSmtp"]);
+            var usuario = configuracionCorreo["Usuario"];
+            var contrasenna = configuracionCorreo["Password"];
+            var direccionCuentaRemitente = configuracionCorreo["DireccionCuentaRemitente"];
+            var nombreCuentaRemitente = configuracionCorreo["NombreCuentaRemitente"];
+            services.AddSingleton<IServicioCorreoElectronico>(new ServicioCorreoElectronico(servidorSmtp, puertoSmtp, usuario,
+                                                                contrasenna, direccionCuentaRemitente, nombreCuentaRemitente));
         }
     }
 }

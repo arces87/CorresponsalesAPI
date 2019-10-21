@@ -29,7 +29,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 
         public async Task<ListaActivarAgenteMS> Handle(ListaActivarAgenteME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetForActivation();
+            var _model = await _repositorio.GetForActivation(request.IdSupervisor);
             var _retorno = new ListaActivarAgenteMS();
             var totalElementos = 0;
             Filtro<Agente>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
