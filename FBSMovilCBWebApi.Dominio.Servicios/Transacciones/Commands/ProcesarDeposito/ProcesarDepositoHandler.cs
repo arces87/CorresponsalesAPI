@@ -42,10 +42,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
         public async Task<ProcesoDepositoMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
         {
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
@@ -66,14 +67,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual + request.Valor,
-                Tipo = "Depósito",
+                Tipo = IdTipoAccion,
                 EstaActivo = true
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
             var modelo = _mapper.Map<PedidoDatosTransaccionDepositoME>(request);
@@ -82,7 +83,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
@@ -90,7 +91,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
             return respuesta.Body;

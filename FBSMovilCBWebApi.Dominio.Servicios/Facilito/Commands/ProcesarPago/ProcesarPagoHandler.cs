@@ -42,10 +42,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
 
         public async Task<PagoResponse> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
         {
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
@@ -66,14 +67,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual + request.Valor,
-                Tipo = "CobroServicios",
+                Tipo = IdTipoAccion,
                 EstaActivo = true
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
             var modelo = _mapper.Map<PagoRequest>(request);
@@ -82,7 +83,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
@@ -90,7 +91,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
-                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor,
+                IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
             return respuesta.Body;

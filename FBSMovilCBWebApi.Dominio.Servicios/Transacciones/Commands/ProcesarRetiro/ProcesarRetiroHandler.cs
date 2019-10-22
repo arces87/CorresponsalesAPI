@@ -66,7 +66,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual - request.Valor,
-                Tipo = "Retiro",
+                Tipo = IdTipoAccion.ToString(),
                 EstaActivo = true
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
