@@ -41,20 +41,6 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                     var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                     "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                    "where transaccion.EstaActivo='true'",
-                   (transaccion, agente, estado) =>
-                   {
-                       transaccion.Estado = estado;
-                       transaccion.Agente = agente;
-                       return transaccion;
-                   });
-                    return transacciones.ToList();
-                }
-                else
-                {
-                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
-                    "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
-                    "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
                     "where transaccion.EstaActivo='true' and agente.Id = @IdAgente",
                    (transaccion, agente, estado) =>
                    {
@@ -62,6 +48,20 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                        transaccion.Agente = agente;
                        return transaccion;
                    }, param: new { IdAgente });
+                    return transacciones.ToList();
+                }
+                else
+                {
+                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
+                    "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
+                    "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                    "where transaccion.EstaActivo='true'",
+                   (transaccion, agente, estado) =>
+                   {
+                       transaccion.Estado = estado;
+                       transaccion.Agente = agente;
+                       return transaccion;
+                   });
                     return transacciones.ToList();
                 }
             }
