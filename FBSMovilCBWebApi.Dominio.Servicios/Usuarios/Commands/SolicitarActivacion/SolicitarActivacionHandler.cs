@@ -48,8 +48,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 {
                     if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
                     {
-
-                        var usuarioAutenticado = await _mediador.Send(new LoginUsuarioME() { Usuario = request.Usuario, Contrasenna = request.Contrasenia });
+                        var _usuario = new LoginUsuarioME() { Usuario = request.Usuario, Contrasenna = request.Contrasenia, Dispositivo = "Movil" };
+                        var usuarioAutenticado = await _mediador.Send(_usuario);
                         if (usuarioAutenticado.Errores == null)
                         {
                             agente.Estado = new Catalogo() { Id = new Guid(idEstado) };
@@ -68,6 +68,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                             });
                             return true;
                         }
+                        throw new Exception(usuarioAutenticado.Errores);
                     }
 
                 }

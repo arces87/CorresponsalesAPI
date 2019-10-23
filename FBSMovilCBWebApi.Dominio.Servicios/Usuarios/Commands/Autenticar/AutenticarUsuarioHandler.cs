@@ -59,6 +59,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                             if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
                             {
                                 var _usuario = _mapper.Map<LoginUsuarioME>(request);
+                                _usuario.Dispositivo = "Movil";
                                 var usuarioAutenticado = await _mediador.Send(_usuario);
                                 if (usuarioAutenticado.Errores == null)
                                 {

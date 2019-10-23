@@ -23,6 +23,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
         public async Task<AutenticarUsuarioMS> Handle(AutenticarUsuarioME request, CancellationToken cancellationToken)
         {
             var _modelo = _mapper.Map<LoginUsuarioME>(request);
+            _modelo.Dispositivo = "Consola";
             var _usuario = _mapper.Map<AutenticarUsuarioMS>(await _mediador.Send(_modelo));
             if (_usuario.Errores == null && _usuario.Errores != "")
             {
