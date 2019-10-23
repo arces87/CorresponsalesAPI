@@ -13,6 +13,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task<IEnumerable<Transaccion>> GetForTipo(string idTipo, string IdAgente);
         Task<Transaccion> GetWithAssociations(string Id);
         Task<double> GetSaldoActual(string IdAgente);
+        Task<double> GetSaldoCuenta(string IdAgente);
 
     }
 }

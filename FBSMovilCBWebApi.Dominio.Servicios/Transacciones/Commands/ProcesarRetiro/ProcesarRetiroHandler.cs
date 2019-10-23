@@ -25,10 +25,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IMapper _mapper;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IHttpContextAccessor _httpContext;
 
         public ProcesarRetiroHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
-            IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente,
+            IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente, IRepositorioCuenta repositorioCuenta,
             IHttpContextAccessor httpContext)
         {
             _mediador = mediador;
@@ -37,6 +38,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _mapper = mapper;
             _repositorioTransaccion = repositorioTransaccion;
             _repositorioAgente = repositorioAgente;
+            _repositorioCuenta = repositorioCuenta;
             _httpContext = httpContext;
         }
 
@@ -50,7 +52,37 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+            var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
+            var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
+            var transacciones = await _repositorioTransaccion.GetForTipo(agente.Id.ToString(), IdTipoAccion);
+            transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+            var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+            saldoCuenta = saldoCuenta == 0 && transacciones.Count() == 0 ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+            if (!jsonNegocio.Retiro.Activo.Value)
+            {
+                throw new Exception("Usted no tiene acceso para realizar este tipo de operación");
+            }
+            if (request.Valor > jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion)
+            {
+                throw new Exception("No puede realizar esta operación porque excede el monto máximo definido para este tipo de operación");
+            }
+            if (request.Valor < jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion)
+            {
+                throw new Exception("No puede realizar esta operación porque no alcanza el monto mínimo definido para este tipo de operación");
+            }
+            if (saldoActual > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
+            {
+                throw new Exception("No puede realizar esta operación porque excede el monto máximo diario definido para este tipo de operación");
+            }
+            if (transacciones.Count() > jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones)
+            {
+                throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
+            }
+            if (saldoActual - request.Valor < 0)
+            {
+                throw new Exception("No puede realizar esta operación, no tiene fondos suficientes en caja");
+            }
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
@@ -67,6 +99,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual - request.Valor,
+                SaldoCuenta = cuenta != null ? saldoCuenta + request.Valor : 0,
                 Tipo = IdTipoAccion,
                 EstaActivo = true
             };

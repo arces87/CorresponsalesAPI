@@ -21,6 +21,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public string JsonDatos { get; set; }
         public double Valor { get; set; }
         public double SaldoDisponible { get; set; }
+        public double SaldoCuenta { get; set; }
         public string Comisiones { get; set; }
         public bool ReposicionRealizada { get; set; }
         public string Descripcion { get; set; }
