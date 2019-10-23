@@ -308,9 +308,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var dispositivos = await conexion.QueryAsync<Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
+                var dispositivos = await conexion.QueryAsync<Dispositivo, Catalogo, Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
                     "left join Corresponsales.Agente on Canales.Dispositivo.Id = Corresponsales.Agente.DispositivoId " +
-                    "where Canales.Dispositivo.EstaActivo='true' and Corresponsales.Agente.Id is null");
+                    "left join Nomenclador.Catalogo on Canales.Dispositivo.MarcaId = Nomenclador.Catalogo.Id " +
+                    "where Canales.Dispositivo.EstaActivo='true' and Corresponsales.Agente.Id is null", (dispositivo, catalogo) =>
+                    {
+                        dispositivo.Marca = catalogo;
+                        return dispositivo;
+                    });
                 return dispositivos.ToList();
             }
         }
