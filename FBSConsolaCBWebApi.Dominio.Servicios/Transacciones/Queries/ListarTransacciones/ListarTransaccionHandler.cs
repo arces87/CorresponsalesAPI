@@ -23,7 +23,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
 
         public async Task<ListarTransaccionMS> Handle(ListarTransaccionME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
+            var _model = await _repositorio.GetAllWithAssociations(request.IdAgente);
             var _retorno = new ListarTransaccionMS();
             var totalElementos = 0;
             Filtro<Transaccion>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);

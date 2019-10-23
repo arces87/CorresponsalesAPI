@@ -31,12 +31,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 return Transaccions.ToList();
             }
         }
-        public async Task<IEnumerable<Transaccion>> GetAllWithAssociations()
+        public async Task<IEnumerable<Transaccion>> GetAllWithAssociations(string IdAgente)
         {
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
+                if (IdAgente != null && IdAgente != "")
+                {
+                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                     "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
                     "where transaccion.EstaActivo='true'",
@@ -46,7 +48,22 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                        transaccion.Agente = agente;
                        return transaccion;
                    });
-                return transacciones.ToList();
+                    return transacciones.ToList();
+                }
+                else
+                {
+                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
+                    "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
+                    "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                    "where transaccion.EstaActivo='true' and agente.Id = @IdAgente",
+                   (transaccion, agente, estado) =>
+                   {
+                       transaccion.Estado = estado;
+                       transaccion.Agente = agente;
+                       return transaccion;
+                   }, param: new { IdAgente });
+                    return transacciones.ToList();
+                }
             }
         }
         public async Task<Transaccion> GetWithAssociations(string Id)

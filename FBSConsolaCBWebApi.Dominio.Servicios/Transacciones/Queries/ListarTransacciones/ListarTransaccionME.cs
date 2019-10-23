@@ -6,6 +6,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
 {
     public class ListarTransaccionME : IRequest<ListarTransaccionMS>
     {
+        public string IdAgente { get; set; }
         public int Pagina { get; set; }
 
         public int CantidadElementos { get; set; }
