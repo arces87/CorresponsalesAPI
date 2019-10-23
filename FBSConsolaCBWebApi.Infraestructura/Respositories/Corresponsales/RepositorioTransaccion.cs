@@ -38,30 +38,35 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 conexion.Open();
                 if (IdAgente != null && IdAgente != "")
                 {
-                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
+                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                     "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                    "left join Nomenclador.Catalogo tipo on transaccion.Tipo = tipo.Id " +
                     "where transaccion.EstaActivo='true' and agente.Id = @IdAgente",
-                   (transaccion, agente, estado) =>
+                   (transaccion, agente, estado, tipo) =>
                    {
                        transaccion.Estado = estado;
                        transaccion.Agente = agente;
+                       transaccion.Tipo = tipo.Nombre;
                        return transaccion;
                    }, param: new { IdAgente });
                     return transacciones.ToList();
                 }
                 else
                 {
-                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
-                    "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
-                    "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                    "where transaccion.EstaActivo='true'",
-                   (transaccion, agente, estado) =>
-                   {
-                       transaccion.Estado = estado;
-                       transaccion.Agente = agente;
-                       return transaccion;
-                   });
+                    var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
+                      "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
+                      "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                      "left join Nomenclador.Catalogo tipo on transaccion.Tipo = tipo.Id " +
+                      "where transaccion.EstaActivo='true'",
+                     (transaccion, agente, estado, tipo) =>
+                     {
+                         transaccion.Estado = estado;
+                         transaccion.Agente = agente;
+                         transaccion.Tipo = tipo.Nombre;
+                         return transaccion;
+                     }
+                    );
                     return transacciones.ToList();
                 }
             }
