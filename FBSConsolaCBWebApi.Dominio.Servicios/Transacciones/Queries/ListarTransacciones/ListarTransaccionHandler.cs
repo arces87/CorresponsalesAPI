@@ -3,6 +3,7 @@ using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,12 +14,14 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
     public class ListarTransaccionHandler : IRequestHandler<ListarTransaccionME, ListarTransaccionMS>
     {
         private readonly IRepositorioTransaccion _repositorio;
+        private readonly IRepositorioCatalogo _repositorioCatalogo;
         private readonly IMapper _mapper;
 
-        public ListarTransaccionHandler(IRepositorioTransaccion repositorio, IMapper mapper)
+        public ListarTransaccionHandler(IRepositorioTransaccion repositorio, IMapper mapper, IRepositorioCatalogo repositorioCatalogo)
         {
             _repositorio = repositorio;
             _mapper = mapper;
+            _repositorioCatalogo = repositorioCatalogo;
         }
 
         public async Task<ListarTransaccionMS> Handle(ListarTransaccionME request, CancellationToken cancellationToken)
@@ -29,6 +32,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             Filtro<Transaccion>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
             _retorno.TotalElementos = totalElementos;
             _retorno.Transacciones = _mapper.Map<List<ModeloListaTransaccion>>(_model);
+            foreach (var item in _retorno.Transacciones)
+            {
+                item.NombreTipo = (await _repositorioCatalogo.Get(item.Tipo)).Nombre;
+            }
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
             return _retorno;

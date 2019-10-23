@@ -22,6 +22,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }
         public string NumeroCuenta { get; set; }
+        public string NombreTipo { get; set; }
         public string Tipo { get; set; }
     }
 }
