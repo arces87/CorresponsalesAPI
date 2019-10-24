@@ -96,7 +96,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdentificacionCliente = request.IdentificacionCliente,
                 NombreCliente = request.NombreCliente,
                 NumeroCuenta = request.NumeroCuenta,
-                Valor = request.Valor,
+                Valor = 0-request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual - request.Valor,
                 SaldoCuenta = cuenta != null ? saldoCuenta + request.Valor : 0,
