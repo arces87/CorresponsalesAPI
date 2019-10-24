@@ -60,7 +60,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                     new ModeloListaTipoTransaccion(){
                         Id = idRetiro,
                         Nombre = "Retiro",
-                        Valor = 0-valorRetiro
+                        Valor = valorRetiro
                     },
             };
             return _retorno;

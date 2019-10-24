@@ -87,7 +87,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                     new ModeloObtenerComisionTransaccion(){
                         Id = idRetiro,
                         Nombre = "Retiro",
-                        Valor = 0-valorRetiro,
+                        Valor = valorRetiro,
                         Comisiones=_comisionRetiro
                     },
             };
