@@ -9,6 +9,8 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
 using OtpNet;
+using ServiciosFinancial;
+using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +28,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IServicioCorreoElectronico _correoElectronico;
+        private readonly IFBSCorresponsalesApi _servicioFinancial;
         private readonly byte[] _llave;
 
-        public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper,
+        public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper, IFBSCorresponsalesApi servicioFinancial,
             IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion, IServicioCorreoElectronico correoElectronico)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
+            _servicioFinancial = servicioFinancial;
             _jsonConfiguracion = jsonConfiguracion;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
             _correoElectronico = correoElectronico;
@@ -59,6 +63,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 cuentaDestino = agente.Usuario.Email;
                 nombreDestino = agente.NombreAgente;
+            }
+            else
+            {
+                var cliente = await _servicioFinancial.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(new PorIdentificacionSocioME()
+                {
+                    Identificacion = request.Identificacion
+                });
+                cuentaDestino = cliente.Body.CorreoElectronico;
+                nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
             }
             if (cuentaDestino != "" && nombreDestino != "")
                 try
@@ -90,7 +103,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                     throw new Exception("No se ha podido enviar el Correo Electrónico");
-                    
+
                 }
 
             return true;
