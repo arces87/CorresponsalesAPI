@@ -61,29 +61,42 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                 var _usuario = _mapper.Map<LoginUsuarioME>(request);
                                 _usuario.Dispositivo = "Movil";
                                 var usuarioAutenticado = await _mediador.Send(_usuario);
-                                if (usuarioAutenticado.Errores == null)
+                                if (usuarioAutenticado.Errores == null || usuarioAutenticado.CambioContrasenia)
                                 {
-                                    var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-                                    var usuario = new AutenticarUsuarioMS()
+                                    AutenticarUsuarioMS usuario = null;
+                                    if (usuarioAutenticado.CambioContrasenia)
                                     {
-                                        Token = usuarioAutenticado.Token,
-                                        Comisiones = new ComisionesMS(),
-                                        Identificacion = agente.Identificacion,
-                                        ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
-                                        ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente,
-                                        JsonNegocio = jsonNegocio,
-                                        Estado = agente.Estado.Nombre
-                                    };
-
-                                    if (jsonNegocio != null)
-                                    {
-                                        if (jsonNegocio.CobroServicios != null)
-                                            usuario.Comisiones.CobroServicios = _mapper.Map<ComisionOperacionMS>(jsonNegocio.CobroServicios.Comisiones);
-                                        if (jsonNegocio.Deposito != null)
-                                            usuario.Comisiones.Deposito = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Deposito.Comisiones);
-                                        if (jsonNegocio.Retiro != null)
-                                            usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
+                                        usuario = new AutenticarUsuarioMS()
+                                        {
+                                            Token = usuarioAutenticado.Token,
+                                            CambioContrasenia = true
+                                        };
                                     }
+                                    else
+                                    {
+                                        var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+                                        usuario = new AutenticarUsuarioMS()
+                                        {
+                                            Token = usuarioAutenticado.Token,
+                                            Comisiones = new ComisionesMS(),
+                                            Identificacion = agente.Identificacion,
+                                            ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
+                                            ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente,
+                                            JsonNegocio = jsonNegocio,
+                                            Estado = agente.Estado.Nombre
+                                        };
+                                        if (jsonNegocio != null)
+                                        {
+                                            if (jsonNegocio.CobroServicios != null)
+                                                usuario.Comisiones.CobroServicios = _mapper.Map<ComisionOperacionMS>(jsonNegocio.CobroServicios.Comisiones);
+                                            if (jsonNegocio.Deposito != null)
+                                                usuario.Comisiones.Deposito = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Deposito.Comisiones);
+                                            if (jsonNegocio.Retiro != null)
+                                                usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
+                                        }
+                                    }
+
+
                                     await _mediador.Send(new CrearLogME()
                                     {
                                         JsonLog = JsonConvert.SerializeObject(usuario),
