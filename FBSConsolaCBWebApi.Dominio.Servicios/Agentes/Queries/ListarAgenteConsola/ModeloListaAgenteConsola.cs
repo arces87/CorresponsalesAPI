@@ -10,6 +10,7 @@
         public double ValorComision { get; set; }
         public int NumeroAlerta { get; set; }
         public double ValorReposicion { get; set; }
+        public bool CuentaAsociada { get; set; }
         public string Estado { get; set; }
     }
 }

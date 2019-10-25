@@ -18,15 +18,18 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
         private readonly IRepositorioAgente _repositorio;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAlerta _repositorioAlerta;
+        private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
 
-        public ListaAgenteConsolaHandler(IRepositorioAgente repositorio, IRepositorioAlerta repositorioAlerta, IRepositorioTransaccion repositorioTransaccion,
+        public ListaAgenteConsolaHandler(IRepositorioAgente repositorio, IRepositorioAlerta repositorioAlerta,
+            IRepositorioTransaccion repositorioTransaccion, IRepositorioCuenta repositorioCuenta,
             IJsonConfiguracion jsonConfiguracion, IMapper mapper)
         {
             _repositorio = repositorio;
             _repositorioAlerta = repositorioAlerta;
             _repositorioTransaccion = repositorioTransaccion;
+            _repositorioCuenta = repositorioCuenta;
             _jsonConfiguracion = jsonConfiguracion;
             _mapper = mapper;
         }
@@ -42,6 +45,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
             foreach (var item in _model)
             {
                 var transacciones = await _repositorioTransaccion.GetForAgente(item.Id.ToString());
+                var cuenta = await _repositorioCuenta.GetForAgente(item.Id.ToString());
                 var comisiones = 0.0;
                 transacciones = transacciones.Where(t => !t.ReposicionRealizada).ToList();
                 foreach (var transaccion in transacciones)
@@ -61,7 +65,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
                     Ubicacion = item.Ubicacion,
                     ValorComision = comisiones,
                     ValorReposicion = transacciones != null ? transacciones.Sum(t => t.Valor) : 0,
-                    Estado = item.Estado.Nombre
+                    Estado = item.Estado.Nombre,
+                    CuentaAsociada = cuenta != null ? true : false
                 });
             }
             _retorno.CantidadElementos = request.CantidadElementos;
