@@ -45,7 +45,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 var idEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
                 var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
-                if (agente != null && (agente.Estado.Id == new Guid(idEstadoActivo) || agente.Estado.Id == new Guid(idEstadoCobrando))) //Comprobacion de existencia del Agente y si se encuentra Activo
+                if (agente != null) //Comprobacion de existencia del Agente y si se encuentra Activo
                 {
                     if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
                     {
@@ -72,7 +72,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                             CambioContrasenia = true
                                         };
                                     }
-                                    else
+                                    else if (agente.Estado.Id == new Guid(idEstadoActivo) || agente.Estado.Id == new Guid(idEstadoCobrando))
                                     {
                                         var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
                                         usuario = new AutenticarUsuarioMS()
@@ -95,8 +95,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                                 usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
                                         }
                                     }
-
-
+                                    else
+                                    {
+                                        throw new Exception("Error en la validación de los datos de autenticación");
+                                    }
                                     await _mediador.Send(new CrearLogME()
                                     {
                                         JsonLog = JsonConvert.SerializeObject(usuario),
@@ -104,6 +106,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                                     });
                                     return usuario;
+
                                 }
                             }
                         }
