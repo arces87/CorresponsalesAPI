@@ -45,9 +45,10 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("CambioContrasenia", Name = "Usuario_CambioContrasenia")]
-        public async Task<ActionResult<string>> CambioContrasenia([FromBody] CambioContraseniaME modelo)
+        public async Task<ActionResult<bool>> CambioContrasenia([FromBody] CambioContraseniaME modelo)
         {
-            return await _mediador.Send(modelo);
+            await _mediador.Send(modelo);
+            return Ok(true);
         }
     }
 }
