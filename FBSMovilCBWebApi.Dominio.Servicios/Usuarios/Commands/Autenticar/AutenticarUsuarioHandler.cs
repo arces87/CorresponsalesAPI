@@ -49,66 +49,76 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 {
                     if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
                     {
-                        var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
-                        if (geolocalizacion != null) //Comprobación de los datos de Geolocalización
+                        var _usuario = _mapper.Map<LoginUsuarioME>(request);
+                        _usuario.Dispositivo = "Movil";
+                        var usuarioAutenticado = await _mediador.Send(_usuario);
+                        if (usuarioAutenticado.Errores == null || usuarioAutenticado.CambioContrasenia)
                         {
-                            var latitud_inicio = geolocalizacion.Latitud - 1;
-                            var latitud_fin = geolocalizacion.Latitud + 1;
-                            var longitud_inicio = geolocalizacion.Longitud - 1;
-                            var longitud_fin = geolocalizacion.Longitud + 1;
-                            if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
+                            AutenticarUsuarioMS usuario = null;
+                            if (usuarioAutenticado.CambioContrasenia)
                             {
-                                var _usuario = _mapper.Map<LoginUsuarioME>(request);
-                                _usuario.Dispositivo = "Movil";
-                                var usuarioAutenticado = await _mediador.Send(_usuario);
-                                if (usuarioAutenticado.Errores == null || usuarioAutenticado.CambioContrasenia)
+                                usuario = new AutenticarUsuarioMS()
                                 {
-                                    AutenticarUsuarioMS usuario = null;
-                                    if (usuarioAutenticado.CambioContrasenia)
+                                    Token = usuarioAutenticado.Token,
+                                    CambioContrasenia = true
+                                };
+                                await _mediador.Send(new CrearLogME()
+                                {
+                                    JsonLog = JsonConvert.SerializeObject(usuario),
+                                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
+                                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                                });
+                                return usuario;
+                            }
+                            else if (agente.Estado.Id == new Guid(idEstadoActivo) || agente.Estado.Id == new Guid(idEstadoCobrando))
+                            {
+                                var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+                                usuario = new AutenticarUsuarioMS()
+                                {
+                                    Token = usuarioAutenticado.Token,
+                                    Comisiones = new ComisionesMS(),
+                                    Identificacion = agente.Identificacion,
+                                    ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
+                                    ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente,
+                                    JsonNegocio = jsonNegocio,
+                                    Estado = agente.Estado.Nombre
+                                };
+                                if (jsonNegocio != null)
+                                {
+                                    if (jsonNegocio.CobroServicios != null)
+                                        usuario.Comisiones.CobroServicios = _mapper.Map<ComisionOperacionMS>(jsonNegocio.CobroServicios.Comisiones);
+                                    if (jsonNegocio.Deposito != null)
+                                        usuario.Comisiones.Deposito = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Deposito.Comisiones);
+                                    if (jsonNegocio.Retiro != null)
+                                        usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
+                                }
+                                var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+                                if (geolocalizacion != null) //Comprobación de los datos de Geolocalización
+                                {
+                                    var latitud_inicio = geolocalizacion.Latitud - 1;
+                                    var latitud_fin = geolocalizacion.Latitud + 1;
+                                    var longitud_inicio = geolocalizacion.Longitud - 1;
+                                    var longitud_fin = geolocalizacion.Longitud + 1;
+                                    if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
                                     {
-                                        usuario = new AutenticarUsuarioMS()
-                                        {
-                                            Token = usuarioAutenticado.Token,
-                                            CambioContrasenia = true
-                                        };
-                                    }
-                                    else if (agente.Estado.Id == new Guid(idEstadoActivo) || agente.Estado.Id == new Guid(idEstadoCobrando))
-                                    {
-                                        var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-                                        usuario = new AutenticarUsuarioMS()
-                                        {
-                                            Token = usuarioAutenticado.Token,
-                                            Comisiones = new ComisionesMS(),
-                                            Identificacion = agente.Identificacion,
-                                            ValidarOtpAgente = _jsonConfiguracion.ValidarOtpAgente,
-                                            ValidarOtpCliente = _jsonConfiguracion.ValidarOtpCliente,
-                                            JsonNegocio = jsonNegocio,
-                                            Estado = agente.Estado.Nombre
-                                        };
-                                        if (jsonNegocio != null)
-                                        {
-                                            if (jsonNegocio.CobroServicios != null)
-                                                usuario.Comisiones.CobroServicios = _mapper.Map<ComisionOperacionMS>(jsonNegocio.CobroServicios.Comisiones);
-                                            if (jsonNegocio.Deposito != null)
-                                                usuario.Comisiones.Deposito = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Deposito.Comisiones);
-                                            if (jsonNegocio.Retiro != null)
-                                                usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new Exception("Error en la validación de los datos de autenticación");
-                                    }
-                                    await _mediador.Send(new CrearLogME()
-                                    {
-                                        JsonLog = JsonConvert.SerializeObject(usuario),
-                                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
-                                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-                                    });
-                                    return usuario;
 
+                                        await _mediador.Send(new CrearLogME()
+                                        {
+                                            JsonLog = JsonConvert.SerializeObject(usuario),
+                                            IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
+                                            IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                                        });
+                                        return usuario;
+
+                                    }
                                 }
                             }
+                            else
+                            {
+                                throw new Exception("Error en la validación de los datos de autenticación");
+                            }
+
+
                         }
                     }
                 }
