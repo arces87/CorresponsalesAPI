@@ -82,5 +82,11 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return Ok(await _mediador.Send(modelo));
         }
+
+        [HttpPost("verificarIdentificacion", Name = "Agente_VerificarIdentificacion")]
+        public async Task<ActionResult<bool>> VerificarIdentificacion([FromBody] VerificarIdentificacionAgenteME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
     }
 }

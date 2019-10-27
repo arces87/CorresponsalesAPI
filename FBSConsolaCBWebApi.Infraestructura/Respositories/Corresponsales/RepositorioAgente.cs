@@ -347,6 +347,12 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 .Include(c => c.Usuario).Include(c => c.Dispositivo).Include(c => c.Estado)
                 .FirstOrDefaultAsync(c => c.Usuario.Id == IdUsuario);
         }
+        public async Task<bool> Verificaridentificacion(string Identificacion)
+        {
+            var usuario = await _contexto.Set<Agente>()
+                .FirstOrDefaultAsync(c => c.Identificacion == Identificacion);
+            return usuario != null ? true : false;
+        }
 
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
