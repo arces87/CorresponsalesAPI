@@ -2,6 +2,7 @@
 using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -12,6 +13,7 @@ using ServiciosFacilito;
 using ServiciosFacilito.Models;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +29,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly byte[] _llave;
 
         public ProcesarPagoHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSFacilitoAPI facilitoApi,
             IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente, IRepositorioCuenta repositorioCuenta,
@@ -40,6 +43,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             _repositorioAgente = repositorioAgente;
             _repositorioCuenta = repositorioCuenta;
             _httpContext = httpContext;
+            _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
         public async Task<PagoResponse> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
@@ -105,7 +109,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 SaldoDisponible = saldoActual + request.Valor,
                 SaldoCuenta = cuenta != null ? saldoCuenta - request.Valor : 0,
                 Tipo = IdTipoAccion,
-                EstaActivo = true
+                EstaActivo = true,
+                Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
             await _mediador.Send(new CrearLogME()
