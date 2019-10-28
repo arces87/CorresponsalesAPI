@@ -82,6 +82,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
         {
             var catalogo = _contexto.Set<Catalogo>().FirstOrDefault(o => o.Id == entidad.Id);
             catalogo.EstaActivo = false;
+            _contexto.Entry(catalogo).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
 

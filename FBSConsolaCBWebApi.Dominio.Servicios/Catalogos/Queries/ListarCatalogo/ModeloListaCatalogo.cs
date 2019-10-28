@@ -11,5 +11,6 @@
         public string IdTipoCatalogo { get; set; }
 
         public string NombreTipoCatalogo { get; set; }
+        public bool EstaActivo { get; set; }
     }
 }
