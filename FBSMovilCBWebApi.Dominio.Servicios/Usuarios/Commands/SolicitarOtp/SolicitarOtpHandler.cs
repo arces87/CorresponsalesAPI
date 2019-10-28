@@ -3,6 +3,7 @@ using FBS.Dominio.Modelos.CorreoElectronico;
 using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
+using FBS.Identidad.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -25,21 +26,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IMediator _mediador;
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
-        private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
+        private readonly IRepositorioUsuario _repositorioUsuario;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IServicioCorreoElectronico _correoElectronico;
         private readonly IFBSCorresponsalesApi _servicioFinancial;
         private readonly byte[] _llave;
 
         public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper, IFBSCorresponsalesApi servicioFinancial,
-            IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion, IServicioCorreoElectronico correoElectronico)
+            IJsonConfiguracion jsonConfiguracion, IRepositorioUsuario repositorioUsuario, IServicioCorreoElectronico correoElectronico)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
             _servicioFinancial = servicioFinancial;
             _jsonConfiguracion = jsonConfiguracion;
-            _repositorioGeolocalizacion = repositorioGeolocalizacion;
+            _repositorioUsuario = repositorioUsuario;
             _correoElectronico = correoElectronico;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
@@ -63,6 +64,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 cuentaDestino = agente.Usuario.Email;
                 nombreDestino = agente.NombreAgente;
+                await _repositorioUsuario.EliminarOtp(request.Usuario);
             }
             else
             {
@@ -72,6 +74,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 });
                 cuentaDestino = cliente.Body.CorreoElectronico;
                 nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
+                await _repositorioUsuario.EliminarOtpCliente(request.Usuario);
             }
             if (cuentaDestino != "" && nombreDestino != "")
                 try
