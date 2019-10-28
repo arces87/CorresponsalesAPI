@@ -148,6 +148,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
+        public async Task ReponerTransaccion(string IdAgente)
+        {
+            var transacciones = Context.Transacciones.Where(t => t.ReposicionRealizada == false && t.Agente.Id.ToString() == IdAgente);
+            if (transacciones.Count() > 0)
+                Context.Transacciones.RemoveRange(transacciones);
+            await _contexto.SaveChangesAsync();
+        }
 
         public async Task<IEnumerable<Transaccion>> GetForAgente(string Id)
         {

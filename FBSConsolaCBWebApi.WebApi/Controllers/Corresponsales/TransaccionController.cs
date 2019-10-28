@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Commands;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -53,6 +54,12 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
 
         [HttpPost("obtener", Name = "Transaccion_ObtenerTransaccion")]
         public async Task<ActionResult<ObtenerTransaccionMS>> Get([FromBody] ObtenerTransaccionME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("reponerTransacciones", Name = "Transaccion_ReponerTransacciones")]
+        public async Task<ActionResult<bool>> ReponerTransacciones([FromBody] ReponerTransaccionesME modelo)
         {
             return await _mediador.Send(modelo);
         }
