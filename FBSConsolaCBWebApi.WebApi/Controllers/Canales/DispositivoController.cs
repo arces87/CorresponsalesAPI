@@ -47,5 +47,11 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return Ok(await _mediador.Send(modelo));
         }
+
+        [HttpPost("verificarDispositivo", Name = "Dispositivo_VerificarDispositivo")]
+        public async Task<ActionResult<bool>> VerificarDispositivo([FromBody] VerificarDispositivoME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
     }
 }

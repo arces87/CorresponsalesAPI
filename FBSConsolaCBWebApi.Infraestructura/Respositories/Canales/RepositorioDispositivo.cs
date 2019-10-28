@@ -98,6 +98,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
             await _contexto.SaveChangesAsync();
         }
 
+        public async Task<bool> VerificarDispositivo(string Marca, string Modelo, string NoSerie)
+        {
+            var dispositivo = await Context.Dispositivos.FirstOrDefaultAsync(d => d.Marca.Nombre == Marca
+                                                                    && d.Modelo.Replace(" ", "").ToLower() == Modelo.Replace(" ", "").ToLower()
+                                                                    && d.NumeroSerie.Replace(" ", "").ToLower() == NoSerie.Replace(" ", "").ToLower());
+            return dispositivo != null ? true : false;
+        }
+
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
         public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));

@@ -72,6 +72,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
             _retorno.TotalElementos = totalElementos;
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
+            _retorno.Agentes = listaRetorno.ToList();
             return _retorno;
         }
     }
