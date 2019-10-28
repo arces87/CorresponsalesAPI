@@ -29,7 +29,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 
         public async Task<ObtenerDistribuidosMS> Handle(ObtenerDistribuidosME request, CancellationToken cancellationToken)
         {
-            var catalogos = await _repositorioCatalogo.GetAllWithAssociations();
+            var catalogos = await _repositorioCatalogo.GetAllWithAssociations(true);
             var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync();
             var tiposAlertas = catalogos.Where(c => c.TipoCatalogo.Id == new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTipoAlerta").Valor)).ToList();
             return new ObtenerDistribuidosMS() { TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuesta.Body.TiposIdentificacion), TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas) };

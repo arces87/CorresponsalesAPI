@@ -38,9 +38,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
         {
             var _model = await _repositorio.GetAllWithAssociationsConsola(request.IdSupervisor);
             var _retorno = new ListaAgenteConsolaMS();
-            var totalElementos = 0;
-            Filtro<Agente>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
-            _retorno.TotalElementos = totalElementos;
             _retorno.Agentes = new List<ModeloListaAgenteConsola>();
             foreach (var item in _model)
             {
@@ -69,6 +66,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
                     CuentaAsociada = cuenta != null ? true : false
                 });
             }
+            var totalElementos = 0;
+            IEnumerable<ModeloListaAgenteConsola> listaRetorno = _retorno.Agentes;
+            Filtro<ModeloListaAgenteConsola>.ProcesarLista(ref listaRetorno, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
+            _retorno.TotalElementos = totalElementos;
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
             return _retorno;

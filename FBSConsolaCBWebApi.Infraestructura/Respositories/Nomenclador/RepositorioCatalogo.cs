@@ -30,19 +30,34 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
                 return catalogos.ToList();
             }
         }
-        public async Task<IEnumerable<Catalogo>> GetAllWithAssociations()
+        public async Task<IEnumerable<Catalogo>> GetAllWithAssociations(bool? Activo)
         {
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var catalogos = await conexion.QueryAsync<Catalogo, TipoCatalogo, Catalogo>(@"SELECT * FROM Nomenclador.Catalogo join Nomenclador.TipoCatalogo " +
-                    "on Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id where Nomenclador.Catalogo.EstaActivo='true'",
+                if (Activo != null)
+                {
+                    var catalogos = await conexion.QueryAsync<Catalogo, TipoCatalogo, Catalogo>(@"SELECT * FROM Nomenclador.Catalogo join Nomenclador.TipoCatalogo " +
+                    "on Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id " +
+                    "where Nomenclador.Catalogo.EstaActivo=@Activo",
+                    (catalogo, tipoCatalogo) =>
+                    {
+                        catalogo.TipoCatalogo = tipoCatalogo;
+                        return catalogo;
+                    }, param: new { Activo });
+                    return catalogos.ToList();
+                }
+                else
+                {
+                    var catalogos = await conexion.QueryAsync<Catalogo, TipoCatalogo, Catalogo>(@"SELECT * FROM Nomenclador.Catalogo join Nomenclador.TipoCatalogo " +
+                    "on Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id",
                     (catalogo, tipoCatalogo) =>
                     {
                         catalogo.TipoCatalogo = tipoCatalogo;
                         return catalogo;
                     });
-                return catalogos.ToList();
+                    return catalogos.ToList();
+                }
             }
         }
         public async Task<Catalogo> GetWithAssociations(string Id)

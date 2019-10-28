@@ -56,7 +56,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdVerificarOtp").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return totp.VerifyTotp(request.Otp, out intentos);
+            var validacion = totp.VerifyTotp(request.Otp, out intentos);
+            if (validacion)
+                return true;
+            return validacion;
         }
     }
 }

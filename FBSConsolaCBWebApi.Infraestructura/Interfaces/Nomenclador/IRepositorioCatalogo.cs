@@ -8,7 +8,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador
     public interface IRepositorioCatalogo : IRepositorio<Catalogo>
     {
         Task<IEnumerable<Catalogo>> GetAllActive();
-        Task<IEnumerable<Catalogo>> GetAllWithAssociations();
+        Task<IEnumerable<Catalogo>> GetAllWithAssociations(bool? Activo);
         Task<Catalogo> GetWithAssociations(string Id);
 
     }

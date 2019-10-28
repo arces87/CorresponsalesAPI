@@ -6,6 +6,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries
 {
     public class ListarCatalogoME : IRequest<ListarCatalogoMS>
     {
+        public bool? Activos { get; set; }
         public int Pagina { get; set; }
 
         public int CantidadElementos { get; set; }

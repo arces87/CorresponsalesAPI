@@ -23,7 +23,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries
 
         public async Task<ListarCatalogoMS> Handle(ListarCatalogoME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
+            var _model = await _repositorio.GetAllWithAssociations(request.Activos);
             var _retorno = new ListarCatalogoMS();
             var totalElementos = 0;
             Filtro<Catalogo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
