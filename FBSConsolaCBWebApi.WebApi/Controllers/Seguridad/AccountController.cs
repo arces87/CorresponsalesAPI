@@ -74,13 +74,13 @@ namespace FBSConsolaCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
 
-        [HttpPost("verificarCodigoUsuario", Name = "Agente_VerificarCodigoUsuario")]
+        [HttpPost("verificarCodigoUsuario", Name = "Usuario_VerificarCodigoUsuario")]
         public async Task<ActionResult<bool>> VerificarCodigoUsuario([FromBody] VerificarUsuarioME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
-        [HttpPost("verificarCorreoElectronico", Name = "Agente_VerificarCorreoElectronico")]
+        [HttpPost("verificarCorreoElectronico", Name = "Usuario_VerificarCorreoElectronico")]
         public async Task<ActionResult<bool>> VerificarCorreoElectronico([FromBody] VerificarCorreoElectronicoME modelo)
         {
             return await _mediador.Send(modelo);
