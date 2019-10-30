@@ -34,6 +34,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
         public async Task<AutenticarUsuarioMS> Handle(AutenticarUsuarioME request, CancellationToken cancellationToken)
         {
+            var error = "";
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -109,23 +110,44 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         return usuario;
 
                                     }
+                                    else
+                                    {
+                                        error = " | A006";
+                                    }
+                                }
+                                else
+                                {
+                                    error = " | A005";
                                 }
                             }
                             else
                             {
-                                throw new Exception("Error en la validación de los datos de autenticación");
+
+                                throw new Exception("Error en la validación de los datos de autenticación | A004");
                             }
 
 
                         }
+                        else
+                        {
+                            error = " | A003";
+                        }
+                    }
+                    else
+                    {
+                        error = " | A002";
                     }
                 }
+                else
+                {
+                    error = " | A001";
+                }
 
-                throw new Exception("Error en la validación de los datos de autenticación");
+                throw new Exception("Error en la validación de los datos de autenticación" + error);
             }
             catch (Exception)
             {
-                throw new Exception("Error en la validación de los datos de autenticación");
+                throw new Exception("Error en la validación de los datos de autenticación" + error);
             }
         }
     }

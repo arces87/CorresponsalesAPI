@@ -40,6 +40,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdActivacion").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
+            var error = "";
             try
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
@@ -68,16 +69,27 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                             });
                             return true;
                         }
-                        throw new Exception(usuarioAutenticado.Errores);
+                        else
+                        {
+                            error = " | A003";
+                        }
+                        throw new Exception("Error en la validación de los datos de autenticación" + error);
                     }
-
+                    else
+                    {
+                        error = " | A002";
+                    }
+                }
+                else
+                {
+                    error = " | A001";
                 }
 
-                throw new Exception("Error en la validación de los datos de autenticación");
+                throw new Exception("Error en la validación de los datos de autenticación" + error);
             }
             catch (Exception)
             {
-                throw new Exception("Error en la validación de los datos de autenticación");
+                throw new Exception("Error en la validación de los datos de autenticación" + error);
             }
         }
     }
