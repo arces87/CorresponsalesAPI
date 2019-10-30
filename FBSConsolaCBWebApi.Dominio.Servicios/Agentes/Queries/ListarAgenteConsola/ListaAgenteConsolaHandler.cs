@@ -2,7 +2,6 @@
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
 using FBS.Identidad.DAL.Modelado;
-using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using Newtonsoft.Json;

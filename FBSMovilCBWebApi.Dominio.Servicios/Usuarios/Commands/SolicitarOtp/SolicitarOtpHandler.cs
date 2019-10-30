@@ -4,7 +4,6 @@ using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;

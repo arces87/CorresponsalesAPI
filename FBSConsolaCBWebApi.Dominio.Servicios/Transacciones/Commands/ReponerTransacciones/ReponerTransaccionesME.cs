@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Commands
 {

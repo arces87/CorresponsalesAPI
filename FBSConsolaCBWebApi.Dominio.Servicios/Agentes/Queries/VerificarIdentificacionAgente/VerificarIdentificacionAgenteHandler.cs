@@ -17,7 +17,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 
         public async Task<bool> Handle(VerificarIdentificacionAgenteME request, CancellationToken cancellationToken)
         {
+            if (request.IdAgente != null && request.IdAgente != "")
+                return await _repositorio.Verificaridentificacion(request.Identificacion, request.IdAgente);
             return await _repositorio.Verificaridentificacion(request.Identificacion);
+
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +17,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
 
         public async Task<bool> Handle(VerificarDispositivoME request, CancellationToken cancellationToken)
         {
-            return await _repositorio.VerificarDispositivo(request.Marca,request.Modelo,request.NoSerie);
+            if (request.IdDispositivo != null && request.IdDispositivo != "")
+                return await _repositorio.VerificarDispositivo(request.Marca, request.Modelo, request.NoSerie, request.IdDispositivo);
+            return await _repositorio.VerificarDispositivo(request.Marca, request.Modelo, request.NoSerie);
         }
     }
 }

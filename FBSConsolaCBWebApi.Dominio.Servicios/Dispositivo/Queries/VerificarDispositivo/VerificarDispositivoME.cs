@@ -7,5 +7,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
         public string Marca { get; set; }
         public string Modelo { get; set; }
         public string NoSerie { get; set; }
+        public string IdDispositivo { get; set; }
     }
 }

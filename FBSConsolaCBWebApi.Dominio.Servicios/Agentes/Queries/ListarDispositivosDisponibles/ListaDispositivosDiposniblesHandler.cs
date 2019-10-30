@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FBS.Dominio.Modelos.Filtro;
 using FBS.Dominio.Servicios.Utilidades;
-using FBS.Identidad.DAL.Seguridad;
 using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;

@@ -105,6 +105,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
                                                                     && d.NumeroSerie.Replace(" ", "").ToLower() == NoSerie.Replace(" ", "").ToLower());
             return dispositivo != null ? true : false;
         }
+        public async Task<bool> VerificarDispositivo(string Marca, string Modelo, string NoSerie, string IdDispositivo)
+        {
+            var dispositivo = await Context.Dispositivos.FirstOrDefaultAsync(d => d.Marca.Nombre == Marca
+                                                                    && d.Modelo.Replace(" ", "").ToLower() == Modelo.Replace(" ", "").ToLower()
+                                                                    && d.NumeroSerie.Replace(" ", "").ToLower() == NoSerie.Replace(" ", "").ToLower()
+                                                                    && d.Id.ToString() != IdDispositivo);
+            return dispositivo != null ? true : false;
+        }
 
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 

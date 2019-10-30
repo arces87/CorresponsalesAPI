@@ -11,6 +11,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales
         Task<IEnumerable<Dispositivo>> GetAllWithAssociations();
         Task<Dispositivo> GetWithAssociations(string Id);
         Task<bool> VerificarDispositivo(string Marca, string Modelo, string NoSerie);
+        Task<bool> VerificarDispositivo(string Marca, string Modelo, string NoSerie, string IdDispositivo);
 
     }
 }
