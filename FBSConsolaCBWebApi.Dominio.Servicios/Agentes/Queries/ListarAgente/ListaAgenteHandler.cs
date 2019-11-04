@@ -25,7 +25,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 
         public async Task<ListaAgenteMS> Handle(ListaAgenteME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations(request.IdSupervisor);
+            var _model = await _repositorio.GetAllWithAssociations(request.IdSupervisor, request.Estado);
             var _retorno = new ListaAgenteMS();
             var totalElementos = 0;
             Filtro<Agente>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);

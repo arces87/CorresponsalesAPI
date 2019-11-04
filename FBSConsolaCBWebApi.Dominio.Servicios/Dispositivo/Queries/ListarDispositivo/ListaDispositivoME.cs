@@ -6,6 +6,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
 {
     public class ListaDispositivoME : IRequest<ListaDispositivoMS>
     {
+        public bool? Activo { get; set; }
         public int Pagina { get; set; }
 
         public int CantidadElementos { get; set; }

@@ -6,6 +6,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 {
     public class ListaAgenteME : IRequest<ListaAgenteMS>
     {
+        public string Estado { get; set; }
         public string IdSupervisor { get; set; }
         public int Pagina { get; set; }
 

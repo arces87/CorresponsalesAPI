@@ -23,7 +23,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Queries
 
         public async Task<ListaDispositivoMS> Handle(ListaDispositivoME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
+            var _model = await _repositorio.GetAllWithAssociations(request.Activo);
             var _retorno = new ListaDispositivoMS();
             var totalElementos = 0;
             Filtro<Dispositivo>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);

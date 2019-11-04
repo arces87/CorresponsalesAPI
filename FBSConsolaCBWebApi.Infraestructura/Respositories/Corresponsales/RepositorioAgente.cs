@@ -38,14 +38,39 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 return Agentes.ToList();
             }
         }
-        public async Task<IEnumerable<Agente>> GetAllWithAssociations(string IdSupervisor)
+        public async Task<IEnumerable<Agente>> GetAllWithAssociations(string IdSupervisor, string Estado)
         {
             using (var conexion = Conexion)
             {
                 conexion.Open();
                 if (IdSupervisor != null && IdSupervisor != "")
                 {
-                    var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                    if (Estado != null && Estado != "")
+                    {
+                        var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                        "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
+                        "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                        "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                        "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                        "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                        "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                        "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.SupervisorId = @IdSupervisor and Corresponsales.Agente.EstadoId = @Estado",
+                       (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                       {
+                           dispositivo.Marca = marca;
+                           agente.Estado = estado;
+                           if (usuario != null)
+                               agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                           if (supervisor != null)
+                               agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                           agente.Dispositivo = dispositivo;
+                           return agente;
+                       }, param: new { IdSupervisor, Estado });
+                        return Agentes.ToList();
+                    }
+                    else
+                    {
+                        var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
                         "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
                         "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
                         "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
@@ -64,30 +89,59 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                            agente.Dispositivo = dispositivo;
                            return agente;
                        }, param: new { IdSupervisor });
-                    return Agentes.ToList();
+                        return Agentes.ToList();
+                    }
+
                 }
                 else
                 {
-                    var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
-                       "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
-                       "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
-                       "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
-                       "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
-                       "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
-                       "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
-                       "where Corresponsales.Agente.EstaActivo='true'",
-                      (agente, estado, dispositivo, marca, usuario, supervisor) =>
-                      {
-                          dispositivo.Marca = marca;
-                          agente.Estado = estado;
-                          if (usuario != null)
-                              agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
-                          if (supervisor != null)
-                              agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
-                          agente.Dispositivo = dispositivo;
-                          return agente;
-                      });
-                    return Agentes.ToList();
+                    if (Estado != null && Estado != "")
+                    {
+                        var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                          "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
+                          "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                          "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                          "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                          "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                          "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                          "where Corresponsales.Agente.EstaActivo='true' and Corresponsales.Agente.EstadoId = @Estado",
+                         (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                         {
+                             dispositivo.Marca = marca;
+                             agente.Estado = estado;
+                             if (usuario != null)
+                                 agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                             if (supervisor != null)
+                                 agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                             agente.Dispositivo = dispositivo;
+                             return agente;
+                         }, param: new { Estado });
+                        return Agentes.ToList();
+                    }
+                    else
+                    {
+                        var Agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*,marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                      "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
+                      "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                      "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                      "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                      "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                      "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                      "where Corresponsales.Agente.EstaActivo='true'",
+                     (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                     {
+                         dispositivo.Marca = marca;
+                         agente.Estado = estado;
+                         if (usuario != null)
+                             agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                         if (supervisor != null)
+                             agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                         agente.Dispositivo = dispositivo;
+                         return agente;
+                     });
+                        return Agentes.ToList();
+                    }
+
                 }
 
             }
@@ -240,10 +294,11 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             return await Context.Agentes.FirstOrDefaultAsync(d => d.Id.ToString() == Id);
         }
 
-        public override async Task Remove(Agente entidad)
+        public override async Task Remove(Agente agente)
         {
-            var catalogo = _contexto.Set<Agente>().FirstOrDefault(o => o.Id == entidad.Id);
-            catalogo.EstaActivo = false;
+            var entidad = _contexto.Set<Agente>().FirstOrDefault(o => o.Id == agente.Id);
+            entidad.EstaActivo = false;
+            _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
 

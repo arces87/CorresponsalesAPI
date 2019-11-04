@@ -31,22 +31,38 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
                 return dispositivos.ToList();
             }
         }
-        public async Task<IEnumerable<Dispositivo>> GetAllWithAssociations()
+        public async Task<IEnumerable<Dispositivo>> GetAllWithAssociations(bool? activo)
         {
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var dispositivos = await conexion.QueryAsync<Dispositivo, Catalogo, Catalogo, Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
-                    "join Nomenclador.Catalogo marca on Canales.Dispositivo.MarcaId = marca.Id " +
-                    "join Nomenclador.Catalogo sistemaOperativo on Canales.Dispositivo.SistemaOperativoId = sistemaOperativo.Id " +
-                    "where Canales.Dispositivo.EstaActivo='true'",
-                    (dispositivo, marca, sistemaOperativo) =>
-                    {
-                        dispositivo.Marca = marca;
-                        dispositivo.SistemaOperativo = sistemaOperativo;
-                        return dispositivo;
-                    });
-                return dispositivos.ToList();
+                if (activo != null)
+                {
+                    var dispositivos = await conexion.QueryAsync<Dispositivo, Catalogo, Catalogo, Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
+                  "join Nomenclador.Catalogo marca on Canales.Dispositivo.MarcaId = marca.Id " +
+                  "join Nomenclador.Catalogo sistemaOperativo on Canales.Dispositivo.SistemaOperativoId = sistemaOperativo.Id " +
+                  "where Canales.Dispositivo.EstaActivo=@activo",
+                  (dispositivo, marca, sistemaOperativo) =>
+                  {
+                      dispositivo.Marca = marca;
+                      dispositivo.SistemaOperativo = sistemaOperativo;
+                      return dispositivo;
+                  }, param: new { activo });
+                    return dispositivos.ToList();
+                }
+                else
+                {
+                    var dispositivos = await conexion.QueryAsync<Dispositivo, Catalogo, Catalogo, Dispositivo>(@"SELECT * FROM Canales.Dispositivo " +
+                   "join Nomenclador.Catalogo marca on Canales.Dispositivo.MarcaId = marca.Id " +
+                   "join Nomenclador.Catalogo sistemaOperativo on Canales.Dispositivo.SistemaOperativoId = sistemaOperativo.Id",
+                   (dispositivo, marca, sistemaOperativo) =>
+                   {
+                       dispositivo.Marca = marca;
+                       dispositivo.SistemaOperativo = sistemaOperativo;
+                       return dispositivo;
+                   });
+                    return dispositivos.ToList();
+                }
             }
         }
         public async Task<Dispositivo> GetWithAssociations(string Id)
@@ -76,8 +92,9 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
 
         public override async Task Remove(Dispositivo entidad)
         {
-            var catalogo = _contexto.Set<Dispositivo>().FirstOrDefault(o => o.Id == entidad.Id);
-            catalogo.EstaActivo = false;
+            var dispositivo = _contexto.Set<Dispositivo>().FirstOrDefault(o => o.Id == entidad.Id);
+            dispositivo.EstaActivo = false;
+            _contexto.Entry(dispositivo).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
 
