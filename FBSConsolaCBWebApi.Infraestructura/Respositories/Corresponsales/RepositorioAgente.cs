@@ -296,8 +296,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
 
         public override async Task Remove(Agente agente)
         {
-            var entidad = _contexto.Set<Agente>().FirstOrDefault(o => o.Id == agente.Id);
-            entidad.EstaActivo = false;
+            var IdEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
+            var IdEstadoEliminado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoEliminado").Valor;
+            var entidad = Context.Agentes.Include(a => a.Estado).FirstOrDefault(o => o.Id == agente.Id);
+            if (entidad.Id.ToString() == IdEstadoEliminado)
+                entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id.ToString() == IdEstadoActivo);
+            else
+                entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id.ToString() == IdEstadoEliminado);
             _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }

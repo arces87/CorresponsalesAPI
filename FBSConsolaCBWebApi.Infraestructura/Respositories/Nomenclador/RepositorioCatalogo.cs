@@ -81,7 +81,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador
         public override async Task Remove(Catalogo entidad)
         {
             var catalogo = _contexto.Set<Catalogo>().FirstOrDefault(o => o.Id == entidad.Id);
-            catalogo.EstaActivo = false;
+            catalogo.EstaActivo = !catalogo.EstaActivo;
             _contexto.Entry(catalogo).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }

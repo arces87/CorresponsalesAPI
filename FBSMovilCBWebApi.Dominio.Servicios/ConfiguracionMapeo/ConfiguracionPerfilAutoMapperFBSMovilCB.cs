@@ -60,8 +60,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Transacciones
-            CreateMap<Transaccion, ModeloTransaccion>();
-            CreateMap<Transaccion, ModeloListarHojaColecta>();
+            CreateMap<Transaccion, ModeloTransaccion>()
+                .ForMember(t => t.Tipo, opt => opt.MapFrom(m => m.Descripcion));
+            CreateMap<Transaccion, ModeloListarHojaColecta>()
+                .ForMember(t => t.Tipo, opt => opt.MapFrom(m => m.Descripcion));
             #endregion
 
             #region Servicios Financial

@@ -93,7 +93,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
         public override async Task Remove(Dispositivo entidad)
         {
             var dispositivo = _contexto.Set<Dispositivo>().FirstOrDefault(o => o.Id == entidad.Id);
-            dispositivo.EstaActivo = false;
+            dispositivo.EstaActivo = !dispositivo.EstaActivo;
             _contexto.Entry(dispositivo).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
