@@ -85,5 +85,10 @@ namespace FBSConsolaCBWebApi.WebApi
         {
             return await _mediador.Send(modelo);
         }
+        [HttpDelete("eliminar", Name = "Usuario_BloquearUsuario")]
+        public async Task<ActionResult<bool>> Delete([FromBody] EliminarUsuarioME modelo)
+        {
+            return Ok(await _mediador.Send(modelo));
+        }
     }
 }

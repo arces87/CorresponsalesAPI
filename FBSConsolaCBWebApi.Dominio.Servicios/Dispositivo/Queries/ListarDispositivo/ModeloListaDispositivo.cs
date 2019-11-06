@@ -15,5 +15,6 @@
         public string NombreMarca { get; set; }
         public string IdSistemaOperativo { get; set; }
         public string NombreSistemaOperativo { get; set; }
+        public bool Estado { get; set; }
     }
 }

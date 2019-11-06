@@ -47,7 +47,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.IdMarca, opt => opt.MapFrom(d => d.Marca.Id))
                .ForMember(m => m.NombreMarca, opt => opt.MapFrom(d => d.Marca.Nombre))
                .ForMember(m => m.IdSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Id))
-               .ForMember(m => m.NombreSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Nombre));
+               .ForMember(m => m.NombreSistemaOperativo, opt => opt.MapFrom(d => d.SistemaOperativo.Nombre))
+               .ForMember(m => m.Estado, opt => opt.MapFrom(d => d.EstaActivo));
             CreateMap<Imagen, ObtenerDispositivoImagen>()
               .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.DireccionImagen));
 
