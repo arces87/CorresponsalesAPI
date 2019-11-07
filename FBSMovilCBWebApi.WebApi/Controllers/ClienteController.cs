@@ -22,8 +22,8 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("crearCliente", Name = "Cliente_CrearCliente")]
-        [Produces(typeof(CreaClienteMS))]
-        public async Task<ActionResult<CreaClienteMS>> CrearCliente([FromBody] CrearClienteME modelo)
+        [Produces(typeof(bool))]
+        public async Task<ActionResult<bool>> CrearCliente([FromBody] CrearClienteME modelo)
         {
             return await _mediador.Send(modelo);
         }

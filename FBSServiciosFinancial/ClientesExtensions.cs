@@ -46,7 +46,7 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static CreaClienteMS CreaCliente(this IClientes operations, CreaClienteME request)
+            public static bool? CreaCliente(this IClientes operations, CreaClienteME request)
             {
                 return operations.CreaClienteAsync(request).GetAwaiter().GetResult();
             }
@@ -59,7 +59,7 @@ namespace ServiciosFinancial
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CreaClienteMS> CreaClienteAsync(this IClientes operations, CreaClienteME request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<bool?> CreaClienteAsync(this IClientes operations, CreaClienteME request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreaClienteWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
                 {

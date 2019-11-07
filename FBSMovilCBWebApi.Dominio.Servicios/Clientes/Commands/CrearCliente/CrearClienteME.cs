@@ -3,7 +3,7 @@ using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 {
-    public class CrearClienteME : IRequest<CreaClienteMS>
+    public class CrearClienteME : IRequest<bool>
     {
         public int? SecuencialTipoIdentificacion { get; set; }
         public string Identificacion { get; set; }

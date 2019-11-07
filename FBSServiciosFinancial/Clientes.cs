@@ -205,7 +205,7 @@ namespace ServiciosFinancial
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<CreaClienteMS>> CreaClienteWithHttpMessagesAsync(CreaClienteME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<bool?>> CreaClienteWithHttpMessagesAsync(CreaClienteME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (request == null)
             {
@@ -290,7 +290,7 @@ namespace ServiciosFinancial
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<CreaClienteMS>();
+            var _result = new HttpOperationResponse<bool?>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -299,7 +299,7 @@ namespace ServiciosFinancial
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<CreaClienteMS>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<bool?>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {

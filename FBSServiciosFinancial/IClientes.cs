@@ -53,7 +53,7 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<CreaClienteMS>> CreaClienteWithHttpMessagesAsync(CreaClienteME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<bool?>> CreaClienteWithHttpMessagesAsync(CreaClienteME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
