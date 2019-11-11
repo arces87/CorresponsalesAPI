@@ -179,7 +179,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.IdAgente, opt => opt.MapFrom(d => d.Agente.Id))
                .ForMember(m => m.NombreAgente, opt => opt.MapFrom(d => d.Agente.NombreAgente))
                .ForMember(m => m.IdTipo, opt => opt.MapFrom(d => d.Tipo.Nombre))
-               .ForMember(m => m.NombreTipo, opt => opt.MapFrom(d => d.Tipo.Nombre));
+               .ForMember(m => m.NombreTipo, opt => opt.MapFrom(d => d.Tipo.Nombre))
+               .ForMember(m => m.Imagen, opt => opt.MapFrom(d => d.Agente.Usuario.Imagen));
             #endregion
 
             #region Usuarios

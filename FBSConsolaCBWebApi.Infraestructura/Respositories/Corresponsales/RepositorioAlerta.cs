@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using FBS.DAL.Nomenclador;
+using FBS.Identidad.DAL.Seguridad;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
@@ -40,14 +41,16 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 {
                     if (TipoAlerta != null && TipoAlerta != "")
                     {
-                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Usuario, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
                             "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                             "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                             "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                            "left join Seguridad.Usuario usuario on agente.UsuarioId = usuario.Id " +
                             "where alerta.EstaActivo='true' and alerta.TipoId = @TipoAlerta and alerta.EstadoId = @Estado",
-                           (alerta, estado, agente, tipo) =>
+                           (alerta, estado, agente, tipo, usuario) =>
                            {
                                alerta.Estado = estado;
+                               agente.Usuario = usuario;
                                alerta.Agente = agente;
                                alerta.Tipo = tipo;
                                return alerta;
@@ -56,14 +59,16 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                     }
                     else
                     {
-                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Usuario, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
                                 "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                                 "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                                 "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                                "left join Seguridad.Usuario usuario on agente.UsuarioId = usuario.Id " +
                                 "where alerta.EstaActivo='true' and alerta.EstadoId = @Estado",
-                               (alerta, estado, agente, tipo) =>
+                               (alerta, estado, agente, tipo, usuario) =>
                                {
                                    alerta.Estado = estado;
+                                   agente.Usuario = usuario;
                                    alerta.Agente = agente;
                                    alerta.Tipo = tipo;
                                    return alerta;
@@ -75,14 +80,16 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 {
                     if (TipoAlerta != null && TipoAlerta != "")
                     {
-                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Usuario, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
                             "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                             "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                             "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                            "left join Seguridad.Usuario usuario on agente.UsuarioId = usuario.Id " +
                             "where alerta.EstaActivo='true' and alerta.TipoId = @TipoAlerta",
-                           (alerta, estado, agente, tipo) =>
+                           (alerta, estado, agente, tipo, usuario) =>
                            {
                                alerta.Estado = estado;
+                               agente.Usuario = usuario;
                                alerta.Agente = agente;
                                alerta.Tipo = tipo;
                                return alerta;
@@ -91,14 +98,16 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                     }
                     else
                     {
-                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Usuario, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
                             "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
                             "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
                             "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                            "left join Seguridad.Usuario usuario on agente.UsuarioId = usuario.Id " +
                             "where alerta.EstaActivo='true'",
-                           (alerta, estado, agente, tipo) =>
+                           (alerta, estado, agente, tipo, usuario) =>
                            {
                                alerta.Estado = estado;
+                               agente.Usuario = usuario;
                                alerta.Agente = agente;
                                alerta.Tipo = tipo;
                                return alerta;

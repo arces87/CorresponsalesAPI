@@ -16,5 +16,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
         public string IdTipo { get; set; }
         public string NombreTipo { get; set; }
         public string Comentario { get; set; }
+        public string Imagen { get; set; }
     }
 }
