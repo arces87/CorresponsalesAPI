@@ -21,7 +21,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries
 
         public async Task<ListarAlertaMS> Handle(ListarAlertaME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
+            var _model = await _repositorio.GetAllWithAssociations("", "");
             var _retorno = new ListarAlertaMS();
             _retorno.Alertas = _mapper.Map<List<ModeloListaAlerta>>(_model.OrderByDescending(a => a.Fecha).Take(request.CantidadElementos));
             return _retorno;
