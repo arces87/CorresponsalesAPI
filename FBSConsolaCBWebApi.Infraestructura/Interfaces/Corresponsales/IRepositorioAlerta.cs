@@ -8,7 +8,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
     public interface IRepositorioAlerta : IRepositorio<Alerta>
     {
         Task<IEnumerable<Alerta>> GetAllActive();
-        Task<IEnumerable<Alerta>> GetAllWithAssociations();
+        Task<IEnumerable<Alerta>> GetAllWithAssociations(string Estado, string TipoAlerta);
         Task<IEnumerable<Alerta>> GetForAgente(string IdAgente);
         Task<Alerta> GetWithAssociations(string Id);
 

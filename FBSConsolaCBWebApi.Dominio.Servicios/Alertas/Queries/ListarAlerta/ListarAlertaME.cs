@@ -6,6 +6,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
 {
     public class ListarAlertaME : IRequest<ListarAlertaMS>
     {
+        public string Estado { get; set; }
+        public string TipoAlerta { get; set; }
         public int Pagina { get; set; }
 
         public int CantidadElementos { get; set; }

@@ -31,24 +31,82 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 return Alertas.ToList();
             }
         }
-        public async Task<IEnumerable<Alerta>> GetAllWithAssociations()
+        public async Task<IEnumerable<Alerta>> GetAllWithAssociations(string Estado, string TipoAlerta)
         {
             using (var conexion = Conexion)
             {
                 conexion.Open();
-                var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
-                    "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
-                    "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
-                    "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
-                    "where alerta.EstaActivo='true'",
-                   (alerta, estado, agente, tipo) =>
-                   {
-                       alerta.Estado = estado;
-                       alerta.Agente = agente;
-                       alerta.Tipo = tipo;
-                       return alerta;
-                   });
-                return alertas.ToList();
+                if (Estado != null && Estado != "")
+                {
+                    if (TipoAlerta != null && TipoAlerta != "")
+                    {
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                            "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
+                            "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
+                            "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                            "where alerta.EstaActivo='true' and alerta.TipoId = @TipoAlerta and alerta.EstadoId = @Estado",
+                           (alerta, estado, agente, tipo) =>
+                           {
+                               alerta.Estado = estado;
+                               alerta.Agente = agente;
+                               alerta.Tipo = tipo;
+                               return alerta;
+                           }, param: new { Estado, TipoAlerta });
+                        return alertas.ToList();
+                    }
+                    else
+                    {
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                                "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
+                                "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
+                                "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                                "where alerta.EstaActivo='true' and alerta.EstadoId = @Estado",
+                               (alerta, estado, agente, tipo) =>
+                               {
+                                   alerta.Estado = estado;
+                                   alerta.Agente = agente;
+                                   alerta.Tipo = tipo;
+                                   return alerta;
+                               }, param: new { Estado });
+                        return alertas.ToList();
+                    }
+                }
+                else
+                {
+                    if (TipoAlerta != null && TipoAlerta != "")
+                    {
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                            "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
+                            "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
+                            "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                            "where alerta.EstaActivo='true' and alerta.TipoId = @TipoAlerta",
+                           (alerta, estado, agente, tipo) =>
+                           {
+                               alerta.Estado = estado;
+                               alerta.Agente = agente;
+                               alerta.Tipo = tipo;
+                               return alerta;
+                           }, param: new { TipoAlerta });
+                        return alertas.ToList();
+                    }
+                    else
+                    {
+                        var alertas = await conexion.QueryAsync<Alerta, Catalogo, Agente, Catalogo, Alerta>(@"SELECT * FROM Corresponsales.Alerta alerta " +
+                            "left join Nomenclador.Catalogo estado on alerta.EstadoId = estado.Id " +
+                            "left join Corresponsales.Agente agente on alerta.AgenteId = agente.Id " +
+                            "left join Nomenclador.Catalogo tipo on alerta.TipoId = tipo.Id " +
+                            "where alerta.EstaActivo='true'",
+                           (alerta, estado, agente, tipo) =>
+                           {
+                               alerta.Estado = estado;
+                               alerta.Agente = agente;
+                               alerta.Tipo = tipo;
+                               return alerta;
+                           });
+                        return alertas.ToList();
+                    }
+                }
+
             }
         }
         public async Task<IEnumerable<Alerta>> GetForAgente(string IdAgente)

@@ -23,7 +23,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
 
         public async Task<ListarAlertaMS> Handle(ListarAlertaME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.GetAllWithAssociations();
+            var _model = await _repositorio.GetAllWithAssociations(request.Estado, request.TipoAlerta);
             var _retorno = new ListarAlertaMS();
             var totalElementos = 0;
             Filtro<Alerta>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
