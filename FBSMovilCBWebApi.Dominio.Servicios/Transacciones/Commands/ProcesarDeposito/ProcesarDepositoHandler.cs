@@ -106,8 +106,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 NumeroCuenta = request.NumeroCuenta,
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
-                SaldoDisponible = cuenta != null ? saldoActual + request.Valor : 0,
-                SaldoCuenta = saldoCuenta - request.Valor,
+                SaldoDisponible = saldoActual + request.Valor,
+                SaldoCuenta = cuenta != null ? saldoCuenta - request.Valor : 0,
                 Tipo = IdTipoAccion,
                 EstaActivo = true,
                 Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
