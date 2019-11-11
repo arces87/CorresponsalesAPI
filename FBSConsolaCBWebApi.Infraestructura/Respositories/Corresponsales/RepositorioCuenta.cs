@@ -90,6 +90,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         {
             var cuenta = _contexto.Set<Cuenta>().FirstOrDefault(o => o.Id == entidad.Id);
             cuenta.EstaActivo = false;
+            _contexto.Entry(cuenta).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
 

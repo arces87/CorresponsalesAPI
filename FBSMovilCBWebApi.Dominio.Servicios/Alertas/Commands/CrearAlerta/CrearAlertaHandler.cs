@@ -12,34 +12,32 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
 {
-    public class CrearAlertaHandler : IRequestHandler<CrearAlertaME, string>
+    public class CrearAlertaHandler : IRequestHandler<CrearAlertaME, bool>
     {
         private readonly IRepositorioAlerta _repositorio;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
-        private readonly IMediator _mediador;
 
         public CrearAlertaHandler(IRepositorioAlerta repositorio, IMapper mapper, IJsonConfiguracion jsonConfiguracion,
-            IMediator mediador, IRepositorioAgente repositorioAgente, IHttpContextAccessor httpContext)
+            IRepositorioAgente repositorioAgente, IHttpContextAccessor httpContext)
         {
             _repositorio = repositorio;
             _mapper = mapper;
             _jsonConfiguracion = jsonConfiguracion;
-            _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _httpContext = httpContext;
         }
 
-        public async Task<string> Handle(CrearAlertaME request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CrearAlertaME request, CancellationToken cancellationToken)
         {
             var _model = _mapper.Map<Alerta>(request);
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             _model.Agente = agente;
             _model.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAlertaNueva").Valor) };
             var identificador = await _repositorio.Add(_model);
-            return identificador;
+            return true;
         }
     }
 }

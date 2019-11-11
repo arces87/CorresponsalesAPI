@@ -3,7 +3,7 @@ using System;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
 {
-    public class CrearAlertaME : IRequest<string>
+    public class CrearAlertaME : IRequest<bool>
     {
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }

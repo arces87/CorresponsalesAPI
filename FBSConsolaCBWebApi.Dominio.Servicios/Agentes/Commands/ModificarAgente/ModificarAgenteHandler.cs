@@ -25,14 +25,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
             var _model = await _repositorio.Get(request.Id);
             _mapper.Map(request, _model);
             await _repositorio.Update(_model);
-            if (request.TipoCuenta != null && request.TipoCuenta != "" && request.NumeroCuenta != null && request.NumeroCuenta !="")
+            var cuenta = await _repositorioCuenta.GetForAgente(request.Id);
+            if (cuenta != null && (cuenta.NumeroCuenta != request.NumeroCuenta || request.NumeroCuenta == null || request.NumeroCuenta == ""))
             {
-                var cuenta = await _repositorioCuenta.GetForAgente(request.Id);
-
-                if (cuenta != null && cuenta.NumeroCuenta != request.NumeroCuenta)
-                {
-                    await _repositorioCuenta.Remove(cuenta);
-                }
+                await _repositorioCuenta.Remove(cuenta);
+            }
+            if (request.TipoCuenta != null && request.TipoCuenta != "" && request.NumeroCuenta != null && request.NumeroCuenta != "")
+            {
                 if (cuenta == null || (cuenta != null && cuenta.NumeroCuenta != request.NumeroCuenta))
                 {
                     await _repositorioCuenta.Add(new Cuenta()
@@ -42,7 +41,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
                         NumeroCuenta = request.NumeroCuenta
                     });
                 }
-
             }
             return _model.Id.ToString();
         }

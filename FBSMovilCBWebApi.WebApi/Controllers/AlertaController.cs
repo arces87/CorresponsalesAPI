@@ -27,7 +27,7 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("crearAlerta", Name = "Alerta_CrearAlerta")]
-        public async Task<ActionResult<string>> Create([FromBody] CrearAlertaME model)
+        public async Task<ActionResult<bool>> Create([FromBody] CrearAlertaME model)
         {
             return await _mediador.Send(model);
         }
