@@ -45,9 +45,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoUbicado").Valor;
+                var idEstadoInactivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoEliminado").Valor;
+
                 if (agente != null) //Comprobacion de existencia del Agente
                 {
-                    if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
+                    if (agente.Estado.Id.ToString() == idEstadoInactivo)
+                    {
+                        throw new Exception("Error en la validación de los datos de autenticación | A003");
+                    }
+                    else if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
                     {
                         var _usuario = new LoginUsuarioME() { Usuario = request.Usuario, Contrasenna = request.Contrasenia, Dispositivo = "Movil" };
                         var usuarioAutenticado = await _mediador.Send(_usuario);
