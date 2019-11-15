@@ -37,29 +37,6 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             Filtro<Transaccion>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
             _retorno.TotalElementos = totalElementos;
             _retorno.Transacciones = _mapper.Map<List<ModeloListaTransaccion>>(_model);
-            _retorno.Caja = await _repositorio.GetSaldoActual(request.IdAgente);
-            var idDeposito = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito")?.Valor;
-            var idRetiro = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro")?.Valor;
-            var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
-            if (idDeposito != null)
-            {
-                var modelo = await _repositorio.GetForTipo(idDeposito, request.IdAgente);
-                _retorno.Deposito = modelo.Sum(m => m.Valor);
-            }
-            if (idRetiro != null)
-            {
-                var modelo = await _repositorio.GetForTipo(idRetiro, request.IdAgente);
-                _retorno.Retiro = modelo.Sum(m => m.Valor);
-            }
-            if (idCobroServicio != null)
-            {
-                var modelo = await _repositorio.GetForTipo(idCobroServicio, request.IdAgente);
-                _retorno.CobroServicios = modelo.Sum(m => m.Valor);
-            }
-            foreach (var item in _retorno.Transacciones)
-            {
-                item.NombreTipo = (await _repositorioCatalogo.GetWithAssociations(item.Tipo)).Nombre;
-            }
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
             return _retorno;
