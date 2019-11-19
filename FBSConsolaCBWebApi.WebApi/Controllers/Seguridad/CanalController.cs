@@ -26,25 +26,25 @@ namespace FBSConsolaCBWebApi.WebApi
             return usuario;
         }
 
-        [HttpPost("lista", Name = "Catalogo_ListarCatalogos")]
+        [HttpPost("lista", Name = "Canal_ListarCatalogos")]
         public async Task<ActionResult<ListarCatalogoMS>> List([FromBody] ListarCatalogoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
-        [HttpPost("obtener", Name = "Catalogo_ObtenerCatalogo")]
+        [HttpPost("obtener", Name = "Canal_ObtenerCatalogo")]
         public async Task<ActionResult<ObtenerCatalogoMS>> Get([FromBody] ObtenerCatalogoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
-        [HttpPut("actualizar", Name = "Catalogo_ActualizarCatalogo")]
+        [HttpPut("actualizar", Name = "Canal_ActualizarCatalogo")]
         public async Task<ActionResult<int>> Update([FromBody] ModificarCatalogoME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
 
-        [HttpDelete("eliminar", Name = "Catalogo_EliminarCatalogo")]
+        [HttpDelete("eliminar", Name = "Canal_EliminarCatalogo")]
         public async Task<ActionResult<int>> Delete([FromBody] EliminarCatalogoME modelo)
         {
             return Ok(await _mediador.Send(modelo));
