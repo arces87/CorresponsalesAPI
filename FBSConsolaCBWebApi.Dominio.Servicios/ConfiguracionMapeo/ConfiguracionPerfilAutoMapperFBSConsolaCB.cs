@@ -10,6 +10,8 @@ using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Canales.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Dispositivos.Commands;
@@ -27,7 +29,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
     {
         public ConfiguracionPerfilAutoMapperFBSConsolaCB() : base()
         {
+            #region Canal
+            CreateMap<ModificarCanalME, Canal>();
+            CreateMap<EliminarCanalME, Canal>();
 
+            CreateMap<Canal, ObtenerCanalMS>();
+            CreateMap<Canal, ModeloListaCanal>();
+            #endregion
 
             #region Dispositivos
             CreateMap<CrearDispositivoME, Dispositivo>()
@@ -205,6 +213,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ListaAgenteConsolaME, ModeloPaginacion>();
             CreateMap<ListaActivarAgenteME, ModeloPaginacion>();
             CreateMap<ListaUsuarioME, ModeloPaginacion>();
+            CreateMap<ListarCanalME, ModeloPaginacion>();
             #endregion
         }
     }
