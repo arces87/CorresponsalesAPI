@@ -91,11 +91,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             {
                 throw new Exception("No puede realizar esta operación porque no posee saldo en la cuenta");
             }
+            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
+            var comisiones = JsonConvert.SerializeObject(comision);
+            comisiones.Replace("}", ",Facilito:" + request.Comision + "}");
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
                 Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
-                Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones),
+                Comisiones = comisiones,
                 Agente = agente,
                 Descripcion = request.Descripcion,
                 FechaDispositivo = DateTime.Now,
@@ -106,7 +109,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 SecuencialCuenta = request.SecuencialCuenta.ToString(),
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
-                SaldoDisponible = saldoActual + request.Valor,
+                SaldoDisponible = saldoActual + request.Valor + comision.Agente.Value + comision.AdministracionCanal.Value + comision.Cooperativa.Value + request.Comision.Value,
                 Tipo = IdTipoAccion,
                 EstaActivo = true,
                 Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
@@ -118,8 +121,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            var comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones);
-            comisiones.Replace("}", ",Facilito:" + request.Comision + "}");
+
             var modelo = new PagoFacilitoME()
             {
                 CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
