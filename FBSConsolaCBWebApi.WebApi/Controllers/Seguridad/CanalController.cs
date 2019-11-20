@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
-using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
-using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Canales.Queries;
+using FBSConsolaCBWebApi.Dominio.Servicios.Canals.Commands;
+using FBSConsolaCBWebApi.Dominio.Servicios.Canals.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,26 +28,26 @@ namespace FBSConsolaCBWebApi.WebApi
             return usuario;
         }
 
-        [HttpPost("lista", Name = "Canal_ListarCatalogos")]
-        public async Task<ActionResult<ListarCatalogoMS>> List([FromBody] ListarCatalogoME modelo)
+        [HttpPost("lista", Name = "Canal_ListarCanals")]
+        public async Task<ActionResult<ListarCanalMS>> List([FromBody] ListarCanalME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
-        [HttpPost("obtener", Name = "Canal_ObtenerCatalogo")]
-        public async Task<ActionResult<ObtenerCatalogoMS>> Get([FromBody] ObtenerCatalogoME modelo)
+        [HttpPost("obtener", Name = "Canal_ObtenerCanal")]
+        public async Task<ActionResult<ObtenerCanalMS>> Get([FromBody] ObtenerCanalME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
-        [HttpPut("actualizar", Name = "Canal_ActualizarCatalogo")]
-        public async Task<ActionResult<int>> Update([FromBody] ModificarCatalogoME modelo)
+        [HttpPut("actualizar", Name = "Canal_ActualizarCanal")]
+        public async Task<ActionResult<int>> Update([FromBody] ModificarCanalME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
 
-        [HttpDelete("eliminar", Name = "Canal_EliminarCatalogo")]
-        public async Task<ActionResult<int>> Delete([FromBody] EliminarCatalogoME modelo)
+        [HttpDelete("eliminar", Name = "Canal_EliminarCanal")]
+        public async Task<ActionResult<int>> Delete([FromBody] EliminarCanalME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
