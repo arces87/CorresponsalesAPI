@@ -24,12 +24,15 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
         {
             var _model = _mapper.Map<Agente>(request);
             var identificador = await _repositorio.Add(_model);
-            if (request.TipoCuenta != null && request.TipoCuenta != "" && request.NumeroCuenta != null && request.NumeroCuenta != "")
+            if (request.TipoCuenta != null && request.TipoCuenta != ""
+                && request.NumeroCuenta != null && request.NumeroCuenta != ""
+                && request.SecuencialCuenta != null && request.SecuencialCuenta != "")
                 await _repositorioCuenta.Add(new Cuenta()
                 {
                     Agente = _model,
                     Tipo = request.TipoCuenta,
-                    NumeroCuenta = request.NumeroCuenta
+                    NumeroCuenta = request.NumeroCuenta,
+                    SecuencialCuenta = request.SecuencialCuenta
                 });
             return identificador;
         }

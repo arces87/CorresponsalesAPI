@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, ProcesoDepositoMS>
+    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, AfectacionAUnCorresponsalMS>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -46,7 +46,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
-        public async Task<ProcesoDepositoMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
+        public async Task<AfectacionAUnCorresponsalMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
         {
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
             await _mediador.Send(new CrearLogME()
@@ -103,11 +103,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 HoraDispositivo = DateTime.Now.TimeOfDay,
                 IdentificacionCliente = request.IdentificacionCliente,
                 NombreCliente = request.NombreCliente,
-                NumeroCuenta = request.NumeroCuenta,
+                SecuencialCuenta = request.SecuencialCuenta.ToString(),
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual + request.Valor,
-                SaldoCuenta = cuenta != null ? saldoCuenta - request.Valor : 0,
                 Tipo = IdTipoAccion,
                 EstaActivo = true,
                 Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
@@ -119,9 +118,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            var modelo = _mapper.Map<PedidoDatosTransaccionDepositoME>(request);
-            modelo.Id = Guid.NewGuid();
-            var respuesta = await _financialApi.Cuentas.ProcesaDepositoWithHttpMessagesAsync(modelo);
+            var modelo = new AfectacionAUnCorresponsalME()
+            {
+                TipoTransaccion = "D",
+                CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
+                JsonComision = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Deposito.Comisiones),
+                SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
+                SecuencialCuentaSocio = request.SecuencialCuenta,
+                ValorAfectado = request.Valor
+            };
+            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
@@ -129,6 +135,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
+            transaccion.SaldoCuenta = respuesta.Body.SaldoCuentaCorresponsal.Value;
             await _repositorioTransaccion.Update(transaccion);
             await _mediador.Send(new CrearLogME()
             {

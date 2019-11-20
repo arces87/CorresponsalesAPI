@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 {

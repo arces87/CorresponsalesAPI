@@ -27,7 +27,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public string Descripcion { get; set; }
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }
-        public string NumeroCuenta { get; set; }
+        public string SecuencialCuenta { get; set; }
 
         public bool EstaActivo { get; set; }
         [Timestamp]

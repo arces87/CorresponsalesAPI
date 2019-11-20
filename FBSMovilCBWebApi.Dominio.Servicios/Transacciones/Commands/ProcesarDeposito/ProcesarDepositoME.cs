@@ -3,9 +3,9 @@ using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarDepositoME : IRequest<ProcesoDepositoMS>
+    public class ProcesarDepositoME : IRequest<AfectacionAUnCorresponsalMS>
     {
-        public string NumeroCuenta { get; set; }
+        public int SecuencialCuenta { get; set; }
         public double Valor { get; set; }
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }

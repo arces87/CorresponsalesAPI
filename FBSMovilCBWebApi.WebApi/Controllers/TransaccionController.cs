@@ -22,14 +22,14 @@ namespace FBSMovilCBWebApi.WebApi
 
         [HttpPost("procesarDeposito", Name = "Transaccion_ProcesarDeposito")]
         [Produces(typeof(ProcesoDepositoMS))]
-        public async Task<ActionResult<ProcesoDepositoMS>> ProcesarDeposito([FromBody] ProcesarDepositoME modelo)
+        public async Task<ActionResult<AfectacionAUnCorresponsalMS>> ProcesarDeposito([FromBody] ProcesarDepositoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("procesarRetiro", Name = "Transaccion_ProcesarRetiro")]
         [Produces(typeof(ProcesoRetiroMS))]
-        public async Task<ActionResult<ProcesoRetiroMS>> ProcesarRetiro([FromBody] ProcesarRetiroME modelo)
+        public async Task<ActionResult<AfectacionAUnCorresponsalMS>> ProcesarRetiro([FromBody] ProcesarRetiroME modelo)
         {
             return await _mediador.Send(modelo);
         }

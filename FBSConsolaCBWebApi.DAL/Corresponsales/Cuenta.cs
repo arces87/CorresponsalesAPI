@@ -11,6 +11,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public Guid Id { get; set; }
         public Agente Agente { get; set; }
         public string Tipo { get; set; }
+        public string SecuencialCuenta { get; set; }
         public string NumeroCuenta { get; set; }
         public bool EstaActivo { get; set; }
         [Timestamp]

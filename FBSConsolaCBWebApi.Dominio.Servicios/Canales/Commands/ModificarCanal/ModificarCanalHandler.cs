@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

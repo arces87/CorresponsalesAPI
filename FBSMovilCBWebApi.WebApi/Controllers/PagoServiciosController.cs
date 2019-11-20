@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiciosFacilito.Models;
+using ServiciosFinancial.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +23,7 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("pagarServicio", Name = "PagoServicios_PagarServicio")]
-        public async Task<ActionResult<PagoResponse>> PagarServicio([FromBody] ProcesarPagoME modelo)
+        public async Task<ActionResult<PagoFacilitoMS>> PagarServicio([FromBody] ProcesarPagoME modelo)
         {
             return await _mediador.Send(modelo);
         }

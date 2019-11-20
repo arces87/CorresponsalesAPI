@@ -30,7 +30,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
             {
                 await _repositorioCuenta.Remove(cuenta);
             }
-            if (request.TipoCuenta != null && request.TipoCuenta != "" && request.NumeroCuenta != null && request.NumeroCuenta != "")
+            if (request.TipoCuenta != null && request.TipoCuenta != ""
+                && request.NumeroCuenta != null && request.NumeroCuenta != ""
+                && request.SecuencialCuenta != null && request.SecuencialCuenta != "")
             {
                 if (cuenta == null || (cuenta != null && cuenta.NumeroCuenta != request.NumeroCuenta))
                 {
@@ -38,7 +40,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
                     {
                         Agente = _model,
                         Tipo = request.TipoCuenta,
-                        NumeroCuenta = request.NumeroCuenta
+                        NumeroCuenta = request.NumeroCuenta,
+                        SecuencialCuenta = request.SecuencialCuenta
                     });
                 }
             }

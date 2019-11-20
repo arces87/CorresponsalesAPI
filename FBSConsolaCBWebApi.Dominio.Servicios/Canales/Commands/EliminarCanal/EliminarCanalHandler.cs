@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
