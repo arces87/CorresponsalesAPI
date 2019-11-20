@@ -129,7 +129,7 @@ namespace ServiciosFacilito
         /// </summary>
         private void Initialize()
         {
-            BaseUri = new System.Uri("http://localhost");
+            BaseUri = HttpClient.BaseAddress;
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -138,7 +138,7 @@ namespace ServiciosFacilito
                 NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
                 ContractResolver = new ReadOnlyJsonContractResolver(),
-                Converters = new  List<JsonConverter>
+                Converters = new List<JsonConverter>
                     {
                         new Iso8601TimeSpanConverter()
                     }
@@ -172,7 +172,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ObtenerServiciosFacilitoResponse>> ObtenerServiciosFacilitoWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ObtenerServiciosFacilitoMS>> ObtenerServiciosFacilitoWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -197,7 +197,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -226,10 +226,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -246,7 +248,7 @@ namespace ServiciosFacilito
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ObtenerServiciosFacilitoResponse>();
+            var _result = new HttpOperationResponse<ObtenerServiciosFacilitoMS>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -255,7 +257,7 @@ namespace ServiciosFacilito
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ObtenerServiciosFacilitoResponse>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ObtenerServiciosFacilitoMS>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -291,7 +293,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ObtenerProductosFacilitoResponse>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ObtenerProductosFacilitoMS>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -317,7 +319,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -329,11 +331,11 @@ namespace ServiciosFacilito
 
             // Serialize Request
             string _requestContent = null;
-            if(datosRequest != null)
+            if (datosRequest != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(datosRequest, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Send Request
             if (_shouldTrace)
@@ -352,10 +354,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -372,7 +376,7 @@ namespace ServiciosFacilito
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ObtenerProductosFacilitoResponse>();
+            var _result = new HttpOperationResponse<ObtenerProductosFacilitoMS>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -381,7 +385,7 @@ namespace ServiciosFacilito
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ObtenerProductosFacilitoResponse>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ObtenerProductosFacilitoMS>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -440,7 +444,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -469,10 +473,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -534,7 +540,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ConsultaResponse>> ServicioConsultaWithHttpMessagesAsync(ConsultaRequest request = default(ConsultaRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaWithHttpMessagesAsync(ConsultaRequest request = default(ConsultaRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -560,7 +566,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -572,11 +578,11 @@ namespace ServiciosFacilito
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if (request != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(request, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Send Request
             if (_shouldTrace)
@@ -595,10 +601,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -615,7 +623,7 @@ namespace ServiciosFacilito
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ConsultaResponse>();
+            var _result = new HttpOperationResponse<ConsultaMS>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -624,7 +632,7 @@ namespace ServiciosFacilito
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ConsultaResponse>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ConsultaMS>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -686,7 +694,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -698,11 +706,11 @@ namespace ServiciosFacilito
 
             // Serialize Request
             string _requestContent = null;
-            if(request != null)
+            if (request != null)
             {
                 _requestContent = SafeJsonConvert.SerializeObject(request, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
-                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+                _httpRequest.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
             }
             // Send Request
             if (_shouldTrace)
@@ -721,10 +729,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -784,7 +794,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ConsultaResponse>> ServicioConsultaPruebaWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaPruebaWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -809,7 +819,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -838,10 +848,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -858,7 +870,7 @@ namespace ServiciosFacilito
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ConsultaResponse>();
+            var _result = new HttpOperationResponse<ConsultaMS>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -867,7 +879,7 @@ namespace ServiciosFacilito
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ConsultaResponse>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ConsultaMS>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -926,7 +938,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -955,10 +967,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
@@ -1040,7 +1054,7 @@ namespace ServiciosFacilito
 
             if (customHeaders != null)
             {
-                foreach(var _header in customHeaders)
+                foreach (var _header in customHeaders)
                 {
                     if (_httpRequest.Headers.Contains(_header.Key))
                     {
@@ -1069,10 +1083,12 @@ namespace ServiciosFacilito
             if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
+                if (_httpResponse.Content != null)
+                {
                     _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     _responseContent = string.Empty;
                 }
                 ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);

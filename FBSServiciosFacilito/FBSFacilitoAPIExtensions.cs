@@ -18,7 +18,7 @@ namespace ServiciosFacilito
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static ObtenerServiciosFacilitoResponse ObtenerServiciosFacilito(this IFBSFacilitoAPI operations)
+            public static ObtenerServiciosFacilitoMS ObtenerServiciosFacilito(this IFBSFacilitoAPI operations)
             {
                 return operations.ObtenerServiciosFacilitoAsync().GetAwaiter().GetResult();
             }
@@ -29,7 +29,7 @@ namespace ServiciosFacilito
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ObtenerServiciosFacilitoResponse> ObtenerServiciosFacilitoAsync(this IFBSFacilitoAPI operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ObtenerServiciosFacilitoMS> ObtenerServiciosFacilitoAsync(this IFBSFacilitoAPI operations, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ObtenerServiciosFacilitoWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
                 {
@@ -42,7 +42,7 @@ namespace ServiciosFacilito
             /// </param>
             /// <param name='datosRequest'>
             /// </param>
-            public static ObtenerProductosFacilitoResponse ObtenerProductosFacilito(this IFBSFacilitoAPI operations, DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest))
+            public static ObtenerProductosFacilitoMS ObtenerProductosFacilito(this IFBSFacilitoAPI operations, DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest))
             {
                 return operations.ObtenerProductosFacilitoAsync(datosRequest).GetAwaiter().GetResult();
             }
@@ -55,7 +55,7 @@ namespace ServiciosFacilito
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ObtenerProductosFacilitoResponse> ObtenerProductosFacilitoAsync(this IFBSFacilitoAPI operations, DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ObtenerProductosFacilitoMS> ObtenerProductosFacilitoAsync(this IFBSFacilitoAPI operations, DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ObtenerProductosFacilitoWithHttpMessagesAsync(datosRequest, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -90,7 +90,7 @@ namespace ServiciosFacilito
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static ConsultaResponse ServicioConsulta(this IFBSFacilitoAPI operations, ConsultaRequest request = default(ConsultaRequest))
+            public static ConsultaMS ServicioConsulta(this IFBSFacilitoAPI operations, ConsultaRequest request = default(ConsultaRequest))
             {
                 return operations.ServicioConsultaAsync(request).GetAwaiter().GetResult();
             }
@@ -103,7 +103,7 @@ namespace ServiciosFacilito
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ConsultaResponse> ServicioConsultaAsync(this IFBSFacilitoAPI operations, ConsultaRequest request = default(ConsultaRequest), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ConsultaMS> ServicioConsultaAsync(this IFBSFacilitoAPI operations, ConsultaRequest request = default(ConsultaRequest), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ServicioConsultaWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -140,7 +140,7 @@ namespace ServiciosFacilito
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static ConsultaResponse ServicioConsultaPrueba(this IFBSFacilitoAPI operations)
+            public static ConsultaMS ServicioConsultaPrueba(this IFBSFacilitoAPI operations)
             {
                 return operations.ServicioConsultaPruebaAsync().GetAwaiter().GetResult();
             }
@@ -151,7 +151,7 @@ namespace ServiciosFacilito
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ConsultaResponse> ServicioConsultaPruebaAsync(this IFBSFacilitoAPI operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ConsultaMS> ServicioConsultaPruebaAsync(this IFBSFacilitoAPI operations, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ServicioConsultaPruebaWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
                 {

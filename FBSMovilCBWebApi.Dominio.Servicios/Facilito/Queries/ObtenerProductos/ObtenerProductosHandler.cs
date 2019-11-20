@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ObtenerProductosHandler : IRequestHandler<ObtenerProductosME, ObtenerProductosFacilitoResponse>
+    public class ObtenerProductosHandler : IRequestHandler<ObtenerProductosME, ObtenerProductosFacilitoMS>
     {
         private readonly IFBSFacilitoAPI _facilitoApi;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             _mapper = mapper;
         }
 
-        public async Task<ObtenerProductosFacilitoResponse> Handle(ObtenerProductosME request, CancellationToken cancellationToken)
+        public async Task<ObtenerProductosFacilitoMS> Handle(ObtenerProductosME request, CancellationToken cancellationToken)
         {
             var respuesta = await _facilitoApi.ObtenerProductosFacilitoWithHttpMessagesAsync(_mapper.Map<DatosServicioFacilitoRequest>(request));
             return respuesta.Body;

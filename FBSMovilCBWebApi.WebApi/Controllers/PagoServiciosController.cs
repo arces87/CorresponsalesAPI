@@ -28,18 +28,18 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpGet("obtenerServicios", Name = "PagoServicios_ObtenerServicios")]
-        public async Task<ActionResult<ObtenerServiciosFacilitoResponse>> ObtenerServicios()
+        public async Task<ActionResult<ObtenerServiciosFacilitoMS>> ObtenerServicios()
         {
             return await _mediador.Send(new ObtenerServiciosME());
         }
 
         [HttpPost("obtenerProductos", Name = "PagoServicios_ObtenerProductos")]
-        public async Task<ActionResult<ObtenerProductosFacilitoResponse>> ObtenerProductos([FromBody] ObtenerProductosME modelo)
+        public async Task<ActionResult<ObtenerProductosFacilitoMS>> ObtenerProductos([FromBody] ObtenerProductosME modelo)
         {
             return await _mediador.Send(modelo);
         }
         [HttpPost("consultaServicio", Name = "PagoServicios_ConsultaServicio")]
-        public async Task<ActionResult<ConsultaResponse>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
+        public async Task<ActionResult<ConsultaMS>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
         {
             return await _mediador.Send(modelo);
         }

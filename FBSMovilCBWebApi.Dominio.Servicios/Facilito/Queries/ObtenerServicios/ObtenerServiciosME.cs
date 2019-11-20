@@ -3,7 +3,7 @@ using ServiciosFacilito.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ObtenerServiciosME : IRequest<ObtenerServiciosFacilitoResponse>
+    public class ObtenerServiciosME : IRequest<ObtenerServiciosFacilitoMS>
     {
     }
 }

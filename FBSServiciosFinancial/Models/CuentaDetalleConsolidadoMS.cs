@@ -22,9 +22,10 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the CuentaDetalleConsolidadoMS class.
         /// </summary>
-        public CuentaDetalleConsolidadoMS(string codigo = default(string), string tipoCuentaNombre = default(string), string monedaNombre = default(string), double? retencion = default(double?), double? bloqueo = default(double?), double? valorNumeroParteSaldo = default(double?), double? saldo = default(double?), double? disponibleParaTransaccion = default(double?), bool? bloqueadaTransaccionOperativa = default(bool?), string estadoNombre = default(string))
+        public CuentaDetalleConsolidadoMS(string codigo = default(string), int? secuencialCuenta = default(int?), string tipoCuentaNombre = default(string), string monedaNombre = default(string), double? retencion = default(double?), double? bloqueo = default(double?), double? valorNumeroParteSaldo = default(double?), double? saldo = default(double?), double? disponibleParaTransaccion = default(double?), bool? bloqueadaTransaccionOperativa = default(bool?), string estadoNombre = default(string))
         {
             Codigo = codigo;
+            SecuencialCuenta = secuencialCuenta;
             TipoCuentaNombre = tipoCuentaNombre;
             MonedaNombre = monedaNombre;
             Retencion = retencion;
@@ -46,6 +47,11 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "Codigo")]
         public string Codigo { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "SecuencialCuenta")]
+        public int? SecuencialCuenta { get; set; }
 
         /// <summary>
         /// </summary>

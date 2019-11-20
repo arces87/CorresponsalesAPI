@@ -2,8 +2,6 @@
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Canales.Queries;
-using FBSConsolaCBWebApi.Dominio.Servicios.Canals.Commands;
-using FBSConsolaCBWebApi.Dominio.Servicios.Canals.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -30,6 +30,11 @@ namespace ServiciosFinancial
 
 
         /// <summary>
+        /// Gets the IAfectacion.
+        /// </summary>
+        IAfectacion Afectacion { get; }
+
+        /// <summary>
         /// Gets the IClientes.
         /// </summary>
         IClientes Clientes { get; }

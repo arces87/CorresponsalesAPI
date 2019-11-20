@@ -4,28 +4,28 @@
 // regenerated.
 // </auto-generated>
 
-namespace ServiciosFacilito.Models
+namespace ServiciosFinancial.Models
 {
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CabeceraResponse
+    public partial class ActualizaEstadoUsuarioME
     {
         /// <summary>
-        /// Initializes a new instance of the CabeceraResponse class.
+        /// Initializes a new instance of the ActualizaEstadoUsuarioME class.
         /// </summary>
-        public CabeceraResponse()
+        public ActualizaEstadoUsuarioME()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CabeceraResponse class.
+        /// Initializes a new instance of the ActualizaEstadoUsuarioME class.
         /// </summary>
-        public CabeceraResponse(int? codigoRespuesta = default(int?), string mensaje = default(string))
+        public ActualizaEstadoUsuarioME(string codigoUsuario = default(string), bool? estado = default(bool?))
         {
-            CodigoRespuesta = codigoRespuesta;
-            Mensaje = mensaje;
+            CodigoUsuario = codigoUsuario;
+            Estado = estado;
             CustomInit();
         }
 
@@ -36,13 +36,13 @@ namespace ServiciosFacilito.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "codigoRespuesta")]
-        public int? CodigoRespuesta { get; set; }
+        [JsonProperty(PropertyName = "CodigoUsuario")]
+        public string CodigoUsuario { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "mensaje")]
-        public string Mensaje { get; set; }
+        [JsonProperty(PropertyName = "Estado")]
+        public bool? Estado { get; set; }
 
     }
 }

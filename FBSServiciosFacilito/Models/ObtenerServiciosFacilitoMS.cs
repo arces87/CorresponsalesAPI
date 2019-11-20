@@ -11,24 +11,21 @@ namespace ServiciosFacilito.Models
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class ObtenerServiciosFacilitoResponse
+    public partial class ObtenerServiciosFacilitoMS
     {
         /// <summary>
-        /// Initializes a new instance of the ObtenerServiciosFacilitoResponse
-        /// class.
+        /// Initializes a new instance of the ObtenerServiciosFacilitoMS class.
         /// </summary>
-        public ObtenerServiciosFacilitoResponse()
+        public ObtenerServiciosFacilitoMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ObtenerServiciosFacilitoResponse
-        /// class.
+        /// Initializes a new instance of the ObtenerServiciosFacilitoMS class.
         /// </summary>
-        public ObtenerServiciosFacilitoResponse(CabeceraResponse cabeceraResponse = default(CabeceraResponse), IList<ServicioFacilito> listadoServicio = default(IList<ServicioFacilito>))
+        public ObtenerServiciosFacilitoMS(IList<ServicioFacilito> listadoServicio = default(IList<ServicioFacilito>))
         {
-            CabeceraResponse = cabeceraResponse;
             ListadoServicio = listadoServicio;
             CustomInit();
         }
@@ -37,11 +34,6 @@ namespace ServiciosFacilito.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "cabeceraResponse")]
-        public CabeceraResponse CabeceraResponse { get; set; }
 
         /// <summary>
         /// </summary>

@@ -3,7 +3,7 @@ using ServiciosFacilito.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ConsultaServiciosME : IRequest<ConsultaResponse>
+    public class ConsultaServiciosME : IRequest<ConsultaMS>
     {
         public int? CodigoTransaccion { get; set; }
         public int? Operador { get; set; }

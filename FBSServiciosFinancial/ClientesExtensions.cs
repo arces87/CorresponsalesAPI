@@ -89,5 +89,57 @@ namespace ServiciosFinancial
                 }
             }
 
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            public static bool? CreaUsuario(this IClientes operations, PorCodigoUsuarioCorresponsalME request)
+            {
+                return operations.CreaUsuarioAsync(request).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<bool?> CreaUsuarioAsync(this IClientes operations, PorCodigoUsuarioCorresponsalME request, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.CreaUsuarioWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            public static bool? ActualizaEstadoUsuario(this IClientes operations, ActualizaEstadoUsuarioME request)
+            {
+                return operations.ActualizaEstadoUsuarioAsync(request).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<bool?> ActualizaEstadoUsuarioAsync(this IClientes operations, ActualizaEstadoUsuarioME request, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ActualizaEstadoUsuarioWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
     }
 }

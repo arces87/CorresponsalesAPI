@@ -41,7 +41,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ObtenerServiciosFacilitoResponse>> ObtenerServiciosFacilitoWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ObtenerServiciosFacilitoMS>> ObtenerServiciosFacilitoWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='datosRequest'>
         /// </param>
@@ -51,7 +51,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ObtenerProductosFacilitoResponse>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ObtenerProductosFacilitoMS>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -69,7 +69,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ConsultaResponse>> ServicioConsultaWithHttpMessagesAsync(ConsultaRequest request = default(ConsultaRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaWithHttpMessagesAsync(ConsultaRequest request = default(ConsultaRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='request'>
         /// </param>
@@ -87,7 +87,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ConsultaResponse>> ServicioConsultaPruebaWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaPruebaWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='customHeaders'>
         /// The headers that will be added to request.

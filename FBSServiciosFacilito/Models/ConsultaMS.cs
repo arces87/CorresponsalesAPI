@@ -9,20 +9,20 @@ namespace ServiciosFacilito.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class ConsultaResponse
+    public partial class ConsultaMS
     {
         /// <summary>
-        /// Initializes a new instance of the ConsultaResponse class.
+        /// Initializes a new instance of the ConsultaMS class.
         /// </summary>
-        public ConsultaResponse()
+        public ConsultaMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ConsultaResponse class.
+        /// Initializes a new instance of the ConsultaMS class.
         /// </summary>
-        public ConsultaResponse(string cedularuc = default(string), string codigOAUTORIZACION = default(string), string codigORESULTADO = default(string), string coDPAGO = default(string), double? comision = default(double?), string direccion = default(string), string fechACOMPENSACION = default(string), string fechATRANSACCION = default(string), string fechorASWITCH = default(string), string horATRANSACCION = default(string), string mensaje = default(string), string nombre = default(string), string producto = default(string), string secuenciAADQUIRENTE = default(string), string secuenciASWITCH = default(string), string terminal = default(string), string typETRN = default(string), double? valoRTOTAL = default(double?), string xmLADD = default(string), string xmLDATA = default(string), string xmLFACT = default(string))
+        public ConsultaMS(string cedularuc = default(string), string codigOAUTORIZACION = default(string), string codigORESULTADO = default(string), string coDPAGO = default(string), double? comision = default(double?), string direccion = default(string), string fechACOMPENSACION = default(string), string fechATRANSACCION = default(string), string fechorASWITCH = default(string), string horATRANSACCION = default(string), string mensaje = default(string), string nombre = default(string), string producto = default(string), string secuenciAADQUIRENTE = default(string), string secuenciASWITCH = default(string), string terminal = default(string), string typETRN = default(string), double? valoRTOTAL = default(double?), string xmLADD = default(string), string xmLDATA = default(string), string xmLFACT = default(string))
         {
             Cedularuc = cedularuc;
             CodigOAUTORIZACION = codigOAUTORIZACION;

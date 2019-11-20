@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ConsultaServiciosHandler : IRequestHandler<ConsultaServiciosME, ConsultaResponse>
+    public class ConsultaServiciosHandler : IRequestHandler<ConsultaServiciosME, ConsultaMS>
     {
         private readonly IFBSFacilitoAPI _facilitoApi;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             _mapper = mapper;
         }
 
-        public async Task<ConsultaResponse> Handle(ConsultaServiciosME request, CancellationToken cancellationToken)
+        public async Task<ConsultaMS> Handle(ConsultaServiciosME request, CancellationToken cancellationToken)
         {
             var respuesta = await _facilitoApi.ServicioConsultaWithHttpMessagesAsync(_mapper.Map<ConsultaRequest>(request));
             return respuesta.Body;

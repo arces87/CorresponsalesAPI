@@ -33,6 +33,11 @@ namespace ServiciosFinancial
         public JsonSerializerSettings DeserializationSettings { get; private set; }
 
         /// <summary>
+        /// Gets the IAfectacion.
+        /// </summary>
+        public virtual IAfectacion Afectacion { get; private set; }
+
+        /// <summary>
         /// Gets the IClientes.
         /// </summary>
         public virtual IClientes Clientes { get; private set; }
@@ -134,6 +139,7 @@ namespace ServiciosFinancial
         /// </summary>
         private void Initialize()
         {
+            Afectacion = new Afectacion(this);
             Clientes = new Clientes(this);
             Cuentas = new Cuentas(this);
             BaseUri = HttpClient.BaseAddress;
