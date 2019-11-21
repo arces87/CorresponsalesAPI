@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBS.Identidad.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using MediatR;
 using System.Threading;
@@ -8,10 +9,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Queries
 {
     public class ObtenerCanalHandler : IRequestHandler<ObtenerCanalME, ObtenerCanalMS>
     {
-        private readonly IRepositorioCatalogo _repositorio;
+        private readonly IRepositorioCanal _repositorio;
         private readonly IMapper _mapper;
 
-        public ObtenerCanalHandler(IRepositorioCatalogo repositorio, IMapper mapper)
+        public ObtenerCanalHandler(IRepositorioCanal repositorio, IMapper mapper)
         {
             _repositorio = repositorio;
             _mapper = mapper;
