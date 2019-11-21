@@ -22,6 +22,7 @@
 
         public string TipoCuenta { get; set; }
         public string NumeroCuenta { get; set; }
+        public string SecuencialCuenta { get; set; }
         public double SaldoCuenta { get; set; }
     }
 }
