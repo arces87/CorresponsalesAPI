@@ -9,22 +9,20 @@ namespace ServiciosFacilito.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class DatosServicioFacilitoRequest
+    public partial class DatosServicioFacilitoME
     {
         /// <summary>
-        /// Initializes a new instance of the DatosServicioFacilitoRequest
-        /// class.
+        /// Initializes a new instance of the DatosServicioFacilitoME class.
         /// </summary>
-        public DatosServicioFacilitoRequest()
+        public DatosServicioFacilitoME()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the DatosServicioFacilitoRequest
-        /// class.
+        /// Initializes a new instance of the DatosServicioFacilitoME class.
         /// </summary>
-        public DatosServicioFacilitoRequest(System.Guid? idGrupo = default(System.Guid?), string servicio = default(string))
+        public DatosServicioFacilitoME(System.Guid? idGrupo = default(System.Guid?), string servicio = default(string))
         {
             IdGrupo = idGrupo;
             Servicio = servicio;

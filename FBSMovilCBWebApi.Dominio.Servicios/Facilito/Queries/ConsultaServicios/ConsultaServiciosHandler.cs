@@ -9,10 +9,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class ConsultaServiciosHandler : IRequestHandler<ConsultaServiciosME, ConsultaMS>
     {
-        private readonly IFBSFacilitoAPI _facilitoApi;
+        private readonly IFacilitoAPI _facilitoApi;
         private readonly IMapper _mapper;
 
-        public ConsultaServiciosHandler(IFBSFacilitoAPI facilitoApi, IMapper mapper)
+        public ConsultaServiciosHandler(IFacilitoAPI facilitoApi, IMapper mapper)
         {
             _facilitoApi = facilitoApi;
             _mapper = mapper;
@@ -20,7 +20,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 
         public async Task<ConsultaMS> Handle(ConsultaServiciosME request, CancellationToken cancellationToken)
         {
-            var respuesta = await _facilitoApi.ServicioConsultaWithHttpMessagesAsync(_mapper.Map<ConsultaRequest>(request));
+            var respuesta = await _facilitoApi.ServicioConsultaWithHttpMessagesAsync(_mapper.Map<ConsultaME>(request));
             return respuesta.Body;
         }
     }

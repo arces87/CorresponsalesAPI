@@ -18,9 +18,9 @@ namespace ServiciosFacilito
     using System.Threading.Tasks;
 
     /// <summary>
-    /// FBS_Facilito Api
+    /// Servicios para Facilito
     /// </summary>
-    public partial class FBSFacilitoAPI : ServiceClient<FBSFacilitoAPI>, IFBSFacilitoAPI
+    public partial class FacilitoAPI : ServiceClient<FacilitoAPI>, IFacilitoAPI
     {
         /// <summary>
         /// The base URI of the service.
@@ -38,31 +38,31 @@ namespace ServiciosFacilito
         public JsonSerializerSettings DeserializationSettings { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the FBSFacilitoAPI class.
+        /// Initializes a new instance of the FacilitoAPI class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling FBSFacilitoAPI.Dispose(). False: will not dispose provided httpClient</param>
-        public FBSFacilitoAPI(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling FacilitoAPI.Dispose(). False: will not dispose provided httpClient</param>
+        public FacilitoAPI(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the FBSFacilitoAPI class.
+        /// Initializes a new instance of the FacilitoAPI class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public FBSFacilitoAPI(params DelegatingHandler[] handlers) : base(handlers)
+        public FacilitoAPI(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the FBSFacilitoAPI class.
+        /// Initializes a new instance of the FacilitoAPI class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -70,13 +70,13 @@ namespace ServiciosFacilito
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public FBSFacilitoAPI(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        public FacilitoAPI(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the FBSFacilitoAPI class.
+        /// Initializes a new instance of the FacilitoAPI class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -87,7 +87,7 @@ namespace ServiciosFacilito
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public FBSFacilitoAPI(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        public FacilitoAPI(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -97,7 +97,7 @@ namespace ServiciosFacilito
         }
 
         /// <summary>
-        /// Initializes a new instance of the FBSFacilitoAPI class.
+        /// Initializes a new instance of the FacilitoAPI class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -111,7 +111,7 @@ namespace ServiciosFacilito
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public FBSFacilitoAPI(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public FacilitoAPI(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -293,7 +293,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ObtenerProductosFacilitoMS>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ObtenerProductosFacilitoMS>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoME datosRequest = default(DatosServicioFacilitoME), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -540,7 +540,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaWithHttpMessagesAsync(ConsultaRequest request = default(ConsultaRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaWithHttpMessagesAsync(ConsultaME request = default(ConsultaME), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -668,7 +668,7 @@ namespace ServiciosFacilito
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PagoResponse>> ServicioPagoWithHttpMessagesAsync(PagoRequest request = default(PagoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PagoMS>> ServicioPagoWithHttpMessagesAsync(PagoME request = default(PagoME), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -751,7 +751,7 @@ namespace ServiciosFacilito
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<PagoResponse>();
+            var _result = new HttpOperationResponse<PagoMS>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -760,7 +760,7 @@ namespace ServiciosFacilito
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<PagoResponse>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<PagoMS>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {

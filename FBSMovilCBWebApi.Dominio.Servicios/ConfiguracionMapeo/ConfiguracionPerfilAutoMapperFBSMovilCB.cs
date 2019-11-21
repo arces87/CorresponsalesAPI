@@ -75,10 +75,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Servicios Facilito
-            CreateMap<ProcesarPagoME, PagoRequest>();
             CreateMap<ProcesarRetiroME, PedidoDatosTransaccionRetiroME>();
-            CreateMap<ObtenerProductosME, DatosServicioFacilitoRequest>();
-            CreateMap<ConsultaServiciosME, ConsultaRequest>();
+            CreateMap<ObtenerProductosME, DatosServicioFacilitoME>();
+            CreateMap<ConsultaServiciosME, ConsultaME>();
             CreateMap<TipoIdentificacionMS, DistribuidoTipoIdentificacion>();
             #endregion
         }

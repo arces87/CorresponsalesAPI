@@ -8,9 +8,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class ObtenerServiciosHandler : IRequestHandler<ObtenerServiciosME, ObtenerServiciosFacilitoMS>
     {
-        private readonly IFBSFacilitoAPI _facilitoApi;
+        private readonly IFacilitoAPI _facilitoApi;
 
-        public ObtenerServiciosHandler(IFBSFacilitoAPI facilitoApi)
+        public ObtenerServiciosHandler(IFacilitoAPI facilitoApi)
         {
             _facilitoApi = facilitoApi;
         }

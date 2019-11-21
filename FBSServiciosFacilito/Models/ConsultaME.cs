@@ -9,20 +9,20 @@ namespace ServiciosFacilito.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class ConsultaRequest
+    public partial class ConsultaME
     {
         /// <summary>
-        /// Initializes a new instance of the ConsultaRequest class.
+        /// Initializes a new instance of the ConsultaME class.
         /// </summary>
-        public ConsultaRequest()
+        public ConsultaME()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ConsultaRequest class.
+        /// Initializes a new instance of the ConsultaME class.
         /// </summary>
-        public ConsultaRequest(int? codigoTransaccion = default(int?), int? operador = default(int?), string producto = default(string), string codigoAuxiliar = default(string), string referencia = default(string), int? servicioBancario = default(int?), string xmlAdd = default(string))
+        public ConsultaME(int? codigoTransaccion = default(int?), int? operador = default(int?), string producto = default(string), string codigoAuxiliar = default(string), string referencia = default(string), int? servicioBancario = default(int?), string xmlAdd = default(string))
         {
             CodigoTransaccion = codigoTransaccion;
             Operador = operador;

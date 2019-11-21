@@ -67,7 +67,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             {
                 BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFacilito").Valor)
             };
-            services.AddSingleton<IFBSFacilitoAPI>(new FBSFacilitoAPI(httpClientFacilito, false));
+            services.AddSingleton<IFacilitoAPI>(new FacilitoAPI(httpClientFacilito, false));
         }
     }
 }

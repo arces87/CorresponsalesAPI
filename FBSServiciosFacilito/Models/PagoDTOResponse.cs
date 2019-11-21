@@ -9,20 +9,20 @@ namespace ServiciosFacilito.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PagoResponse
+    public partial class PagoDTOResponse
     {
         /// <summary>
-        /// Initializes a new instance of the PagoResponse class.
+        /// Initializes a new instance of the PagoDTOResponse class.
         /// </summary>
-        public PagoResponse()
+        public PagoDTOResponse()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PagoResponse class.
+        /// Initializes a new instance of the PagoDTOResponse class.
         /// </summary>
-        public PagoResponse(string codigOAUTORIZACION = default(string), string codigORESULTADO = default(string), string coDPAGO = default(string), string fechATRANSACCION = default(string), string horATRANSACCION = default(string), string mensaje = default(string), string secuenciAADQUIRENTE = default(string), string secuenciASWITCH = default(string), string xmLADD = default(string), string xmLDATA = default(string), string xmLFACT = default(string))
+        public PagoDTOResponse(string codigOAUTORIZACION = default(string), string codigORESULTADO = default(string), string coDPAGO = default(string), string fechATRANSACCION = default(string), string horATRANSACCION = default(string), string mensaje = default(string), string secuenciAADQUIRENTE = default(string), string secuenciASWITCH = default(string), string xmLADD = default(string), string xmLDATA = default(string), string xmLFACT = default(string))
         {
             CodigOAUTORIZACION = codigOAUTORIZACION;
             CodigORESULTADO = codigORESULTADO;

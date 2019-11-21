@@ -15,9 +15,9 @@ namespace ServiciosFacilito
     using System.Threading.Tasks;
 
     /// <summary>
-    /// FBS_Facilito Api
+    /// Servicios para Facilito
     /// </summary>
-    public partial interface IFBSFacilitoAPI : System.IDisposable
+    public partial interface IFacilitoAPI : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.
@@ -51,7 +51,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ObtenerProductosFacilitoMS>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoRequest datosRequest = default(DatosServicioFacilitoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ObtenerProductosFacilitoMS>> ObtenerProductosFacilitoWithHttpMessagesAsync(DatosServicioFacilitoME datosRequest = default(DatosServicioFacilitoME), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -69,7 +69,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaWithHttpMessagesAsync(ConsultaRequest request = default(ConsultaRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ConsultaMS>> ServicioConsultaWithHttpMessagesAsync(ConsultaME request = default(ConsultaME), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='request'>
         /// </param>
@@ -79,7 +79,7 @@ namespace ServiciosFacilito
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<PagoResponse>> ServicioPagoWithHttpMessagesAsync(PagoRequest request = default(PagoRequest), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PagoMS>> ServicioPagoWithHttpMessagesAsync(PagoME request = default(PagoME), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='customHeaders'>
         /// The headers that will be added to request.

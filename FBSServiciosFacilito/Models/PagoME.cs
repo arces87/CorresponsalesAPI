@@ -9,20 +9,20 @@ namespace ServiciosFacilito.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PagoRequest
+    public partial class PagoME
     {
         /// <summary>
-        /// Initializes a new instance of the PagoRequest class.
+        /// Initializes a new instance of the PagoME class.
         /// </summary>
-        public PagoRequest()
+        public PagoME()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PagoRequest class.
+        /// Initializes a new instance of the PagoME class.
         /// </summary>
-        public PagoRequest(int? codigoTransaccion = default(int?), string nombres = default(string), int? operador = default(int?), string producto = default(string), string referencia = default(string), int? servicioBancario = default(int?), double? valor = default(double?), double? comision = default(double?), string xmlData = default(string))
+        public PagoME(int? codigoTransaccion = default(int?), string nombres = default(string), int? operador = default(int?), string producto = default(string), string referencia = default(string), int? servicioBancario = default(int?), double? valor = default(double?), double? comision = default(double?), string xmlData = default(string))
         {
             CodigoTransaccion = codigoTransaccion;
             Nombres = nombres;

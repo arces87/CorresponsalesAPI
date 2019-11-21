@@ -9,10 +9,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class ObtenerProductosHandler : IRequestHandler<ObtenerProductosME, ObtenerProductosFacilitoMS>
     {
-        private readonly IFBSFacilitoAPI _facilitoApi;
+        private readonly IFacilitoAPI _facilitoApi;
         private readonly IMapper _mapper;
 
-        public ObtenerProductosHandler(IFBSFacilitoAPI facilitoApi, IMapper mapper)
+        public ObtenerProductosHandler(IFacilitoAPI facilitoApi, IMapper mapper)
         {
             _facilitoApi = facilitoApi;
             _mapper = mapper;
@@ -20,7 +20,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 
         public async Task<ObtenerProductosFacilitoMS> Handle(ObtenerProductosME request, CancellationToken cancellationToken)
         {
-            var respuesta = await _facilitoApi.ObtenerProductosFacilitoWithHttpMessagesAsync(_mapper.Map<DatosServicioFacilitoRequest>(request));
+            var respuesta = await _facilitoApi.ObtenerProductosFacilitoWithHttpMessagesAsync(_mapper.Map<DatosServicioFacilitoME>(request));
             return respuesta.Body;
         }
     }
