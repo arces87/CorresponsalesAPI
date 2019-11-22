@@ -93,7 +93,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             }
             var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
             var comisiones = JsonConvert.SerializeObject(comision);
-            comisiones = comisiones.Replace("}", ",Facilito:" + request.Comision + "}");
+            comisiones = comisiones.Replace("}", ",\"Facilito\":" + request.Comision + "}");
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
