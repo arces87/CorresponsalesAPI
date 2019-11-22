@@ -122,11 +122,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                             }
                             else
                             {
-
-                                throw new Exception("Error en la validación de los datos de autenticación | A004");
+                                error = " | A004";
                             }
-
-
                         }
                         else
                         {
