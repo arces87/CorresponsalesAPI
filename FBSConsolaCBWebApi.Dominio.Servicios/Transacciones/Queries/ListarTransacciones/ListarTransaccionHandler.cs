@@ -36,6 +36,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             Filtro<Transaccion>.ProcesarLista(ref _model, _mapper.Map<ModeloPaginacion>(request), ref totalElementos);
             _retorno.TotalElementos = totalElementos;
             _retorno.Transacciones = _mapper.Map<List<ModeloListaTransaccion>>(_model);
+            foreach (var item in _retorno.Transacciones)
+            {
+                item.NombreTipo = (await _repositorioCatalogo.GetWithAssociations(item.Tipo)).Nombre;
+            }
             _retorno.CantidadElementos = request.CantidadElementos;
             _retorno.Pagina = request.Pagina;
             return _retorno;

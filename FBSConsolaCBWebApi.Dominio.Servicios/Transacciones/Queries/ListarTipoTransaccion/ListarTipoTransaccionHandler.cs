@@ -30,7 +30,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var valorDeposito = 0.0;
             var valorRetiro = 0.0;
             var valorCobroServicio = 0.0;
-            var _retorno = new ListarTipoTransaccionMS();
+            var saldo = await _repositorio.GetSaldoActual(request.IdAgente);
+            var _retorno = new ListarTipoTransaccionMS() { SaldoCaja = saldo };
             if (idDeposito != null)
             {
                 var _model = await _repositorio.GetForTipo(idDeposito, request.IdAgente);
