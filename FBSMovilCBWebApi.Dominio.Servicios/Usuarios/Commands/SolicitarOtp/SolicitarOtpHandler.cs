@@ -23,23 +23,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
     public class SolicitarOtpHandler : IRequestHandler<SolicitarOtpME, bool>
     {
         private readonly IMediator _mediador;
-        private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
-        private readonly IRepositorioUsuario _repositorioUsuario;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IServicioCorreoElectronico _correoElectronico;
         private readonly IFBSCorresponsalesApi _servicioFinancial;
         private readonly byte[] _llave;
 
-        public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper, IFBSCorresponsalesApi servicioFinancial,
-            IJsonConfiguracion jsonConfiguracion, IRepositorioUsuario repositorioUsuario, IServicioCorreoElectronico correoElectronico)
+        public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IFBSCorresponsalesApi servicioFinancial,
+            IJsonConfiguracion jsonConfiguracion, IServicioCorreoElectronico correoElectronico)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
-            _mapper = mapper;
             _servicioFinancial = servicioFinancial;
             _jsonConfiguracion = jsonConfiguracion;
-            _repositorioUsuario = repositorioUsuario;
             _correoElectronico = correoElectronico;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
@@ -63,7 +59,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 cuentaDestino = agente.Usuario.Email;
                 nombreDestino = agente.NombreAgente;
-                await _repositorioUsuario.EliminarOtp(request.Usuario);
             }
             else
             {
@@ -73,14 +68,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 });
                 cuentaDestino = cliente.Body.CorreoElectronico;
                 nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
-                await _repositorioUsuario.EliminarOtpCliente(request.Usuario);
             }
             if (cuentaDestino != "" && nombreDestino != "")
                 try
                 {
                     _correoElectronico.Enviar(new ModeloMensaje()
                     {
-                        Asunto = "OTP Banca Movil",
+                        Asunto = "OTP Corresponsales Solidarios",
                         Mensaje = "Su OTP para realizar la Operación es: " + totp.ComputeTotp(),
                         DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo(){
