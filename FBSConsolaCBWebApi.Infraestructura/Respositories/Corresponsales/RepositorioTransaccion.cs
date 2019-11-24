@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using FBS.DAL.Nomenclador;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
@@ -17,10 +18,12 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
     public class RepositorioTransaccion : Repositorio<Transaccion>, IRepositorioTransaccion
     {
         private readonly IConfiguration _configuracion;
+        private readonly IJsonConfiguracion _jsonConfiguracion;
 
-        public RepositorioTransaccion(ContextoFBSConsolaCB context, IConfiguration configuracion) : base(context)
+        public RepositorioTransaccion(ContextoFBSConsolaCB context, IConfiguration configuracion, IJsonConfiguracion jsonConfiguracion) : base(context)
         {
             _configuracion = configuracion;
+            _jsonConfiguracion = jsonConfiguracion;
         }
         public async Task<IEnumerable<Transaccion>> GetAllActive()
         {
@@ -36,18 +39,19 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
                 if (IdAgente != null && IdAgente != "")
                 {
                     var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                     "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                    "where transaccion.EstaActivo='true' and agente.Id = @IdAgente",
+                    "where transaccion.EstaActivo='true' and agente.Id = @IdAgente and transaccion.EstadoId = @estadoTransaccion",
                    (transaccion, agente, estado) =>
                    {
                        transaccion.Estado = estado;
                        transaccion.Agente = agente;
                        return transaccion;
-                   }, param: new { IdAgente });
+                   }, param: new { IdAgente, estadoTransaccion });
                     return transacciones.ToList();
                 }
                 else
@@ -55,13 +59,13 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                     var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                     "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                     "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                    "where transaccion.EstaActivo='true'",
+                    "where transaccion.EstaActivo='true' and transaccion.EstadoId = @estadoTransaccion",
                    (transaccion, agente, estado) =>
                    {
                        transaccion.Estado = estado;
                        transaccion.Agente = agente;
                        return transaccion;
-                   });
+                   }, param: new { estadoTransaccion });
                     return transacciones.ToList();
                 }
             }
@@ -71,16 +75,17 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
                 var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                   "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                   "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                  "where transaccion.EstaActivo='true' and transaccion.Id = @Id",
+                  "where transaccion.EstaActivo='true' and transaccion.Id = @Id and transaccion.EstadoId = @estadoTransaccion",
                     (transaccion, agente, estado) =>
                     {
                         transaccion.Estado = estado;
                         transaccion.Agente = agente;
                         return transaccion;
-                    }, param: new { Id });
+                    }, param: new { Id, estadoTransaccion });
 
                 return transacciones.FirstOrDefault();
             }
@@ -90,10 +95,11 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
                 var transacciones = await conexion.QueryAsync<Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
-                  "where transaccion.EstaActivo='true' and transaccion.ReposicionRealizada = 'false' and transaccion.AgenteId = @IdAgente " +
+                  "where transaccion.EstaActivo='true' and transaccion.ReposicionRealizada = 'false' and transaccion.AgenteId = @IdAgente and transaccion.EstadoId = @estadoTransaccion " +
                   "order by transaccion.FechaSistema",
-                  param: new { IdAgente });
+                  param: new { IdAgente, estadoTransaccion });
                 var ultimaTransaccion = transacciones.LastOrDefault();
                 if (ultimaTransaccion != null)
                 {
@@ -107,10 +113,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
                 var transacciones = await conexion.QueryAsync<Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
-                  "where transaccion.EstaActivo='true' and transaccion.ReposicionRealizada = 'false' and transaccion.AgenteId = @IdAgente " +
+                  "where transaccion.EstaActivo='true' " +
+                  "and transaccion.ReposicionRealizada = 'false' " +
+                  "and transaccion.AgenteId = @IdAgente " +
+                  "and transaccion.EstadoId = @estadoTransaccion " +
                   "order by transaccion.FechaSistema",
-                  param: new { IdAgente });
+                  param: new { IdAgente, estadoTransaccion });
                 var ultimaTransaccion = transacciones.LastOrDefault();
                 if (ultimaTransaccion != null)
                 {
@@ -161,16 +171,17 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
                 var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                   "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                   "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                  "where transaccion.EstaActivo='true' and agente.Id = @Id",
+                  "where transaccion.EstaActivo='true' and agente.Id = @Id and transaccion.EstadoId = @estadoTransaccion",
                     (transaccion, agente, estado) =>
                     {
                         transaccion.Estado = estado;
                         transaccion.Agente = agente;
                         return transaccion;
-                    }, param: new { Id });
+                    }, param: new { Id, estadoTransaccion });
 
                 return transacciones.ToList();
             }
@@ -181,17 +192,18 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             using (var conexion = Conexion)
             {
                 conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
                 var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                   "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                   "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
                   "where transaccion.EstaActivo='true' and transaccion.Tipo = @idTipo and agente.Id = @IdAgente " +
-                  "and transaccion.ReposicionRealizada = 'false'",
+                  "and transaccion.ReposicionRealizada = 'false' and transaccion.EstadoId = @estadoTransaccion",
                     (transaccion, agente, estado) =>
                     {
                         transaccion.Estado = estado;
                         transaccion.Agente = agente;
                         return transaccion;
-                    }, param: new { idTipo, IdAgente });
+                    }, param: new { idTipo, IdAgente, estadoTransaccion });
 
                 return transacciones.ToList();
             }
