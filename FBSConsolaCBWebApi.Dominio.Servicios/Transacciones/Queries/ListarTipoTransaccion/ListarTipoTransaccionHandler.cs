@@ -51,7 +51,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             {
                 var _modelRetiro = await _repositorio.GetForTipo(idRetiro, request.IdAgente);
                 valorRetiro = _modelRetiro.Sum(m => m.Valor);
-                comisionDeposito = _modelRetiro.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
+                comisionRetiro = _modelRetiro.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
             if (idCobroServicio != null)
             {
