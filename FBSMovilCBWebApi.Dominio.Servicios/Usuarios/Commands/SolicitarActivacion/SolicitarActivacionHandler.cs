@@ -53,7 +53,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     {
                         throw new Exception("Error en la validación de los datos de autenticación | A003");
                     }
-                    else if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
+                    else if (agente.Dispositivo != null && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
                     {
                         var _usuario = new LoginUsuarioME() { Usuario = request.Usuario, Contrasenna = request.Contrasenia, Dispositivo = "Movil" };
                         var usuarioAutenticado = await _mediador.Send(_usuario);
