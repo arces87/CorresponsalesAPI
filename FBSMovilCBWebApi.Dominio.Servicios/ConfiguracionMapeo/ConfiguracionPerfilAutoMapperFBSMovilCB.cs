@@ -79,6 +79,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<ObtenerProductosME, DatosServicioFacilitoME>();
             CreateMap<ConsultaServiciosME, ConsultaME>();
             CreateMap<TipoIdentificacionMS, DistribuidoTipoIdentificacion>();
+            CreateMap<ComisionOperacion, ComisionPago>();
             #endregion
         }
     }

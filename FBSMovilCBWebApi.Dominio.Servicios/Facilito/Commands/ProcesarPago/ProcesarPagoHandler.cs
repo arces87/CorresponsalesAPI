@@ -92,8 +92,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 throw new Exception("No puede realizar esta operación porque no posee saldo en la cuenta");
             }
             var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
-            var comisiones = JsonConvert.SerializeObject(comision);
-            comisiones = comisiones.Replace("}", ",\"Facilito\":" + request.Comision + "}");
+            var comisionPago = _mapper.Map<ComisionPago>(comision);
+            comisionPago.Facilito = request.Comision;
+            var comisiones = JsonConvert.SerializeObject(comisionPago);
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
