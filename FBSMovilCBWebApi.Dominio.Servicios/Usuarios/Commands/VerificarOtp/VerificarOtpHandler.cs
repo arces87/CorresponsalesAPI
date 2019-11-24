@@ -51,17 +51,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
             var vw = new VerificationWindow(1, 1);
-            bool verificacion = totp.VerifyTotp(request.Otp, out intentos, vw);
-            if (verificacion && !(await _repositorioUsuario.ComprobarOtp(request.Usuario, intentos.ToString())))
-            {
-                var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-                if (agente.Identificacion == request.Identificacion)
-                    await _repositorioUsuario.SalvarOtp(request.Usuario, intentos.ToString());
-                else
-                    await _repositorioUsuario.SalvarOtpCliente(request.Usuario, intentos.ToString());
-                return true;
-            }
-            return false;
+            return totp.VerifyTotp(request.Otp, out intentos, vw); ;
         }
     }
 }
