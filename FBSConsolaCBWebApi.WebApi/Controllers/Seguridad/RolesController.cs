@@ -49,7 +49,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
             return await _mediador.Send(modelo);
         }
 
-        [HttpPost("verificarRol", Name = "Usuario_VerificarRol")]
+        [HttpPost("verificarRol", Name = "Rol_VerificarRol")]
         public async Task<ActionResult<bool>> VerificarRol ([FromBody] ComprobarRolME modelo)
         {
             return await _mediador.Send(modelo);
