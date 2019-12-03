@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
 {
-    public class ObtenerDispositivoHandler : IRequestHandler<ObtenerAgenteME, ObtenerAgenteMS>
+    public class ObtenerAgenteHandler : IRequestHandler<ObtenerAgenteME, ObtenerAgenteMS>
     {
         private readonly IRepositorioAgente _repositorio;
         private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IMapper _mapper;
 
-        public ObtenerDispositivoHandler(IRepositorioAgente repositorio, IRepositorioCuenta repositorioCuenta, IMapper mapper)
+        public ObtenerAgenteHandler(IRepositorioAgente repositorio, IRepositorioCuenta repositorioCuenta, IMapper mapper)
         {
             _repositorio = repositorio;
             _repositorioCuenta = repositorioCuenta;

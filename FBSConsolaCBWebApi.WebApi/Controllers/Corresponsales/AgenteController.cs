@@ -88,5 +88,11 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(modelo);
         }
+
+        [HttpPost("obtenerGeolocalizacion", Name = "Agente_ObtenerGeolocalizacion")]
+        public async Task<ActionResult<ObtenerObtenerGeolocalizacionMS>> ObtenerGeolocalizacion([FromBody] ObtenerObtenerGeolocalizacionME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
     }
 }

@@ -5,6 +5,7 @@ using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -32,6 +33,19 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
                 return geolocalizaciones.FirstOrDefault();
             }
         }
+        public async Task<IEnumerable<ImagenGeolocalizacion>> GetImagenesPorAgente(string Id)
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var geolocalizaciones = await conexion.QueryAsync<ImagenGeolocalizacion>(@"SELECT Canales.ImagenGeolocalizacion.* FROM Canales.ImagenGeolocalizacion " +
+                    "join Canales.Geolocalizacion on Canales.ImagenGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id " +
+                    "join Canales.AgenteGeolocalizacion on Canales.Geolocalizacion.Id = Canales.AgenteGeolocalizacion.GeolocalizacionId " +
+                    "where Canales.AgenteGeolocalizacion.AgenteId = @Id and Canales.Geolocalizacion.EstaActivo='true'", param: new { Id });
+                return geolocalizaciones.ToList();
+            }
+        }
+
         public async Task AdicionarGeolocalizacionAgente(double latitud, double longitud, string idAgente)
         {
             var geolocalizacion = new Geolocalizacion() { Latitud = latitud, Longitud = longitud, FechaAlta = DateTime.Now, EstaActivo = true };
