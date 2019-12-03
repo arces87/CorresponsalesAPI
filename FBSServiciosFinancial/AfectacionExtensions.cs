@@ -46,9 +46,9 @@ namespace ServiciosFinancial
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static PagoFacilitoMS AfectacionAUnCorresponsal1(this IAfectacion operations, PagoFacilitoME request)
+            public static PagoFacilitoMS PagoFacilito(this IAfectacion operations, PagoFacilitoME request)
             {
-                return operations.AfectacionAUnCorresponsal1Async(request).GetAwaiter().GetResult();
+                return operations.PagoFacilitoAsync(request).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -59,9 +59,9 @@ namespace ServiciosFinancial
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PagoFacilitoMS> AfectacionAUnCorresponsal1Async(this IAfectacion operations, PagoFacilitoME request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PagoFacilitoMS> PagoFacilitoAsync(this IAfectacion operations, PagoFacilitoME request, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.AfectacionAUnCorresponsal1WithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.PagoFacilitoWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

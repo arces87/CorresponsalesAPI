@@ -22,9 +22,9 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the ActualizaEstadoUsuarioME class.
         /// </summary>
-        public ActualizaEstadoUsuarioME(string codigoUsuario = default(string), bool? estado = default(bool?))
+        public ActualizaEstadoUsuarioME(string codigoUsuarioCorresponsal = default(string), bool? estado = default(bool?))
         {
-            CodigoUsuario = codigoUsuario;
+            CodigoUsuarioCorresponsal = codigoUsuarioCorresponsal;
             Estado = estado;
             CustomInit();
         }
@@ -36,8 +36,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "CodigoUsuario")]
-        public string CodigoUsuario { get; set; }
+        [JsonProperty(PropertyName = "CodigoUsuarioCorresponsal")]
+        public string CodigoUsuarioCorresponsal { get; set; }
 
         /// <summary>
         /// </summary>

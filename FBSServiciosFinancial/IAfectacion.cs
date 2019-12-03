@@ -53,6 +53,6 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<PagoFacilitoMS>> AfectacionAUnCorresponsal1WithHttpMessagesAsync(PagoFacilitoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PagoFacilitoMS>> PagoFacilitoWithHttpMessagesAsync(PagoFacilitoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

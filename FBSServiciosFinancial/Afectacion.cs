@@ -205,7 +205,7 @@ namespace ServiciosFinancial
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<PagoFacilitoMS>> AfectacionAUnCorresponsal1WithHttpMessagesAsync(PagoFacilitoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PagoFacilitoMS>> PagoFacilitoWithHttpMessagesAsync(PagoFacilitoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (request == null)
             {
@@ -220,7 +220,7 @@ namespace ServiciosFinancial
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("request", request);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "AfectacionAUnCorresponsal1", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "PagoFacilito", tracingParameters);
             }
             // Construct URL
             var _baseUrl = Client.BaseUri.AbsoluteUri;

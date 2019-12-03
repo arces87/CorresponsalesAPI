@@ -22,7 +22,7 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the PagoFacilitoME class.
         /// </summary>
-        public PagoFacilitoME(int? secuencialCuentaCorresponsal = default(int?), int? secuencialCuentaCliente = default(int?), string jsonPagoFacilito = default(string), string jsonComision = default(string), double? valor = default(double?), string codigoUsuario = default(string))
+        public PagoFacilitoME(int? secuencialCuentaCorresponsal = default(int?), int? secuencialCuentaCliente = default(int?), string jsonPagoFacilito = default(string), string jsonComision = default(string), double? valor = default(double?), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?))
         {
             SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             SecuencialCuentaCliente = secuencialCuentaCliente;
@@ -30,6 +30,7 @@ namespace ServiciosFinancial.Models
             JsonComision = jsonComision;
             Valor = valor;
             CodigoUsuario = codigoUsuario;
+            EsUnSoloCobroComision = esUnSoloCobroComision;
             CustomInit();
         }
 
@@ -67,6 +68,11 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "CodigoUsuario")]
         public string CodigoUsuario { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "EsUnSoloCobroComision")]
+        public bool? EsUnSoloCobroComision { get; set; }
 
     }
 }

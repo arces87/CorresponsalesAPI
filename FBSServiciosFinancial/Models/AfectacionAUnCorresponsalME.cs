@@ -24,7 +24,7 @@ namespace ServiciosFinancial.Models
         /// Initializes a new instance of the AfectacionAUnCorresponsalME
         /// class.
         /// </summary>
-        public AfectacionAUnCorresponsalME(string tipoTransaccion = default(string), int? secuencialCuentaSocio = default(int?), int? secuencialCuentaCorresponsal = default(int?), double? valorAfectado = default(double?), string jsonComision = default(string), string codigoUsuario = default(string))
+        public AfectacionAUnCorresponsalME(string tipoTransaccion = default(string), int? secuencialCuentaSocio = default(int?), int? secuencialCuentaCorresponsal = default(int?), double? valorAfectado = default(double?), string jsonComision = default(string), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?))
         {
             TipoTransaccion = tipoTransaccion;
             SecuencialCuentaSocio = secuencialCuentaSocio;
@@ -32,6 +32,7 @@ namespace ServiciosFinancial.Models
             ValorAfectado = valorAfectado;
             JsonComision = jsonComision;
             CodigoUsuario = codigoUsuario;
+            EsUnSoloCobroComision = esUnSoloCobroComision;
             CustomInit();
         }
 
@@ -69,6 +70,11 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "CodigoUsuario")]
         public string CodigoUsuario { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "EsUnSoloCobroComision")]
+        public bool? EsUnSoloCobroComision { get; set; }
 
     }
 }

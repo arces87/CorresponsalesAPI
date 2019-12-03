@@ -132,7 +132,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 SecuencialCuentaCliente = request.SecuencialCuenta,
                 Valor = request.Valor
             };
-            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsal1WithHttpMessagesAsync(modelo);
+            var respuesta = await _financialApi.Afectacion.PagoFacilitoWithHttpMessagesAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
             {

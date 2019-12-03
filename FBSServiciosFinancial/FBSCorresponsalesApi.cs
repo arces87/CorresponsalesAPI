@@ -142,7 +142,7 @@ namespace ServiciosFinancial
             Afectacion = new Afectacion(this);
             Clientes = new Clientes(this);
             Cuentas = new Cuentas(this);
-            BaseUri = HttpClient.BaseAddress;
+            BaseUri = new System.Uri("http://186.5.29.68:9008");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -151,7 +151,7 @@ namespace ServiciosFinancial
                 NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
                 ContractResolver = new ReadOnlyJsonContractResolver(),
-                Converters = new List<JsonConverter>
+                Converters = new  List<JsonConverter>
                     {
                         new Iso8601TimeSpanConverter()
                     }
