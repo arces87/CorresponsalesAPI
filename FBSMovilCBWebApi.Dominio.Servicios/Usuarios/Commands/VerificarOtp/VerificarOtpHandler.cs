@@ -43,7 +43,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             var secretKey = Criptografia.EncryptStringToBytes_Aes(request.Identificacion, _llave, _llave);
             var tiempoVida = _jsonConfiguracion.TiempoVidaOtp;
             var totp = new Totp(secretKey, tiempoVida);
-            long intentos = 0;
+            long tiempoVerificacion = 0;
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -51,7 +51,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
             var vw = new VerificationWindow(1, 1);
-            return totp.VerifyTotp(request.Otp, out intentos, vw); ;
+            var verificacion = totp.VerifyTotp(request.Otp, out tiempoVerificacion, vw);
+
+            if (verificacion && !(await _repositorioUsuario.ComprobarOtp(request.Usuario, request.Identificacion, tiempoVerificacion.ToString())))
+            {
+                await _repositorioUsuario.SalvarOtp(request.Usuario, request.Identificacion, tiempoVerificacion.ToString());
+                return true;
+            }
+            return false;
         }
     }
 }
