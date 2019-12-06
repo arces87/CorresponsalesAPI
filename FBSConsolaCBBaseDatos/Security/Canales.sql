@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [Canales]
+    AUTHORIZATION [dbo];
+
