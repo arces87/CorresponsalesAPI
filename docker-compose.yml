@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+    corresponsales-web-api:
+        build:
+            context: .
+            dockerfile: FBSConsolaCBWebApi.WebApi/Dockerfile
+        image: corresponsales-web-api
+        container_name: corresponsales-web-api
+        depends_on:
+            - corresponsales_mssqlserver
+        ports:
+            - 8095:80
+    corresponsales-web-api-movil:
+        build:
+            context: .
+            dockerfile: FBSMovilCBWebApi.WebApi/Dockerfile
+        image: corresponsales-web-api-movil
+        container_name: corresponsales-web-api-movil
+        depends_on:
+            - corresponsales_mssqlserver
+        ports:
+            - 8096:80
+    corresponsales_mssqlserver:
+        image: mcr.microsoft.com/mssql/server:latest
+        container_name: corresponsales_mssqlserver
+        environment:
+            ACCEPT_EULA: Y
+            SA_PASSWORD: Root123*-
+        ports:
+            - 1432:1433
+        volumes:
+            - mssql:/var/opt/mssql
+
+volumes:
+    mssql:
