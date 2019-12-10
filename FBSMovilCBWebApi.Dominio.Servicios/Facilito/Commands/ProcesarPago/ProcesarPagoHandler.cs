@@ -130,7 +130,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 JsonComision = comisiones,
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaCliente = request.SecuencialCuenta,
-                Valor = request.Valor
+                Valor = request.Valor,
+                EsUnSoloCobroComision = true
             };
             var respuesta = await _financialApi.Afectacion.PagoFacilitoWithHttpMessagesAsync(modelo);
 

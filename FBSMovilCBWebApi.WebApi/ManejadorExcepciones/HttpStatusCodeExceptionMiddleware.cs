@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,8 +33,8 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                 context.Response.Clear();
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = @"text/plain";
-                var mensaje = ex.Response.Content.ToString().Split("|");
-                await context.Response.WriteAsync(mensaje.Count() > 1 ? mensaje[1].Split("\"")[0] : mensaje[0].Split("\"")[0]);
+                var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(ex.Response.Content);
+                await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
                 return;
             }
             catch (Exception ex)
@@ -43,8 +44,8 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                 if (ex.InnerException is HttpOperationException)
                 {
                     context.Response.ContentType = @"text/plain";
-                    var mensaje = (ex.InnerException as HttpOperationException).Response.Content.ToString().Split("|");
-                    await context.Response.WriteAsync(mensaje.Count() > 1 ? mensaje[1].Split("\"")[0] : mensaje[0].Split("\"")[0]);
+                    var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
+                    await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
                 }
                 else
                 {

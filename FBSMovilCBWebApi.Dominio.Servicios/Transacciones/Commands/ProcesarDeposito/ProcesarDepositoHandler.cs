@@ -125,7 +125,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 JsonComision = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Deposito.Comisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,
-                ValorAfectado = request.Valor
+                ValorAfectado = request.Valor,
+                EsUnSoloCobroComision = true
             };
             var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo);
             await _mediador.Send(new CrearLogME()
