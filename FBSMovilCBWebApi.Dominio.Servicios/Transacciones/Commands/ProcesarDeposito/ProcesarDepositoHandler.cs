@@ -5,6 +5,7 @@ using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -118,11 +120,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
+            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Deposito.Comisiones;
+            var arregloComisiones = new List<ComisionFinancial>();
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Administración Canal", Valor = comision.AdministracionCanal });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
+
             var modelo = new AfectacionAUnCorresponsalME()
             {
                 TipoTransaccion = "D",
                 CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
-                JsonComision = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Deposito.Comisiones),
+                JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,
                 ValorAfectado = request.Valor,

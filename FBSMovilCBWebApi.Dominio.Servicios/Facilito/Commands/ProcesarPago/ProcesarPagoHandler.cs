@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -122,12 +123,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-
+            var arregloComisiones = new List<ComisionFinancial>();
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Administración Canal", Valor = comision.AdministracionCanal });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Facilito", Valor = request.Comision });
             var modelo = new PagoFacilitoME()
             {
                 CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
                 JsonPagoFacilito = request.JsonFacilito,
-                JsonComision = comisiones,
+                JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaCliente = request.SecuencialCuenta,
                 Valor = request.Valor,
