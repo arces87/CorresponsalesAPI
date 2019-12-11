@@ -130,7 +130,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Facilito", Valor = request.Comision });
             var modelo = new PagoFacilitoME()
             {
-                CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
+                //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
+                CodigoUsuario = "ADMIN",
                 JsonPagoFacilito = request.JsonFacilito,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
