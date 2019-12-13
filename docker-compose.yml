@@ -22,7 +22,10 @@ services:
         ports:
             - 8096:80
     corresponsales_mssqlserver:
-        image: mcr.microsoft.com/mssql/server:latest
+        build:
+            context: .
+            dockerfile: FBSConsolaCBBaseDatos/Dockerfile
+        image: corresponsales_mssqlserver      
         container_name: corresponsales_mssqlserver
         environment:
             ACCEPT_EULA: Y
