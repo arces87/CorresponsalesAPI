@@ -78,7 +78,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             }
             if (saldoActual + request.Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception("No puede realizar esta operación porque excede el monto máximo diario en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - saldoActual + request.Valor) + " del valor definido para este tipo de operación");
+                throw new Exception("No puede realizar esta operación porque excede el monto máximo diario en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + request.Valor)) + " del valor definido para este tipo de operación");
             }
             if (transacciones.Count() > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
             {
@@ -86,7 +86,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             }
             if (saldoActual + request.Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
             {
-                throw new Exception("No puede realizar esta operación porque excede el Saldo Máximo en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - saldoActual + request.Valor) + " del establecido para mantener en caja");
+                throw new Exception("No puede realizar esta operación porque excede el Saldo Máximo en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + request.Valor)) + " del establecido para mantener en caja");
             }
             if (cuenta != null && saldoCuenta - request.Valor < 0)
             {
