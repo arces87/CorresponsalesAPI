@@ -58,8 +58,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
                             });
                             return true;
                     }
+                    else
+                    {
+                        throw new Exception("Error en la validación de los datos de autenticación | A002");
+                    }
                 }
-                throw new Exception("Error en la validación de los datos de autenticación");
+                throw new Exception("Error en la validación de los datos de autenticación | A001");
             }
             catch (Exception)
             {
