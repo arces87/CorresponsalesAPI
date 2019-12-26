@@ -13,4 +13,4 @@ RUN dotnet publish ./app/FBSConsolaCBWebApi.WebApi/FBSConsolaCBWebApi.WebApi.csp
 FROM mcr.microsoft.com/dotnet/core/aspnet:latest
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "FBSConsolaCBWebApi.WebApi.dll"]
+ENTRYPOINT ["dotnet", "--launch-profile", "Production", "FBSConsolaCBWebApi.WebApi.dll"]
