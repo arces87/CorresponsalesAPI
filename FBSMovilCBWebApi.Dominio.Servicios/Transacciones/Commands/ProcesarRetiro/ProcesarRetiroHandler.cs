@@ -123,8 +123,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
             var modelo = new AfectacionAUnCorresponsalME()
             {
-                TipoTransaccion = "R",
-                //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
+                TipoTransaccion = "NDCliente",
+                //CodigoUsuario = agente.Usuario.UserName,
                 CodigoUsuario = "ADMIN",
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
