@@ -48,6 +48,21 @@ namespace ServiciosFinancial
         public virtual ICuentas Cuentas { get; private set; }
 
         /// <summary>
+        /// Gets the IMensajeriaSMS.
+        /// </summary>
+        public virtual IMensajeriaSMS MensajeriaSMS { get; private set; }
+
+        /// <summary>
+        /// Gets the IPagoServiciosFacilito.
+        /// </summary>
+        public virtual IPagoServiciosFacilito PagoServiciosFacilito { get; private set; }
+
+        /// <summary>
+        /// Gets the IPagoServiciosPagoAgil.
+        /// </summary>
+        public virtual IPagoServiciosPagoAgil PagoServiciosPagoAgil { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the FBSCorresponsalesApi class.
         /// </summary>
         /// <param name='httpClient'>

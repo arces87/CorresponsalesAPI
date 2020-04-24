@@ -13,5 +13,6 @@ RUN dotnet publish ./app/FBSMovilCBWebApi.WebApi/FBSMovilCBWebApi.WebApi.csproj 
 FROM mcr.microsoft.com/dotnet/core/aspnet:latest
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "--launch-profile", "Production", "FBSMovilCBWebApi.WebApi.dll"]
+#ENTRYPOINT ["dotnet", "--launch-profile", "Production", "FBSMovilCBWebApi.WebApi.dll"]
+ENTRYPOINT ["dotnet","FBSMovilCBWebApi.WebApi.dll"]
 

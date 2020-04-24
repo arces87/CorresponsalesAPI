@@ -22,12 +22,16 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the PagoFacilitoMS class.
         /// </summary>
-        public PagoFacilitoMS(double? saldoCuentaCorresponsal = default(double?), double? saldoCuentaCliente = default(double?), System.DateTime? fechaTransaccion = default(System.DateTime?), string jsonRespuestaFacilito = default(string))
+        public PagoFacilitoMS(string fechaTransaccion = default(string), string documento = default(string), string codigoResultado = default(string), string fechaTransaccionFinancial = default(string), string horaTransaccion = default(string), string mensaje = default(string), double? valorPagado = default(double?), int? secuencialRespuestaPago = default(int?))
         {
-            SaldoCuentaCorresponsal = saldoCuentaCorresponsal;
-            SaldoCuentaCliente = saldoCuentaCliente;
             FechaTransaccion = fechaTransaccion;
-            JsonRespuestaFacilito = jsonRespuestaFacilito;
+            Documento = documento;
+            CodigoResultado = codigoResultado;
+            FechaTransaccionFinancial = fechaTransaccionFinancial;
+            HoraTransaccion = horaTransaccion;
+            Mensaje = mensaje;
+            ValorPagado = valorPagado;
+            SecuencialRespuestaPago = secuencialRespuestaPago;
             CustomInit();
         }
 
@@ -38,23 +42,43 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "SaldoCuentaCorresponsal")]
-        public double? SaldoCuentaCorresponsal { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "SaldoCuentaCliente")]
-        public double? SaldoCuentaCliente { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "FechaTransaccion")]
-        public System.DateTime? FechaTransaccion { get; set; }
+        public string FechaTransaccion { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "JsonRespuestaFacilito")]
-        public string JsonRespuestaFacilito { get; set; }
+        [JsonProperty(PropertyName = "Documento")]
+        public string Documento { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "CodigoResultado")]
+        public string CodigoResultado { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "FechaTransaccionFinancial")]
+        public string FechaTransaccionFinancial { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "HoraTransaccion")]
+        public string HoraTransaccion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Mensaje")]
+        public string Mensaje { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "ValorPagado")]
+        public double? ValorPagado { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "SecuencialRespuestaPago")]
+        public int? SecuencialRespuestaPago { get; set; }
 
     }
 }

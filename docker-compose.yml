@@ -25,7 +25,7 @@ services:
         build:
             context: .
             dockerfile: FBSConsolaCBBaseDatos/Dockerfile
-        image: mcr.microsoft.com/mssql/server:2017-latest    
+        image: corresponsales_mssqlserver  
         container_name: corresponsales_mssqlserver
         environment:
             ACCEPT_EULA: Y

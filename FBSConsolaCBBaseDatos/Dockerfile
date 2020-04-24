@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/mssql/server:2017-latest
 
 # Install Unzip
-RUN apt-get update \
-    && apt-get install unzip -y
+#RUN apt-get update \
+#    && apt-get install unzip -y
 
 # Install SQLPackage for Linux and make it executable
 #RUN wget -progress=bar:force -q -O sqlpackage.zip https://go.microsoft.com/fwlink/?linkid=2108814 \
@@ -11,7 +11,7 @@ RUN apt-get update \
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-COPY ./FBSConsolaCBBaseDatos/. /usr/src/app
+COPY . ./usr/src/app
 RUN ls /usr/src/app
 
 # Grant permissions for the import-data script to be executable

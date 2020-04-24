@@ -7,6 +7,8 @@
 namespace ServiciosFinancial.Models
 {
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
     public partial class PagoFacilitoME
@@ -22,15 +24,23 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the PagoFacilitoME class.
         /// </summary>
-        public PagoFacilitoME(int? secuencialCuentaCorresponsal = default(int?), int? secuencialCuentaCliente = default(int?), string jsonPagoFacilito = default(string), string jsonComision = default(string), double? valor = default(double?), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?))
+        public PagoFacilitoME(int? secuencialCuentaCliente = default(int?), int? secuencialCuentaCorresponsal = default(int?), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool? esUnSoloCobroComision = default(bool?), System.Guid? idProducto = default(System.Guid?), string referencia = default(string), double? valor = default(double?), string valorTonelaje = default(string), string identificacion = default(string), int? numeroCuotasPensionesAlimenticiaPersona = default(int?), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int? secuencialResultadoTransaccion = default(int?), bool? comisionRubro = default(bool?), IList<RubroME> rubros = default(IList<RubroME>))
         {
-            SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             SecuencialCuentaCliente = secuencialCuentaCliente;
-            JsonPagoFacilito = jsonPagoFacilito;
+            SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             JsonComision = jsonComision;
-            Valor = valor;
-            CodigoUsuario = codigoUsuario;
+            CodigoUsuarioBanca = codigoUsuarioBanca;
             EsUnSoloCobroComision = esUnSoloCobroComision;
+            IdProducto = idProducto;
+            Referencia = referencia;
+            Valor = valor;
+            ValorTonelaje = valorTonelaje;
+            Identificacion = identificacion;
+            NumeroCuotasPensionesAlimenticiaPersona = numeroCuotasPensionesAlimenticiaPersona;
+            CodigoPagarPensionesAlimenticiaEmpresa = codigoPagarPensionesAlimenticiaEmpresa;
+            SecuencialResultadoTransaccion = secuencialResultadoTransaccion;
+            ComisionRubro = comisionRubro;
+            Rubros = rubros;
             CustomInit();
         }
 
@@ -41,18 +51,13 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "SecuencialCuentaCorresponsal")]
-        public int? SecuencialCuentaCorresponsal { get; set; }
-
-        /// <summary>
-        /// </summary>
         [JsonProperty(PropertyName = "SecuencialCuentaCliente")]
         public int? SecuencialCuentaCliente { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "JsonPagoFacilito")]
-        public string JsonPagoFacilito { get; set; }
+        [JsonProperty(PropertyName = "SecuencialCuentaCorresponsal")]
+        public int? SecuencialCuentaCorresponsal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -61,18 +66,63 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Valor")]
-        public double? Valor { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "CodigoUsuario")]
-        public string CodigoUsuario { get; set; }
+        [JsonProperty(PropertyName = "CodigoUsuarioBanca")]
+        public string CodigoUsuarioBanca { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "EsUnSoloCobroComision")]
         public bool? EsUnSoloCobroComision { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "IdProducto")]
+        public System.Guid? IdProducto { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Referencia")]
+        public string Referencia { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Valor")]
+        public double? Valor { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "ValorTonelaje")]
+        public string ValorTonelaje { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Identificacion")]
+        public string Identificacion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "NumeroCuotasPensionesAlimenticiaPersona")]
+        public int? NumeroCuotasPensionesAlimenticiaPersona { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "CodigoPagarPensionesAlimenticiaEmpresa")]
+        public string CodigoPagarPensionesAlimenticiaEmpresa { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "SecuencialResultadoTransaccion")]
+        public int? SecuencialResultadoTransaccion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "ComisionRubro")]
+        public bool? ComisionRubro { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Rubros")]
+        public IList<RubroME> Rubros { get; set; }
 
     }
 }

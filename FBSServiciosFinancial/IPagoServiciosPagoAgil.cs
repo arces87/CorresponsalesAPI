@@ -14,10 +14,23 @@ namespace ServiciosFinancial
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Afectacion operations.
+    /// PagoServiciosPagoAgil operations.
     /// </summary>
-    public partial interface IAfectacion
+    public partial interface IPagoServiciosPagoAgil
     {
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="Microsoft.Rest.HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="Microsoft.Rest.SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        Task<HttpOperationResponse<ServiciosMSL>> ServiciosWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='request'>
         /// </param>
         /// <param name='customHeaders'>
@@ -35,7 +48,7 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<AfectacionAUnCorresponsalMS>> AfectacionAUnCorresponsalWithHttpMessagesAsync(AfectacionAUnCorresponsalME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<FormatoMS>> FormatoWithHttpMessagesAsync(FormatoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='request'>
         /// </param>
         /// <param name='customHeaders'>
@@ -53,7 +66,7 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<FacilitoPagoMS>> FacilitoPagoWithHttpMessagesAsync(FacilitoPagoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ConsultaMS>> ConsultaWithHttpMessagesAsync(ConsultaME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='request'>
         /// </param>
         /// <param name='customHeaders'>
@@ -71,6 +84,6 @@ namespace ServiciosFinancial
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<EfectivizacionPrestamoMS>> EfectivizacionPrestamoWithHttpMessagesAsync(EfectivizacionPrestamoME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<AfectacionMS>> AfectacionMethodWithHttpMessagesAsync(AfectacionME request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
