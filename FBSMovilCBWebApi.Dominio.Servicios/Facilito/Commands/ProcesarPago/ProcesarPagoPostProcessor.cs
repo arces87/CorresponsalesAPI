@@ -19,6 +19,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands.ProcesarPago
         {
             await _mediador.Publish(new NotificacionME
             {
+                Operacion = "CobroServicios",
                 CorreoElectronicoDestinatario = "",
                 NombreDestinatario = "",
                 AsuntoCorreoElectronico = "",
