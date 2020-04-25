@@ -43,15 +43,6 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuracion)
         {
-            var configuracionCorreo = configuracion.GetSection("ConfiguracionCorreo");
-            var servidorSmtp = configuracionCorreo["ServidorSmtp"];
-            var puertoSmtp = int.Parse(configuracionCorreo["PuertoSmtp"]);
-            var usuario = configuracionCorreo["Usuario"];
-            var contrasenna = configuracionCorreo["Password"];
-            var direccionCuentaRemitente = configuracionCorreo["DireccionCuentaRemitente"];
-            var nombreCuentaRemitente = configuracionCorreo["NombreCuentaRemitente"];
-            services.AddSingleton<IServicioCorreoElectronico>(new ServicioCorreoElectronico(servidorSmtp, puertoSmtp, usuario, contrasenna, direccionCuentaRemitente, nombreCuentaRemitente));
-
             var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
             var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
             var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);

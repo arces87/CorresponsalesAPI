@@ -23,7 +23,7 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("pagarServicio", Name = "PagoServicios_PagarServicio")]
-        public async Task<ActionResult<PagoFacilitoMS>> PagarServicio([FromBody] ProcesarPagoME modelo)
+        public async Task<ActionResult<PagoFacilitoMSL>> PagarServicio([FromBody] ProcesarPagoME modelo)
         {
             return await _mediador.Send(modelo);
         }
@@ -40,7 +40,7 @@ namespace FBSMovilCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
         [HttpPost("consultaServicio", Name = "PagoServicios_ConsultaServicio")]
-        public async Task<ActionResult<ConsultaMS>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
+        public async Task<ActionResult<ConsultaValorAPagarMS>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
         {
             return await _mediador.Send(modelo);
         }

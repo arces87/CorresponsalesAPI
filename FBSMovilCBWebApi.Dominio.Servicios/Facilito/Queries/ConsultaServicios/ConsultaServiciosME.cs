@@ -1,16 +1,16 @@
 ﻿using MediatR;
 using ServiciosFinancial.Models;
+using System;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ConsultaServiciosME : IRequest<ConsultaMS>
+    public class ConsultaServiciosME : IRequest<ConsultaValorAPagarMS>
     {
-        public int? CodigoTransaccion { get; set; }
-        public int? Operador { get; set; }
-        public string Producto { get; set; }
-        public string CodigoAuxiliar { get; set; }
+        public Guid? IdProducto { get; set; }
         public string Referencia { get; set; }
-        public int? ServicioBancario { get; set; }
-        public string XmlAdd { get; set; }
+        public string Identificacion { get; set; }
+        public string ValorTonelaje { get; set; }
+        public int? NumeroCuotasPensionesAlimenticiaPersona { get; set; }
+        public string CodigoPagarPensionesAlimenticiaEmpresa { get; set; }
     }
 }

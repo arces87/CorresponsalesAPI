@@ -126,7 +126,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
             
-            var modelo = new AfectacionAUnCorresponsalME()
+            var modelo = new ServiciosFinancial.Models.AfectacionAUnCorresponsalME()
             {
                 TipoTransaccion = "NCCliente",
                 //CodigoUsuario = agente.Usuario.UserName,

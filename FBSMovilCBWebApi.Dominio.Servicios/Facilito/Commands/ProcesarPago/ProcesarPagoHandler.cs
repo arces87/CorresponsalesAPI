@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
 {
-    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, PagoFacilitoMS>
+    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, PagoFacilitoMSL>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -47,7 +47,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
-        public async Task<PagoFacilitoMS> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
+        public async Task<PagoFacilitoMSL> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
         {
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
@@ -106,9 +106,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 FechaDispositivo = DateTime.Now,
                 FechaSistema = DateTime.Now,
                 HoraDispositivo = DateTime.Now.TimeOfDay,
-                IdentificacionCliente = request.IdentificacionCliente,
+                IdentificacionCliente = request.Identificacion,
                 NombreCliente = request.NombreCliente,
-                SecuencialCuenta = request.SecuencialCuenta.ToString(),
+                SecuencialCuenta = request.SecuencialCuentaCliente.ToString(),
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual + request.Valor + comision.Agente.Value + comision.AdministracionCanal.Value + comision.Cooperativa.Value + request.Comision.Value,
@@ -132,14 +132,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             {
                 //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
                 CodigoUsuarioBanca = "ADMIN",
-                //JsonPagoFacilito = request.JsonFacilito,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
-                SecuencialCuentaCliente = request.SecuencialCuenta,
-                Valor = request.Valor,
                 EsUnSoloCobroComision = true
             };
-            var respuesta = await _financialApi.Afectacion.FacilitoPagoWithHttpMessagesAsync(modelo);
+            _mapper.Map(request, modelo);
+            var respuesta = await _financialApi.PagoServiciosFacilito.PagoFacilitoAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
             {
@@ -148,7 +146,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
-            transaccion.SaldoCuenta = respuesta.Body.SaldoCuentaCorresponsal.Value;
+            transaccion.SaldoCuenta = respuesta.SaldoCuentaCorresponsal.Value;
             await _repositorioTransaccion.Update(transaccion);
             await _mediador.Send(new CrearLogME()
             {
@@ -156,7 +154,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body;
+            return respuesta;
         }
     }
 }
