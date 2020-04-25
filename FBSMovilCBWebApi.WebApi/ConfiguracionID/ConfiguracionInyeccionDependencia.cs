@@ -1,23 +1,20 @@
-﻿using FBS.Dominio.Servicios.CorreoElectronico;
-using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
-using FBS.Identidad.DAL.Modelado;
+﻿using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using ServiciosFinancial;
 using System;
 using System.Linq;
-using ServiciosFinancial;
 using System.Net.Http;
-using ServiciosFinancial;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
-using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
 
 namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 {

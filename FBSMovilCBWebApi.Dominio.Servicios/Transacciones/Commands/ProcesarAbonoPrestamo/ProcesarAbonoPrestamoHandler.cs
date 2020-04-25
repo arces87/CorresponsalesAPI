@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarRetiroHandler : IRequestHandler<ProcesarRetiroME, AfectacionAUnCorresponsalMS>
+    public class ProcesarAbonoPrestamoHandler : IRequestHandler<ProcesarAbonoPrestamoME, EfectivizacionPrestamoMS>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -33,7 +33,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IHttpContextAccessor _httpContext;
         private readonly byte[] _llave;
 
-        public ProcesarRetiroHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
+        public ProcesarAbonoPrestamoHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
             IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente, IRepositorioCuenta repositorioCuenta,
             IHttpContextAccessor httpContext)
         {
@@ -48,9 +48,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
-        public async Task<AfectacionAUnCorresponsalMS> Handle(ProcesarRetiroME request, CancellationToken cancellationToken)
+        public async Task<EfectivizacionPrestamoMS> Handle(ProcesarAbonoPrestamoME request, CancellationToken cancellationToken)
         {
-            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro").Valor;
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo").Valor;
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -65,23 +65,23 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             saldoCuenta = saldoCuenta == 0 && transacciones.Count() == 0 ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
-            if (!jsonNegocio.Retiro.Activo.Value)
+            if (!jsonNegocio.AbonoPrestamos.Activo.Value)
             {
                 throw new Exception("Usted no tiene acceso para realizar este tipo de operación");
             }
-            if (request.Valor > jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion)
+            if (request.Valor > jsonNegocio.AbonoPrestamos.Limites.MontoMaximoPorTransaccion)
             {
                 throw new Exception("No puede realizar esta operación porque excede el monto máximo definido para este tipo de operación");
             }
-            if (request.Valor < jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion)
+            if (request.Valor < jsonNegocio.AbonoPrestamos.Limites.MontoMinimoPorTransaccion)
             {
                 throw new Exception("No puede realizar esta operación porque no alcanza el monto mínimo definido para este tipo de operación");
             }
-            if (saldoActual > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
+            if (saldoActual > jsonNegocio.AbonoPrestamos.Limites.MontoMaximoDiarioDeTransacciones)
             {
                 throw new Exception("No puede realizar esta operación porque excede el monto máximo diario definido para este tipo de operación");
             }
-            if (transacciones.Count() > jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones)
+            if (transacciones.Count() > jsonNegocio.AbonoPrestamos.Limites.NumeroMaximoDiarioDeTransacciones)
             {
                 throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
             }
@@ -95,7 +95,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
                 Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Retiro.Comisiones),
                 Agente = agente,
-                Descripcion = request.Descripcion,
+                Descripcion = request.Concepto,
                 FechaDispositivo = DateTime.Now,
                 FechaSistema = DateTime.Now,
                 HoraDispositivo = DateTime.Now.TimeOfDay,
@@ -116,23 +116,24 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Retiro.Comisiones;
+            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).AbonoPrestamos.Comisiones;
             var arregloComisiones = new List<ComisionFinancial>();
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Administración Canal", Valor = comision.AdministracionCanal });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
-            var modelo = new AfectacionAUnCorresponsalME()
+            var modelo = new EfectivizacionPrestamoME()
             {
-                TipoTransaccion = "NDCliente",
                 //CodigoUsuario = agente.Usuario.UserName,
                 CodigoUsuario = "ADMIN",
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,
                 ValorAfectado = request.Valor,
-                EsUnSoloCobroComision = true
+                EsUnSoloCobroComision = true,
+                Concepto = request.Concepto,
+                NumeroPrestamo = request.NumeroPrestamo
             };
-            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo);
+            var respuesta = await _financialApi.Afectacion.EfectivizacionPrestamoAsync(modelo);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
@@ -140,7 +141,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
-            transaccion.SaldoCuenta = respuesta.Body.SaldoCuentaCorresponsal.Value;
+            transaccion.SaldoCuenta = respuesta.SaldoCuentaCorresponsal.Value;
             await _repositorioTransaccion.Update(transaccion);
             await _mediador.Send(new CrearLogME()
             {
@@ -148,7 +149,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body;
+            return respuesta;
         }
     }
 }

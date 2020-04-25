@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FBS.Dominio.Modelos.CorreoElectronico;
-using FBS.Dominio.Servicios.Interfaces.CorreoElectronico;
+﻿using FBS.Dominio.Servicios.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
@@ -26,20 +24,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioUsuario _repositorioUsuario;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IServicioCorreoElectronico _correoElectronico;
         private readonly IFBSCorresponsalesApi _servicioFinancial;
         private readonly byte[] _llave;
 
         public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente,
             IFBSCorresponsalesApi servicioFinancial, IRepositorioUsuario repositorioUsuario,
-            IJsonConfiguracion jsonConfiguracion, IServicioCorreoElectronico correoElectronico)
+            IJsonConfiguracion jsonConfiguracion)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _servicioFinancial = servicioFinancial;
             _repositorioUsuario = repositorioUsuario;
             _jsonConfiguracion = jsonConfiguracion;
-            _correoElectronico = correoElectronico;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
@@ -75,13 +71,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             if (cuentaDestino != "" && nombreDestino != "")
                 try
                 {
-                    _correoElectronico.Enviar(new ModeloMensaje()
+                    await _mediador.Publish(new EnviarCorreoElectronicoME
                     {
                         Asunto = "OTP Corresponsales Solidarios",
                         Mensaje = "Su OTP para realizar la Operación es: " + totp.ComputeTotp(),
                         DireccionesDestino = new List<ModeloCuentaCorreo>() {
-                        new ModeloCuentaCorreo(){
-                            Direccion=cuentaDestino,
+                        new ModeloCuentaCorreo() {
+                            Direccion = cuentaDestino,
                             Nombre = nombreDestino
                         }
                     }
