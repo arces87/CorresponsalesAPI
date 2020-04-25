@@ -1,26 +1,26 @@
 ﻿using AutoMapper;
 using MediatR;
-using ServiciosFacilito;
-using ServiciosFacilito.Models;
+using ServiciosFinancial;
+using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ObtenerProductosHandler : IRequestHandler<ObtenerProductosME, ObtenerProductosFacilitoMS>
+    public class ObtenerProductosHandler : IRequestHandler<ObtenerProductosME, ObtenerProductosMS>
     {
-        private readonly IFacilitoAPI _facilitoApi;
+        private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IMapper _mapper;
 
-        public ObtenerProductosHandler(IFacilitoAPI facilitoApi, IMapper mapper)
+        public ObtenerProductosHandler(IFBSCorresponsalesApi facilitoApi, IMapper mapper)
         {
-            _facilitoApi = facilitoApi;
+            _financialApi = facilitoApi;
             _mapper = mapper;
         }
 
-        public async Task<ObtenerProductosFacilitoMS> Handle(ObtenerProductosME request, CancellationToken cancellationToken)
+        public async Task<ObtenerProductosMS> Handle(ObtenerProductosME request, CancellationToken cancellationToken)
         {
-            var respuesta = await _facilitoApi.ObtenerProductosFacilitoWithHttpMessagesAsync(_mapper.Map<DatosServicioFacilitoME>(request));
+            var respuesta = await _financialApi.PagoServiciosFacilito.ObtenerProductosWithHttpMessagesAsync(_mapper.Map<ServiciosFinancial.Models.ObtenerProductosME>(request));
             return respuesta.Body;
         }
     }

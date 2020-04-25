@@ -4,8 +4,8 @@ using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ServiciosFacilito.Models;
 using ServiciosFinancial.Models;
+using ObtenerProductosME = FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries.ObtenerProductosME;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,13 +29,13 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpGet("obtenerServicios", Name = "PagoServicios_ObtenerServicios")]
-        public async Task<ActionResult<ObtenerServiciosFacilitoMS>> ObtenerServicios()
+        public async Task<ActionResult<ObtenerServiciosMS>> ObtenerServicios()
         {
             return await _mediador.Send(new ObtenerServiciosME());
         }
 
         [HttpPost("obtenerProductos", Name = "PagoServicios_ObtenerProductos")]
-        public async Task<ActionResult<ObtenerProductosFacilitoMS>> ObtenerProductos([FromBody] ObtenerProductosME modelo)
+        public async Task<ActionResult<ObtenerProductosMS>> ObtenerProductos([FromBody] ObtenerProductosME modelo)
         {
             return await _mediador.Send(modelo);
         }

@@ -1,23 +1,23 @@
 ﻿using MediatR;
-using ServiciosFacilito;
-using ServiciosFacilito.Models;
+using ServiciosFinancial;
+using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ObtenerServiciosHandler : IRequestHandler<ObtenerServiciosME, ObtenerServiciosFacilitoMS>
+    public class ObtenerServiciosHandler : IRequestHandler<ObtenerServiciosME, ObtenerServiciosMS>
     {
-        private readonly IFacilitoAPI _facilitoApi;
+        private readonly IFBSCorresponsalesApi _financialApi;
 
-        public ObtenerServiciosHandler(IFacilitoAPI facilitoApi)
+        public ObtenerServiciosHandler(IFBSCorresponsalesApi facilitoApi)
         {
-            _facilitoApi = facilitoApi;
+            _financialApi = facilitoApi;
         }
 
-        public async Task<ObtenerServiciosFacilitoMS> Handle(ObtenerServiciosME request, CancellationToken cancellationToken)
+        public async Task<ObtenerServiciosMS> Handle(ObtenerServiciosME request, CancellationToken cancellationToken)
         {
-            var respuesta = await _facilitoApi.ObtenerServiciosFacilitoWithHttpMessagesAsync();
+            var respuesta = await _financialApi.PagoServiciosFacilito.ObtenerServiciosWithHttpMessagesAsync();
             return respuesta.Body;
         }
     }

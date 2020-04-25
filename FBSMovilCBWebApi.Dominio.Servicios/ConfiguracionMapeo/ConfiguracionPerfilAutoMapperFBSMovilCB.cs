@@ -17,7 +17,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
-using ServiciosFacilito.Models;
 using ServiciosFinancial.Models;
 using System;
 
@@ -76,10 +75,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Servicios Facilito
             CreateMap<ProcesarRetiroME, PedidoDatosTransaccionRetiroME>();
-            CreateMap<ObtenerProductosME, DatosServicioFacilitoME>();
             CreateMap<ConsultaServiciosME, ConsultaME>();
             CreateMap<TipoIdentificacionMS, DistribuidoTipoIdentificacion>();
             CreateMap<ComisionOperacion, ComisionPago>();
+
+            CreateMap<Cuentas.Queries.ObtenerProductosME, ServiciosFinancial.Models.ObtenerProductosME>()
+              .ForMember(m => m.IdGrupo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdGrupo) }));
             #endregion
         }
     }

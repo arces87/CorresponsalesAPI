@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using ServiciosFacilito;
-using ServiciosFacilito.Models;
+using ServiciosFinancial;
+using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,18 +9,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class ConsultaServiciosHandler : IRequestHandler<ConsultaServiciosME, ConsultaMS>
     {
-        private readonly IFacilitoAPI _facilitoApi;
+        private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IMapper _mapper;
 
-        public ConsultaServiciosHandler(IFacilitoAPI facilitoApi, IMapper mapper)
+        public ConsultaServiciosHandler(IFBSCorresponsalesApi facilitoApi, IMapper mapper)
         {
-            _facilitoApi = facilitoApi;
+            _financialApi = facilitoApi;
             _mapper = mapper;
         }
 
         public async Task<ConsultaMS> Handle(ConsultaServiciosME request, CancellationToken cancellationToken)
         {
-            var respuesta = await _facilitoApi.ServicioConsultaWithHttpMessagesAsync(_mapper.Map<ConsultaME>(request));
+            var respuesta = await _financialApi.PagoServiciosFacilito.ConsultaValorAPagarWithHttpMessagesAsync(_mapper.Map<ConsultaME>(request));
             return respuesta.Body;
         }
     }

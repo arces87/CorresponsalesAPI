@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ServiciosFacilito.Models;
+using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {

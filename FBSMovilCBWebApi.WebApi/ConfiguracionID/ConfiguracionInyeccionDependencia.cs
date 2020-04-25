@@ -15,7 +15,7 @@ using System;
 using System.Linq;
 using ServiciosFinancial;
 using System.Net.Http;
-using ServiciosFacilito;
+using ServiciosFinancial;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
 
@@ -63,11 +63,6 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
                 BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
-            var httpClientFacilito = new HttpClient
-            {
-                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFacilito").Valor)
-            };
-            services.AddSingleton<IFacilitoAPI>(new FacilitoAPI(httpClientFacilito, false));
         }
     }
 }

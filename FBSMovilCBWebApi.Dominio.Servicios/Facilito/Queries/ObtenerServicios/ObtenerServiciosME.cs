@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using ServiciosFacilito.Models;
+using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ObtenerServiciosME : IRequest<ObtenerServiciosFacilitoMS>
+    public class ObtenerServiciosME : IRequest<ObtenerServiciosMS>
     {
     }
 }

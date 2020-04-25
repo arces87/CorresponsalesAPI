@@ -131,15 +131,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands
             var modelo = new PagoFacilitoME()
             {
                 //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
-                CodigoUsuario = "ADMIN",
-                JsonPagoFacilito = request.JsonFacilito,
+                CodigoUsuarioBanca = "ADMIN",
+                //JsonPagoFacilito = request.JsonFacilito,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaCliente = request.SecuencialCuenta,
                 Valor = request.Valor,
                 EsUnSoloCobroComision = true
             };
-            var respuesta = await _financialApi.Afectacion.PagoFacilitoWithHttpMessagesAsync(modelo);
+            var respuesta = await _financialApi.Afectacion.FacilitoPagoWithHttpMessagesAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
             {
