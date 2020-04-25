@@ -26,11 +26,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 
         public async Task Handle(NotificacionME notification, CancellationToken cancellationToken)
         {
-            var notificarCorreoElectronico = bool.Parse(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "NotificarCorreoElectronico").Valor);
+            var notificarCorreoElectronico = bool.Parse(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == $"{notification.Operacion}NotificarCorreoElectronico").Valor);
 
-            var notificarSMS = bool.Parse(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "NotificarSMS").Valor);
-            var plantillaCorreoElectronico = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "PlantillaCorreoElectronico").Valor;
-            var plantillaSMS = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "PlantillaSMS").Valor;
+            var notificarSMS = bool.Parse(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == $"{notification.Operacion}NotificarSMS").Valor);
+            var plantillaCorreoElectronico = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == $"{notification.Operacion}PlantillaCorreoElectronico").Valor;
+            var plantillaSMS = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == $"{notification.Operacion}PlantillaSMS").Valor;
             foreach (var key in notification.Valores.Keys)
             {
                 plantillaCorreoElectronico.Replace(key, notification.Valores[key]);

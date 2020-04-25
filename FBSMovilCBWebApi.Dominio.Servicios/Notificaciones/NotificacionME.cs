@@ -5,6 +5,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 {
     public class NotificacionME : INotification
     {
+        public string Operacion { get; set; }
         public string NombreDestinatario { get; set; }
         public string CorreoElectronicoDestinatario { get; set; }
         public string AsuntoCorreoElectronico { get; set; }

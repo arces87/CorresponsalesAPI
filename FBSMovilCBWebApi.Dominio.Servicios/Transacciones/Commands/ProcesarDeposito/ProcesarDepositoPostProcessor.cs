@@ -19,6 +19,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         {
             await _mediador.Publish(new NotificacionME
             {
+                Operacion = "Deposito",
                 CorreoElectronicoDestinatario = "",
                 NombreDestinatario = "",
                 AsuntoCorreoElectronico = "",
