@@ -22,9 +22,8 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the EfectivizacionPrestamoME class.
         /// </summary>
-        public EfectivizacionPrestamoME(int? secuencialCuentaSocio = default(int?), int? secuencialCuentaCorresponsal = default(int?), string numeroPrestamo = default(string), double? valorAfectado = default(double?), string jsonComision = default(string), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?), string concepto = default(string))
+        public EfectivizacionPrestamoME(int? secuencialCuentaCorresponsal = default(int?), string numeroPrestamo = default(string), double? valorAfectado = default(double?), string jsonComision = default(string), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?), string concepto = default(string))
         {
-            SecuencialCuentaSocio = secuencialCuentaSocio;
             SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             NumeroPrestamo = numeroPrestamo;
             ValorAfectado = valorAfectado;
@@ -39,11 +38,6 @@ namespace ServiciosFinancial.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "SecuencialCuentaSocio")]
-        public int? SecuencialCuentaSocio { get; set; }
 
         /// <summary>
         /// </summary>

@@ -59,5 +59,10 @@ namespace ServiciosFinancial
         /// </summary>
         IPagoServiciosPagoAgil PagoServiciosPagoAgil { get; }
 
+        /// <summary>
+        /// Gets the IPrestamos.
+        /// </summary>
+        IPrestamos Prestamos { get; }
+
     }
 }

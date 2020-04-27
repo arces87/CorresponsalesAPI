@@ -24,9 +24,8 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the PagoFacilitoME class.
         /// </summary>
-        public PagoFacilitoME(int? secuencialCuentaCliente = default(int?), int? secuencialCuentaCorresponsal = default(int?), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool? esUnSoloCobroComision = default(bool?), System.Guid? idProducto = default(System.Guid?), string referencia = default(string), double? valor = default(double?), string valorTonelaje = default(string), string identificacion = default(string), int? numeroCuotasPensionesAlimenticiaPersona = default(int?), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int? secuencialResultadoTransaccion = default(int?), bool? comisionRubro = default(bool?), IList<RubroME> rubros = default(IList<RubroME>))
+        public PagoFacilitoME(int? secuencialCuentaCorresponsal = default(int?), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool? esUnSoloCobroComision = default(bool?), System.Guid? idProducto = default(System.Guid?), string referencia = default(string), double? valor = default(double?), string valorTonelaje = default(string), string identificacion = default(string), int? numeroCuotasPensionesAlimenticiaPersona = default(int?), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int? secuencialResultadoTransaccion = default(int?), bool? comisionRubro = default(bool?), IList<RubroME> rubros = default(IList<RubroME>))
         {
-            SecuencialCuentaCliente = secuencialCuentaCliente;
             SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             JsonComision = jsonComision;
             CodigoUsuarioBanca = codigoUsuarioBanca;
@@ -48,11 +47,6 @@ namespace ServiciosFinancial.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "SecuencialCuentaCliente")]
-        public int? SecuencialCuentaCliente { get; set; }
 
         /// <summary>
         /// </summary>

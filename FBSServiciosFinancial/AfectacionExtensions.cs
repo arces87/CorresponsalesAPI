@@ -41,57 +41,5 @@ namespace ServiciosFinancial
                 }
             }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='request'>
-            /// </param>
-            public static FacilitoPagoMS FacilitoPago(this IAfectacion operations, FacilitoPagoME request)
-            {
-                return operations.FacilitoPagoAsync(request).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='request'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<FacilitoPagoMS> FacilitoPagoAsync(this IAfectacion operations, FacilitoPagoME request, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.FacilitoPagoWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='request'>
-            /// </param>
-            public static EfectivizacionPrestamoMS EfectivizacionPrestamo(this IAfectacion operations, EfectivizacionPrestamoME request)
-            {
-                return operations.EfectivizacionPrestamoAsync(request).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='request'>
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<EfectivizacionPrestamoMS> EfectivizacionPrestamoAsync(this IAfectacion operations, EfectivizacionPrestamoME request, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.EfectivizacionPrestamoWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
     }
 }

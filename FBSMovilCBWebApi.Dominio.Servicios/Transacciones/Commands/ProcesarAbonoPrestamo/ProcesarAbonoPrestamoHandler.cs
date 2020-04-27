@@ -127,13 +127,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 CodigoUsuario = "ADMIN",
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
-                SecuencialCuentaSocio = request.SecuencialCuenta,
                 ValorAfectado = request.Valor,
                 EsUnSoloCobroComision = true,
                 Concepto = request.Concepto,
                 NumeroPrestamo = request.NumeroPrestamo
             };
-            var respuesta = await _financialApi.Afectacion.EfectivizacionPrestamoAsync(modelo);
+            var respuesta = await _financialApi.Prestamos.EfectivizacionPrestamoAsync(modelo);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),

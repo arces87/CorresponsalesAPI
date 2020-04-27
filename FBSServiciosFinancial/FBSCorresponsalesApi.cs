@@ -63,6 +63,11 @@ namespace ServiciosFinancial
         public virtual IPagoServiciosPagoAgil PagoServiciosPagoAgil { get; private set; }
 
         /// <summary>
+        /// Gets the IPrestamos.
+        /// </summary>
+        public virtual IPrestamos Prestamos { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the FBSCorresponsalesApi class.
         /// </summary>
         /// <param name='httpClient'>
@@ -157,7 +162,11 @@ namespace ServiciosFinancial
             Afectacion = new Afectacion(this);
             Clientes = new Clientes(this);
             Cuentas = new Cuentas(this);
-            BaseUri = HttpClient.BaseAddress;
+            MensajeriaSMS = new MensajeriaSMS(this);
+            PagoServiciosFacilito = new PagoServiciosFacilito(this);
+            PagoServiciosPagoAgil = new PagoServiciosPagoAgil(this);
+            Prestamos = new Prestamos(this);
+            BaseUri = new System.Uri("http://186.5.29.68:9029");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -166,7 +175,7 @@ namespace ServiciosFinancial
                 NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize,
                 ContractResolver = new ReadOnlyJsonContractResolver(),
-                Converters = new List<JsonConverter>
+                Converters = new  List<JsonConverter>
                     {
                         new Iso8601TimeSpanConverter()
                     }
