@@ -6,5 +6,6 @@
         public ModeloListaRecaudaciones Deposito { get; set; }
         public ModeloListaRecaudaciones Retiro { get; set; }
         public ModeloListaRecaudaciones CobroServicios { get; set; }
+        public ModeloListaRecaudaciones AbonoPrestamo { get; set; }
     }
 }

@@ -32,12 +32,15 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var idDeposito = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito")?.Valor;
             var idRetiro = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro")?.Valor;
             var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
+            var idAbonoPrestamo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo")?.Valor;
             var valorDeposito = 0.0;
             var comisionDeposito = 0.0;
             var valorRetiro = 0.0;
             var comisionRetiro = 0.0;
             var valorCobroServicio = 0.0;
             var comisionCobroServicio = 0.0;
+            var valorAbonoPrestamos = 0.0;
+            var comisionAbonoPrestamos = 0.0;
             var _retorno = new ListarRecaudacionesMS();
             _retorno.MontoCaja = await _repositorio.GetSaldoActual(request.IdAgente);
             if (idDeposito != null)
@@ -64,6 +67,16 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                 comisionCobroServicio = _model.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
                 var lista = _model != null ? _mapper.Map<IEnumerable<ModeloTransaccion>>(_model) : new List<ModeloTransaccion>();
                 _retorno.CobroServicios = new ModeloListaRecaudaciones() { Total = valorCobroServicio, Comisiones = comisionCobroServicio, Lista = lista };
+            }
+
+            if (idAbonoPrestamo != null)
+            {
+
+                var _model = await _repositorio.GetForTipo(idAbonoPrestamo, request.IdAgente);
+                valorAbonoPrestamos = _model.Sum(m => m.Valor);
+                comisionAbonoPrestamos = _model.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
+                var lista = _model != null ? _mapper.Map<IEnumerable<ModeloTransaccion>>(_model) : new List<ModeloTransaccion>();
+                _retorno.AbonoPrestamo = new ModeloListaRecaudaciones() { Total = valorAbonoPrestamos, Comisiones = comisionAbonoPrestamos, Lista = lista };
             }
             return _retorno;
         }
