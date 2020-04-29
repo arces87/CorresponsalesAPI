@@ -28,13 +28,16 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var idDeposito = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito")?.Valor;
             var idRetiro = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro")?.Valor;
             var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
+            var idAbonoPrestamo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo")?.Valor;
             var valorDeposito = 0.0;
             var valorRetiro = 0.0;
             var valorCobroServicio = 0.0;
+            var valorAbonoPrestamo = 0.0;
             var _retorno = new ObtenerComisionTransaccionMS();
             var _comisionDeposito = new ComisionTransaccion() { Agente = 0, AdministracionCanal = 0, Cooperativa = 0 };
             var _comisionRetiro = new ComisionTransaccion() { Agente = 0, AdministracionCanal = 0, Cooperativa = 0 };
             var _comisionCobroServicio = new ComisionTransaccion() { Agente = 0, AdministracionCanal = 0, Cooperativa = 0 };
+            var _comisionAbonoPrestamo = new ComisionTransaccion() { Agente = 0, AdministracionCanal = 0, Cooperativa = 0 };
             if (idDeposito != null)
             {
                 var _model = await _repositorio.GetForTipo(idDeposito, request.IdAgente);
@@ -71,6 +74,19 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                 }
                 valorCobroServicio += _comisionCobroServicio.Agente.Value + _comisionCobroServicio.AdministracionCanal.Value + _comisionCobroServicio.Cooperativa.Value;
             }
+
+            if (idAbonoPrestamo != null)
+            {
+                var _model = await _repositorio.GetForTipo(idAbonoPrestamo, request.IdAgente);
+                foreach (var item in _model)
+                {
+                    var comisiones = JsonConvert.DeserializeObject<ComisionTransaccion>(item.Comisiones);
+                    _comisionAbonoPrestamo.Agente += comisiones.Agente != null ? comisiones.Agente.Value : 0.0;
+                    _comisionAbonoPrestamo.AdministracionCanal += comisiones.AdministracionCanal != null ? comisiones.AdministracionCanal.Value : 0.0;
+                    _comisionAbonoPrestamo.Cooperativa += comisiones.Cooperativa != null ? comisiones.Cooperativa.Value : 0.0;
+                }
+                valorCobroServicio += _comisionCobroServicio.Agente.Value + _comisionCobroServicio.AdministracionCanal.Value + _comisionCobroServicio.Cooperativa.Value;
+            }
             _retorno.TiposTransacciones = new List<ModeloObtenerComisionTransaccion>() {
                     new ModeloObtenerComisionTransaccion(){
                         Id = idCobroServicio,
@@ -89,6 +105,12 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                         Nombre = "Retiro",
                         Valor = valorRetiro,
                         Comisiones=_comisionRetiro
+                    },
+                    new ModeloObtenerComisionTransaccion(){
+                        Id = idAbonoPrestamo,
+                        Nombre = "Abono Préstamo",
+                        Valor = valorAbonoPrestamo,
+                        Comisiones= _comisionAbonoPrestamo
                     },
             };
             return _retorno;

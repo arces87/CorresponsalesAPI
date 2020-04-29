@@ -104,7 +104,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 SecuencialCuenta = request.SecuencialCuenta.ToString(),
                 Valor = 0 - request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
-                SaldoDisponible = saldoActual - request.Valor,
+                SaldoDisponible = saldoActual + request.Valor,
                 Tipo = IdTipoAccion,
                 EstaActivo = true,
                 Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
