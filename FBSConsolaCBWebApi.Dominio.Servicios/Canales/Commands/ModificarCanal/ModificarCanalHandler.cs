@@ -80,7 +80,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
                 operacionAgente.Limites.MontoMaximoDiarioDeTransacciones = operacionCooperativa.Limites.MontoMaximoDiarioDeTransacciones;
             if (operacionCooperativa.Limites.MontoMaximoPorTransaccion < operacionAgente.Limites.MontoMaximoPorTransaccion)
                 operacionAgente.Limites.MontoMaximoPorTransaccion = operacionCooperativa.Limites.MontoMaximoPorTransaccion;
-            if (operacionCooperativa.Limites.MontoMinimoPorTransaccion < operacionAgente.Limites.MontoMinimoPorTransaccion)
+            if (operacionCooperativa.Limites.MontoMinimoPorTransaccion > operacionAgente.Limites.MontoMinimoPorTransaccion)
                 operacionAgente.Limites.MontoMinimoPorTransaccion = operacionCooperativa.Limites.MontoMinimoPorTransaccion;
             if (operacionCooperativa.Limites.NumeroMaximoDiarioDeTransacciones < operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones)
                 operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones = operacionCooperativa.Limites.NumeroMaximoDiarioDeTransacciones;
