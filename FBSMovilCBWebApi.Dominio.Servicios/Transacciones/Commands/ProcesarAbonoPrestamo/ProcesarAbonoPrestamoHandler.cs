@@ -101,7 +101,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 HoraDispositivo = DateTime.Now.TimeOfDay,
                 IdentificacionCliente = request.IdentificacionCliente,
                 NombreCliente = request.NombreCliente,
-                SecuencialCuenta = request.SecuencialCuenta.ToString(),
+                SecuencialCuenta = request.SecuencialCuentaCliente.ToString(),
                 Valor = 0 - request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual + request.Valor,

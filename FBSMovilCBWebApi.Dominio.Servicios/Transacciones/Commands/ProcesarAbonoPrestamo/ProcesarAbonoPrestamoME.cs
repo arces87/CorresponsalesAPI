@@ -5,7 +5,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
     public class ProcesarAbonoPrestamoME : IRequest<EfectivizacionPrestamoMS>
     {
-        public int SecuencialCuenta { get; set; }
+        public int SecuencialCuentaCliente { get; set; }
         public string NumeroPrestamo { get; set; }
         public double Valor { get; set; }
         public string NombreCliente { get; set; }
