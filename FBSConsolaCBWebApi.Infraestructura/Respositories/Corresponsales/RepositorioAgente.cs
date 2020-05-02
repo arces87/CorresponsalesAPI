@@ -146,6 +146,36 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
 
             }
         }
+
+        public async Task<IEnumerable<Agente>> GetAllWithAssociations()
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var agentes = await conexion.QueryAsync<Agente, Catalogo, Dispositivo, Catalogo, UsuarioDapper, UsuarioDapper, Agente>(@"SELECT Corresponsales.Agente.*, estado.*, dispositivo.*, marca.*, usuario.Id, usuario.Codigo,usuario.Imagen, " +
+                    "supervisor.Id, supervisor.Codigo,supervisor.Imagen FROM Corresponsales.Agente " +
+                    "left join Nomenclador.Catalogo estado on Corresponsales.Agente.EstadoId = estado.Id " +
+                    "left join Canales.Dispositivo dispositivo on Corresponsales.Agente.DispositivoId = dispositivo.Id " +
+                    "left join Nomenclador.Catalogo marca on dispositivo.MarcaId = marca.Id " +
+                    "left join Seguridad.Usuario usuario on Corresponsales.Agente.UsuarioId = usuario.Id " +
+                    "left join Seguridad.Usuario supervisor on Corresponsales.Agente.SupervisorId = supervisor.Id " +
+                    "where Corresponsales.Agente.EstaActivo='true'",
+                   (agente, estado, dispositivo, marca, usuario, supervisor) =>
+                   {
+                       dispositivo.Marca = marca;
+                       agente.Estado = estado;
+                       if (usuario != null)
+                           agente.Usuario = new Usuario() { Id = usuario.Id, UserName = usuario.Codigo, Imagen = usuario.Imagen };
+                       if (supervisor != null)
+                           agente.Supervisor = new Usuario() { Id = supervisor.Id, UserName = supervisor.Codigo, Imagen = supervisor.Imagen };
+                       agente.Dispositivo = dispositivo;
+                       return agente;
+                   });
+
+                return agentes.ToList();
+            }
+        }
+
         public async Task<Agente> GetWithAssociations(string Id)
         {
             using (var conexion = Conexion)
@@ -419,6 +449,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 .FirstOrDefaultAsync(c => c.Identificacion == Identificacion && c.Id.ToString() != idAgente);
             return usuario != null ? true : false;
         }
+
 
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 

@@ -35,7 +35,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         private async Task ActualizarAgentes(Guid idCanal, string jsonCooperativa)
         {
 
-            var agentes = await _repositorioAgente.GetAll();
+            var agentes = await _repositorioAgente.GetAllWithAssociations();
             var jsonNegocioCooperativa = JsonConvert.DeserializeObject<JsonNegocioMS>(jsonCooperativa);
             foreach (var agente in agentes)
             {
