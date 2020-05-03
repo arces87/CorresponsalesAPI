@@ -85,15 +85,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
             }
-            if (saldoActual - request.Valor < 0)
-            {
-                throw new Exception("No puede realizar esta operación, no tiene fondos suficientes en caja");
-            }
+          
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
                 Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
-                Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Retiro.Comisiones),
+                Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).AbonoPrestamos.Comisiones),
                 Agente = agente,
                 Descripcion = request.Concepto,
                 FechaDispositivo = DateTime.Now,
@@ -102,7 +99,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdentificacionCliente = request.IdentificacionCliente,
                 NombreCliente = request.NombreCliente,
                 SecuencialCuenta = request.SecuencialCuentaCliente.ToString(),
-                Valor = 0 - request.Valor,
+                Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
                 SaldoDisponible = saldoActual + request.Valor,
                 Tipo = IdTipoAccion,

@@ -108,7 +108,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                     },
                     new ModeloObtenerComisionTransaccion(){
                         Id = idAbonoPrestamo,
-                        Nombre = "Abono Préstamo",
+                        Nombre = "Abono de Préstamos",
                         Valor = valorAbonoPrestamo,
                         Comisiones= _comisionAbonoPrestamo
                     },

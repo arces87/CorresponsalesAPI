@@ -7,6 +7,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
     {
         public int SecuencialCuentaCliente { get; set; }
         public string NumeroPrestamo { get; set; }
+        public string TipoPrestamo { get; set; }
         public double Valor { get; set; }
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }
