@@ -162,7 +162,11 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         {
             var transacciones = Context.Transacciones.Where(t => t.ReposicionRealizada == false && t.Agente.Id.ToString() == IdAgente);
             if (transacciones.Count() > 0)
-                Context.Transacciones.RemoveRange(transacciones);
+                foreach (var transaccion in transacciones)
+                {
+                    transaccion.ReposicionRealizada = true;
+                }
+            Context.Transacciones.UpdateRange(transacciones);
             await _contexto.SaveChangesAsync();
         }
 
