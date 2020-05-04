@@ -85,7 +85,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                     _comisionAbonoPrestamo.AdministracionCanal += comisiones.AdministracionCanal != null ? comisiones.AdministracionCanal.Value : 0.0;
                     _comisionAbonoPrestamo.Cooperativa += comisiones.Cooperativa != null ? comisiones.Cooperativa.Value : 0.0;
                 }
-                valorCobroServicio += _comisionCobroServicio.Agente.Value + _comisionCobroServicio.AdministracionCanal.Value + _comisionCobroServicio.Cooperativa.Value;
+                valorAbonoPrestamo += _comisionAbonoPrestamo.Agente.Value + _comisionAbonoPrestamo.AdministracionCanal.Value + _comisionAbonoPrestamo.Cooperativa.Value;
             }
             _retorno.TiposTransacciones = new List<ModeloObtenerComisionTransaccion>() {
                     new ModeloObtenerComisionTransaccion(){
