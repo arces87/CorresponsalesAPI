@@ -6,6 +6,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
     public class ProcesarRetiroME : IRequest<AfectacionAUnCorresponsalMS>
     {
         public int SecuencialCuenta { get; set; }
+        public string NumeroCuentaCliente { get; set; }
+        public string TipoCuentaCliente { get; set; }
         public double Valor { get; set; }
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }

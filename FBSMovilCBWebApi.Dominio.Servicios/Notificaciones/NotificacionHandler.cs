@@ -27,6 +27,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                 if (notification.PlantillaSMS != null)
                     notification.PlantillaSMS.Replace(key, notification.Valores[key]);
             }
+
             if (notification.PlantillaCorreoElectronico != null)
             {
                 await _mediador.Publish(new EnviarCorreoElectronicoME
