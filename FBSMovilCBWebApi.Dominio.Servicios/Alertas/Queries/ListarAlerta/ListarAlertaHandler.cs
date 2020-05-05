@@ -16,11 +16,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries
         private readonly IHttpContextAccessor _httpContext;
         private readonly IMapper _mapper;
 
-        public ListarAlertaHandler(IRepositorioAlerta repositorio, IMapper mapper, IHttpContextAccessor httpContext)
+        public ListarAlertaHandler(IRepositorioAlerta repositorio, IMapper mapper, IHttpContextAccessor httpContext, IRepositorioAgente repositorioAgente)
         {
             _repositorio = repositorio;
             _mapper = mapper;
             _httpContext = httpContext;
+            _repositorioAgente = repositorioAgente;
         }
 
         public async Task<ListarAlertaMS> Handle(ListarAlertaME request, CancellationToken cancellationToken)
