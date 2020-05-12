@@ -15,9 +15,11 @@
   <ItemGroup>
     <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />
     <ProjectReference Include="..\FBSServiciosFinancial\FBSServiciosFinancial.csproj" />
-    <ProjectReference Include="..\FBSServiciosSMSTulcan\FBSServiciosSMSTulcan.csproj" />
-    <ProjectReference Include="..\FBSServiciosTulcan\FBSServiciosTulcan.csproj" />
     <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Transacciones\Commands\ProcesarPagoServicio\" />
   </ItemGroup>
 
 </Project>

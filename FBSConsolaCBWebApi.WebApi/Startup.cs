@@ -27,7 +27,6 @@ using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using FBSServiciosSMSTulcan.EnviarSMS;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
@@ -115,7 +114,7 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
-            services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly, typeof(EnviarSmsME).Assembly);
+            services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHealthChecks().AddSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
             services.AddHealthChecksUI(setupSettings: setup =>

@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using ServiciosFinancial;
-using ServiciosTulcan;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -59,13 +58,7 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
 
-            services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
-
-            httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("http://186.46.143.237:2024/")
-            };
-            services.AddSingleton<IAPICORRESPONSALES10>(new APICORRESPONSALES10(httpClient, false));
+            services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);         
 
         }
     }

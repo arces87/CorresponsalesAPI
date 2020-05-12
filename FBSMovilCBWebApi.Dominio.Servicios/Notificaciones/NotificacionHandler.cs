@@ -1,5 +1,4 @@
 ﻿using FBS.Dominio.Servicios.CorreoElectronico;
-using FBSServiciosSMSTulcan.EnviarSMS;
 using MediatR;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
@@ -48,16 +47,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         notification.PlantillaSMS.Replace(key, notification.ValoresSms[key]);
                 }
 
-                var request = new EnviarSmsME
-                {
-                    Mensaje =  new SmsModelo()
-                    {
-                        Destinatario = notification.NumeroCliente.ToString(),
-                        Mensaje = notification.PlantillaSMS
-                    }
-                };
+                //var request = new EnviarS
+                //{
+                //    Mensaje =  new SmsModelo()
+                //    {
+                //        Destinatario = notification.NumeroCliente.ToString(),
+                //        Mensaje = notification.PlantillaSMS
+                //    }
+                //};
 
-                await _mediador.Publish(request);
+                //await _mediador.Publish(request);
             }
         }
     }

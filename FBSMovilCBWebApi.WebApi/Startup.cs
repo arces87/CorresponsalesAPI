@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
-
 using FBSConsolaCBWebApi.DAL;
 using FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo;
 using System.Collections.Generic;
@@ -20,7 +19,6 @@ using FBS.Identidad.DAL.Seguridad;
 using FFBSMovilCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSMovilCBWebApi.WebApi.ManejadorExcepciones;
-using FBSServiciosSMSTulcan.EnviarSMS;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -108,7 +106,7 @@ namespace FBSMovilCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB));
-            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, typeof(EnviarSmsME).Assembly);
+            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 
