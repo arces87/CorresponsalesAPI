@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiciosFinancial.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +29,37 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         {
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+
+            var valores = new Dictionary<string, string>();
+            var comision = jsonNegocio.Retiro.Comisiones.AdministracionCanal + jsonNegocio.Retiro.Comisiones.Agente + jsonNegocio.Retiro.Comisiones.Cooperativa;
+            var detalle = $"<ul><li>Operación: Retiro</li><li>Tipo de Cuenta: {request.NumeroCuentaCliente}</li><li>No Cuenta: {request.TipoCuentaCliente}</li><li>Valor: {request.Valor}</li><li>Comisión: {comision}</li><li>Total: {request.Valor}</li><li>Descripción:</li></ul>";
+            valores.Add("[:detalle:]", detalle);
+
+            if (jsonNegocio.Retiro.NotificarCorreoElectronico && string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaCorreoElectronico))
+            {
+                var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index.html");
+
+                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                {
+                    jsonNegocio.Retiro.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                }
+            }
+
+            if (jsonNegocio.Retiro.NotificarSMS && string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaSMS))
+            {
+                var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
+
+                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                {
+                    jsonNegocio.Retiro.PlantillaSMS = SourceReader.ReadToEnd();
+                }
+            }
+
+            var valoresSMS = new Dictionary<string, string>();
+            detalle = $"Operación: Retiro\nNo Cuenta: {request.TipoCuentaCliente}\nTotal: {request.Valor}";
+            valoresSMS.Add("[:detalle:]", detalle);
+
+
             await _mediador.Publish(new NotificacionME
             {
                 PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,
@@ -37,7 +69,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 AsuntoCorreoElectronico = "",
                 NumeroCliente = 1,
                 SecuencialEmpresa = 1,
-                Valores = new Dictionary<string, string>()
+                ValoresEmail = valores,
+                ValoresSms = valoresSMS
             });
         }
     }

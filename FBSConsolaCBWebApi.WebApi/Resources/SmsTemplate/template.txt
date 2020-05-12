@@ -1,0 +1,2 @@
+﻿Estimado cliente, usted ha efectuado con éxito una operación.
+[:detalle:]

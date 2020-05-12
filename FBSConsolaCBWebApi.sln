@@ -48,6 +48,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FBSServiciosTulcan", "FBSServiciosTulcan\FBSServiciosTulcan.csproj", "{AB9FA91A-CDC2-48BA-B9CA-0052D57C6F44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBSServiciosSMSTulcan", "FBSServiciosSMSTulcan\FBSServiciosSMSTulcan.csproj", "{8A72B8E9-3A8F-4460-B4A0-8B289F6BC598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +120,14 @@ Global
 		{C1F5D2E4-AF80-4A16-B038-8FAB8A231DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1F5D2E4-AF80-4A16-B038-8FAB8A231DDD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1F5D2E4-AF80-4A16-B038-8FAB8A231DDD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AB9FA91A-CDC2-48BA-B9CA-0052D57C6F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9FA91A-CDC2-48BA-B9CA-0052D57C6F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9FA91A-CDC2-48BA-B9CA-0052D57C6F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9FA91A-CDC2-48BA-B9CA-0052D57C6F44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A72B8E9-3A8F-4460-B4A0-8B289F6BC598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A72B8E9-3A8F-4460-B4A0-8B289F6BC598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A72B8E9-3A8F-4460-B4A0-8B289F6BC598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A72B8E9-3A8F-4460-B4A0-8B289F6BC598}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

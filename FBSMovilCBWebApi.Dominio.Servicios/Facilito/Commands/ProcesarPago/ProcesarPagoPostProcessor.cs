@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiciosFinancial.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +28,36 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands.ProcesarPago
         {
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+            var valores  =  new Dictionary<string, string>();
+            var comision = jsonNegocio.CobroServicios.Comisiones.AdministracionCanal + jsonNegocio.CobroServicios.Comisiones.Agente + jsonNegocio.CobroServicios.Comisiones.Cooperativa;
+            var detalle = $"<ul><li>Operación: Pago de Servicios</li><li>Producto: {request.IdProducto}</li><li>No Cuenta: {request.SecuencialCuentaCliente}</li><li>Valor: {request.Valor}</li><li>Comisión: {comision}</li><li>Total: {request.Valor}</li><li>Descripción:</li></ul>";
+            valores.Add("[:detalle:]", detalle);
+
+            if (jsonNegocio.CobroServicios.NotificarCorreoElectronico && string.IsNullOrEmpty(jsonNegocio.CobroServicios.PlantillaCorreoElectronico))
+            {
+                var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index.html");
+
+                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                {
+                    jsonNegocio.CobroServicios.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                }
+            }
+
+            if (jsonNegocio.CobroServicios.NotificarSMS && string.IsNullOrEmpty(jsonNegocio.CobroServicios.PlantillaSMS))
+            {
+                var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
+
+                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                {
+                    jsonNegocio.CobroServicios.PlantillaSMS = SourceReader.ReadToEnd();
+                }
+            }
+
+            var valoresSMS = new Dictionary<string, string>();
+            detalle = $"Operación: Abono de Préstamos\nNo de Producto: {request.IdProducto}\nTotal: {request.Valor}";
+            valoresSMS.Add("[:detalle:]", detalle);
+
+
             await _mediador.Publish(new NotificacionME
             {
                 PlantillaCorreoElectronico = jsonNegocio.CobroServicios.NotificarCorreoElectronico ? jsonNegocio.CobroServicios.PlantillaCorreoElectronico : null,
@@ -36,7 +67,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands.ProcesarPago
                 AsuntoCorreoElectronico = "",
                 NumeroCliente = 1,
                 SecuencialEmpresa = 1,
-                Valores = new Dictionary<string, string>()
+                ValoresEmail = valores,
+                ValoresSms = valoresSMS
             });
         }
     }
