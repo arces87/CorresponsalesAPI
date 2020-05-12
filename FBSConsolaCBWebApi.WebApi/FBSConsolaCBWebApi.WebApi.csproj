@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FBSConsolaCBWebApi.Dominio.Servicios\FBSConsolaCBWebApi.Dominio.Servicios.csproj" />
+    <ProjectReference Include="..\FBSServiciosSMSTulcan\FBSServiciosSMSTulcan.csproj" />
   </ItemGroup>
 
 </Project>

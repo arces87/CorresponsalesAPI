@@ -20,6 +20,7 @@ using FBS.Identidad.DAL.Seguridad;
 using FFBSMovilCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSMovilCBWebApi.WebApi.ManejadorExcepciones;
+using FBSServiciosSMSTulcan.EnviarSMS;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -40,6 +41,7 @@ namespace FBSMovilCBWebApi.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddDbContext<ContextoFBSConsolaCB>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("FBSMovilCBWebApi.WebApi")));
 
             #region Swagger Configuration
@@ -106,7 +108,7 @@ namespace FBSMovilCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB));
-            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, typeof(ConfiguracionAutoMapper).Assembly);
+            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, typeof(EnviarSmsME).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FBSMovilCBWebApi.Dominio.Servicios\FBSMovilCBWebApi.Dominio.Servicios.csproj" />
+    <ProjectReference Include="..\FBSServiciosSMSTulcan\FBSServiciosSMSTulcan.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using FBS.Dominio.Servicios.CorreoElectronico;
+using FBSServiciosSMSTulcan.EnviarSMS;
 using MediatR;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
@@ -20,16 +21,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 
         public async Task Handle(NotificacionME notification, CancellationToken cancellationToken)
         {
-            foreach (var key in notification.Valores.Keys)
-            {
-                if (notification.PlantillaCorreoElectronico != null)
-                    notification.PlantillaCorreoElectronico.Replace(key, notification.Valores[key]);
-                if (notification.PlantillaSMS != null)
-                    notification.PlantillaSMS.Replace(key, notification.Valores[key]);
-            }
-
             if (notification.PlantillaCorreoElectronico != null)
             {
+                foreach (var key in notification.ValoresEmail.Keys)
+                {
+                    if (notification.PlantillaCorreoElectronico != null)
+                        notification.PlantillaCorreoElectronico.Replace(key, notification.ValoresEmail[key]);
+                }
+
                 await _mediador.Publish(new EnviarCorreoElectronicoME
                 {
                     Asunto = notification.AsuntoCorreoElectronico,
@@ -38,17 +37,27 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         Direccion = notification.CorreoElectronicoDestinatario,
                         Nombre = notification.NombreDestinatario} }
                 });
+
             }
 
             if (notification.PlantillaSMS != null)
             {
-                var request = new PorNumeroClienteDeUnaEmpresaMensajeME
+                foreach (var key in notification.ValoresSms.Keys)
                 {
-                    NumeroCliente = notification.NumeroCliente,
-                    SecuencialEmpresa = notification.SecuencialEmpresa,
-                    Mensaje = notification.PlantillaSMS
+                    if (notification.PlantillaSMS != null)
+                        notification.PlantillaSMS.Replace(key, notification.ValoresSms[key]);
+                }
+
+                var request = new EnviarSmsME
+                {
+                    Mensaje =  new SmsModelo()
+                    {
+                        Destinatario = notification.NumeroCliente.ToString(),
+                        Mensaje = notification.PlantillaSMS
+                    }
                 };
-                var response = await _financialApi.MensajeriaSMS.EnvioSMSAsync(request);
+
+                await _mediador.Publish(request);
             }
         }
     }

@@ -4,8 +4,9 @@ using System.Text;
 
 namespace FBSConsolaCBWebApi.Infraestructura.Utiles
 {
-    public interface IFormateadorMensaje
+    public interface IFormateadorMensaje<T>
     {
-        string FormatearNotificacion(string mensaje, string numeroOtp, int diasRestantes, string nombreUsuario, string direccionIp);
+        string FormatearSMS(string mensaje, T operacion);
+        string FormatearEmail(string mensaje, T operacion);
     }
 }
