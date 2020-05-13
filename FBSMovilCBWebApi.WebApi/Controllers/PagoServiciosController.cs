@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
-using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiciosFinancial.Models;
-using ObtenerProductosME = FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries.ObtenerProductosME;
+using ObtenerFormatosME = FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries.ObtenerFormatosME;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,24 +23,24 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("pagarServicio", Name = "PagoServicios_PagarServicio")]
-        public async Task<ActionResult<PagoFacilitoMSL>> PagarServicio([FromBody] ProcesarPagoME modelo)
+        public async Task<ActionResult<AfectacionMS>> PagarServicio([FromBody] ProcesarPagoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpGet("obtenerServicios", Name = "PagoServicios_ObtenerServicios")]
-        public async Task<ActionResult<ObtenerServiciosMS>> ObtenerServicios()
+        public async Task<ActionResult<ServiciosMSL>> ObtenerServicios()
         {
             return await _mediador.Send(new ObtenerServiciosME());
         }
 
-        [HttpPost("obtenerProductos", Name = "PagoServicios_ObtenerProductos")]
-        public async Task<ActionResult<ObtenerProductosMS>> ObtenerProductos([FromBody] ObtenerProductosME modelo)
+        [HttpPost("obtenerFormatos", Name = "PagoServicios_ObtenerFormatos")]
+        public async Task<ActionResult<FormatoMS>> ObtenerProductos([FromBody] ObtenerFormatosME modelo)
         {
             return await _mediador.Send(modelo);
         }
         [HttpPost("consultaServicio", Name = "PagoServicios_ConsultaServicio")]
-        public async Task<ActionResult<ConsultaValorAPagarMS>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
+        public async Task<ActionResult<ConsultaMS>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
         {
             return await _mediador.Send(modelo);
         }

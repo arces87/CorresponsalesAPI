@@ -24,12 +24,11 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the AfectacionME class.
         /// </summary>
-        public AfectacionME(int? secuencialCuentaCliente = default(int?), string jsonComision = default(string), string codigoUsuarioBanca = default(string), string ipRemota = default(string), int? secuencialServicio = default(int?), int? secuencialRequerimientoConsulta = default(int?), IList<CampoPagoResumenME> campos = default(IList<CampoPagoResumenME>))
+        public AfectacionME(int? secuencialCuentaCorresponsal = default(int?), string jsonComision = default(string), string codigoUsuario = default(string), int? secuencialServicio = default(int?), int? secuencialRequerimientoConsulta = default(int?), IList<CampoPagoResumenME> campos = default(IList<CampoPagoResumenME>))
         {
-            SecuencialCuentaCliente = secuencialCuentaCliente;
+            SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             JsonComision = jsonComision;
-            CodigoUsuarioBanca = codigoUsuarioBanca;
-            IpRemota = ipRemota;
+            CodigoUsuario = codigoUsuario;
             SecuencialServicio = secuencialServicio;
             SecuencialRequerimientoConsulta = secuencialRequerimientoConsulta;
             Campos = campos;
@@ -43,8 +42,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "SecuencialCuentaCliente")]
-        public int? SecuencialCuentaCliente { get; set; }
+        [JsonProperty(PropertyName = "SecuencialCuentaCorresponsal")]
+        public int? SecuencialCuentaCorresponsal { get; set; }
 
         /// <summary>
         /// </summary>
@@ -53,13 +52,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "CodigoUsuarioBanca")]
-        public string CodigoUsuarioBanca { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "IpRemota")]
-        public string IpRemota { get; set; }
+        [JsonProperty(PropertyName = "CodigoUsuario")]
+        public string CodigoUsuario { get; set; }
 
         /// <summary>
         /// </summary>

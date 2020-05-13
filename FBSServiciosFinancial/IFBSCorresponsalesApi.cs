@@ -45,24 +45,9 @@ namespace ServiciosFinancial
         ICuentas Cuentas { get; }
 
         /// <summary>
-        /// Gets the IMensajeriaSMS.
-        /// </summary>
-        IMensajeriaSMS MensajeriaSMS { get; }
-
-        /// <summary>
-        /// Gets the IPagoServiciosFacilito.
-        /// </summary>
-        IPagoServiciosFacilito PagoServiciosFacilito { get; }
-
-        /// <summary>
         /// Gets the IPagoServiciosPagoAgil.
         /// </summary>
         IPagoServiciosPagoAgil PagoServiciosPagoAgil { get; }
-
-        /// <summary>
-        /// Gets the IPrestamos.
-        /// </summary>
-        IPrestamos Prestamos { get; }
 
     }
 }

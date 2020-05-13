@@ -22,7 +22,7 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the AfectacionMS class.
         /// </summary>
-        public AfectacionMS(string codigoTrxEmpresa = default(string), string serialTransaccion = default(string), string codigoTransaccion = default(string), string tipo = default(string), string codigoRespuesta = default(string), string fechaTransaccion = default(string), string mensajeRespuesta = default(string), double? montoPago = default(double?), double? montoComision = default(double?), double? montoTotal = default(double?), int? secuencialResultadoPago = default(int?), double? saldoCuentaCliente = default(double?), string documento = default(string), ImpresionMS impresion = default(ImpresionMS))
+        public AfectacionMS(string codigoTrxEmpresa = default(string), string serialTransaccion = default(string), string codigoTransaccion = default(string), string tipo = default(string), string codigoRespuesta = default(string), string fechaTransaccion = default(string), string mensajeRespuesta = default(string), double? montoPago = default(double?), double? montoComision = default(double?), double? montoTotal = default(double?), int? secuencialResultadoPago = default(int?), double? saldoCuentaCorresponsal = default(double?), string documento = default(string), ImpresionMS impresion = default(ImpresionMS))
         {
             CodigoTrxEmpresa = codigoTrxEmpresa;
             SerialTransaccion = serialTransaccion;
@@ -35,7 +35,7 @@ namespace ServiciosFinancial.Models
             MontoComision = montoComision;
             MontoTotal = montoTotal;
             SecuencialResultadoPago = secuencialResultadoPago;
-            SaldoCuentaCliente = saldoCuentaCliente;
+            SaldoCuentaCorresponsal = saldoCuentaCorresponsal;
             Documento = documento;
             Impresion = impresion;
             CustomInit();
@@ -103,8 +103,8 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "SaldoCuentaCliente")]
-        public double? SaldoCuentaCliente { get; set; }
+        [JsonProperty(PropertyName = "SaldoCuentaCorresponsal")]
+        public double? SaldoCuentaCorresponsal { get; set; }
 
         /// <summary>
         /// </summary>

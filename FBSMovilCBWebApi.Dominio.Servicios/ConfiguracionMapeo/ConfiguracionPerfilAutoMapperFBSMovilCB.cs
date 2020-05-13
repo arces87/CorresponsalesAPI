@@ -11,7 +11,7 @@ using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries;
-using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
@@ -37,7 +37,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
                .ForMember(m => m.IdTipo, opt => opt.MapFrom(d => d.Tipo.Nombre))
                .ForMember(m => m.NombreTipo, opt => opt.MapFrom(d => d.Tipo.Nombre));
             #endregion
-
+              
             #region Log
             CreateMap<CrearLogME, Log>()
                .ForMember(m => m.TipoAccion, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdTipoAccion) }))
@@ -70,18 +70,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<CrearClienteME, CreaClienteME>();
             CreateMap<BuscarClienteME, PorIdentificacionSocioME>();
             CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVista>();
-            CreateMap<ProcesarDepositoME, PedidoDatosTransaccionDepositoME>();
             #endregion
 
-            #region Servicios Facilito
-            CreateMap<ProcesarPagoME, PagoFacilitoME>();
-            CreateMap<ProcesarRetiroME, PedidoDatosTransaccionRetiroME>();
-            CreateMap<ConsultaServiciosME, ConsultaME>();
+            #region Pago Servicios
             CreateMap<TipoIdentificacionMS, DistribuidoTipoIdentificacion>();
             CreateMap<ComisionOperacion, ComisionPago>();
 
-            CreateMap<Cuentas.Queries.ObtenerProductosME, ServiciosFinancial.Models.ObtenerProductosME>()
-              .ForMember(m => m.IdGrupo, opt => opt.MapFrom(d => new Catalogo() { Id = new Guid(d.IdGrupo) }));
             #endregion
         }
     }

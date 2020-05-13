@@ -5,7 +5,6 @@ using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
-using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -19,9 +18,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
+namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 {
-    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, AfectacionAUnCorresponsalMS>
+    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, AfectacionMS>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -33,7 +32,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IHttpContextAccessor _httpContext;
         private readonly byte[] _llave;
 
-        public ProcesarDepositoHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
+        public ProcesarPagoHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
             IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente, IRepositorioCuenta repositorioCuenta,
             IHttpContextAccessor httpContext)
         {
@@ -48,9 +47,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
-        public async Task<AfectacionAUnCorresponsalMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
+        public async Task<AfectacionMS> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
         {
-            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -65,23 +64,23 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             saldoCuenta = saldoCuenta == 0 && transacciones.Count() == 0 ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
-            if (!jsonNegocio.Deposito.Activo.Value)
+            if (!jsonNegocio.CobroServicios.Activo.Value)
             {
                 throw new Exception("Usted no tiene acceso para realizar este tipo de operación");
             }
-            if (request.Valor > jsonNegocio.Deposito.Limites.MontoMaximoPorTransaccion)
+            if (request.Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoPorTransaccion)
             {
                 throw new Exception("No puede realizar esta operación porque excede el monto máximo definido para este tipo de operación");
             }
-            if (request.Valor < jsonNegocio.Deposito.Limites.MontoMinimoPorTransaccion)
+            if (request.Valor < jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion)
             {
                 throw new Exception("No puede realizar esta operación porque no alcanza el monto mínimo definido para este tipo de operación");
             }
-            if (saldoActual + request.Valor > jsonNegocio.Deposito.Limites.MontoMaximoDiarioDeTransacciones)
+            if (saldoActual + request.Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
             {
                 throw new Exception("No puede realizar esta operación porque excede el monto máximo diario en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + request.Valor)) + " del valor definido para este tipo de operación");
             }
-            if (transacciones.Count() > jsonNegocio.Deposito.Limites.NumeroMaximoDiarioDeTransacciones)
+            if (transacciones.Count() > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
             {
                 throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
             }
@@ -93,22 +92,26 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 throw new Exception("No puede realizar esta operación porque no posee saldo en la cuenta");
             }
+            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
+            var comisionPago = _mapper.Map<ComisionPago>(comision);
+            comisionPago.Facilito = request.Comision;
+            var comisiones = JsonConvert.SerializeObject(comisionPago);
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
                 Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
-                Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Deposito.Comisiones),
+                Comisiones = comisiones,
                 Agente = agente,
                 Descripcion = request.Descripcion,
                 FechaDispositivo = DateTime.Now,
                 FechaSistema = DateTime.Now,
                 HoraDispositivo = DateTime.Now.TimeOfDay,
-                IdentificacionCliente = request.IdentificacionCliente,
+                IdentificacionCliente = request.Identificacion,
                 NombreCliente = request.NombreCliente,
-                SecuencialCuenta = request.SecuencialCuenta.ToString(),
+                SecuencialCuenta = request.SecuencialCuentaCliente.ToString(),
                 Valor = request.Valor,
                 JsonDatos = JsonConvert.SerializeObject(request),
-                SaldoDisponible = saldoActual + request.Valor,
+                SaldoDisponible = saldoActual + request.Valor + comision.Agente.Value + comision.AdministracionCanal.Value + comision.Cooperativa.Value + request.Comision.Value,
                 Tipo = IdTipoAccion,
                 EstaActivo = true,
                 Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
@@ -120,24 +123,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Deposito.Comisiones;
             var arregloComisiones = new List<ComisionFinancial>();
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Administración Canal", Valor = comision.AdministracionCanal });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
-            
-            var modelo = new ServiciosFinancial.Models.AfectacionAUnCorresponsalME()
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Pago Agil", Valor = request.Comision });
+            var modelo = new AfectacionME()
             {
-                TipoTransaccion = "NCCliente",
-                //CodigoUsuario = agente.Usuario.UserName,
+                //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
                 CodigoUsuario = "ADMIN",
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
-                SecuencialCuentaSocio = request.SecuencialCuenta,
-                ValorAfectado = request.Valor,
-                EsUnSoloCobroComision = true
             };
-            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo);
+            _mapper.Map(request, modelo);
+            var respuesta = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodAsync(modelo);
+
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
@@ -145,7 +145,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
-            transaccion.SaldoCuenta = respuesta.Body.SaldoCuentaCorresponsal.Value;
+            transaccion.SaldoCuenta = respuesta.SaldoCuentaCorresponsal.Value;
             await _repositorioTransaccion.Update(transaccion);
             await _mediador.Send(new CrearLogME()
             {
@@ -153,7 +153,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body;
+            return respuesta;
         }
     }
 }

@@ -48,24 +48,9 @@ namespace ServiciosFinancial
         public virtual ICuentas Cuentas { get; private set; }
 
         /// <summary>
-        /// Gets the IMensajeriaSMS.
-        /// </summary>
-        public virtual IMensajeriaSMS MensajeriaSMS { get; private set; }
-
-        /// <summary>
-        /// Gets the IPagoServiciosFacilito.
-        /// </summary>
-        public virtual IPagoServiciosFacilito PagoServiciosFacilito { get; private set; }
-
-        /// <summary>
         /// Gets the IPagoServiciosPagoAgil.
         /// </summary>
         public virtual IPagoServiciosPagoAgil PagoServiciosPagoAgil { get; private set; }
-
-        /// <summary>
-        /// Gets the IPrestamos.
-        /// </summary>
-        public virtual IPrestamos Prestamos { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the FBSCorresponsalesApi class.
@@ -162,11 +147,8 @@ namespace ServiciosFinancial
             Afectacion = new Afectacion(this);
             Clientes = new Clientes(this);
             Cuentas = new Cuentas(this);
-            MensajeriaSMS = new MensajeriaSMS(this);
-            PagoServiciosFacilito = new PagoServiciosFacilito(this);
             PagoServiciosPagoAgil = new PagoServiciosPagoAgil(this);
-            Prestamos = new Prestamos(this);
-            BaseUri = new System.Uri("http://186.5.29.68:9029");
+            BaseUri = new System.Uri("http://186.5.29.68:9084");
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
