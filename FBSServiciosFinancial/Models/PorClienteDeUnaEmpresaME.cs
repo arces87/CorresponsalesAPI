@@ -22,10 +22,12 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the PorClienteDeUnaEmpresaME class.
         /// </summary>
-        public PorClienteDeUnaEmpresaME(int? numeroCliente = default(int?), int? secuencialEmpresa = default(int?))
+        public PorClienteDeUnaEmpresaME(int? numeroCliente = default(int?), int? secuencialEmpresa = default(int?), int? secuencialTipoIdentificacion = default(int?), string identificacion = default(string))
         {
             NumeroCliente = numeroCliente;
             SecuencialEmpresa = secuencialEmpresa;
+            SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
+            Identificacion = identificacion;
             CustomInit();
         }
 
@@ -43,6 +45,16 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "SecuencialEmpresa")]
         public int? SecuencialEmpresa { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "SecuencialTipoIdentificacion")]
+        public int? SecuencialTipoIdentificacion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Identificacion")]
+        public string Identificacion { get; set; }
 
     }
 }

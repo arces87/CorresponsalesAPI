@@ -17,11 +17,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 
         public async Task<ConsolidadoCuentasMSL> Handle(DevuelveCuentaME request, CancellationToken cancellationToken)
         {
-            var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasWithHttpMessagesAsync(new PorClienteDeUnaEmpresaME()
-            {
-                NumeroCliente = int.Parse(request.SecuencialCliente),
-                SecuencialEmpresa = 1
-            });
+            var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasWithHttpMessagesAsync(request);
             return respuesta.Body;
         }
     }

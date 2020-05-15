@@ -19,6 +19,7 @@ using FBS.Identidad.DAL.Seguridad;
 using FFBSMovilCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSMovilCBWebApi.WebApi.ManejadorExcepciones;
+using FBS.Dominio.Servicios.GestionFicheros;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -106,7 +107,7 @@ namespace FBSMovilCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB));
-            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly);
+            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

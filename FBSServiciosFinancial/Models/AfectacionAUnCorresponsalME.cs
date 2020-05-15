@@ -24,7 +24,7 @@ namespace ServiciosFinancial.Models
         /// Initializes a new instance of the AfectacionAUnCorresponsalME
         /// class.
         /// </summary>
-        public AfectacionAUnCorresponsalME(string tipoTransaccion = default(string), int? secuencialCuentaSocio = default(int?), int? secuencialCuentaCorresponsal = default(int?), double? valorAfectado = default(double?), string jsonComision = default(string), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?))
+        public AfectacionAUnCorresponsalME(string tipoTransaccion = default(string), int? secuencialCuentaSocio = default(int?), int? secuencialCuentaCorresponsal = default(int?), double? valorAfectado = default(double?), string jsonComision = default(string), string codigoUsuario = default(string), bool? esUnSoloCobroComision = default(bool?), int? secuencialTipoIdentificacionCliente = default(int?), string identificacionCliente = default(string))
         {
             TipoTransaccion = tipoTransaccion;
             SecuencialCuentaSocio = secuencialCuentaSocio;
@@ -33,6 +33,8 @@ namespace ServiciosFinancial.Models
             JsonComision = jsonComision;
             CodigoUsuario = codigoUsuario;
             EsUnSoloCobroComision = esUnSoloCobroComision;
+            SecuencialTipoIdentificacionCliente = secuencialTipoIdentificacionCliente;
+            IdentificacionCliente = identificacionCliente;
             CustomInit();
         }
 
@@ -75,6 +77,16 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "EsUnSoloCobroComision")]
         public bool? EsUnSoloCobroComision { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "SecuencialTipoIdentificacionCliente")]
+        public int? SecuencialTipoIdentificacionCliente { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "IdentificacionCliente")]
+        public string IdentificacionCliente { get; set; }
 
     }
 }

@@ -90,7 +90,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     await _mediador.Send(new CrearLogME()
                     {

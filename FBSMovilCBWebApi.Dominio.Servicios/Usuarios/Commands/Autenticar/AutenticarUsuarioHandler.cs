@@ -142,7 +142,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
                 throw new Exception("Error en la validación de los datos de autenticación" + error);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw new Exception("Error en la validación de los datos de autenticación" + error);
             }

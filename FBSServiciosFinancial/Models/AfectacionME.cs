@@ -24,11 +24,12 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the AfectacionME class.
         /// </summary>
-        public AfectacionME(int? secuencialCuentaCorresponsal = default(int?), string jsonComision = default(string), string codigoUsuario = default(string), int? secuencialServicio = default(int?), int? secuencialRequerimientoConsulta = default(int?), IList<CampoPagoResumenME> campos = default(IList<CampoPagoResumenME>))
+        public AfectacionME(int? secuencialCuentaCorresponsal = default(int?), string jsonComision = default(string), string codigoUsuario = default(string), string correoCliente = default(string), int? secuencialServicio = default(int?), int? secuencialRequerimientoConsulta = default(int?), IList<CampoPagoResumenME> campos = default(IList<CampoPagoResumenME>))
         {
             SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             JsonComision = jsonComision;
             CodigoUsuario = codigoUsuario;
+            CorreoCliente = correoCliente;
             SecuencialServicio = secuencialServicio;
             SecuencialRequerimientoConsulta = secuencialRequerimientoConsulta;
             Campos = campos;
@@ -54,6 +55,11 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "CodigoUsuario")]
         public string CodigoUsuario { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "CorreoCliente")]
+        public string CorreoCliente { get; set; }
 
         /// <summary>
         /// </summary>

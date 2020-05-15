@@ -9,23 +9,23 @@ namespace ServiciosFinancial.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PorIdentificacionSocioME
+    public partial class EnvioSMSMS
     {
         /// <summary>
-        /// Initializes a new instance of the PorIdentificacionSocioME class.
+        /// Initializes a new instance of the EnvioSMSMS class.
         /// </summary>
-        public PorIdentificacionSocioME()
+        public EnvioSMSMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PorIdentificacionSocioME class.
+        /// Initializes a new instance of the EnvioSMSMS class.
         /// </summary>
-        public PorIdentificacionSocioME(string identificacion = default(string), int? secuencialTipoIdentificacion = default(int?))
+        public EnvioSMSMS(bool? esExitoso = default(bool?), string mensajeRespuesta = default(string))
         {
-            Identificacion = identificacion;
-            SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
+            EsExitoso = esExitoso;
+            MensajeRespuesta = mensajeRespuesta;
             CustomInit();
         }
 
@@ -36,13 +36,13 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Identificacion")]
-        public string Identificacion { get; set; }
+        [JsonProperty(PropertyName = "EsExitoso")]
+        public bool? EsExitoso { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "SecuencialTipoIdentificacion")]
-        public int? SecuencialTipoIdentificacion { get; set; }
+        [JsonProperty(PropertyName = "MensajeRespuesta")]
+        public string MensajeRespuesta { get; set; }
 
     }
 }

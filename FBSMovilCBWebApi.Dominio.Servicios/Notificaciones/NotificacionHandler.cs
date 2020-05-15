@@ -47,16 +47,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         notification.PlantillaSMS.Replace(key, notification.ValoresSms[key]);
                 }
 
-                //var request = new EnviarS
-                //{
-                //    Mensaje =  new SmsModelo()
-                //    {
-                //        Destinatario = notification.NumeroCliente.ToString(),
-                //        Mensaje = notification.PlantillaSMS
-                //    }
-                //};
+                var mensajeSMS = new EnvioSMSME()
+                {
+                    CodigoUsuarioCorresponsal = notification.NombreUsuarioCorresponsal,
+                    MensajeTexto = notification.PlantillaSMS,
+                    NumeroIdentificacion = notification.IdentificacionCorresponsal,
+                    SecuencialTipoIdentificacion = notification.TipoIdentificacionCorresponsal
+                };
 
-                //await _mediador.Publish(request);
+                await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
             }
         }
     }

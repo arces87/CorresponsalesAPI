@@ -48,6 +48,11 @@ namespace ServiciosFinancial
         public virtual ICuentas Cuentas { get; private set; }
 
         /// <summary>
+        /// Gets the IMensajeriaSMS.
+        /// </summary>
+        public virtual IMensajeriaSMS MensajeriaSMS { get; private set; }
+
+        /// <summary>
         /// Gets the IPagoServiciosPagoAgil.
         /// </summary>
         public virtual IPagoServiciosPagoAgil PagoServiciosPagoAgil { get; private set; }
@@ -147,6 +152,7 @@ namespace ServiciosFinancial
             Afectacion = new Afectacion(this);
             Clientes = new Clientes(this);
             Cuentas = new Cuentas(this);
+            MensajeriaSMS = new MensajeriaSMS(this);
             PagoServiciosPagoAgil = new PagoServiciosPagoAgil(this);
             BaseUri = new System.Uri("http://186.5.29.68:9084");
             SerializationSettings = new JsonSerializerSettings

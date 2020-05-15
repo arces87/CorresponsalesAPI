@@ -11,6 +11,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         public double Valor { get; set; }
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }
+        public int TipoIdentificacionCliente { get; set; }
         public string Descripcion { get; set; }
     }
 }

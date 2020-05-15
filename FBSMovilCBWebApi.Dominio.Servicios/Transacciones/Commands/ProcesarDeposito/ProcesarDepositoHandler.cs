@@ -135,8 +135,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,
                 ValorAfectado = request.Valor,
-                EsUnSoloCobroComision = true
-            };
+                EsUnSoloCobroComision = true,
+                SecuencialTipoIdentificacionCliente = request.TipoIdentificacionCliente,
+                IdentificacionCliente = request.IdentificacionCliente
+        };
             var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo);
             await _mediador.Send(new CrearLogME()
             {
