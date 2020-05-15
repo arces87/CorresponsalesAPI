@@ -20,6 +20,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
             var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasIdentificacionWithHttpMessagesAsync(new PorIdentificacionClienteDeUnaEmpresa()
             {
                 Identificacion = request.Identificacion,
+                SecuencialTipoIdentificacion = request.TipoIdentificacion,
                 SecuencialEmpresa = 1
             });
             return respuesta.Body;
