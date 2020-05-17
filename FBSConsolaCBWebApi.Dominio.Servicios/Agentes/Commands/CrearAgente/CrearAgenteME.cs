@@ -8,6 +8,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
 
         public string JsonAgente { get; set; }
         public string Identificacion { get; set; }
+        public int TipoIdentificacion { get; set; }
         public string Ubicacion { get; set; }
         public string IdEstado { get; set; }
 

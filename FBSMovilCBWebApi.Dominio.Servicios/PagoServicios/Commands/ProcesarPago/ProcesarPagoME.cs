@@ -12,6 +12,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         public string Descripcion { get; set; }
 
         public int? SecuencialCuentaCliente { get; set; }
+        public string CorreoCliente { get; set; }
         public int SecuencialServicio { get; set; }
         public int SecuencialRequerimientoConsulta { get; set; }
 

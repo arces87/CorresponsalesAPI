@@ -4,14 +4,16 @@ using FBSConsolaCBWebApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FBSConsolaCBWebApi.WebApi.Migrations
 {
     [DbContext(typeof(ContextoFBSConsolaCB))]
-    partial class ContextoFBSConsolaCBModelSnapshot : ModelSnapshot
+    [Migration("20200516132746_TipoIdentificacionAgente")]
+    partial class TipoIdentificacionAgente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -490,7 +492,7 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.Property<string>("SupervisorId");
 
-                    b.Property<int>("TipoIdentificacion");
+                    b.Property<int>("TipoIdentificación");
 
                     b.Property<string>("Ubicacion");
 

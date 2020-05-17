@@ -24,6 +24,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
 
         public string JsonAgente { get; set; }
         public string Identificacion { get; set; }
+        public int TipoIdentificacion { get; set; }
         public string Ubicacion { get; set; }
 
         public bool EstaActivo { get; set; }

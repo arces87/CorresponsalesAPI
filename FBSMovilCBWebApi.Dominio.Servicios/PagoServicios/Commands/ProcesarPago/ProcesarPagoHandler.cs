@@ -129,13 +129,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Pago Agil", Valor = request.Comision });
             var modelo = new AfectacionME()
-            {
-                //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
-                CodigoUsuario = "ADMIN",
+            { 
+                CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
+                SecuencialServicio = request.SecuencialServicio,
+                SecuencialRequerimientoConsulta = request.SecuencialRequerimientoConsulta,
+                Campos =  request.Campos,
+                CorreoCliente =  request.CorreoCliente
+
+
             };
-            _mapper.Map(request, modelo);
             var respuesta = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
