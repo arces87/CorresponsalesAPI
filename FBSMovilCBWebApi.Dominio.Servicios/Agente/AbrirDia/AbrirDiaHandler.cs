@@ -44,11 +44,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
             {
                 await _mediador.Send(new VerificarAgenteME()
                 {
+                    Usuario = request.Usuario,
                     Imei = request.Imei,
                     Mac = request.Mac,
-                    Latitud = request.Latitud,
                     Longitud = request.Longitud,
-                    Usuario = request.Usuario
+                    Latitud = request.Latitud
                 });
 
                 var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;

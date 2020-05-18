@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
 using ServiciosFinancial;
@@ -35,6 +36,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCliente").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
             });
+
+            await _mediador.Send(new VerificarAgenteME()
+            {
+                Usuario = request.Usuario,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Longitud = request.Longitud,
+                Latitud = request.Latitud
+            });
+
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),

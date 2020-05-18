@@ -4,6 +4,7 @@ using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
 using OtpNet;
@@ -46,6 +47,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 JsonLog = JsonConvert.SerializeObject(request),
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+            });
+
+            await _mediador.Send(new VerificarAgenteME()
+            {
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Latitud = request.Latitud,
+                Longitud = request.Longitud,
+                Usuario = request.Usuario
             });
 
             var secretKey = Criptografia.EncryptStringToBytes_Aes(request.Identificacion, _llave, _llave);

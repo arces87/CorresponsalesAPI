@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
+using MediatR;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
 {
@@ -6,8 +7,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }
-        public string Mac { get; set; }
         public double Latitud { get; set; }
         public double Longitud { get; set; }
+        public string Mac { get; set; }
     }
 }

@@ -20,5 +20,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         public string Identificacion { get; set; }
 
         public IList<CampoPagoResumenME> Campos { get; set; }
+        public string Usuario { get; set; }
+        public string Imei { get; set; }
+        public double Latitud { get; set; }
+        public double Longitud { get; set; }
+        public string Mac { get; set; }
     }
 }

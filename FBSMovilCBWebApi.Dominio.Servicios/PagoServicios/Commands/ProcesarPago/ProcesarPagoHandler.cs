@@ -7,6 +7,7 @@ using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -59,6 +60,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
         public async Task<AfectacionMS> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
         {
+            await _mediador.Send(new VerificarAgenteME()
+            {
+                Usuario = request.Usuario,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Longitud = request.Longitud,
+                Latitud = request.Latitud
+            });
+
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
             {
