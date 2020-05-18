@@ -4,6 +4,7 @@ using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
@@ -31,10 +32,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IHttpContextAccessor _httpContext;
         private readonly byte[] _llave;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
 
-        public ProcesarPagoHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
-            IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente, IRepositorioCuenta repositorioCuenta,
-            IHttpContextAccessor httpContext)
+        public ProcesarPagoHandler(
+            IMediator mediador, 
+            IJsonConfiguracion jsonConfiguracion, 
+            IFBSCorresponsalesApi financialApi,
+            IMapper mapper, 
+            IRepositorioTransaccion repositorioTransaccion, 
+            IRepositorioAgente repositorioAgente, 
+            IRepositorioCuenta repositorioCuenta,
+            IHttpContextAccessor httpContext,
+            IApiKeyGenerator apiKeyGenerator)
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
@@ -45,6 +54,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             _repositorioCuenta = repositorioCuenta;
             _httpContext = httpContext;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
+            _apiKeyGenerator = apiKeyGenerator;
         }
 
         public async Task<AfectacionMS> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
@@ -137,10 +147,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 SecuencialRequerimientoConsulta = request.SecuencialRequerimientoConsulta,
                 Campos =  request.Campos,
                 CorreoCliente =  request.CorreoCliente
-
-
             };
-            var respuesta = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodAsync(modelo);
+
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeader = _apiKeyGenerator.generateCustomHeaders(apiKey);
+
+            var respuestaHttp = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodWithHttpMessagesAsync(modelo, customHeader);
+            var respuesta = respuestaHttp.Body;
 
             await _mediador.Send(new CrearLogME()
             {

@@ -2,6 +2,7 @@
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
@@ -44,6 +45,8 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioTransaccion, RepositorioTransaccion>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
+
+            services.AddSingleton<IApiKeyGenerator>(new ApiKeyGenerator("b9be8fe4-d8a5-4fb8-a591-2ed86af6ffde"));
         }
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuracion)

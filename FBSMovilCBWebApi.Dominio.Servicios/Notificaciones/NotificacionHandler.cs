@@ -25,7 +25,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                 foreach (var key in notification.ValoresEmail.Keys)
                 {
                     if (notification.PlantillaCorreoElectronico != null)
-                        notification.PlantillaCorreoElectronico.Replace(key, notification.ValoresEmail[key]);
+                        notification.PlantillaCorreoElectronico = notification.PlantillaCorreoElectronico.Replace(key, notification.ValoresEmail[key]);
                 }
 
                 await _mediador.Publish(new EnviarCorreoElectronicoME
@@ -44,7 +44,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                 foreach (var key in notification.ValoresSms.Keys)
                 {
                     if (notification.PlantillaSMS != null)
-                        notification.PlantillaSMS.Replace(key, notification.ValoresSms[key]);
+                        notification.PlantillaSMS = notification.PlantillaSMS.Replace(key, notification.ValoresSms[key]);
                 }
 
                 var mensajeSMS = new EnvioSMSME()

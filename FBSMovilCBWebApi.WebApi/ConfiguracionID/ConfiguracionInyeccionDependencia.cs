@@ -2,6 +2,7 @@
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBSConsolaCBWebApi.DAL;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
@@ -15,6 +16,7 @@ using ServiciosFinancial;
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 {
@@ -36,6 +38,8 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioCuenta, RepositorioCuenta>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
+
+            services.AddSingleton<IApiKeyGenerator>(new ApiKeyGenerator("b9be8fe4-d8a5-4fb8-a591-2ed86af6ffde"));
         }
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuracion)
@@ -48,7 +52,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
             var httpClient = new HttpClient
             {
-                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
+                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor),
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
         }

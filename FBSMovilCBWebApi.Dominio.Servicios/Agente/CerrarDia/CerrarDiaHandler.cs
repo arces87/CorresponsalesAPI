@@ -4,6 +4,7 @@ using FBS.Identidad.DAL.Modelado;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
 using System;
@@ -41,29 +42,40 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
             });
             try
             {
+                await _mediador.Send(new VerificarAgenteME()
+                {
+                    Imei = request.Imei,
+                    Mac = request.Mac,
+                    Latitud = request.Latitud,
+                    Longitud = request.Longitud,
+                    Usuario = request.Usuario
+                });
+
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
-                if (agente != null) //Comprobacion de existencia del Agente
+                agente.Estado = new Catalogo() { Id = new Guid(idEstado) };
+                await _repositorioAgente.UpdateEstado(agente);
+
+                await _mediador.Send(new CrearLogME()
                 {
-                    if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
-                    {
-                            agente.Estado = new Catalogo() { Id = new Guid(idEstado) };
-                            await _repositorioAgente.UpdateEstado(agente);
-                           
-                            await _mediador.Send(new CrearLogME()
-                            {
-                                JsonLog = JsonConvert.SerializeObject(request),
-                                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCerrarDia").Valor,
-                                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-                            });
-                            return true;
-                    }
-                    else
-                    {
-                        throw new Exception("Error en la validación de los datos de autenticación | A002");
-                    }
-                }
-                throw new Exception("Error en la validación de los datos de autenticación | A001");
+                    JsonLog = JsonConvert.SerializeObject(request),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCerrarDia").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+                return true;
+
+                //if (agente != null) //Comprobacion de existencia del Agente
+                //{
+                //    if (agente.Dispositivo != null && agente.Dispositivo.Imei == request.Imei && agente.Dispositivo.MacAddress == request.Mac) //Comprobación de existencia de dispositivo y sus datos
+                //    {
+
+                //    }
+                //    else
+                //    {
+                //        throw new Exception("Error en la validación de los datos de autenticación | A002");
+                //    }
+                //}
+                //throw new Exception("Error en la validación de los datos de autenticación | A001");
             }
             catch (Exception)
             {
