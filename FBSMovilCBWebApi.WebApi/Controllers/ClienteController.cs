@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
+using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentificacion;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,13 @@ namespace FBSMovilCBWebApi.WebApi
         [HttpPost("buscarCliente", Name = "Cliente_BuscarCliente")]
         [Produces(typeof(InformacionPersonaMS))]
         public async Task<ActionResult<InformacionPersonaMS>> BuscarCliente([FromBody] BuscarClienteME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("buscarTiposIdentificaciones", Name = "Cliente_TiposIdentificaciones")]
+        [Produces(typeof(InformacionPersonaMS))]
+        public async Task<ActionResult<TiposIdentificacionMSL>> BuscarTiposIdentificaciones([FromBody] ListarTiposIdentificacionME modelo)
         {
             return await _mediador.Send(modelo);
         }
