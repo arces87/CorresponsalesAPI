@@ -37,7 +37,7 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         [HttpPost("buscarTiposIdentificaciones", Name = "Cliente_TiposIdentificaciones")]
-        [Produces(typeof(InformacionPersonaMS))]
+        [Produces(typeof(TiposIdentificacionMSL))]
         public async Task<ActionResult<TiposIdentificacionMSL>> BuscarTiposIdentificaciones([FromBody] ListarTiposIdentificacionME modelo)
         {
             return await _mediador.Send(modelo);
