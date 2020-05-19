@@ -19,7 +19,7 @@ namespace FBSMovilCBWebApi.WebApi
             _mediador = mediador;
         }
 
-        [HttpGet("obtenerDistribuidos", Name = "Distribuidos_ObtenerDistribuidos")]
+        [HttpPost("obtenerDistribuidos", Name = "Distribuidos_ObtenerDistribuidos")]
         [Produces(typeof(ObtenerDistribuidosMS))]
         public async Task<ActionResult<ObtenerDistribuidosMS>> BuscarDistribuidos([FromBody] ObtenerDistribuidosME modelo)
         {

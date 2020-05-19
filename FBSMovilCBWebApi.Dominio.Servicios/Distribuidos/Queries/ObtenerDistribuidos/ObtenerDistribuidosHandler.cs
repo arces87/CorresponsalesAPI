@@ -31,6 +31,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
             _repositorioCatalogo = repositorioCatalogo;
             _jsonConfiguracion = jsonConfiguracion;
             _mapper = mapper;
+            _mediador = mediador;
+            _apiKeyGenerator = apiKeyGenerator;
+            _repositorioAgente = repositorioAgente;
         }
 
         public async Task<ObtenerDistribuidosMS> Handle(ObtenerDistribuidosME request, CancellationToken cancellationToken)

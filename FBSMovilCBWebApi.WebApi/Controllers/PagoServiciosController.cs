@@ -28,7 +28,7 @@ namespace FBSMovilCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
 
-        [HttpGet("obtenerServicios", Name = "PagoServicios_ObtenerServicios")]
+        [HttpPost("obtenerServicios", Name = "PagoServicios_ObtenerServicios")]
         public async Task<ActionResult<ServiciosMSL>> ObtenerServicios([FromBody] ObtenerServiciosME modelo)
         {
             return await _mediador.Send(modelo);
