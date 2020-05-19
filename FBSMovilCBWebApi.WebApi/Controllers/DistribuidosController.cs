@@ -21,9 +21,9 @@ namespace FBSMovilCBWebApi.WebApi
 
         [HttpGet("obtenerDistribuidos", Name = "Distribuidos_ObtenerDistribuidos")]
         [Produces(typeof(ObtenerDistribuidosMS))]
-        public async Task<ActionResult<ObtenerDistribuidosMS>> BuscarDistribuidos()
+        public async Task<ActionResult<ObtenerDistribuidosMS>> BuscarDistribuidos([FromBody] ObtenerDistribuidosME modelo)
         {
-            return await _mediador.Send(new ObtenerDistribuidosME());
+            return await _mediador.Send(modelo);
         }
     }
 }

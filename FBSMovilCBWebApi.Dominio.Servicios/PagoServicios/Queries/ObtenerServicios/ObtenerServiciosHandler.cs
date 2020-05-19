@@ -1,4 +1,6 @@
-﻿using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
+﻿using FBSConsolaCBWebApi.Infraestructura.Utiles;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
@@ -11,11 +13,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
     {
         private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IMediator _mediador;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
+        private readonly IRepositorioAgente _repositorioAgente;
 
-        public ObtenerServiciosHandler(IFBSCorresponsalesApi facilitoApi, IMediator mediador)
+        public ObtenerServiciosHandler(IFBSCorresponsalesApi facilitoApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
             _financialApi = facilitoApi;
             _mediador = mediador;
+            _apiKeyGenerator = apiKeyGenerator;
+            _repositorioAgente = repositorioAgente;
         }
 
         public async Task<ServiciosMSL> Handle(ObtenerServiciosME request, CancellationToken cancellationToken)
@@ -29,7 +35,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
                 Latitud = request.Latitud
             });
 
-            var respuesta = await _financialApi.PagoServiciosPagoAgil.ServiciosWithHttpMessagesAsync();
+            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var respuesta = await _financialApi.PagoServiciosPagoAgil.ServiciosWithHttpMessagesAsync(customHeaders);
             return respuesta.Body;
         }
     }

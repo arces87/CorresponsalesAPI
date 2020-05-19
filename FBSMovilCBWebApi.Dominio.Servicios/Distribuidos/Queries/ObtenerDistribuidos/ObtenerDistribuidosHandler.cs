@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using ServiciosFinancial;
 using System;
@@ -18,8 +21,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
         private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
+        private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IMediator _mediador;
 
-        public ObtenerDistribuidosHandler(IFBSCorresponsalesApi financialApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper)
+        public ObtenerDistribuidosHandler(IFBSCorresponsalesApi financialApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
             _financialApi = financialApi;
             _repositorioCatalogo = repositorioCatalogo;
@@ -29,8 +35,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 
         public async Task<ObtenerDistribuidosMS> Handle(ObtenerDistribuidosME request, CancellationToken cancellationToken)
         {
+            await _mediador.Send(new VerificarAgenteME()
+            {
+                Usuario = request.Usuario,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Longitud = request.Longitud,
+                Latitud = request.Latitud
+            });
+
+            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+
             var catalogos = await _repositorioCatalogo.GetAllWithAssociations(true);
-            var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync();
+            var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
             var tiposAlertas = catalogos.Where(c => c.TipoCatalogo.Id == new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTipoAlerta").Valor)).ToList();
             return new ObtenerDistribuidosMS() { TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuesta.Body.TiposIdentificacion), TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas) };
         }

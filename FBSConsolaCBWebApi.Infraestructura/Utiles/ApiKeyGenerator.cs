@@ -14,7 +14,10 @@ namespace FBSConsolaCBWebApi.Infraestructura.Utiles
 
         public string generateApiKey(string secretKey)
         {
-            var apiKey = $"{secretKey}-{_privateKey}";
+            var imeiSubstringLength = secretKey.Length - 8;
+            var imeiSubstring1 = secretKey.Substring(0, 8);
+            var imeiSubstring2 = secretKey.Substring(8, imeiSubstringLength);
+            var apiKey = $"{imeiSubstring1}-{imeiSubstring2}-{_privateKey}";
 
             return apiKey;
         }
@@ -38,6 +41,8 @@ namespace FBSConsolaCBWebApi.Infraestructura.Utiles
 
             list.Clear();
             list.Add(value);
+
+            header.Add("Id", list);
 
             return header;
         }

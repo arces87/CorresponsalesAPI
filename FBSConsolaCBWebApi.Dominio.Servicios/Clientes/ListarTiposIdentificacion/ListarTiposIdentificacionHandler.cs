@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using MediatR;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
@@ -13,17 +14,20 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Clientes.Queries
     public class ListarTiposIdentificacionHandler: IRequestHandler<ListarTiposIdentificacionME, TiposIdentificacionMSL>
     {
         private readonly IFBSCorresponsalesApi _financialApi;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediador;
-        public ListarTiposIdentificacionHandler(IFBSCorresponsalesApi financialApi, IMapper mapper, IMediator mediador)
+        private readonly IApiKeyGenerator _apiKeyGenerator;
+        public ListarTiposIdentificacionHandler(IFBSCorresponsalesApi financialApi, IApiKeyGenerator apiKeyGenerator)
         {
             _financialApi = financialApi;
-            _mapper = mapper;
+            _apiKeyGenerator = apiKeyGenerator;
         }
 
         public async Task<TiposIdentificacionMSL> Handle(ListarTiposIdentificacionME request, CancellationToken cancellationToken)
         {
-            return await _financialApi.Clientes.DevuelveTiposIdentificacionAsync();
+           
+            var apyKey = _apiKeyGenerator.generateApiKey("0000000000000000");
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
+            return respuesta.Body;
         }
     }
 }

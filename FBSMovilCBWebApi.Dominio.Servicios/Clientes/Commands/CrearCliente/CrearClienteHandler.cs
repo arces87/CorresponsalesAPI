@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
@@ -18,14 +20,23 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
+        private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
 
-        public CrearClienteHandler(IFBSCorresponsalesApi financialApi, IMapper mapper,
-            IMediator mediador, IJsonConfiguracion jsonConfiguracion)
+        public CrearClienteHandler(
+            IFBSCorresponsalesApi financialApi, 
+            IMapper mapper,
+            IMediator mediador, 
+            IJsonConfiguracion jsonConfiguracion,
+            IRepositorioAgente repositorioAgente,
+            IApiKeyGenerator apiKeyGenerator)
         {
             _financialApi = financialApi;
             _mapper = mapper;
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
+            _repositorioAgente = repositorioAgente;
+            _apiKeyGenerator = apiKeyGenerator;
         }
 
         public async Task<bool> Handle(CrearClienteME request, CancellationToken cancellationToken)
@@ -52,7 +63,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCliente").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(_mapper.Map<CreaClienteME>(request));
+
+            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+
+            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(_mapper.Map<CreaClienteME>(request), customHeaders);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),

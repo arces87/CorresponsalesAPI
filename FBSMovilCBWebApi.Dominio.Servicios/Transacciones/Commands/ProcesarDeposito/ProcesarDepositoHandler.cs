@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
+using FBSConsolaCBWebApi.Infraestructura.Utiles;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
@@ -32,11 +33,20 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioCuenta _repositorioCuenta;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly byte[] _llave;
 
-        public ProcesarDepositoHandler(IMediator mediador, IJsonConfiguracion jsonConfiguracion, IFBSCorresponsalesApi financialApi,
-            IMapper mapper, IRepositorioTransaccion repositorioTransaccion, IRepositorioAgente repositorioAgente, IRepositorioCuenta repositorioCuenta,
-            IHttpContextAccessor httpContext)
+
+        public ProcesarDepositoHandler(
+            IMediator mediador, 
+            IJsonConfiguracion jsonConfiguracion, 
+            IFBSCorresponsalesApi financialApi,
+            IMapper mapper, 
+            IRepositorioTransaccion repositorioTransaccion, 
+            IRepositorioAgente repositorioAgente, 
+            IRepositorioCuenta repositorioCuenta,
+            IHttpContextAccessor httpContext,
+            IApiKeyGenerator apiKeyGenerator)
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
@@ -47,6 +57,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _repositorioCuenta = repositorioCuenta;
             _httpContext = httpContext;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
+            _apiKeyGenerator = apiKeyGenerator;
         }
 
         public async Task<AfectacionAUnCorresponsalMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
@@ -150,7 +161,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 SecuencialTipoIdentificacionCliente = request.TipoIdentificacionCliente,
                 IdentificacionCliente = request.IdentificacionCliente
         };
-            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo);
+            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo, customHeaders);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
