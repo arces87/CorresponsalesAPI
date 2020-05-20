@@ -2,6 +2,7 @@
 using MediatR;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,14 +29,22 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         notification.PlantillaCorreoElectronico = notification.PlantillaCorreoElectronico.Replace(key, notification.ValoresEmail[key]);
                 }
 
-                await _mediador.Publish(new EnviarCorreoElectronicoME
+                try
                 {
-                    Asunto = notification.AsuntoCorreoElectronico,
-                    Mensaje = notification.PlantillaCorreoElectronico,
-                    DireccionesDestino = new List<ModeloCuentaCorreo> { new ModeloCuentaCorreo {
+                    await _mediador.Publish(new EnviarCorreoElectronicoME
+                    {
+                        Asunto = notification.AsuntoCorreoElectronico,
+                        Mensaje = notification.PlantillaCorreoElectronico,
+                        DireccionesDestino = new List<ModeloCuentaCorreo> { new ModeloCuentaCorreo {
                         Direccion = notification.CorreoElectronicoDestinatario,
                         Nombre = notification.NombreDestinatario} }
-                });
+                    });
+                }
+                catch (Exception)
+                {
+                    throw new Exception($"Error en el envio del correo electrónico al notificar la operación");
+                }
+              
 
             }
 
@@ -55,7 +64,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                     SecuencialTipoIdentificacion = notification.TipoIdentificacionCorresponsal
                 };
 
-                await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
+                try
+                {
+                    await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
+                } catch(Exception) {
+                    throw new Exception($"Error en el envio de sms al notificar la operación");
+                }
+                
             }
         }
     }
