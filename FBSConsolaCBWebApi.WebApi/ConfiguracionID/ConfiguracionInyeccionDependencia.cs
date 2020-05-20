@@ -1,6 +1,7 @@
 ﻿using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
+using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.DAL;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;

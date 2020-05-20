@@ -32,32 +32,41 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             var valores = new Dictionary<string, string>();
             var comision = jsonNegocio.Deposito.Comisiones.AdministracionCanal + jsonNegocio.Deposito.Comisiones.Agente + jsonNegocio.Deposito.Comisiones.Cooperativa;
-            var detalle = $"<ul><li>Operación: Depósito</li><li>Tipo de Cuenta: {request.NumeroCuentaCliente}</li><li>No Cuenta: {request.TipoCuentaCliente}</li><li>Valor: {request.Valor}</li><li>Comisión: {comision}</li><li>Total: {request.Valor}</li><li>Descripción:</li></ul>"  ;
-            valores.Add("[:detalle:]", detalle);
 
-            if(jsonNegocio.Deposito.NotificarCorreoElectronico && string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaCorreoElectronico))
+            var detalle = "";
+
+            if (jsonNegocio.Deposito.NotificarCorreoElectronico)
             {
-                var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index.html");
+                if(string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaCorreoElectronico)) {
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index.html");
 
-                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-                {
-                    jsonNegocio.Deposito.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        jsonNegocio.Deposito.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                    }
                 }
-            }
 
-            if (jsonNegocio.Deposito.NotificarSMS && string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaSMS))
-            {
-                var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
-
-                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-                {
-                    jsonNegocio.Deposito.PlantillaSMS = SourceReader.ReadToEnd();
-                }
+                detalle = $"<ul><li>Operación: Depósito</li><li>Tipo de Cuenta: {request.NumeroCuentaCliente}</li><li>No Cuenta: {request.TipoCuentaCliente}</li><li>Valor: {request.Valor}</li><li>Comisión: {comision}</li><li>Total: {request.Valor}</li><li>Descripción:</li></ul>";
+                valores.Add("[:detalle:]", detalle);
             }
 
             var valoresSMS = new Dictionary<string, string>();
-            detalle = $"Operación: Depósito\nNo Cuenta: {request.TipoCuentaCliente}\nTotal: {request.Valor}";
-            valoresSMS.Add("[:detalle:]", detalle);
+
+            if (jsonNegocio.Deposito.NotificarSMS)
+            {
+                if(string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaSMS)){
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
+
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        jsonNegocio.Deposito.PlantillaSMS = SourceReader.ReadToEnd();
+                    }
+                    
+                }
+                detalle = $"Operación: Depósito\nNo Cuenta: {request.TipoCuentaCliente}\nTotal: {request.Valor}";
+                valoresSMS.Add("[:detalle:]", detalle);
+            }
+        
 
             await _mediador.Publish(new NotificacionME
             {

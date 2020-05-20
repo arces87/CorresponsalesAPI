@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
+using FBS.Infraestructura.Interfaces;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {

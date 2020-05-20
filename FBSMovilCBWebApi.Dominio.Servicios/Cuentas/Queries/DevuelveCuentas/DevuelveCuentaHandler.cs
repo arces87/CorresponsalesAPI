@@ -6,6 +6,7 @@ using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
+using FBS.Infraestructura.Interfaces;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {

@@ -12,6 +12,7 @@ using ServiciosFinancial.Models;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FBS.Infraestructura.Interfaces;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {

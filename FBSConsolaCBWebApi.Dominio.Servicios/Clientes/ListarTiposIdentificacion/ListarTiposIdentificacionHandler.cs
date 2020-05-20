@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using MediatR;
 using ServiciosFinancial;
@@ -24,7 +25,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Clientes.Queries
         public async Task<TiposIdentificacionMSL> Handle(ListarTiposIdentificacionME request, CancellationToken cancellationToken)
         {
            
-            var apyKey = _apiKeyGenerator.generateApiKey("0000000000000000");
+            var apyKey = _apiKeyGenerator.generateApiKey("000000000000000");
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
             var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
             return respuesta.Body;

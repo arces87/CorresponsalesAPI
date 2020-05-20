@@ -4,6 +4,7 @@ using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
+using FBS.Infraestructura.Interfaces;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
@@ -19,16 +20,16 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
 
         public async Task<ConsolidadoCuentasMSL> Handle(ListaCuentaME request, CancellationToken cancellationToken)
         {
-            //var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
-            var apiKey = _apiKeyGenerator.generateApiKey("00000000-0000000000");
-            var customHeader = _apiKeyGenerator.generateCustomHeaders(apiKey);
+           
+            var apyKey = _apiKeyGenerator.generateApiKey("000000000000000");
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
 
             var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasIdentificacionWithHttpMessagesAsync(new PorIdentificacionClienteDeUnaEmpresa()
             {
                 Identificacion = request.Identificacion,
                 SecuencialTipoIdentificacion = request.TipoIdentificacion,
                 SecuencialEmpresa = 1
-            }, customHeader);
+            }, customHeaders);
             return respuesta.Body;
         }
     }
