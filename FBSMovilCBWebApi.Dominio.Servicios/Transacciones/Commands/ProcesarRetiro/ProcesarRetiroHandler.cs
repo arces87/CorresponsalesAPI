@@ -151,7 +151,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 TipoTransaccion = "NDCliente",
                 //CodigoUsuario = agente.Usuario.UserName,
-                CodigoUsuario = "ADMIN",
+                //CodigoUsuario = "ADMIN",
+                CodigoUsuario = agente.Usuario.UserName,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,

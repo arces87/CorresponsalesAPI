@@ -152,8 +152,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var modelo = new ServiciosFinancial.Models.AfectacionAUnCorresponsalME()
             {
                 TipoTransaccion = "NCCliente",
-                //CodigoUsuario = agente.Usuario.UserName,
-                CodigoUsuario = "ADMIN",
+                CodigoUsuario = agente.Usuario.UserName,
+                //CodigoUsuario = "ADMIN",
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,
