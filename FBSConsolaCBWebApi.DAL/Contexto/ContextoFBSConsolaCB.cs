@@ -1,19 +1,14 @@
 ﻿using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.DataEncryption;
-using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
-using System.Text;
 
 namespace FBSConsolaCBWebApi.DAL
 {
     public class ContextoFBSConsolaCB : ContextoFBSIdentidad
     {
-        
-        public ContextoFBSConsolaCB(DbContextOptions<ContextoFBSConsolaCB> options, IEncryptionProvider provider) : base(options, provider)
+        public ContextoFBSConsolaCB(DbContextOptions<ContextoFBSConsolaCB> options) : base(options)
         {
 
-            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -10,8 +10,6 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
-using Microsoft.EntityFrameworkCore.DataEncryption;
-using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -19,7 +17,6 @@ using ServiciosFinancial;
 using System;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 
 namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 {
@@ -51,26 +48,21 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
 
             services.AddSingleton<IApiKeyGenerator>(new ApiKeyGenerator("b9be8fe4-d8a5-4fb8-a591-2ed86af6ffde"));
-
-            string _encryptionKey = "b9be8fe4-d8a5-4fb8-a591-2ed86af6ffde";
-            string _encryptionIV = "b9be8fe4-d8a5-4fb8-a591-2ed86af6ffde";
-        services.AddSingleton<IEncryptionProvider>(new AesProvider(Encoding.UTF8.GetBytes(_encryptionKey), Encoding.UTF8.GetBytes(_encryptionIV)));
-
         }
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuracion)
         {
-            //var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
-            //var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
-            //var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
-            //services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
-            //var httpClient = new HttpClient
-            //{
-            //    BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
-            //};
-            //services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+            var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
+            var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
+            var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
+            services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor)
+            };
+            services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
 
-            //services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);         
+            services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);         
 
         }
     }
