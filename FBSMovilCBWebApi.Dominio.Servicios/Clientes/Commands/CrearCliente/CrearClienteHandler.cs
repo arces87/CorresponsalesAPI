@@ -66,8 +66,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
             });
 
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(_mapper.Map<CreaClienteME>(request), customHeaders);
             await _mediador.Send(new CrearLogME()

@@ -21,8 +21,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
         public async Task<ConsolidadoCuentasMSL> Handle(ListaCuentaME request, CancellationToken cancellationToken)
         {
            
-            var apyKey = _apiKeyGenerator.generateApiKey("000000000000000");
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasIdentificacionWithHttpMessagesAsync(new PorIdentificacionClienteDeUnaEmpresa()
             {

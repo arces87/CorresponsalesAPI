@@ -25,8 +25,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Clientes.Queries
         public async Task<TiposIdentificacionMSL> Handle(ListarTiposIdentificacionME request, CancellationToken cancellationToken)
         {
            
-            var apyKey = _apiKeyGenerator.generateApiKey("000000000000000");
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
             return respuesta.Body;
         }

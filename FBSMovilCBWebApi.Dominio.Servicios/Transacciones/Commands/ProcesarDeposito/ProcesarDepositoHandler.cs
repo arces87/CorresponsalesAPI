@@ -162,8 +162,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 SecuencialTipoIdentificacionCliente = request.TipoIdentificacionCliente,
                 IdentificacionCliente = request.IdentificacionCliente
         };
-            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo, customHeaders);
             await _mediador.Send(new CrearLogME()
             {

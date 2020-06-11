@@ -69,8 +69,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var apyKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apyKey);
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             var respuesta = await _financialApi.Cuentas.CreaCuentaWithHttpMessagesAsync(_mapper.Map<CreaCuentaME>(request), customHeaders);
             await _mediador.Send(new CrearLogME()
             {
