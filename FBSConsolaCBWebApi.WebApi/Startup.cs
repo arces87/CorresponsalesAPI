@@ -24,9 +24,6 @@ using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBS.Dominio.Servicios.GestionFicheros;
 using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
-using HealthChecks.UI.Client;
-using HealthChecks.UI.Configuration;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
@@ -116,11 +113,7 @@ namespace FBSConsolaCBWebApi.WebApi
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddHealthChecks().AddSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
-            services.AddHealthChecksUI(setupSettings: setup =>
-            {
-                setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:5000/hc");
-            });
+
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
@@ -174,15 +167,6 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
 
             app.UseAuthentication();
-            app.UseHealthChecks("/hc", new HealthCheckOptions
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecksUI(delegate (Options options)
-            {
-                options.UIPath = "/hc-ui";
-            });
 
             
             app.UseMvc();
