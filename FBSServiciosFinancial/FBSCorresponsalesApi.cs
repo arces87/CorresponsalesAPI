@@ -154,7 +154,7 @@ namespace ServiciosFinancial
             Cuentas = new Cuentas(this);
             MensajeriaSMS = new MensajeriaSMS(this);
             PagoServiciosPagoAgil = new PagoServiciosPagoAgil(this);
-            BaseUri = new System.Uri("http://186.5.29.68:9084");
+            BaseUri = HttpClient.BaseAddress;
             SerializationSettings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
