@@ -145,14 +145,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
             var arregloComisiones = new List<ComisionFinancial>();
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Administración Canal", Valor = comision.AdministracionCanal });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", Valor = comision.AdministracionCanal });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Pago Agil", Valor = request.Comision });
             var modelo = new AfectacionME()
             {
-                //CodigoUsuario = _httpContext.HttpContext.User.Identity.Name,
-                //CodigoUsuario = "ADMIN",
                 CodigoUsuario = agente.Usuario.UserName,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
@@ -161,6 +159,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 Campos =  request.Campos,
                 CorreoCliente =  request.CorreoCliente
             };
+
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(modelo),
+                IdTipoAccion = IdTipoAccion,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
+            });
 
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeader = _apiKeyGenerator.generateCustomHeaders(apiKey);

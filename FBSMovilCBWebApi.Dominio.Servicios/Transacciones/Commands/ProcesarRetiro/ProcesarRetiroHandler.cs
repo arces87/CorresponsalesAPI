@@ -136,22 +136,24 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
+           
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
+
             var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).Retiro.Comisiones;
             var arregloComisiones = new List<ComisionFinancial>();
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Administración Canal", Valor = comision.AdministracionCanal });
+
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", Valor = comision.AdministracionCanal });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
+
             var modelo = new AfectacionAUnCorresponsalME()
             {
                 TipoTransaccion = "NDCliente",
-                //CodigoUsuario = agente.Usuario.UserName,
-                //CodigoUsuario = "ADMIN",
                 CodigoUsuario = agente.Usuario.UserName,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
@@ -161,6 +163,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 SecuencialTipoIdentificacionCliente = request.TipoIdentificacionCliente,
                 IdentificacionCliente = request.IdentificacionCliente
             };
+
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(modelo),
+                IdTipoAccion = IdTipoAccion,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
+            });
 
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
