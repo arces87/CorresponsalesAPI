@@ -8,3 +8,4 @@ bin/
 *.png
 PublishProfiles/
 /FBS_SST.WebApi/Properties/launchSettings.json
+.idea
