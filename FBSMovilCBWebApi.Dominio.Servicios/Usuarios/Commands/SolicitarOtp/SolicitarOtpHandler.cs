@@ -6,12 +6,14 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using OtpNet;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,10 +29,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IFBSCorresponsalesApi _servicioFinancial;
         private readonly byte[] _llave;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public SolicitarOtpHandler(IMediator mediador, IRepositorioAgente repositorioAgente,
-            IFBSCorresponsalesApi servicioFinancial, IRepositorioUsuario repositorioUsuario,
-            IJsonConfiguracion jsonConfiguracion)
+        public SolicitarOtpHandler(IMediator mediador, 
+            IRepositorioAgente repositorioAgente,
+            IFBSCorresponsalesApi servicioFinancial, 
+            IRepositorioUsuario repositorioUsuario,
+            IJsonConfiguracion jsonConfiguracion,
+            IHttpContextAccessor httpContext)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -38,10 +44,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             _repositorioUsuario = repositorioUsuario;
             _jsonConfiguracion = jsonConfiguracion;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
+            _httpContext = httpContext;
         }
 
         public async Task<bool> Handle(SolicitarOtpME request, CancellationToken cancellationToken)
         {
+            var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -63,9 +72,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             var totp = new Totp(secretKey, tiempoVida);
             var cuentaDestino = "";
             var nombreDestino = "";
+
+            var fechaActual = DateTime.Now.ToString("DD/MM/yyyy/ H:mm");
+
             if (request.ParaAgente)
             {
-                var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 cuentaDestino = agente.Usuario.Email;
                 nombreDestino = agente.NombreAgente;
             }
@@ -81,10 +92,24 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             if (cuentaDestino != "" && nombreDestino != "")
                 try
                 {
+
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_otp.html");
+                    var emailTemplate = "";
+
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        emailTemplate = SourceReader.ReadToEnd();
+                    }
+
+                    emailTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino);
+                    emailTemplate.Replace("[:OTP:]", totp.ComputeTotp());
+                    emailTemplate.Replace("[:TIEMPO_VIDA:]", totp.ComputeTotp());
+                    emailTemplate.Replace("[:FECHAACTUAL:]", fechaActual);
+
                     await _mediador.Publish(new EnviarCorreoElectronicoME
                     {
                         Asunto = "OTP Corresponsales Solidarios",
-                        Mensaje = "Su OTP para realizar la Operación es: " + totp.ComputeTotp(),
+                        Mensaje = emailTemplate,
                         DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
                             Direccion = cuentaDestino,
@@ -92,6 +117,28 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         }
                     }
                     });
+
+                    pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_otp.txt");
+                    var smsTemplate = "";
+
+                    smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino);
+                    smsTemplate.Replace("[:OTP:]", totp.ComputeTotp());
+                    smsTemplate.Replace("[:TIEMPO_VIDA:]", totp.ComputeTotp());
+                    smsTemplate.Replace("[:FECHAACTUAL:]", fechaActual);
+
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        smsTemplate = SourceReader.ReadToEnd();
+                    }
+
+                    var mensajeSMS = new EnvioSMSME()
+                    {
+                        CodigoUsuarioCorresponsal = agente.Usuario.UserName,
+                        MensajeTexto = smsTemplate,
+                        NumeroIdentificacion = agente.Identificacion,
+                        SecuencialTipoIdentificacion = agente.TipoIdentificacion
+                    };
+
                     await _repositorioUsuario.EliminarOtp(request.Identificacion);
                     await _mediador.Send(new CrearLogME()
                     {
