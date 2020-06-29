@@ -67,7 +67,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
-
                 valores.Add("[:[:VALOROPERACION:]:]", request.Valor.ToString());
                 valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
                 valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
@@ -79,7 +78,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 PlantillaSMS = jsonNegocio.Retiro.NotificarSMS ? jsonNegocio.Retiro.PlantillaSMS : null,
                 CorreoElectronicoDestinatario = agente.Usuario.Email,
                 NombreDestinatario = agente.NombreAgente,
-                AsuntoCorreoElectronico = "",
+                AsuntoCorreoElectronico = "Operación Retiro realizada con éxito",
                 NumeroCliente = 1,
                 SecuencialEmpresa = 1,
                 ValoresEmail = valores,

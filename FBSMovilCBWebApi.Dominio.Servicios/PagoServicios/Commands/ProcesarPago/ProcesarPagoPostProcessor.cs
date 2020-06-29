@@ -6,6 +6,7 @@ using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiciosFinancial.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -26,37 +27,62 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands.ProcesarPago
         }
         public async Task Process(ProcesarPagoME request, AfectacionMS response, CancellationToken cancellationToken)
         {
-            //var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
-            //var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-            //jsonNegocio.CobroServicios.NotificarCorreoElectronico = false;
+            var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+            var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+            var valores = new Dictionary<string, string>();
+
+            var fechaActual = DateTime.Now.ToString("DD/MM/yyyy/ H:mm");
+
+            if (jsonNegocio.Deposito.NotificarCorreoElectronico)
+            {
+                if (string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaCorreoElectronico))
+                {
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_pago_servicios.html");
+
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        jsonNegocio.Deposito.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                    }
+                }
+
+                valores.Add("[:[:NOMBRECLIENTE:]:]", request.NombreCliente);
+                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
+                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
+            }
+
+            var valoresSMS = new Dictionary<string, string>();
+
+            if (jsonNegocio.Deposito.NotificarSMS)
+            {
+                if (string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaSMS))
+                {
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_pago_servicios.txt");
+
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        jsonNegocio.Deposito.PlantillaSMS = SourceReader.ReadToEnd();
+                    }
+
+                }
+
+                valores.Add("[:[:VALOROPERACION:]:]", request.Valor.ToString());
+                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
+                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
+            }
 
 
-            //if (jsonNegocio.CobroServicios.NotificarSMS && string.IsNullOrEmpty(jsonNegocio.CobroServicios.PlantillaSMS))
-            //{
-            //    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
-
-            //    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-            //    {
-            //        jsonNegocio.CobroServicios.PlantillaSMS = SourceReader.ReadToEnd();
-            //    }
-            //}
-
-            //var valoresSMS = new Dictionary<string, string>();
-            //var detalle = $"Operación: Abono de Préstamos\nNo de Producto: {request.SecuencialServicio}\nTotal: {request.Valor}";
-            //valoresSMS.Add("[:detalle:]", detalle);
-
-            //await _mediador.Publish(new NotificacionME
-            //{
-            //    PlantillaCorreoElectronico = null,
-            //    PlantillaSMS = jsonNegocio.CobroServicios.NotificarSMS ? jsonNegocio.CobroServicios.PlantillaSMS : null,
-            //    CorreoElectronicoDestinatario = agente.Usuario.Email,
-            //    NombreDestinatario = agente.NombreAgente,
-            //    AsuntoCorreoElectronico = "",
-            //    NumeroCliente = 1,
-            //    SecuencialEmpresa = 1,
-            //    ValoresEmail = null,
-            //    ValoresSms = valoresSMS
-            //});
+            await _mediador.Publish(new NotificacionME
+            {
+                PlantillaCorreoElectronico = jsonNegocio.Deposito.NotificarCorreoElectronico ? jsonNegocio.Deposito.PlantillaCorreoElectronico : null,
+                PlantillaSMS = jsonNegocio.Deposito.NotificarSMS ? jsonNegocio.Deposito.PlantillaSMS : null,
+                CorreoElectronicoDestinatario = agente.Usuario.Email,
+                NombreDestinatario = agente.NombreAgente,
+                AsuntoCorreoElectronico = "Operación Pago de Servicios realizada con éxito",
+                NumeroCliente = 1,
+                SecuencialEmpresa = 1,
+                ValoresEmail = valores,
+                ValoresSms = valoresSMS
+            });
         }
     }
 }
