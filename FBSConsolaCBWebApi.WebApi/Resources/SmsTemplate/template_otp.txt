@@ -1,2 +1,1 @@
-﻿Estimado cliente, usted ha efectuado con éxito una operación.
-[:detalle:]
+﻿Estimado (a) “[:NOMBRECORRESPONSAL:]”. Su clave temporal es: “[:OTP:]”. Duración: [:TIEMPO_VIDA:] - [:FECHAACTUAL:].

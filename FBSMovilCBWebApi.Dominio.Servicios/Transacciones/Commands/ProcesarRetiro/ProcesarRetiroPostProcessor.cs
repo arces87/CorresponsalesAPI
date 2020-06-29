@@ -6,6 +6,7 @@ using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiciosFinancial.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -32,22 +33,24 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var valores = new Dictionary<string, string>();
             var comision = jsonNegocio.Retiro.Comisiones.AdministracionCanal + jsonNegocio.Retiro.Comisiones.Agente + jsonNegocio.Retiro.Comisiones.Cooperativa;
-            var detalle = "";
+
+            var fechaActual = DateTime.Now.ToString("DD/MM/yyyy/ H:mm");
 
             if (jsonNegocio.Retiro.NotificarCorreoElectronico)
             {
                 if(string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaCorreoElectronico))
                 {
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index.html");
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_retiro.html");
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
                         jsonNegocio.Retiro.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
                     }
-                }                
+                }
 
-                detalle = $"<ul><li>Operación: Retiro</li><li>Tipo de Cuenta: {request.NumeroCuentaCliente}</li><li>No Cuenta: {request.TipoCuentaCliente}</li><li>Valor: {request.Valor}</li><li>Comisión: {comision}</li><li>Total: {request.Valor}</li><li>Descripción:</li></ul>";
-                valores.Add("[:detalle:]", detalle);
+                valores.Add("[:[:NOMBRECLIENTE:]:]", request.NombreCliente);
+                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
+                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
             }
 
             var valoresSMS = new Dictionary<string, string>();
@@ -56,16 +59,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 if(string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaSMS))
                 {
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_retiro.txt");
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
                         jsonNegocio.Retiro.PlantillaSMS = SourceReader.ReadToEnd();
                     }
-                }              
+                }
 
-                detalle = $"Operación: Retiro\nNo Cuenta: {request.TipoCuentaCliente}\nTotal: {request.Valor}";
-                valoresSMS.Add("[:detalle:]", detalle);
+
+                valores.Add("[:[:VALOROPERACION:]:]", request.Valor.ToString());
+                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
+                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
             }
                       
             await _mediador.Publish(new NotificacionME

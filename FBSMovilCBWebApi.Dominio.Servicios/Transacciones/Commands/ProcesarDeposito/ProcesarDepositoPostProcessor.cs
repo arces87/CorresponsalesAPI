@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using MimeKit;
 using Newtonsoft.Json;
 using ServiciosFinancial.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -33,12 +34,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var valores = new Dictionary<string, string>();
             var comision = jsonNegocio.Deposito.Comisiones.AdministracionCanal + jsonNegocio.Deposito.Comisiones.Agente + jsonNegocio.Deposito.Comisiones.Cooperativa;
 
-            var detalle = "";
+            var fechaActual = DateTime.Now.ToString("DD/MM/yyyy/ H:mm");
 
             if (jsonNegocio.Deposito.NotificarCorreoElectronico)
             {
                 if(string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaCorreoElectronico)) {
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index.html");
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_deposito.html");
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
@@ -46,8 +47,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
-                detalle = $"<ul><li>Operación: Depósito</li><li>Tipo de Cuenta: {request.NumeroCuentaCliente}</li><li>No Cuenta: {request.TipoCuentaCliente}</li><li>Valor: {request.Valor}</li><li>Comisión: {comision}</li><li>Total: {request.Valor}</li><li>Descripción:</li></ul>";
-                valores.Add("[:detalle:]", detalle);
+                valores.Add("[:[:NOMBRECLIENTE:]:]", request.NombreCliente);
+                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
+                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
             }
 
             var valoresSMS = new Dictionary<string, string>();
@@ -55,7 +57,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             if (jsonNegocio.Deposito.NotificarSMS)
             {
                 if(string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaSMS)){
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template.txt");
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_deposito.txt");
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
@@ -63,8 +65,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                     
                 }
-                detalle = $"Operación: Depósito\nNo Cuenta: {request.TipoCuentaCliente}\nTotal: {request.Valor}";
-                valoresSMS.Add("[:detalle:]", detalle);
+
+                valores.Add("[:[:VALOROPERACION:]:]", request.Valor.ToString());
+                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
+                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
             }
         
 
