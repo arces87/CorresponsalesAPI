@@ -69,11 +69,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
             var secretKey = Criptografia.EncryptStringToBytes_Aes(request.Identificacion, _llave, _llave);
             var tiempoVida = _jsonConfiguracion.TiempoVidaOtp;
+            var tiempoVidaMinutos = tiempoVida / 60;
             var totp = new Totp(secretKey, tiempoVida);
             var cuentaDestino = "";
             var nombreDestino = "";
 
-            var fechaActual = DateTime.Now.ToString("DD/MM/yyyy/ H:mm");
+            var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
 
             if (request.ParaAgente)
             {
@@ -93,18 +94,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 try
                 {
 
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_otp.html");
-                    var emailTemplate = "";
+                    var emailTemplate = File.ReadAllText("Resources/EmailTemplate/index _otp.html");
 
-                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-                    {
-                        emailTemplate = SourceReader.ReadToEnd();
-                    }
-
-                    emailTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino);
-                    emailTemplate.Replace("[:OTP:]", totp.ComputeTotp());
-                    emailTemplate.Replace("[:TIEMPO_VIDA:]", totp.ComputeTotp());
-                    emailTemplate.Replace("[:FECHAACTUAL:]", fechaActual);
+                    emailTemplate = emailTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
+                                .Replace("[:OTP:]", totp.ComputeTotp())
+                                .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} minutos")
+                                .Replace("[:FECHAACTUAL:]", fechaActual);
 
                     await _mediador.Publish(new EnviarCorreoElectronicoME
                     {
@@ -118,13 +113,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     }
                     });
 
-                    pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_otp.txt");
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_otp.txt");
                     var smsTemplate = "";
 
-                    smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino);
-                    smsTemplate.Replace("[:OTP:]", totp.ComputeTotp());
-                    smsTemplate.Replace("[:TIEMPO_VIDA:]", totp.ComputeTotp());
-                    smsTemplate.Replace("[:FECHAACTUAL:]", fechaActual);
+                    smsTemplate = smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
+                        .Replace("[:OTP:]", totp.ComputeTotp())
+                        .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} m")
+                        .Replace("[:FECHAACTUAL:]", fechaActual);
+
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {

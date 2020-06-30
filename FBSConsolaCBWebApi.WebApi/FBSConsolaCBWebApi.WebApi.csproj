@@ -6,6 +6,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\EmailTemplate\index _otp.html" />
+    <None Remove="Resources\EmailTemplate\index _retiro.html" />
+    <None Remove="Resources\EmailTemplate\index_deposito.html" />
+    <None Remove="Resources\EmailTemplate\index_pago_serivicios.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\EmailTemplate\index _otp.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\EmailTemplate\index _retiro.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\EmailTemplate\index_deposito.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\EmailTemplate\index_pago_serivicios.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
