@@ -43,9 +43,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                 catch (Exception)
                 {
                     throw new Exception($"Error en el envio del correo electrónico al notificar la operación");
-                }
-              
-
+                }              
             }
 
             if (notification.PlantillaSMS != null)

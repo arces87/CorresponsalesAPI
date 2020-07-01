@@ -2,6 +2,7 @@
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
+using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
@@ -30,13 +31,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IFBSCorresponsalesApi _servicioFinancial;
         private readonly byte[] _llave;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
 
-        public SolicitarOtpHandler(IMediator mediador, 
+        public SolicitarOtpHandler(IMediator mediador,
             IRepositorioAgente repositorioAgente,
-            IFBSCorresponsalesApi servicioFinancial, 
+            IFBSCorresponsalesApi servicioFinancial,
             IRepositorioUsuario repositorioUsuario,
             IJsonConfiguracion jsonConfiguracion,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IApiKeyGenerator apiKeyGenerator)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -45,6 +48,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             _jsonConfiguracion = jsonConfiguracion;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
             _httpContext = httpContext;
+            _apiKeyGenerator = apiKeyGenerator;
         }
 
         public async Task<bool> Handle(SolicitarOtpME request, CancellationToken cancellationToken)
@@ -90,7 +94,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 cuentaDestino = cliente.Body.CorreoElectronico;
                 nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
             }
+
             if (cuentaDestino != "" && nombreDestino != "")
+            {
                 try
                 {
 
@@ -112,20 +118,27 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         }
                     }
                     });
+                }
+                catch (Exception e)
+                {
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(e.Message),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
+                    throw new Exception("No se ha podido enviar el Correo Electrónico.");
+                }
 
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_otp.txt");
-                    var smsTemplate = "";
+                try
+                {
+
+                    var smsTemplate = File.ReadAllText("Resources/SmsTemplate/template_otp.txt");
 
                     smsTemplate = smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
                         .Replace("[:OTP:]", totp.ComputeTotp())
                         .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} m")
                         .Replace("[:FECHAACTUAL:]", fechaActual);
-
-
-                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-                    {
-                        smsTemplate = SourceReader.ReadToEnd();
-                    }
 
                     var mensajeSMS = new EnvioSMSME()
                     {
@@ -135,26 +148,48 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         SecuencialTipoIdentificacion = agente.TipoIdentificacion
                     };
 
-                    await _repositorioUsuario.EliminarOtp(request.Identificacion);
                     await _mediador.Send(new CrearLogME()
                     {
-                        JsonLog = JsonConvert.SerializeObject(request),
+                        JsonLog = JsonConvert.SerializeObject(mensajeSMS),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
+
+                    var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+                    var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+
+                    var respuesta = await _servicioFinancial.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, customHeaders);
+
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(respuesta),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
+
                 }
                 catch (Exception e)
                 {
                     await _mediador.Send(new CrearLogME()
                     {
-                        JsonLog = JsonConvert.SerializeObject("No se ha podido enviar el correo electrónico"),
+                        JsonLog = JsonConvert.SerializeObject(e.Message),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
-                    throw new Exception("No se ha podido enviar el Correo Electrónico");
 
+                    return true;
+                    //throw new Exception("No se ha podido enviar el sms.");                 
                 }
 
+                await _repositorioUsuario.EliminarOtp(request.Identificacion);
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(request),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+            }
+                         
             return true;
         }
     }
