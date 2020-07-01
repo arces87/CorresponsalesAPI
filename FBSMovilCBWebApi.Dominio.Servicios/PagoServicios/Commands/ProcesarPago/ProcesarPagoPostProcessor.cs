@@ -31,7 +31,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands.ProcesarPago
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             var valores = new Dictionary<string, string>();
 
-            var fechaActual = DateTime.Now.ToString("DD/MM/yyyy/ H:mm");
+            var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
 
             if (jsonNegocio.Deposito.NotificarCorreoElectronico)
             {
@@ -45,9 +45,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands.ProcesarPago
                     }
                 }
 
-                valores.Add("[:[:NOMBRECLIENTE:]:]", request.NombreCliente);
-                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
-                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
+                valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
+                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valores.Add("[:FECHAACTUAL:]", fechaActual);
             }
 
             var valoresSMS = new Dictionary<string, string>();
@@ -65,9 +65,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands.ProcesarPago
 
                 }
 
-                valores.Add("[:[:VALOROPERACION:]:]", request.Valor.ToString());
-                valores.Add("[:[:NOMBRECORRESPONSAL:]:]", agente.NombreAgente);
-                valores.Add("[:[:FECHAACTUAL:]:]", fechaActual);
+                valores.Add("[:VALOROPERACION:]", request.Valor.ToString());
+                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valores.Add("[:FECHAACTUAL:]", fechaActual);
             }
 
 

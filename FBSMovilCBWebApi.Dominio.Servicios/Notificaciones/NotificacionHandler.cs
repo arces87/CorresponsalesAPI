@@ -4,6 +4,7 @@ using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +24,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
         {
             if (notification.PlantillaCorreoElectronico != null)
             {
+                
+                notification.PlantillaCorreoElectronico = Regex.Replace(notification.PlantillaCorreoElectronico, @"\t|\n|\r", "");
+                notification.PlantillaCorreoElectronico = notification.PlantillaCorreoElectronico.Replace("\"", "'");
                 foreach (var key in notification.ValoresEmail.Keys)
                 {
                     if (notification.PlantillaCorreoElectronico != null)
