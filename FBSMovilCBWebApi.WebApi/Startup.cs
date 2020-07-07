@@ -20,6 +20,8 @@ using FFBSMovilCBWebApi.WebApi.AutofacConfiguration;
 using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSMovilCBWebApi.WebApi.ManejadorExcepciones;
 using FBS.Dominio.Servicios.GestionFicheros;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -40,6 +42,14 @@ namespace FBSMovilCBWebApi.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddResponseCompression();
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
+
             services.AddHttpClient();
             services.AddDbContext<ContextoFBSConsolaCB>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("FBSMovilCBWebApi.WebApi")));
 
@@ -119,6 +129,8 @@ namespace FBSMovilCBWebApi.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+            app.UseResponseCompression();
             #region Swagger Configuration
             app.UseSwagger();
 
