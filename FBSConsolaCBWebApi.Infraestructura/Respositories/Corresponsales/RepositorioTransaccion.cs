@@ -213,6 +213,43 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             }
         }
 
+        public async Task<int> TransaccionesRepuestas(string IdAgente)
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
+                var resultado = await conexion.QueryAsync<int>(@"SELECT Count(transaccion.Id) FROM Corresponsales.Transaccion transaccion " +
+                  "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
+                  "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                  "where transaccion.EstaActivo='true' and agente.Id = @IdAgente " +
+                  "and transaccion.ReposicionRealizada = 'true' and transaccion.EstadoId = @estadoTransaccion", param: new { IdAgente, estadoTransaccion });
+
+                var cantidadTransacciones = resultado.Single();
+
+                return cantidadTransacciones;
+            }
+        }
+
+
+        public async Task<int> TransaccionesProcesadas(string IdAgente)
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var estadoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor;
+                var resultado = await conexion.QueryAsync<int>(@"SELECT Count(transaccion.Id) FROM Corresponsales.Transaccion transaccion " +
+                  "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
+                  "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
+                  "where transaccion.EstaActivo='true' and agente.Id = @IdAgente " +
+                  "and transaccion.EstadoId = @estadoTransaccion", param: new { IdAgente, estadoTransaccion });
+
+                var cantidadTransacciones = resultado.Single();
+
+                return cantidadTransacciones;
+            }
+        }
+
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
         public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));

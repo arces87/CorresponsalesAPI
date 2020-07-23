@@ -86,8 +86,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
             var transacciones = await _repositorioTransaccion.GetForTipo(agente.Id.ToString(), IdTipoAccion);
             transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+
+            var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
+            var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
+
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-            saldoCuenta = saldoCuenta == 0 && transacciones.Count() == 0 ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+
+            saldoCuenta = saldoCuenta == 0 && (transacciones.Count() == 0 || transaccionesRepuestas == transaccionesProcesadas) ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
             
             ValidarTransaccion(request, cuenta, saldoActual, saldoCuenta, transacciones, jsonNegocio);
 
@@ -191,7 +196,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 throw new Exception("No puede realizar esta operación porque excede el Saldo Máximo en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + request.Valor)) + " del establecido para mantener en caja");
             }
-            if (cuenta != null && saldoCuenta - request.Valor < 0)
+            if (cuenta != null && saldoCuenta - request.Valor <= 0)
             {
                 throw new Exception("No puede realizar esta operación porque no posee saldo en la cuenta");
             }

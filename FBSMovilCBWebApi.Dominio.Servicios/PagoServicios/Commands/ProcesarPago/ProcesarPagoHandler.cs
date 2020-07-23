@@ -83,8 +83,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
             var transacciones = await _repositorioTransaccion.GetForTipo(agente.Id.ToString(), IdTipoAccion);
             transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+
+            var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
+            var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
+
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-            saldoCuenta = saldoCuenta == 0 && transacciones.Count() == 0 ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+            
+            saldoCuenta = saldoCuenta == 0 && (transacciones.Count() == 0 || transaccionesRepuestas == transaccionesProcesadas) ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+
             if (!jsonNegocio.CobroServicios.Activo.Value)
             {
                 throw new Exception("Usted no tiene acceso para realizar este tipo de operación");
