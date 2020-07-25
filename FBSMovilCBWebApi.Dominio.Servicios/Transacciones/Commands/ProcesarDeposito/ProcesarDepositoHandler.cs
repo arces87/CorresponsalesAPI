@@ -89,10 +89,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
             var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
+            
 
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
-            saldoCuenta = saldoCuenta == 0 && (transacciones.Count() == 0 || transaccionesRepuestas == transaccionesProcesadas) ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+            var enReposicion = transaccionesRepuestas == transaccionesProcesadas;
+            saldoCuenta = (saldoCuenta == 0 && transacciones.Count() == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
             
             ValidarTransaccion(request, cuenta, saldoActual, saldoCuenta, transacciones, jsonNegocio);
 

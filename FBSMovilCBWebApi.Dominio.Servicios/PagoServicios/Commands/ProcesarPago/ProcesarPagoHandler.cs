@@ -88,8 +88,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
 
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-            
-            saldoCuenta = saldoCuenta == 0 && (transacciones.Count() == 0 || transaccionesRepuestas == transaccionesProcesadas) ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+
+            var enReposicion = transaccionesRepuestas == transaccionesProcesadas;
+
+            saldoCuenta = (saldoCuenta == 0 && transacciones.Count() == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
 
             if (!jsonNegocio.CobroServicios.Activo.Value)
             {

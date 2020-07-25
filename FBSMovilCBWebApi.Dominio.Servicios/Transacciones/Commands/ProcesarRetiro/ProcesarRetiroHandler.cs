@@ -94,8 +94,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-            
-            saldoCuenta = saldoCuenta == 0 && (transacciones.Count() == 0 || transaccionesRepuestas == transaccionesProcesadas) ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
+
+            var enReposicion = transaccionesRepuestas == transaccionesProcesadas;
+            saldoCuenta = (saldoCuenta == 0 && transacciones.Count() == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
 
             if (!jsonNegocio.Retiro.Activo.Value)
             {
