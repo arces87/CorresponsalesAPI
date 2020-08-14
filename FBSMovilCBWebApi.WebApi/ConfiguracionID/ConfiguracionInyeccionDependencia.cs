@@ -37,6 +37,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IRepositorioAgente, RepositorioAgente>();
             services.AddScoped<IRepositorioTransaccion, RepositorioTransaccion>();
             services.AddScoped<IRepositorioCuenta, RepositorioCuenta>();
+            services.AddScoped<IRepositorioCanal, RepositorioCanal>();
 
             services.AddScoped<ContextoFBSIdentidad, ContextoFBSConsolaCB>();
 

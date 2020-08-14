@@ -55,7 +55,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 Imei = request.Imei,
                 Mac = request.Mac,
                 Longitud = request.Longitud,
-                Latitud = request.Latitud
+                Latitud = request.Latitud,
+                VerificarGeolocalizacion = false
             });
 
             await _mediador.Send(new CrearLogME()

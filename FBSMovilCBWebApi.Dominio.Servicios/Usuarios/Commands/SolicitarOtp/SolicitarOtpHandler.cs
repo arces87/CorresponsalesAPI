@@ -68,7 +68,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 Mac = request.Mac,
                 Latitud = request.Latitud,
                 Longitud = request.Longitud,
-                Usuario = request.Usuario
+                Usuario = request.Usuario,
+                VerificarGeolocalizacion = false
             });
 
             var secretKey = Criptografia.EncryptStringToBytes_Aes(request.Identificacion, _llave, _llave);

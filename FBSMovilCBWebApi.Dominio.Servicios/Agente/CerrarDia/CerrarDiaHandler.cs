@@ -48,7 +48,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
                     Imei = request.Imei,
                     Mac = request.Mac,
                     Longitud = request.Longitud,
-                    Latitud = request.Latitud
+                    Latitud = request.Latitud,
+                    VerificarGeolocalizacion = false
                 });
 
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);

@@ -17,52 +17,77 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
+        private readonly IRepositorioImagenGeolocalizacion _repositorioImagenGeolocalizacion;
 
-        public ModificarCanalHandler(IRepositorioCanal repositorio, IRepositorioAgente repositorioAgente, IMapper mapper, IRepositorioGeolocalizacion repositorioGeolocalizacion)
+        public ModificarCanalHandler(
+            IRepositorioCanal repositorio, 
+            IRepositorioAgente repositorioAgente, 
+            IMapper mapper, 
+            IRepositorioGeolocalizacion repositorioGeolocalizacion,
+            IRepositorioImagenGeolocalizacion repositorioImagenGeolocalizacion)
         {
             _repositorio = repositorio;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
+            _repositorioImagenGeolocalizacion = repositorioImagenGeolocalizacion;
         }
 
         public async Task<string> Handle(ModificarCanalME request, CancellationToken cancellationToken)
         {
             var _model = await _repositorio.Get(request.Id);
+            var jsonCanalNegocioActual = JsonConvert.DeserializeObject<JsonNegocioMS>(_model.JsonNegocio);
+            var jsonCanalNegocioNuevo = JsonConvert.DeserializeObject<JsonNegocioMS>(request.JsonNegocio);
             _mapper.Map(request, _model);
             await _repositorio.Update(_model);
-            await ActualizarAgentes(new Guid(request.Id), request.JsonNegocio);
+            await ActualizarAgentes(new Guid(request.Id), jsonCanalNegocioNuevo, jsonCanalNegocioActual);
             return _model.Id.ToString();
         }
 
-        private async Task ActualizarAgentes(Guid idCanal, string jsonCanalStr)
+        private async Task ActualizarAgentes(Guid idCanal, JsonNegocioMS jsonCanalNegocioNuevo, JsonNegocioMS jsonCanalNegocioActual)
         {
 
             var agentes = await _repositorioAgente.GetAllWithAssociations();
-            var jsonCanal = JsonConvert.DeserializeObject<JsonNegocioMS>(jsonCanalStr);
             foreach (var agente in agentes)
             {
                 var jsonNegocioAgente = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
-                CompararLimites(jsonCanal, ref jsonNegocioAgente);
+                CompararLimites(jsonCanalNegocioNuevo, ref jsonNegocioAgente);
 
-                jsonNegocioAgente.Retiro = CompararCambios(jsonCanal.Retiro, jsonNegocioAgente.Retiro);
-                jsonNegocioAgente.CobroServicios = CompararCambios(jsonCanal.CobroServicios, jsonNegocioAgente.CobroServicios);
-                jsonNegocioAgente.AbonoPrestamos = CompararCambios(jsonCanal.AbonoPrestamos, jsonNegocioAgente.AbonoPrestamos);
-                jsonNegocioAgente.Deposito = CompararCambios(jsonCanal.Deposito, jsonNegocioAgente.Deposito);
+                jsonNegocioAgente.Retiro = CompararCambios(jsonCanalNegocioNuevo.Retiro, jsonNegocioAgente.Retiro);
+                jsonNegocioAgente.CobroServicios = CompararCambios(jsonCanalNegocioNuevo.CobroServicios, jsonNegocioAgente.CobroServicios);
+                jsonNegocioAgente.AbonoPrestamos = CompararCambios(jsonCanalNegocioNuevo.AbonoPrestamos, jsonNegocioAgente.AbonoPrestamos);
+                jsonNegocioAgente.Deposito = CompararCambios(jsonCanalNegocioNuevo.Deposito, jsonNegocioAgente.Deposito);
 
                 agente.JsonAgente = JsonConvert.SerializeObject(jsonNegocioAgente);
 
-                if (jsonCanal.ValidarGeolocalizacion == false)
+                if (jsonCanalNegocioActual.VerificarGeolocalizacion != jsonCanalNegocioNuevo.VerificarGeolocalizacion)
                 {
-                    var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+                    if (jsonCanalNegocioNuevo.VerificarGeolocalizacion == false)
+                    {
+                        var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
 
-                    geolocalizacion.Latitud = 0;
-                    geolocalizacion.Longitud = 0;
+                        if (geolocalizacion != null)
+                        {
+                            geolocalizacion.Latitud = 0;
+                            geolocalizacion.Longitud = 0;
 
-                    await _repositorioGeolocalizacion.Update(geolocalizacion);
+                            await _repositorioGeolocalizacion.Update(geolocalizacion);
+                        }
+                    } else
+                    {
+                        var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
 
+                        if (geolocalizacion != null)
+                        {
+                            geolocalizacion.FechaBaja = DateTime.Now;
+                            geolocalizacion.EstaActivo = false;
+
+                            await _repositorioGeolocalizacion.Update(geolocalizacion);
+                        }
+                    }
                 }
+               
                 await _repositorioAgente.Update(agente);
             }
         }

@@ -22,6 +22,7 @@ using FBSMovilCBWebApi.WebApi.ManejadorExcepciones;
 using FBS.Dominio.Servicios.GestionFicheros;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
+using FBSMovilCBWebApi.Dominio.Servicios.Canal;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -117,7 +118,11 @@ namespace FBSMovilCBWebApi.WebApi
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB));
-            services.AddMediatR(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
+            services.AddMediatR(
+                typeof(ConfiguracionPerfilAutoMapperFBSMovilCB).Assembly, 
+                typeof(ConfiguracionAutoMapper).Assembly, 
+                typeof(GuardarFicheroME).Assembly,
+                typeof(ObtenerRequisitoCanalME).Assembly);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Configuracion Inyeccion Dependencia 

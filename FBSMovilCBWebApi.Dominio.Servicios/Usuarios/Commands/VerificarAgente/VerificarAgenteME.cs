@@ -12,5 +12,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
         public double Latitud { get; set; }
         public double Longitud { get; set; }
         public string Mac { get; set; }
+        public bool VerificarGeolocalizacion { get; set; } = true;
     }
 }

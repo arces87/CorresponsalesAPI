@@ -47,7 +47,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
                 Imei = request.Imei,
                 Mac = request.Mac,
                 Longitud = request.Longitud,
-                Latitud = request.Latitud
+                Latitud = request.Latitud,
+                VerificarGeolocalizacion = false
             });
 
             var _model = _mapper.Map<Alerta>(request);

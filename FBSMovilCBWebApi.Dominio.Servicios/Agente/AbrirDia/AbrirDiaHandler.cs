@@ -48,7 +48,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
                     Imei = request.Imei,
                     Mac = request.Mac,
                     Longitud = request.Longitud,
-                    Latitud = request.Latitud
+                    Latitud = request.Latitud,
+                    VerificarGeolocalizacion = false 
                 });
 
                 var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;

@@ -38,7 +38,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentif
                 Imei = request.Imei,
                 Mac = request.Mac,
                 Longitud = request.Longitud,
-                Latitud = request.Latitud
+                Latitud = request.Latitud,
+                VerificarGeolocalizacion = false
             });
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);

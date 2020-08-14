@@ -1,4 +1,5 @@
-﻿using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
+﻿using FBSConsolaCBWebApi.DAL.Canales;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using System;
@@ -22,7 +23,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
         public async Task<bool> Handle(VerificarAgenteME request, CancellationToken cancellationToken)
         {
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+
+            Geolocalizacion geolocalizacion = null;
+
+            if  (request.VerificarGeolocalizacion)
+            {
+                geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+            }
+            
             var error = "";
             if(agente == null)
             {
@@ -31,7 +39,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
             else if (! agente.ValdiarDispotivo(request.Imei, request.Mac))
             {
                 error = " | A002";
-            } else if (!(geolocalizacion != null && agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud)))
+            } else if (request.VerificarGeolocalizacion && !(geolocalizacion != null && agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud)))
             {
                 error = " | A006";
             }
