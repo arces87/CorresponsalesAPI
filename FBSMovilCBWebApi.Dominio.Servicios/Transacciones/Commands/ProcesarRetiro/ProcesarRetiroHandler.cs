@@ -118,7 +118,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
             }
-            if (saldoActual - request.Valor < 0)
+            if ( saldoActual - request.Valor < 0)
             {
                 throw new Exception("No puede realizar esta operación, no tiene fondos suficientes en caja");
             }

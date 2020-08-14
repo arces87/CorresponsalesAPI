@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Infraestructura.Interfaces;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using Newtonsoft.Json;
@@ -15,12 +16,14 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         private readonly IRepositorioCanal _repositorio;
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
 
-        public ModificarCanalHandler(IRepositorioCanal repositorio, IRepositorioAgente repositorioAgente, IMapper mapper)
+        public ModificarCanalHandler(IRepositorioCanal repositorio, IRepositorioAgente repositorioAgente, IMapper mapper, IRepositorioGeolocalizacion repositorioGeolocalizacion)
         {
             _repositorio = repositorio;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
+            _repositorioGeolocalizacion = repositorioGeolocalizacion;
         }
 
         public async Task<string> Handle(ModificarCanalME request, CancellationToken cancellationToken)
@@ -32,64 +35,82 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
             return _model.Id.ToString();
         }
 
-        private async Task ActualizarAgentes(Guid idCanal, string jsonCooperativa)
+        private async Task ActualizarAgentes(Guid idCanal, string jsonCanalStr)
         {
 
             var agentes = await _repositorioAgente.GetAllWithAssociations();
-            var jsonNegocioCooperativa = JsonConvert.DeserializeObject<JsonNegocioMS>(jsonCooperativa);
+            var jsonCanal = JsonConvert.DeserializeObject<JsonNegocioMS>(jsonCanalStr);
             foreach (var agente in agentes)
             {
                 var jsonNegocioAgente = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
-                if (jsonNegocioCooperativa.Limites.MontoMaximoDiarioDeTransacciones < jsonNegocioAgente.Limites.MontoMaximoDiarioDeTransacciones)
-                    jsonNegocioAgente.Limites.MontoMaximoDiarioDeTransacciones = jsonNegocioCooperativa.Limites.MontoMaximoDiarioDeTransacciones;
+                CompararLimites(jsonCanal, ref jsonNegocioAgente);
 
-                if (jsonNegocioCooperativa.Limites.NumeroMaximoDiarioDeTransacciones < jsonNegocioAgente.Limites.NumeroMaximoDiarioDeTransacciones)
-                    jsonNegocioAgente.Limites.NumeroMaximoDiarioDeTransacciones = jsonNegocioCooperativa.Limites.NumeroMaximoDiarioDeTransacciones;
-
-                if (jsonNegocioCooperativa.Limites.SaldoMaximoAgente < jsonNegocioAgente.Limites.SaldoMaximoAgente)
-                    jsonNegocioAgente.Limites.SaldoMaximoCuentaAsociada = jsonNegocioCooperativa.Limites.SaldoMaximoCuentaAsociada;
-
-                if (jsonNegocioCooperativa.Limites.NumeroMaximoDiarioDeTransacciones < jsonNegocioAgente.Limites.NumeroMaximoDiarioDeTransacciones)
-                    jsonNegocioAgente.Limites.SaldoMaximoAgente = jsonNegocioCooperativa.Limites.SaldoMaximoAgente;
-
-                if (jsonNegocioCooperativa.Limites.ExistenciaCaja < jsonNegocioCooperativa.Limites.ExistenciaCaja)
-                    jsonNegocioCooperativa.Limites.ExistenciaCaja = jsonNegocioCooperativa.Limites.ExistenciaCaja;
-
-                CompararCambios(jsonNegocioCooperativa.Retiro, jsonNegocioAgente.Retiro);
-                CompararCambios(jsonNegocioCooperativa.CobroServicios, jsonNegocioAgente.CobroServicios);
-                CompararCambios(jsonNegocioCooperativa.AbonoPrestamos, jsonNegocioAgente.AbonoPrestamos);
-                CompararCambios(jsonNegocioCooperativa.Deposito, jsonNegocioAgente.Deposito);
+                jsonNegocioAgente.Retiro = CompararCambios(jsonCanal.Retiro, jsonNegocioAgente.Retiro);
+                jsonNegocioAgente.CobroServicios = CompararCambios(jsonCanal.CobroServicios, jsonNegocioAgente.CobroServicios);
+                jsonNegocioAgente.AbonoPrestamos = CompararCambios(jsonCanal.AbonoPrestamos, jsonNegocioAgente.AbonoPrestamos);
+                jsonNegocioAgente.Deposito = CompararCambios(jsonCanal.Deposito, jsonNegocioAgente.Deposito);
 
                 agente.JsonAgente = JsonConvert.SerializeObject(jsonNegocioAgente);
+
+                if (jsonCanal.ValidarGeolocalizacion == false)
+                {
+                    var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+
+                    geolocalizacion.Latitud = 0;
+                    geolocalizacion.Longitud = 0;
+
+                    await _repositorioGeolocalizacion.Update(geolocalizacion);
+
+                }
                 await _repositorioAgente.Update(agente);
             }
         }
 
-        private void CompararCambios(Operacion operacionCooperativa, Operacion operacionAgente)
+        private static void CompararLimites(JsonNegocioMS jsonCanal, ref JsonNegocioMS jsonNegocioAgente)
         {
-            operacionAgente.Activo = operacionCooperativa.Activo;
-            operacionAgente.NotificarCorreoElectronico = operacionCooperativa.NotificarCorreoElectronico;
-            operacionAgente.NotificarSMS = operacionCooperativa.NotificarSMS;
-            operacionAgente.PlantillaCorreoElectronico = operacionCooperativa.PlantillaCorreoElectronico;
-            operacionAgente.PlantillaSMS = operacionCooperativa.PlantillaSMS;
-            operacionAgente.ValidarOtpAgente = operacionCooperativa.ValidarOtpAgente;
-            operacionAgente.ValidarOtpCliente = operacionCooperativa.ValidarOtpCliente;
+            if (jsonCanal.Limites.MontoMaximoDiarioDeTransacciones < jsonNegocioAgente.Limites.MontoMaximoDiarioDeTransacciones)
+                jsonNegocioAgente.Limites.MontoMaximoDiarioDeTransacciones = jsonCanal.Limites.MontoMaximoDiarioDeTransacciones;
 
-            if (operacionCooperativa.Limites.MontoMaximoDiarioDeTransacciones < operacionAgente.Limites.MontoMaximoDiarioDeTransacciones)
-                operacionAgente.Limites.MontoMaximoDiarioDeTransacciones = operacionCooperativa.Limites.MontoMaximoDiarioDeTransacciones;
-            if (operacionCooperativa.Limites.MontoMaximoPorTransaccion < operacionAgente.Limites.MontoMaximoPorTransaccion)
-                operacionAgente.Limites.MontoMaximoPorTransaccion = operacionCooperativa.Limites.MontoMaximoPorTransaccion;
-            if (operacionCooperativa.Limites.MontoMinimoPorTransaccion > operacionAgente.Limites.MontoMinimoPorTransaccion)
-                operacionAgente.Limites.MontoMinimoPorTransaccion = operacionCooperativa.Limites.MontoMinimoPorTransaccion;
-            if (operacionCooperativa.Limites.NumeroMaximoDiarioDeTransacciones < operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones)
-                operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones = operacionCooperativa.Limites.NumeroMaximoDiarioDeTransacciones;
-            if (operacionCooperativa.Comisiones.AdministracionCanal < operacionAgente.Comisiones.AdministracionCanal)
-                operacionAgente.Comisiones.AdministracionCanal = operacionCooperativa.Comisiones.AdministracionCanal;
-            if (operacionCooperativa.Comisiones.Agente < operacionAgente.Comisiones.Agente)
-                operacionAgente.Comisiones.Agente = operacionCooperativa.Comisiones.Agente;
-            if (operacionCooperativa.Comisiones.Cooperativa < operacionAgente.Comisiones.Cooperativa)
-                operacionAgente.Comisiones.Cooperativa = operacionCooperativa.Comisiones.Cooperativa;
+            if (jsonCanal.Limites.NumeroMaximoDiarioDeTransacciones < jsonNegocioAgente.Limites.NumeroMaximoDiarioDeTransacciones)
+                jsonNegocioAgente.Limites.NumeroMaximoDiarioDeTransacciones = jsonCanal.Limites.NumeroMaximoDiarioDeTransacciones;
+
+            if (jsonCanal.Limites.SaldoMaximoAgente < jsonNegocioAgente.Limites.SaldoMaximoAgente)
+                jsonNegocioAgente.Limites.SaldoMaximoCuentaAsociada = jsonCanal.Limites.SaldoMaximoCuentaAsociada;
+
+            if (jsonCanal.Limites.NumeroMaximoDiarioDeTransacciones < jsonNegocioAgente.Limites.NumeroMaximoDiarioDeTransacciones)
+                jsonNegocioAgente.Limites.SaldoMaximoAgente = jsonCanal.Limites.SaldoMaximoAgente;
+
+            if (jsonCanal.Limites.ExistenciaCaja < jsonNegocioAgente.Limites.ExistenciaCaja)
+                jsonNegocioAgente.Limites.ExistenciaCaja = jsonCanal.Limites.ExistenciaCaja;
+        }
+
+        private Operacion CompararCambios(Operacion operacionCanal, Operacion operacionAgente)
+        {
+            operacionAgente.Activo = operacionCanal.Activo;
+            operacionAgente.NotificarCorreoElectronico = operacionCanal.NotificarCorreoElectronico;
+            operacionAgente.NotificarSMS = operacionCanal.NotificarSMS;
+            operacionAgente.PlantillaCorreoElectronico = operacionCanal.PlantillaCorreoElectronico;
+            operacionAgente.PlantillaSMS = operacionCanal.PlantillaSMS;
+            operacionAgente.ValidarOtpAgente = operacionCanal.ValidarOtpAgente;
+            operacionAgente.ValidarOtpCliente = operacionCanal.ValidarOtpCliente;
+
+            if (operacionCanal.Limites.MontoMaximoDiarioDeTransacciones < operacionAgente.Limites.MontoMaximoDiarioDeTransacciones)
+                operacionAgente.Limites.MontoMaximoDiarioDeTransacciones = operacionCanal.Limites.MontoMaximoDiarioDeTransacciones;
+            if (operacionCanal.Limites.MontoMaximoPorTransaccion < operacionAgente.Limites.MontoMaximoPorTransaccion)
+                operacionAgente.Limites.MontoMaximoPorTransaccion = operacionCanal.Limites.MontoMaximoPorTransaccion;
+            if (operacionCanal.Limites.MontoMinimoPorTransaccion > operacionAgente.Limites.MontoMinimoPorTransaccion)
+                operacionAgente.Limites.MontoMinimoPorTransaccion = operacionCanal.Limites.MontoMinimoPorTransaccion;
+            if (operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones < operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones)
+                operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones = operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones;
+            if (operacionCanal.Comisiones.AdministracionCanal < operacionAgente.Comisiones.AdministracionCanal)
+                operacionAgente.Comisiones.AdministracionCanal = operacionCanal.Comisiones.AdministracionCanal;
+            if (operacionCanal.Comisiones.Agente < operacionAgente.Comisiones.Agente)
+                operacionAgente.Comisiones.Agente = operacionCanal.Comisiones.Agente;
+            if (operacionCanal.Comisiones.Cooperativa < operacionAgente.Comisiones.Cooperativa)
+                operacionAgente.Comisiones.Cooperativa = operacionCanal.Comisiones.Cooperativa;
+
+            return operacionAgente;
         }
     }
 }
