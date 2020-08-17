@@ -20,14 +20,21 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
         {
             var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(request.Id);
             var imagenes = await _repositorioGeolocalizacion.GetImagenesPorAgente(request.Id);
-            var retorno = new ObtenerObtenerGeolocalizacionMS()
+
+            if (geolocalizacion != null)
             {
-                Id = geolocalizacion.Id.ToString(),
-                Latitud = geolocalizacion.Latitud,
-                Longitud = geolocalizacion.Longitud,
-                Imagenes = imagenes.Select(i => i.DireccionImagen)
-            };
-            return retorno;
+                var retorno = new ObtenerObtenerGeolocalizacionMS()
+                {
+                    Id = geolocalizacion.Id.ToString(),
+                    Latitud = geolocalizacion.Latitud,
+                    Longitud = geolocalizacion.Longitud,
+                    Imagenes = imagenes.Select(i => i.DireccionImagen)
+                };
+
+                return retorno;
+            }
+
+            return null;
         }
     }
 }
