@@ -39,7 +39,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
             else if (! agente.ValdiarDispotivo(request.Imei, request.Mac))
             {
                 error = " | A002";
-            } else if (request.VerificarGeolocalizacion && !(geolocalizacion != null && agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud)))
+            } else if (request.VerificarGeolocalizacion &&  (geolocalizacion == null || !(geolocalizacion != null && agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud))))
             {
                 error = " | A006";
             }
