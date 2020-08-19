@@ -5,6 +5,7 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using OtpNet;
 using System.Linq;
@@ -21,19 +22,27 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly byte[] _llave;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public VerificarOtpHandler(IMediator mediador, IRepositorioUsuario repositorioUsuario,
-            IJsonConfiguracion jsonConfiguracion, IRepositorioAgente repositorioAgente)
+        public VerificarOtpHandler(
+            IMediator mediador, 
+            IRepositorioUsuario repositorioUsuario,
+            IJsonConfiguracion jsonConfiguracion, 
+            IRepositorioAgente repositorioAgente,
+            IHttpContextAccessor httpContext)
         {
             _mediador = mediador;
             _repositorioUsuario = repositorioUsuario;
             _jsonConfiguracion = jsonConfiguracion;
             _repositorioAgente = repositorioAgente;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
+            _httpContext = httpContext;
         }
 
         public async Task<bool> Handle(VerificarOtpME request, CancellationToken cancellationToken)
         {
+            var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -51,7 +60,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 VerificarGeolocalizacion = false
             });
 
-            var secretKey = Criptografia.EncryptStringToBytes_Aes(request.Identificacion, _llave, _llave);
+            var referencia = await _repositorioUsuario.ReferenciaOtp(request.Usuario, agente.Identificacion);
+
+            if (referencia != null)
+            {
+                return false;
+            }
+
+            var secretKey = Criptografia.EncryptStringToBytes_Aes(referencia, _llave, _llave);
             var tiempoVida = _jsonConfiguracion.TiempoVidaOtp;
             var totp = new Totp(secretKey, tiempoVida);
             long tiempoVerificacion = 0;
@@ -64,9 +80,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             var vw = new VerificationWindow(1, 1);
             var verificacion = totp.VerifyTotp(request.Otp, out tiempoVerificacion, vw);
 
-            if (verificacion && !(await _repositorioUsuario.ComprobarOtp(request.Usuario, request.Identificacion, tiempoVerificacion.ToString())))
+            if (verificacion)
             {
-                await _repositorioUsuario.SalvarOtp(request.Usuario, request.Identificacion, tiempoVerificacion.ToString());
+                await _repositorioUsuario.EliminarOtp(request.Identificacion);
                 return true;
             }
             return false;

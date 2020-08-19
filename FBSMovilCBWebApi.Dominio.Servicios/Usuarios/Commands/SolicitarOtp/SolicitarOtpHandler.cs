@@ -72,10 +72,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 VerificarGeolocalizacion = false
             });
 
-            var secretKey = Criptografia.EncryptStringToBytes_Aes(request.Identificacion, _llave, _llave);
-            var tiempoVida = _jsonConfiguracion.TiempoVidaOtp;
-            var tiempoVidaMinutos = tiempoVida / 60;
-            var totp = new Totp(secretKey, tiempoVida);
+            int tiempoVidaMinutos;
+            string otp;
+            string referencia;
+            GenerarOtp(request, out tiempoVidaMinutos, out otp, out referencia);
+
             var cuentaDestino = "";
             var nombreDestino = "";
 
@@ -100,25 +101,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 try
                 {
-
-                    var emailTemplate = File.ReadAllText("Resources/EmailTemplate/index _otp.html");
-
-                    emailTemplate = emailTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
-                                .Replace("[:OTP:]", totp.ComputeTotp())
-                                .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} minutos")
-                                .Replace("[:FECHAACTUAL:]", fechaActual);
-
-                    await _mediador.Publish(new EnviarCorreoElectronicoME
-                    {
-                        Asunto = "OTP Corresponsales Solidarios",
-                        Mensaje = emailTemplate,
-                        DireccionesDestino = new List<ModeloCuentaCorreo>() {
-                        new ModeloCuentaCorreo() {
-                            Direccion = cuentaDestino,
-                            Nombre = nombreDestino
-                        }
-                    }
-                    });
+                    await EnviarEmail(tiempoVidaMinutos, otp, cuentaDestino, nombreDestino, fechaActual);
                 }
                 catch (Exception e)
                 {
@@ -133,33 +116,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
                 try
                 {
-
-                    var smsTemplate = File.ReadAllText("Resources/SmsTemplate/template_otp.txt");
-
-                    smsTemplate = smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
-                        .Replace("[:OTP:]", totp.ComputeTotp())
-                        .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} m")
-                        .Replace("[:FECHAACTUAL:]", fechaActual);
-
-                    var mensajeSMS = new EnvioSMSME()
-                    {
-                        CodigoUsuarioCorresponsal = agente.Usuario.UserName,
-                        MensajeTexto = smsTemplate,
-                        NumeroIdentificacion = agente.Identificacion,
-                        SecuencialTipoIdentificacion = agente.TipoIdentificacion
-                    };
-
-                    await _mediador.Send(new CrearLogME()
-                    {
-                        JsonLog = JsonConvert.SerializeObject(mensajeSMS),
-                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
-                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-                    });
-
-                    var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-                    var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-
-                    var respuesta = await _servicioFinancial.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, customHeaders);
+                    var respuesta = await EnviarSMS(agente, tiempoVidaMinutos, otp, nombreDestino, fechaActual);
 
                     await _mediador.Send(new CrearLogME()
                     {
@@ -178,20 +135,87 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    return true;
-                    //throw new Exception("No se ha podido enviar el sms.");                 
+                    //throw new Exception("No se ha podido enviar el sms.");
+                    //return true;
                 }
 
-                await _repositorioUsuario.EliminarOtp(request.Identificacion);
+                await _repositorioUsuario.SalvarOtp(request.Usuario, agente.Identificacion, referencia);
+
                 await _mediador.Send(new CrearLogME()
                 {
                     JsonLog = JsonConvert.SerializeObject(request),
                     IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
+            } else
+            {
+                throw new Exception("No fue posible notificar el otp generado .");
             }
-                         
+
             return true;
+        }
+
+        private void GenerarOtp(SolicitarOtpME request, out int tiempoVidaMinutos, out string otp, out string referencia)
+        {
+            referencia = Guid.NewGuid().ToString();
+            var secretKey = Criptografia.EncryptStringToBytes_Aes(referencia, _llave, _llave);
+            var tiempoVida = _jsonConfiguracion.TiempoVidaOtp;
+            tiempoVidaMinutos = tiempoVida / 60;
+            var totp = new Totp(secretKey, tiempoVida);
+            otp = totp.ComputeTotp();
+        }
+
+        private async Task<Microsoft.Rest.HttpOperationResponse<EnvioSMSMS>> EnviarSMS(FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, int tiempoVidaMinutos, string otp, string nombreDestino, string fechaActual)
+        {
+            var smsTemplate = File.ReadAllText("Resources/SmsTemplate/template_otp.txt");
+
+            smsTemplate = smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
+                .Replace("[:OTP:]", otp)
+                .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} m")
+                .Replace("[:FECHAACTUAL:]", fechaActual);
+
+            var mensajeSMS = new EnvioSMSME()
+            {
+                CodigoUsuarioCorresponsal = agente.Usuario.UserName,
+                MensajeTexto = smsTemplate,
+                NumeroIdentificacion = agente.Identificacion,
+                SecuencialTipoIdentificacion = agente.TipoIdentificacion
+            };
+
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(mensajeSMS),
+                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+            });
+
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+
+            var respuesta = await _servicioFinancial.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, customHeaders);
+            return respuesta;
+        }
+
+        private async Task EnviarEmail(int tiempoVidaMinutos, string otp, string cuentaDestino, string nombreDestino, string fechaActual)
+        {
+            var emailTemplate = File.ReadAllText("Resources/EmailTemplate/index _otp.html");
+
+            emailTemplate = emailTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
+                        .Replace("[:OTP:]", otp)
+                        .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} minutos")
+                        .Replace("[:FECHAACTUAL:]", fechaActual);
+
+            await _mediador.Publish(new EnviarCorreoElectronicoME
+            {
+                Asunto = "OTP Corresponsales Solidarios",
+                Mensaje = emailTemplate,
+                DireccionesDestino = new List<ModeloCuentaCorreo>() {
+                        new ModeloCuentaCorreo() {
+                            Direccion = cuentaDestino,
+                            Nombre = nombreDestino
+                        }
+                    }
+            });
         }
     }
 }
