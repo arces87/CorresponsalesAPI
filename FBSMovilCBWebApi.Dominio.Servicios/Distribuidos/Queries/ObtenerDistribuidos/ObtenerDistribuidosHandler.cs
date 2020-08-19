@@ -4,8 +4,10 @@ using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
+using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
+using Newtonsoft.Json;
 using ServiciosFinancial;
 using System;
 using System.Collections.Generic;
@@ -54,9 +56,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var catalogos = await _repositorioCatalogo.GetAllWithAssociations(true);
-            var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
             var tiposAlertas = catalogos.Where(c => c.TipoCatalogo.Id == new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTipoAlerta").Valor)).ToList();
-            return new ObtenerDistribuidosMS() { TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuesta.Body.TiposIdentificacion), TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas) };
+
+            try
+            {
+                var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
+                return new ObtenerDistribuidosMS() { TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuesta.Body.TiposIdentificacion), TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas) };
+            }
+            catch (Exception)
+            {
+                throw new Exception("Ha ocurrido un error al obtener los tipos de identificación.");
+            }
         }
     }
 }

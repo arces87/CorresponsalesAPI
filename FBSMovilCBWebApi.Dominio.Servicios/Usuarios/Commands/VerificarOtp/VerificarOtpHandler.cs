@@ -62,7 +62,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
             var referencia = await _repositorioUsuario.ReferenciaOtp(request.Usuario, agente.Identificacion);
 
-            if (referencia != null)
+            if (referencia == null)
             {
                 return false;
             }
