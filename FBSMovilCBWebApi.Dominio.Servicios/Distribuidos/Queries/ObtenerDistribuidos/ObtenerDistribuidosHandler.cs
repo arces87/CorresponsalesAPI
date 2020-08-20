@@ -60,11 +60,25 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 
             try
             {
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(customHeaders),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+
                 var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
+
                 return new ObtenerDistribuidosMS() { TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuesta.Body.TiposIdentificacion), TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas) };
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(e.Message),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
                 throw new Exception("Ha ocurrido un error al obtener los tipos de identificación.");
             }
         }
