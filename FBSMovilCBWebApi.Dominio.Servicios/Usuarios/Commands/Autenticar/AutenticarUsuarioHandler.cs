@@ -35,8 +35,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         public async Task<AutenticarUsuarioMS> Handle(AutenticarUsuarioME request, CancellationToken cancellationToken)
         {
             var error = "";
-            var requestCopia = request;
-            requestCopia.Contrasenia = "";
+            AutenticarUsuarioME requestCopia = new AutenticarUsuarioME { 
+                Imei = request.Imei,
+                Contrasenia = "",
+                Latitud = request.Latitud,
+                Longitud = request.Longitud,
+                Mac = request.Mac,
+                Usuario = request.Usuario,
+            };
+
+
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(requestCopia),
