@@ -65,17 +65,23 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
                 {
                     var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
 
-                    if (jsonCanalNegocioNuevo.VerificarGeolocalizacion == false && geolocalizacion != null)
+                    if (geolocalizacion != null)
                     {
-                        geolocalizacion.Latitud = 0;
-                        geolocalizacion.Longitud = 0;
-                    } else
-                    {
-                        geolocalizacion.FechaBaja = DateTime.Now;
-                        geolocalizacion.EstaActivo = false;
+
+                        if (jsonCanalNegocioNuevo.VerificarGeolocalizacion == false )
+                        {
+                            geolocalizacion.Latitud = 0;
+                            geolocalizacion.Longitud = 0;
+                        }
+                        else
+                        {
+                            geolocalizacion.FechaBaja = DateTime.Now;
+                            geolocalizacion.EstaActivo = false;
+                        }
+
+                        await _repositorioGeolocalizacion.Update(geolocalizacion);
                     }
 
-                    await _repositorioGeolocalizacion.Update(geolocalizacion);
                 }
                
                 await _repositorioAgente.Update(agente);
