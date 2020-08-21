@@ -17,20 +17,17 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
-        private readonly IRepositorioImagenGeolocalizacion _repositorioImagenGeolocalizacion;
 
         public ModificarCanalHandler(
             IRepositorioCanal repositorio, 
             IRepositorioAgente repositorioAgente, 
             IMapper mapper, 
-            IRepositorioGeolocalizacion repositorioGeolocalizacion,
-            IRepositorioImagenGeolocalizacion repositorioImagenGeolocalizacion)
+            IRepositorioGeolocalizacion repositorioGeolocalizacion)
         {
             _repositorio = repositorio;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
-            _repositorioImagenGeolocalizacion = repositorioImagenGeolocalizacion;
         }
 
         public async Task<string> Handle(ModificarCanalME request, CancellationToken cancellationToken)

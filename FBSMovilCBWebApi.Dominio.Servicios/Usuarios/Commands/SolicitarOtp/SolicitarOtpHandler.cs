@@ -198,7 +198,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
         private async Task EnviarEmail(int tiempoVidaMinutos, string otp, string cuentaDestino, string nombreDestino, string fechaActual)
         {
-            var emailTemplate = File.ReadAllText("Resources/EmailTemplate/index _otp.html");
+            var emailTemplate = File.ReadAllText("Resources/EmailTemplate/index_otp.html");
 
             emailTemplate = emailTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
                         .Replace("[:OTP:]", otp)
