@@ -179,7 +179,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
                 var transacciones = await conexion.QueryAsync<Transaccion, Agente, Catalogo, Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +
                   "left join Corresponsales.Agente agente on transaccion.AgenteId = agente.Id " +
                   "left join Nomenclador.Catalogo estado on transaccion.EstadoId = estado.Id " +
-                  "where transaccion.EstaActivo='true' transaccion.ReposicionRealizada='false' and agente.Id = @Id and transaccion.EstadoId = @estadoTransaccion",
+                  "where transaccion.EstaActivo='true' and transaccion.ReposicionRealizada='false' and agente.Id = @Id and transaccion.EstadoId = @estadoTransaccion",
                     (transaccion, agente, estado) =>
                     {
                         transaccion.Estado = estado;
