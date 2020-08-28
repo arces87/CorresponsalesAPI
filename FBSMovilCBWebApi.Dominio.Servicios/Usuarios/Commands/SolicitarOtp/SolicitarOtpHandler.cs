@@ -111,7 +111,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
-                    throw new Exception("No se ha podido enviar el Correo Electrónico.");
+                    throw new Exception("No se ha podido enviar el Correo Electrónico con el OTP solicitado.");
                 }
 
                 try
@@ -135,8 +135,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    //throw new Exception("No se ha podido enviar el sms.");
-                    //return true;
+                   throw new Exception("No se ha podido enviar el SMS con el OTP solicitado.");
                 }
 
                 await _repositorioUsuario.SalvarOtp(request.Usuario, agente.Identificacion, referencia);
@@ -149,7 +148,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 });
             } else
             {
-                throw new Exception("No fue posible notificar el otp generado .");
+                throw new Exception("No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino.");
             }
 
             return true;
