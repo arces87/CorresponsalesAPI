@@ -6,23 +6,41 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\EmailTemplate\index _otp.html" />
-    <None Remove="Resources\EmailTemplate\index _retiro.html" />
+    <None Remove="Resources\EmailTemplate\index_otp.html" />
+    <None Remove="Resources\EmailTemplate\index_retiro.html" />
     <None Remove="Resources\EmailTemplate\index_deposito.html" />
     <None Remove="Resources\EmailTemplate\index_pago_serivicios.html" />
+
+    <None Remove="Resources\SmsTemplate\template_otp.txt" />
+    <None Remove="Resources\SmsTemplate\template_retiro.txt" />
+    <None Remove="Resources\SmsTemplate\template_deposito.txt" />
+    <None Remove="Resources\SmsTemplate\template_pago_servicios.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\EmailTemplate\index _otp.html">
+    <Content Include="Resources\EmailTemplate\index_otp.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\EmailTemplate\index _retiro.html">
+    <Content Include="Resources\EmailTemplate\index_retiro.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\EmailTemplate\index_deposito.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\EmailTemplate\index_pago_serivicios.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="Resources\SmsTemplate\template_otp.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SmsTemplate\template_retiro.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SmsTemplate\template_deposito.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SmsTemplate\template_pago_servicios.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

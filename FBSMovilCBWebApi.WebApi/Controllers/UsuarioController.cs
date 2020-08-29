@@ -33,7 +33,7 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("solicitudOtp", Name = "Usuario_SolicitarOtp")]
-        public async Task<ActionResult> SolicitarOtp([FromBody] SolicitarOtpME modelo)
+        public async Task<ActionResult<SolicitarOtpMS>> SolicitarOtp([FromBody] SolicitarOtpME modelo)
         {
             return Ok(await _mediador.Send(modelo));
         }
