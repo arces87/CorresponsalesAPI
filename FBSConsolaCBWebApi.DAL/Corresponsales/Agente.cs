@@ -39,11 +39,14 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         public bool ValdiarGeolocalizacion(Geolocalizacion geolocalizacion, double latitud, double longitud)
         {
 
+            if (geolocalizacion == null) return false;
+
             var latitud_inicio = geolocalizacion.Latitud - 1;
             var latitud_fin = geolocalizacion.Latitud + 1;
             var longitud_inicio = geolocalizacion.Longitud - 1;
             var longitud_fin = geolocalizacion.Longitud + 1;
-            return latitud >= latitud_inicio && latitud <= latitud_fin && longitud >= longitud_inicio && longitud <= longitud_fin;
+
+            return  latitud >= latitud_inicio && latitud <= latitud_fin && longitud >= longitud_inicio && longitud <= longitud_fin;
         }
     }
 }
