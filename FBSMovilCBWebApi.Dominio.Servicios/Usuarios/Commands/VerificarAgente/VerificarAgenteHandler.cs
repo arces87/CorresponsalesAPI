@@ -24,28 +24,25 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
         {
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
 
-            Geolocalizacion geolocalizacion = null;
-
-            if  (request.VerificarGeolocalizacion)
-            {
-                geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
-            }
             
-            var error = "";
+            var error = "Error en la validación de los datos de autenticación ";
+
             if(agente == null)
             {
-                error = " | A001";
+                throw new Exception($"{error} | A001");
             }
             else if (! agente.ValdiarDispotivo(request.Imei, request.Mac))
             {
-                error = " | A002";
-            } else if (request.VerificarGeolocalizacion &&  (geolocalizacion == null || !(geolocalizacion != null && agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud))))
-            {
-                error = " | A006";
+                throw new Exception($"{error} | A002");
             }
-
-            if (error.Length > 0)
-                throw new Exception($"Error en la validación de los datos de autenticación {error}");
+            else if (request.VerificarGeolocalizacion)
+            {
+                var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+                if (!agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud))
+                {
+                    throw new Exception($"{error} | A006");
+                }
+            }
 
             return true;
         }
