@@ -86,18 +86,43 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
             var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
-            var transacciones = await _repositorioTransaccion.GetForTipo(agente.Id.ToString(), IdTipoAccion);
+
+            var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
+            var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+            var transaccionesTipo = transacciones.Where(t => t.Tipo == IdTipoAccion);
+            var transaccionesDiariasTipo = transaccionesTipo.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+
+            var cantidadTransacciones = transacciones.Count();
+            var cantidadTransaccionesTipo = transaccionesTipo.Count();
+            var cantidadTransaccionesDiarias = transaccionesDiarias.Count();
+            var cantidadTransaccionesDiariasTipo = transaccionesDiariasTipo.Count();
+
+            var montoTransacciones = transacciones.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesTipo = transaccionesTipo.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
 
             var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
             var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
 
-            transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
             var enReposicion = transaccionesRepuestas == transaccionesProcesadas;
             saldoCuenta = (saldoCuenta == 0 && transacciones.Count() == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
 
-            ValidarTransaccion(request, saldoActual, transacciones, jsonNegocio);
+            
+            ValidarTransaccion(
+               request.Valor,
+               cuenta != null,
+               saldoActual,
+               saldoCuenta,
+               cantidadTransacciones,
+               cantidadTransaccionesTipo,
+               cantidadTransaccionesDiarias,
+               montoTransacciones,
+               montoTransaccionesTipo,
+               montoTransaccionesTipoDiarias,
+               jsonNegocio);
 
             var transaccion = new Transaccion()
             {
@@ -176,31 +201,62 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             return respuesta.Body;
         }
 
-        private static void ValidarTransaccion(ProcesarRetiroME request, double saldoActual, IEnumerable<Transaccion> transacciones, JsonNegocioMS jsonNegocio)
+        private static void ValidarTransaccion(
+            double Valor,
+            bool cuentaAsociada,
+            double saldoActual,
+            double saldoCuenta,
+            int cantidadTransacciones,
+            int cantidadTransaccionesTipo,
+            int cantidadTransaccionesDiarias,
+            double montoTransacciones,
+            double montoTransaccionesTipo,
+            double montoTransaccionesTipoDiarias,
+            JsonNegocioMS jsonNegocio)
         {
             if (!jsonNegocio.Retiro.Activo.Value)
             {
-                throw new Exception("Usted no tiene acceso para realizar este tipo de operación");
+                throw new Exception("Usted no posee acceso para ejecutar esta operación. En caso de requerir acceso a esta funcionalidad comunicarse con su supervisor.");
             }
-            if (request.Valor > jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion)
+
+            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones)
             {
-                throw new Exception("No puede realizar esta operación porque excede el monto máximo definido para este tipo de operación");
+                throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
-            if (request.Valor < jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion)
+
+            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones)
             {
-                throw new Exception("No puede realizar esta operación porque no alcanza el monto mínimo definido para este tipo de operación");
+                throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: { jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
-            if (saldoActual > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
+
+            if (Valor > jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion)
             {
-                throw new Exception("No puede realizar esta operación porque excede el monto máximo diario definido para este tipo de operación");
+                throw new Exception($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion} USD.");
             }
-            if (transacciones.Count() > jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones)
+
+            if (Valor < jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion)
             {
-                throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
+                throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion} USD.");
             }
-            if (saldoActual - request.Valor < 0)
+
+            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception("No puede realizar esta operación, no tiene fondos suficientes en caja");
+                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diarioa para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+            }
+
+            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
+            {
+                throw new Exception($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+            }
+
+            if (cuentaAsociada && saldoActual + Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
+            {
+                throw new Exception($"No puede realizar la operación porque excedería el saldo máximo de la caja en: { (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} . Su saldo máximo en caja permitido es {jsonNegocio.Limites.SaldoMaximoAgente.Value} USD");
+            }
+
+            if (saldoActual - Valor < 0)
+            {
+                throw new Exception($"No puede realizar esta operación, no tiene fondos suficientes en caja. Fondo en caja ");
             }
         }
     }

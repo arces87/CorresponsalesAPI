@@ -81,8 +81,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
             var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
-            var transacciones = await _repositorioTransaccion.GetForTipo(agente.Id.ToString(), IdTipoAccion);
-            transacciones = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+
+            var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
+            var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+            var transaccionesTipo = transacciones.Where(t => t.Tipo == IdTipoAccion);
+            var transaccionesDiariasTipo = transaccionesTipo.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
+
+            var cantidadTransacciones = transacciones.Count();
+            var cantidadTransaccionesTipo = transaccionesTipo.Count();
+            var cantidadTransaccionesDiarias = transaccionesDiarias.Count();
+            var cantidadTransaccionesDiariasTipo = transaccionesDiariasTipo.Count();
+
+            var montoTransacciones = transacciones.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesTipo = transaccionesTipo.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
 
             var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
             var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
@@ -93,34 +106,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             saldoCuenta = (saldoCuenta == 0 && transacciones.Count() == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
 
-            if (!jsonNegocio.CobroServicios.Activo.Value)
-            {
-                throw new Exception("Usted no tiene acceso para realizar este tipo de operación");
-            }
-            if (request.Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoPorTransaccion)
-            {
-                throw new Exception("No puede realizar esta operación porque excede el monto máximo definido para este tipo de operación");
-            }
-            if (request.Valor < jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion)
-            {
-                throw new Exception("No puede realizar esta operación porque no alcanza el monto mínimo definido para este tipo de operación");
-            }
-            if (saldoActual + request.Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
-            {
-                throw new Exception("No puede realizar esta operación porque excede el monto máximo diario en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + request.Valor)) + " del valor definido para este tipo de operación");
-            }
-            if (transacciones.Count() > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
-            {
-                throw new Exception("No puede realizar esta operación porque excede el número máximo diario definido para este tipo de operación");
-            }
-            if (saldoActual + request.Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
-            {
-                throw new Exception("No puede realizar esta operación porque excede el Saldo Máximo en " + (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + request.Valor)) + " del establecido para mantener en caja");
-            }
-            if (cuenta != null && saldoCuenta - request.Valor < 0)
-            {
-                throw new Exception("No puede realizar esta operación porque no posee saldo en la cuenta");
-            }
+            ValidarTransaccion(
+                request.Valor,
+                cuenta != null,
+                saldoActual,
+                saldoCuenta,
+                cantidadTransacciones,
+                cantidadTransaccionesTipo,
+                cantidadTransaccionesDiarias,
+                montoTransacciones,
+                montoTransaccionesTipo,
+                montoTransaccionesTipoDiarias,
+                jsonNegocio);
+
             var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
             var comisionPago = _mapper.Map<ComisionPago>(comision);
             comisionPago.Facilito = request.Comision;
@@ -197,6 +195,65 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
             return respuesta;
+        }
+
+        private static void ValidarTransaccion(
+           double Valor,
+           bool cuentaAsociada,
+           double saldoActual,
+           double saldoCuenta,
+           int cantidadTransacciones,
+           int cantidadTransaccionesTipo,
+           int cantidadTransaccionesDiarias,
+           double montoTransacciones,
+           double montoTransaccionesTipo,
+           double montoTransaccionesTipoDiarias,
+           JsonNegocioMS jsonNegocio)
+        {
+            if (!jsonNegocio.CobroServicios.Activo.Value)
+            {
+                throw new Exception("Usted no posee acceso para ejecutar esta operación. En caso de requerir acceso a esta funcionalidad comunicarse con su supervisor.");
+            }
+
+            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones)
+            {
+                throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
+            }
+
+            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
+            {
+                throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: { jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones}.");
+            }
+
+            if (Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoPorTransaccion)
+            {
+                throw new Exception($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.CobroServicios.Limites.MontoMaximoPorTransaccion} USD.");
+            }
+
+            if (Valor < jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion)
+            {
+                throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion} USD.");
+            }
+
+            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
+            {
+                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diarioa para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+            }
+
+            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
+            {
+                throw new Exception($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+            }
+
+            if (cuentaAsociada && saldoActual + Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
+            {
+                throw new Exception($"No puede realizar la operación porque excedería el saldo máximo de la caja en: { (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} . Su saldo máximo en caja permitido es {jsonNegocio.Limites.SaldoMaximoAgente.Value} USD");
+            }
+
+            if (cuentaAsociada && saldoCuenta - Valor <= 0)
+            {
+                throw new Exception("No puede realizar la operación porque no posee saldo disponible en la cuenta");
+            }
         }
     }
 }
