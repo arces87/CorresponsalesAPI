@@ -1,9 +1,13 @@
 ﻿using FBS.Dominio.Servicios.CorreoElectronico;
+using FBS.Identidad.DAL.Modelado;
+using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
+using Newtonsoft.Json;
 using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,10 +18,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
     {
         private readonly IFBSCorresponsalesApi _financialApi;
         private readonly IMediator _mediador;
-        public NotificacionHandler(IFBSCorresponsalesApi financialApi, IMediator mediador)
+        private readonly IJsonConfiguracion _jsonConfiguracion;
+        public NotificacionHandler(IFBSCorresponsalesApi financialApi, IMediator mediador, IJsonConfiguracion jsonConfiguracion)
         {
             _financialApi = financialApi;
             _mediador = mediador;
+            _jsonConfiguracion = jsonConfiguracion;
         }
 
         public async Task Handle(NotificacionME notification, CancellationToken cancellationToken)
@@ -44,8 +50,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         Nombre = notification.NombreDestinatario} }
                     });
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(e.Message),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
                     throw new Exception($"Error en el envio del correo electrónico al notificar la operación");
                 }              
             }
@@ -69,7 +81,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                 try
                 {
                     await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
-                } catch(Exception) {
+                } catch(Exception e) {
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(e.Message),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
                     throw new Exception($"Error en el envio de sms al notificar la operación");
                 }
                 
