@@ -253,14 +253,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 throw new Exception($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones} USD.");
             }
 
-            if (cuentaAsociada && saldoActual + Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
-            {
-                throw new Exception($"No puede realizar la operación porque excedería el saldo máximo de la caja en: { (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} . Su saldo máximo en caja permitido es {jsonNegocio.Limites.SaldoMaximoAgente.Value} USD");
-            }
-
             if (saldoActual - Valor < 0)
             {
-                throw new Exception($"No puede realizar esta operación, no tiene fondos suficientes en caja. Fondo en caja ");
+                throw new Exception($"No puede realizar esta operación, no tiene fondos suficientes en caja. Fondo en caja {saldoActual}");
             }
         }
     }
