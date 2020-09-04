@@ -94,5 +94,11 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(modelo);
         }
+
+        [HttpPost("obtenerEstadoReposicion", Name = "Agente_ObtenerEstadoReposicion")]
+        public async Task<ActionResult<ObtenerEstadoReposicionAgenteMS>> ObtenerEstadoReposicion([FromBody] ObtenerEstadoReposicionAgenteME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
     }
 }

@@ -117,9 +117,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 cantidadTransacciones, 
                 cantidadTransaccionesTipo,
                 cantidadTransaccionesDiarias,
+                cantidadTransaccionesDiariasTipo,
                 montoTransacciones,
                 montoTransaccionesTipo,
                 montoTransaccionesTipoDiarias,
+                montoTransaccionesDiarias,
                 jsonNegocio);
 
             var transaccion = new Transaccion()
@@ -204,9 +206,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             int cantidadTransacciones, 
             int cantidadTransaccionesTipo,
             int cantidadTransaccionesDiarias,
+            int cantidadTransaccionesDiariasTipo,
             double montoTransacciones,
             double montoTransaccionesTipo,
             double montoTransaccionesTipoDiarias,
+            double montoTransaccionesDiarias,
             JsonNegocioMS jsonNegocio)
         {
             if (!jsonNegocio.Deposito.Activo.Value)
@@ -219,7 +223,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
 
-            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.Deposito.Limites.NumeroMaximoDiarioDeTransacciones)
+            if (cantidadTransaccionesDiariasTipo + 1 > jsonNegocio.Deposito.Limites.NumeroMaximoDiarioDeTransacciones)
             {
                 throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: { jsonNegocio.Deposito.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
@@ -234,9 +238,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.Deposito.Limites.MontoMinimoPorTransaccion} USD.");
             }
 
-            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
+            if (montoTransaccionesDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diarioa para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
             }
 
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Deposito.Limites.MontoMaximoDiarioDeTransacciones)

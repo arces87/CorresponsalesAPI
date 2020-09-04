@@ -114,9 +114,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 cantidadTransacciones,
                 cantidadTransaccionesTipo,
                 cantidadTransaccionesDiarias,
+                cantidadTransaccionesDiariasTipo,
                 montoTransacciones,
                 montoTransaccionesTipo,
                 montoTransaccionesTipoDiarias,
+                montoTransaccionesDiarias,
                 jsonNegocio);
 
             var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
@@ -205,9 +207,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
            int cantidadTransacciones,
            int cantidadTransaccionesTipo,
            int cantidadTransaccionesDiarias,
+           int cantidadTransaccionesDiariasTipo,
            double montoTransacciones,
            double montoTransaccionesTipo,
            double montoTransaccionesTipoDiarias,
+           double montoTransaccionesDiarias,
            JsonNegocioMS jsonNegocio)
         {
             if (!jsonNegocio.CobroServicios.Activo.Value)
@@ -220,7 +224,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
 
-            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
+            if (cantidadTransaccionesDiariasTipo + 1 > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
             {
                 throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: { jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
@@ -235,9 +239,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion} USD.");
             }
 
-            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
+            if (montoTransaccionesDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diarioa para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
             }
 
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
