@@ -56,7 +56,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
                 jsonNegocioAgente.AbonoPrestamos = CompararCambios(jsonCanalNegocioNuevo.AbonoPrestamos, jsonNegocioAgente.AbonoPrestamos);
                 jsonNegocioAgente.Deposito = CompararCambios(jsonCanalNegocioNuevo.Deposito, jsonNegocioAgente.Deposito);
 
-                agente.JsonAgente = JsonConvert.SerializeObject(jsonNegocioAgente);
+                
 
                 if (jsonCanalNegocioActual.VerificarGeolocalizacion != jsonCanalNegocioNuevo.VerificarGeolocalizacion)
                 {
@@ -79,8 +79,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
                         await _repositorioGeolocalizacion.Update(geolocalizacion);
                     }
 
+                    jsonNegocioAgente.VerificarGeolocalizacion = jsonCanalNegocioNuevo.VerificarGeolocalizacion;
+
                 }
-               
+                agente.JsonAgente = JsonConvert.SerializeObject(jsonNegocioAgente);
                 await _repositorioAgente.Update(agente);
             }
         }

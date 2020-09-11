@@ -101,33 +101,40 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     if (jsonNegocio.Retiro != null)
                                         usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
                                 }
-                                var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
-                                if (geolocalizacion != null) //Comprobación de los datos de Geolocalización
+                                if (jsonNegocio.VerificarGeolocalizacion)
                                 {
-                                    var latitud_inicio = geolocalizacion.Latitud - 1;
-                                    var latitud_fin = geolocalizacion.Latitud + 1;
-                                    var longitud_inicio = geolocalizacion.Longitud - 1;
-                                    var longitud_fin = geolocalizacion.Longitud + 1;
-                                    if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
+                                    var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+                                    if (geolocalizacion != null) //Comprobación de los datos de Geolocalización
                                     {
-
-                                        await _mediador.Send(new CrearLogME()
+                                        var latitud_inicio = geolocalizacion.Latitud - 1;
+                                        var latitud_fin = geolocalizacion.Latitud + 1;
+                                        var longitud_inicio = geolocalizacion.Longitud - 1;
+                                        var longitud_fin = geolocalizacion.Longitud + 1;
+                                        if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
                                         {
-                                            JsonLog = JsonConvert.SerializeObject(usuario),
-                                            IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
-                                            IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-                                        });
-                                        return usuario;
 
+                                            await _mediador.Send(new CrearLogME()
+                                            {
+                                                JsonLog = JsonConvert.SerializeObject(usuario),
+                                                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
+                                                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                                            });
+                                            return usuario;
+
+                                        }
+                                        else
+                                        {
+                                            error = " | A006";
+                                        }
                                     }
                                     else
                                     {
-                                        error = " | A006";
+                                        error = " | A005";
                                     }
                                 }
                                 else
                                 {
-                                    error = " | A005";
+                                    return usuario;
                                 }
                             }
                             else

@@ -1,7 +1,9 @@
-﻿using FBSConsolaCBWebApi.DAL.Canales;
+﻿using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,11 +25,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
         public async Task<bool> Handle(VerificarAgenteME request, CancellationToken cancellationToken)
         {
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-
-            
+                        
             var error = "Error en la validación de los datos de autenticación ";
 
-            if(agente == null)
+            var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
+
+            if (agente == null)
             {
                 throw new Exception($"{error} | A001");
             }
@@ -35,7 +38,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
             {
                 throw new Exception($"{error} | A002");
             }
-            else if (request.VerificarGeolocalizacion)
+            else if (request.VerificarGeolocalizacion && jsonNegocio.VerificarGeolocalizacion)
             {
                 var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
                 if (!agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud))
