@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -15,12 +16,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
         private readonly IRepositorioTransaccion _repositorio;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediador;
+        private readonly IRepositorioAgente _repositorioAgente;
 
-        public ListarTipoTransaccionHandler(IRepositorioTransaccion repositorio, IMapper mapper, IJsonConfiguracion jsonConfiguracion)
+        public ListarTipoTransaccionHandler(IRepositorioTransaccion repositorio, IMapper mapper, IJsonConfiguracion jsonConfiguracion, IMediator mediador, IRepositorioAgente repositorioAgente)
         {
             _repositorio = repositorio;
             _mapper = mapper;
             _jsonConfiguracion = jsonConfiguracion;
+            _mediador = mediador;
+            _repositorioAgente = repositorioAgente;
         }
 
         private double ContabilizarComisiones(ComisionPorTipoTransaccion comisiones)
@@ -30,6 +35,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
         }
         public async Task<ListarTipoTransaccionMS> Handle(ListarTipoTransaccionME request, CancellationToken cancellationToken)
         {
+
+            await _mediador.Send(new VerificarAgenteME()
+            {
+                Usuario = request.Usuario,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Longitud = request.Longitud,
+                Latitud = request.Latitud,
+                VerificarGeolocalizacion = false
+            });
+
             var idDeposito = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito")?.Valor;
             var idRetiro = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro")?.Valor;
             var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
@@ -42,29 +58,32 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
             var comisionCobroServicio = 0.0;
             var valorAbonoPrestamos = 0.0;
             var comisionAbonoPrestamos = 0.0;
-            var saldo = await _repositorio.GetSaldoActual(request.IdAgente);
+
+            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+
+            var saldo = await _repositorio.GetSaldoActual(agente.Id.ToString());
             var _retorno = new ListarTipoTransaccionMS() { SaldoCaja = saldo };
             if (idDeposito != null)
             {
-                var _modelDeposito = await _repositorio.GetForTipo(idDeposito, request.IdAgente);
+                var _modelDeposito = await _repositorio.GetForTipo(idDeposito, agente.Id.ToString());
                 valorDeposito = _modelDeposito.Sum(m => m.Valor);
                 comisionDeposito = _modelDeposito.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
             if (idRetiro != null)
             {
-                var _modelRetiro = await _repositorio.GetForTipo(idRetiro, request.IdAgente);
+                var _modelRetiro = await _repositorio.GetForTipo(idRetiro, agente.Id.ToString());
                 valorRetiro = _modelRetiro.Sum(m => m.Valor);
                 comisionRetiro = _modelRetiro.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
             if (idCobroServicio != null)
             {
-                var _modelCobroServicios = await _repositorio.GetForTipo(idCobroServicio, request.IdAgente);
+                var _modelCobroServicios = await _repositorio.GetForTipo(idCobroServicio, agente.Id.ToString());
                 valorCobroServicio = _modelCobroServicios.Sum(m => m.Valor);
                 comisionCobroServicio = _modelCobroServicios.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
             if (idAbonoPrestamo != null)
             {
-                var _modelAbonoPrestamo = await _repositorio.GetForTipo(idAbonoPrestamo, request.IdAgente);
+                var _modelAbonoPrestamo = await _repositorio.GetForTipo(idAbonoPrestamo, agente.Id.ToString());
                 valorAbonoPrestamos = _modelAbonoPrestamo.Sum(m => m.Valor);
                 comisionAbonoPrestamos = _modelAbonoPrestamo.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
