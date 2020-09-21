@@ -35,6 +35,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(modelo);
         }
+
         [HttpPost("obtenerComisiones", Name = "Transaccion_ObtenerComisiones")]
         public async Task<ActionResult<ObtenerComisionTransaccionMS>> ObtenerComisiones([FromBody] ObtenerComisionTransaccionME modelo)
         {
