@@ -34,7 +34,16 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = @"text/plain";
                 var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(ex.Response.Content);
-                await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
+
+                string mensajeSalida = "Sistema no disponible en estos momentos, por favor intentarlo más tardes o comunicarse con su supervisor";
+
+                if (mensaje.InnerException.ExceptionMessage.Substring(0, 4) == "CNB-")
+                {
+                    int length = mensaje.InnerException.ExceptionMessage.Length;
+                    mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(5, length);
+                }
+
+                await context.Response.WriteAsync(mensajeSalida);
                 return;
             }
             catch (Exception ex)
@@ -45,7 +54,16 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                 {
                     context.Response.ContentType = @"text/plain";
                     var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
-                    await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
+
+                    string mensajeSalida = "Sistema no disponible en estos momentos, por favor intentarlo más tardes o comunicarse con su supervisor";
+
+                    if (mensaje.InnerException.ExceptionMessage.Substring(0, 4) == "CNB-")
+                    {
+                        int length = mensaje.InnerException.ExceptionMessage.Length;
+                        mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(5, length);
+                    }
+
+                    await context.Response.WriteAsync(mensajeSalida);
                 }
                 else
                 {
