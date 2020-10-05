@@ -19,6 +19,7 @@ using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using ServiciosFinancial.Models;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 {
@@ -62,7 +63,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<Transaccion, ModeloTransaccion>()
                 .ForMember(t => t.Tipo, opt => opt.MapFrom(m => m.Descripcion));
             CreateMap<Transaccion, ModeloListarHojaColecta>()
-                .ForMember(t => t.Tipo, opt => opt.MapFrom(m => m.Descripcion));
+                .ForMember(t => t.Tipo, opt => opt.MapFrom(m => m.Descripcion))
+                .ForMember(t => t.NumeroCuenta, opt => opt.MapFrom(m => JObject.Parse(m.JsonDatos)["NumeroCuentaCliente"]));
             #endregion
 
             #region Servicios Financial
