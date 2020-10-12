@@ -1,4 +1,5 @@
 ﻿using FBS.Identidad.DAL.Modelado;
+using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
 using FBS.Infraestructura.Interfaces;
@@ -10,6 +11,7 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -55,6 +57,9 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
             var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
             var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
+
+            var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
+
             services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
 
             var urlApiCore = jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor;
@@ -63,6 +68,13 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
                 BaseAddress = new Uri(urlApiCore)
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+
+            services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Lockout.AllowedForNewUsers = true;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(jsonNegocio.TiempoBloqueo);
+                opt.Lockout.MaxFailedAccessAttempts = jsonNegocio.NumeroMaximoIntentosFallidos;
+            });
         }
     }
 }
