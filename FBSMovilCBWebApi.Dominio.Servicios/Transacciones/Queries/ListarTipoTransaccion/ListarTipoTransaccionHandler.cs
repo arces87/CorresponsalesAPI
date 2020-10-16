@@ -49,15 +49,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
             var idDeposito = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito")?.Valor;
             var idRetiro = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro")?.Valor;
             var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
-            var idAbonoPrestamo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo")?.Valor;
+
             var valorDeposito = 0.0;
             var comisionDeposito = 0.0;
             var valorRetiro = 0.0;
             var comisionRetiro = 0.0;
             var valorCobroServicio = 0.0;
             var comisionCobroServicio = 0.0;
-            var valorAbonoPrestamos = 0.0;
-            var comisionAbonoPrestamos = 0.0;
+          
 
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
 
@@ -81,12 +80,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
                 valorCobroServicio = _modelCobroServicios.Sum(m => m.Valor);
                 comisionCobroServicio = _modelCobroServicios.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
-            if (idAbonoPrestamo != null)
-            {
-                var _modelAbonoPrestamo = await _repositorio.GetForTipo(idAbonoPrestamo, agente.Id.ToString());
-                valorAbonoPrestamos = _modelAbonoPrestamo.Sum(m => m.Valor);
-                comisionAbonoPrestamos = _modelAbonoPrestamo.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
-            }
+           
             _retorno.TiposTransacciones = new List<ModeloListaTipoTransaccion>() {
                     new ModeloListaTipoTransaccion(){
                         Id = idCobroServicio,
@@ -105,13 +99,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
                         Nombre = "Retiro",
                         Comisiones = comisionRetiro,
                         Valor = valorRetiro
-                    },
-                     new ModeloListaTipoTransaccion(){
-                        Id = idAbonoPrestamo,
-                        Nombre = "Abono de Préstamos",
-                        Comisiones = comisionAbonoPrestamos,
-                        Valor = valorAbonoPrestamos
-                    },
+                    }
             };
             return _retorno;
         }

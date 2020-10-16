@@ -45,45 +45,49 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         {
 
             var agentes = await _repositorioAgente.GetAllWithAssociations();
-            foreach (var agente in agentes)
+            try
             {
-                var jsonNegocioAgente = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-
-                CompararLimites(jsonCanalNegocioNuevo, ref jsonNegocioAgente);
-
-                jsonNegocioAgente.Retiro = CompararCambios(jsonCanalNegocioNuevo.Retiro, jsonNegocioAgente.Retiro);
-                jsonNegocioAgente.CobroServicios = CompararCambios(jsonCanalNegocioNuevo.CobroServicios, jsonNegocioAgente.CobroServicios);
-                jsonNegocioAgente.AbonoPrestamos = CompararCambios(jsonCanalNegocioNuevo.AbonoPrestamos, jsonNegocioAgente.AbonoPrestamos);
-                jsonNegocioAgente.Deposito = CompararCambios(jsonCanalNegocioNuevo.Deposito, jsonNegocioAgente.Deposito);
-
-                
-
-                if (jsonCanalNegocioActual.VerificarGeolocalizacion != jsonCanalNegocioNuevo.VerificarGeolocalizacion)
+                foreach (var agente in agentes)
                 {
-                    var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
+                    var jsonNegocioAgente = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
-                    if (geolocalizacion != null)
+                    CompararLimites(jsonCanalNegocioNuevo, ref jsonNegocioAgente);
+
+                    jsonNegocioAgente.Retiro = CompararCambios(jsonCanalNegocioNuevo.Retiro, jsonNegocioAgente.Retiro);
+                    jsonNegocioAgente.CobroServicios = CompararCambios(jsonCanalNegocioNuevo.CobroServicios, jsonNegocioAgente.CobroServicios);
+                    jsonNegocioAgente.Deposito = CompararCambios(jsonCanalNegocioNuevo.Deposito, jsonNegocioAgente.Deposito);
+
+                    if (jsonCanalNegocioActual.VerificarGeolocalizacion != jsonCanalNegocioNuevo.VerificarGeolocalizacion)
                     {
+                        var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
 
-                        if (jsonCanalNegocioNuevo.VerificarGeolocalizacion == false )
+                        if (geolocalizacion != null)
                         {
-                            geolocalizacion.Latitud = 0;
-                            geolocalizacion.Longitud = 0;
-                        }
-                        else
-                        {
-                            geolocalizacion.FechaBaja = DateTime.Now;
-                            geolocalizacion.EstaActivo = false;
+
+                            if (jsonCanalNegocioNuevo.VerificarGeolocalizacion == false)
+                            {
+                                geolocalizacion.Latitud = 0;
+                                geolocalizacion.Longitud = 0;
+                            }
+                            else
+                            {
+                                geolocalizacion.FechaBaja = DateTime.Now;
+                                geolocalizacion.EstaActivo = false;
+                            }
+
+                            await _repositorioGeolocalizacion.Update(geolocalizacion);
                         }
 
-                        await _repositorioGeolocalizacion.Update(geolocalizacion);
+                        jsonNegocioAgente.VerificarGeolocalizacion = jsonCanalNegocioNuevo.VerificarGeolocalizacion;
+
                     }
-
-                    jsonNegocioAgente.VerificarGeolocalizacion = jsonCanalNegocioNuevo.VerificarGeolocalizacion;
-
+                    agente.JsonAgente = JsonConvert.SerializeObject(jsonNegocioAgente);
+                    await _repositorioAgente.Update(agente);
                 }
-                agente.JsonAgente = JsonConvert.SerializeObject(jsonNegocioAgente);
-                await _repositorioAgente.Update(agente);
+            }
+            catch ( Exception e)
+            {
+                throw new Exception("No fue posible modificar el canal.");
             }
         }
 
@@ -115,20 +119,34 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
             operacionAgente.ValidarOtpAgente = operacionCanal.ValidarOtpAgente;
             operacionAgente.ValidarOtpCliente = operacionCanal.ValidarOtpCliente;
 
-            if (operacionCanal.Limites.MontoMaximoDiarioDeTransacciones < operacionAgente.Limites.MontoMaximoDiarioDeTransacciones)
-                operacionAgente.Limites.MontoMaximoDiarioDeTransacciones = operacionCanal.Limites.MontoMaximoDiarioDeTransacciones;
-            if (operacionCanal.Limites.MontoMaximoPorTransaccion < operacionAgente.Limites.MontoMaximoPorTransaccion)
-                operacionAgente.Limites.MontoMaximoPorTransaccion = operacionCanal.Limites.MontoMaximoPorTransaccion;
-            if (operacionCanal.Limites.MontoMinimoPorTransaccion > operacionAgente.Limites.MontoMinimoPorTransaccion)
-                operacionAgente.Limites.MontoMinimoPorTransaccion = operacionCanal.Limites.MontoMinimoPorTransaccion;
-            if (operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones < operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones)
-                operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones = operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones;
-            if (operacionCanal.Comisiones.AdministracionCanal < operacionAgente.Comisiones.AdministracionCanal)
-                operacionAgente.Comisiones.AdministracionCanal = operacionCanal.Comisiones.AdministracionCanal;
-            if (operacionCanal.Comisiones.Agente < operacionAgente.Comisiones.Agente)
-                operacionAgente.Comisiones.Agente = operacionCanal.Comisiones.Agente;
-            if (operacionCanal.Comisiones.Cooperativa < operacionAgente.Comisiones.Cooperativa)
-                operacionAgente.Comisiones.Cooperativa = operacionCanal.Comisiones.Cooperativa;
+            if (operacionAgente.Limites == null)
+            {
+                operacionAgente.Limites = operacionCanal.Limites;
+            } else
+            {
+                if (operacionCanal.Limites.MontoMaximoDiarioDeTransacciones < operacionAgente.Limites.MontoMaximoDiarioDeTransacciones)
+                    operacionAgente.Limites.MontoMaximoDiarioDeTransacciones = operacionCanal.Limites.MontoMaximoDiarioDeTransacciones;
+                if (operacionCanal.Limites.MontoMaximoPorTransaccion < operacionAgente.Limites.MontoMaximoPorTransaccion)
+                    operacionAgente.Limites.MontoMaximoPorTransaccion = operacionCanal.Limites.MontoMaximoPorTransaccion;
+                if (operacionCanal.Limites.MontoMinimoPorTransaccion > operacionAgente.Limites.MontoMinimoPorTransaccion)
+                    operacionAgente.Limites.MontoMinimoPorTransaccion = operacionCanal.Limites.MontoMinimoPorTransaccion;
+                if (operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones < operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones)
+                    operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones = operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones;
+            }
+
+
+            if (operacionAgente.Comisiones == null)
+            {
+                operacionAgente.Comisiones = operacionCanal.Comisiones;
+            } else
+            {
+                if (operacionCanal.Comisiones.AdministracionCanal < operacionAgente.Comisiones.AdministracionCanal)
+                    operacionAgente.Comisiones.AdministracionCanal = operacionCanal.Comisiones.AdministracionCanal;
+                if (operacionCanal.Comisiones.Agente < operacionAgente.Comisiones.Agente)
+                    operacionAgente.Comisiones.Agente = operacionCanal.Comisiones.Agente;
+                if (operacionCanal.Comisiones.Cooperativa < operacionAgente.Comisiones.Cooperativa)
+                    operacionAgente.Comisiones.Cooperativa = operacionCanal.Comisiones.Cooperativa;
+            }
 
             return operacionAgente;
         }
