@@ -19,7 +19,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
 
         public async Task Handle(NotificaSupervisorME request, CancellationToken cancellationToken)
         {
-            var agente = await _repositorioAgente.GetForId(request.Id);
+            var agente = await _repositorioAgente.GetForId(request.IdUsuario);
 
             //await _mediador.Publish(new EnviarCorreoElectronicoME
             //{

@@ -6,6 +6,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
     {
         public string MensajeExcepcion { get; set; }
 
-        public string Id { get; set; }
+        public string IdUsuario { get; set; }
     }
 }

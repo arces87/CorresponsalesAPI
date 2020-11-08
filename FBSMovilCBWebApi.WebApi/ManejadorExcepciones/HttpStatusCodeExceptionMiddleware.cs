@@ -42,6 +42,10 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                 response.ContentType = @"text/plain";
                 switch (error)
                 {
+                    case ExcepcionApp e:
+                        response.StatusCode = StatusCodes.Status400BadRequest;
+                        mensajeSalida = e.Message;
+                        break;
                     case HttpOperationException e:
                         response.Clear();
                         response.StatusCode = StatusCodes.Status400BadRequest;
@@ -66,18 +70,18 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                         break;
                     case SocketException e:
                         mensajeSalida = "Ha ocurrido un error al establecer la conexión con el servicio";
-                        break;
+                        break;                     
                 }
 
                 if (notificar && context.User.Identity.Name != null)
                 {
                     await _mediador.Publish(new NotificaSupervisorME
                     {
-                        MensajeExcepcion = error.Message,
-                        Id = context.User.Identity.Name
+                        MensajeExcepcion = mensajeSalida,
+                        IdUsuario = context.User.Identity.Name
                     });
                 }
-                await context.Response.WriteAsync(mensajeSalida);
+                await response.WriteAsync(mensajeSalida);
                 return;
 
             }
