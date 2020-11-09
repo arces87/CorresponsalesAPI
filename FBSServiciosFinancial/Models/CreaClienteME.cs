@@ -22,7 +22,7 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the CreaClienteME class.
         /// </summary>
-        public CreaClienteME(int? secuencialTipoIdentificacion = default(int?), string identificacion = default(string), string nombres = default(string), string apellidoPaterno = default(string), string apellidoMaterno = default(string), bool? esMasculino = default(bool?), System.DateTime? fechaNacimiento = default(System.DateTime?), string telefonoDomicilio = default(string), string telefonoCelular = default(string), string direccionDomiciliaria = default(string), string referenciaDomiciliaria = default(string), string mail = default(string))
+        public CreaClienteME(int? secuencialTipoIdentificacion = default(int?), string identificacion = default(string), string nombres = default(string), string apellidoPaterno = default(string), string apellidoMaterno = default(string), bool? esMasculino = default(bool?), System.DateTime? fechaNacimiento = default(System.DateTime?), string telefonoDomicilio = default(string), string telefonoCelular = default(string), string direccionDomiciliaria = default(string), string referenciaDomiciliaria = default(string), string mail = default(string), string codigoPais = default(string), string codigoEstadoCivil = default(string), string codigoDactilar = default(string))
         {
             SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
             Identificacion = identificacion;
@@ -36,6 +36,9 @@ namespace ServiciosFinancial.Models
             DireccionDomiciliaria = direccionDomiciliaria;
             ReferenciaDomiciliaria = referenciaDomiciliaria;
             Mail = mail;
+            CodigoPais = codigoPais;
+            CodigoEstadoCivil = codigoEstadoCivil;
+            CodigoDactilar = codigoDactilar;
             CustomInit();
         }
 
@@ -101,8 +104,23 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "mail")]
+        [JsonProperty(PropertyName = "Mail")]
         public string Mail { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "CodigoPais")]
+        public string CodigoPais { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "CodigoEstadoCivil")]
+        public string CodigoEstadoCivil { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "CodigoDactilar")]
+        public string CodigoDactilar { get; set; }
 
     }
 }
