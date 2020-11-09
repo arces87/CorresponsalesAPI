@@ -6,6 +6,7 @@ using Microsoft.Rest;
 using Newtonsoft.Json;
 using System;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net.Mail;
 using System.Net.Sockets;
@@ -59,6 +60,10 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                             int length = mensaje.InnerException.ExceptionMessage.Length;
                             mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(5, length);
                         }
+                        break;
+                    case SqlException e:
+                        mensajeSalida = "Ah ocurrido un error al ejecutar la operación en la Base de Datos.";
+                        notificar = true;
                         break;
                     case DbException e:
                         mensajeSalida = "No fue posible conectarse a la Base de Datos";
