@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿
+using Dapper;
 using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.DAL.Seguridad;
@@ -434,7 +435,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         public async Task<Agente> GetForId(string IdUsuario)
         {
             return await _contexto.Set<Agente>().Where(r => r.EstaActivo == true)
-                .Include(c => c.Usuario).Include(c => c.Dispositivo).Include(c => c.Estado)
+                .Include(c => c.Usuario).Include(c => c.Dispositivo).Include(c => c.Estado).Include(c => c.Supervisor)
                 .FirstOrDefaultAsync(c => c.Usuario.Id == IdUsuario);
         }
         public async Task<bool> Verificaridentificacion(string Identificacion)
