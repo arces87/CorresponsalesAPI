@@ -1,4 +1,5 @@
-﻿using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+﻿using FBS.Dominio.Servicios.CorreoElectronico;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading;
@@ -21,17 +22,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
         {
             var agente = await _repositorioAgente.GetForId(request.IdUsuario);
 
-            //await _mediador.Publish(new EnviarCorreoElectronicoME
-            //{
-            //    Asunto = "Notificación de error en operación del agente",
-            //    Mensaje = "Se ha producido un problema en la operación realizada por el agente: " + agente.NombreAgente + ", error: " + request.MensajeExcepcion + ", remitase a la consola administrativa para más detalles",
-            //    DireccionesDestino = new List<ModeloCuentaCorreo>() {
-            //            new ModeloCuentaCorreo() {
-            //                Direccion = agente.Supervisor.Email,
-            //                Nombre = agente.Supervisor.NombreCompleto
-            //            }
-            //        }
-            //});            
+            await _mediador.Publish(new EnviarCorreoElectronicoME
+            {
+                Asunto = "Notificación de error en operación del agente",
+                Mensaje = "Se ha producido un problema en la operación realizada por el agente: " + agente.NombreAgente + ", error: " + request.MensajeExcepcion + ", remitase a la consola administrativa para más detalles.",
+                DireccionesDestino = new List<ModeloCuentaCorreo>() {
+                        new ModeloCuentaCorreo() {
+                            Direccion = agente.Supervisor.Email,
+                            Nombre = agente.Supervisor.NombreCompleto
+                        }
+                    }
+            });
         }
     }
 }

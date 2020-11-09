@@ -1,6 +1,7 @@
 ﻿using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
 using Newtonsoft.Json;
@@ -22,11 +23,12 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
 
 
 
-        public HttpStatusCodeExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IMediator mediador)
+        public HttpStatusCodeExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IMediator mediador, IServiceScopeFactory serviceProvider)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = loggerFactory?.CreateLogger<HttpStatusCodeExceptionMiddleware>() ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _mediador = mediador;
+            //_mediador = mediador;
+            _mediador = (IMediator)serviceProvider.CreateScope().ServiceProvider.GetService(typeof(IMediator));
         }
 
         public async Task Invoke(HttpContext context)
