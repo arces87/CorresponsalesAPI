@@ -59,8 +59,8 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
 
                         if (mensaje.InnerException.ExceptionMessage.Substring(0, 4) == "CNB-")
                         {
-                            int length = mensaje.InnerException.ExceptionMessage.Length;
-                            mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(5, length);
+                            int length = mensaje.InnerException.ExceptionMessage.Length - 4;
+                            mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(4, length);
                         }
                         break;
                     case SqlException e:
