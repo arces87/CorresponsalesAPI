@@ -57,6 +57,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Distribuidos
             CreateMap<Catalogo, DistribuidoAlerta>();
+            CreateMap<PaisMS, DistribuidoPaises>();
+            CreateMap<EstadoCivilMS, DistribuidoEstadoCivil>();
             #endregion
 
             #region Transacciones
