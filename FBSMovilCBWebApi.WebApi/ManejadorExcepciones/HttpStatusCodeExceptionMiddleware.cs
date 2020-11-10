@@ -77,7 +77,10 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                         break;
                     case SocketException e:
                         mensajeSalida = "Ha ocurrido un error al establecer la conexión con el servicio";
-                        break;                     
+                        break;
+                    default:
+                        mensajeSalida = "Ha ocurrido un error, contacte al administrador";
+                        break;
                 }
 
                 if (notificar && context.User.Identity.Name != null)
