@@ -2,6 +2,7 @@
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -157,11 +158,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     error = " | A001";
                 }
 
-                throw new Exception("Error en la validación de los datos de autenticación" + error);
+                throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
             }
             catch (Exception e)
             {
-                throw new Exception("Error en la validación de los datos de autenticación" + error);
+                throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
             }
         }
     }

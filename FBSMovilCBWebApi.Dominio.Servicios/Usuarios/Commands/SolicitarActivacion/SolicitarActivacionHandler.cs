@@ -2,6 +2,7 @@
 using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -51,7 +52,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 {
                     if (agente.Estado.Id.ToString() == idEstadoInactivo)
                     {
-                        throw new Exception("Error en la validación de los datos de autenticación | A003");
+                        throw new ExcepcionApp("Error en la validación de los datos de autenticación | A003");
                     }
                     else if (agente.Dispositivo != null && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
                     {
@@ -79,7 +80,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         {
                             error = " | A003";
                         }
-                        throw new Exception("Error en la validación de los datos de autenticación" + error);
+                        throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
                     }
                     else
                     {
@@ -91,11 +92,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     error = " | A001";
                 }
 
-                throw new Exception("Error en la validación de los datos de autenticación" + error);
+                throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
             }
             catch (Exception)
             {
-                throw new Exception("Error en la validación de los datos de autenticación" + error);
+                throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
             }
         }
     }

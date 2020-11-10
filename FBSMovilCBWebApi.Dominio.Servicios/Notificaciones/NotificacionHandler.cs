@@ -1,5 +1,6 @@
 ﻿using FBS.Dominio.Servicios.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
+using FBS.Infraestructura.Utiles;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
@@ -58,7 +59,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
-                    throw new Exception($"Error en el envio del correo electrónico al notificar la operación");
+                    throw new ExcepcionApp($"Error en el envio del correo electrónico al notificar la operación");
                 }              
             }
 
@@ -88,7 +89,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
-                    throw new Exception($"Error en el envio de sms al notificar la operación");
+                    throw new ExcepcionApp($"Error en el envio de sms al notificar la operación");
                 }
                 
             }

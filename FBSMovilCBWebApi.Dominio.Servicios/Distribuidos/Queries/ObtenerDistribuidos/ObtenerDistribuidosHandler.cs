@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Interfaces;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
@@ -79,7 +80,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                     IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
-                throw new Exception("Ha ocurrido un error al obtener los tipos de identificación.");
+                throw new ExcepcionApp("Ha ocurrido un error al obtener los tipos de identificación.");
             }
         }
     }

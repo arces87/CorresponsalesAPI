@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -81,11 +82,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands
                 //            return true;
                 //    }
                 //}
-                //throw new Exception("Error en la validación de los datos de autenticación");
+                //throw new ExcepcionApp("Error en la validación de los datos de autenticación");
             }
             catch (Exception)
             {
-                throw new Exception("Error en la validación de los datos de autenticación");
+                throw new ExcepcionApp("Error en la validación de los datos de autenticación");
             }
         }
     }

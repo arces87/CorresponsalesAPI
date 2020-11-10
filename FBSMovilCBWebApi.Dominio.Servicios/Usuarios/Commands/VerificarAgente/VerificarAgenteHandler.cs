@@ -1,12 +1,9 @@
 ﻿using FBS.Identidad.Dominio.Servicios.Canales.Queries;
-using FBSConsolaCBWebApi.DAL.Canales;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,18 +29,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
 
             if (agente == null)
             {
-                throw new Exception($"{error} | A001");
+                throw new ExcepcionApp($"{error} | A001");
             }
             else if (! agente.ValdiarDispotivo(request.Imei, request.Mac))
             {
-                throw new Exception($"{error} | A002");
+                throw new ExcepcionApp($"{error} | A002");
             }
             else if (request.VerificarGeolocalizacion && jsonNegocio.VerificarGeolocalizacion)
             {
                 var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());
                 if (!agente.ValdiarGeolocalizacion(geolocalizacion, request.Latitud, request.Longitud))
                 {
-                    throw new Exception($"{error} | A006");
+                    throw new ExcepcionApp($"{error} | A006");
                 }
             }
 

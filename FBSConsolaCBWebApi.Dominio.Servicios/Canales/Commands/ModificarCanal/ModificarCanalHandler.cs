@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Infraestructura.Interfaces;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
@@ -87,7 +88,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
             }
             catch ( Exception e)
             {
-                throw new Exception("No fue posible modificar el canal.");
+                throw new ExcepcionApp("No fue posible modificar el canal.");
             }
         }
 

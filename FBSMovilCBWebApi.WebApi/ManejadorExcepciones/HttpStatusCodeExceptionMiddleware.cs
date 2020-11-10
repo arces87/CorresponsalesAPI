@@ -1,4 +1,5 @@
-﻿using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
+﻿using FBS.Infraestructura.Utiles;
+using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,7 +51,6 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                         mensajeSalida = e.Message;
                         break;
                     case HttpOperationException e:
-                        response.Clear();
                         response.StatusCode = StatusCodes.Status400BadRequest;
                         var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(e.Response.Content);
                         //var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);

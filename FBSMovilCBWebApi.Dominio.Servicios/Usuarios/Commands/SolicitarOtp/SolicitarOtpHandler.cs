@@ -3,6 +3,7 @@ using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Infraestructura.Interfaces;
+using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
@@ -157,12 +158,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 });
             } else
             {
-                throw new Exception("No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino.");
+                throw new ExcepcionApp("No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino.");
             }
 
             if (respuestaOTP.NotificationEmailError && respuestaOTP.NotificationSMSError)
             {
-                throw new Exception("No fue posible notificar el otp generado.");
+                throw new ExcepcionApp("No fue posible notificar el otp generado.");
             }
 
             return respuestaOTP;

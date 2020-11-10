@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace FBSMobilCBWebApi.Infraestructura
+namespace FBSMovilCBWebApi.Infraestructura
 {
     public class VerificarAgenteMiddleware
     {

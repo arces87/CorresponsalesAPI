@@ -21,6 +21,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
+using FBS.Infraestructura.Utiles;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
@@ -37,9 +38,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         private readonly byte[] _llave;
-
-        
-
+       
         public ProcesarRetiroHandler(
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion, 
@@ -220,42 +219,42 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         {
             if (!jsonNegocio.Retiro.Activo.Value)
             {
-                throw new Exception("Usted no posee acceso para ejecutar esta operación. En caso de requerir acceso a esta funcionalidad comunicarse con su supervisor.");
+                throw new ExcepcionApp("Usted no posee acceso para ejecutar esta operación. En caso de requerir acceso a esta funcionalidad comunicarse con su supervisor.");
             }
 
             if (cantidadTransaccionesDiarias + 1 > jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
+                throw new ExcepcionApp($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
 
             if (cantidadTransaccionesDiariasTipo + 1 > jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: { jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones}.");
+                throw new ExcepcionApp($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: { jsonNegocio.Retiro.Limites.NumeroMaximoDiarioDeTransacciones}.");
             }
 
             if (Valor > jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion)
             {
-                throw new Exception($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion} USD.");
+                throw new ExcepcionApp($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.Retiro.Limites.MontoMaximoPorTransaccion} USD.");
             }
 
             if (Valor < jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion)
             {
-                throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion} USD.");
+                throw new ExcepcionApp($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.Retiro.Limites.MontoMinimoPorTransaccion} USD.");
             }
 
             if (montoTransaccionesDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+                throw new ExcepcionApp($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
             }
 
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+                throw new ExcepcionApp($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones} USD.");
             }
 
             if (saldoActual - Valor < 0)
             {
-                throw new Exception($"No puede realizar esta operación, no tiene fondos suficientes en caja. Fondo en caja {saldoActual}");
+                throw new ExcepcionApp($"No puede realizar esta operación, no tiene fondos suficientes en caja. Fondo en caja {saldoActual}");
             }
         }
     }
