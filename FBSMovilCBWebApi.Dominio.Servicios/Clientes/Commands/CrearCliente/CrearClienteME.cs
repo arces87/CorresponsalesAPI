@@ -16,8 +16,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
         public string TelefonoCelular { get; set; }
         public string DireccionDomiciliaria { get; set; }
         public string ReferenciaDomiciliaria { get; set; }
+        public string PaisNacimiento { get; set; }
+        public string EstadoCivil { get; set; }
+        public string CodigoDactilar { get; set; }
         public string Mail { get; set; }
-
         public string Usuario { get; set; }
         public string Imei { get; set; }
         public double Latitud { get; set; }
