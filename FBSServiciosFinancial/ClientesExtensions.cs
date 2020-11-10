@@ -141,5 +141,27 @@ namespace ServiciosFinancial
                 }
             }
 
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            public static DevuelveDistribuidosMS DevuelveDistribuidos(this IClientes operations)
+            {
+                return operations.DevuelveDistribuidosAsync().GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<DevuelveDistribuidosMS> DevuelveDistribuidosAsync(this IClientes operations, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.DevuelveDistribuidosWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
     }
 }

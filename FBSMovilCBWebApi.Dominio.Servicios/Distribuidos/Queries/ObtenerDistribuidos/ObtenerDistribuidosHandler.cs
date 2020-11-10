@@ -68,9 +68,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
 
-                var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
+                var respuestaTiposIdentificacion = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
+                var respuestaPaisEstadoCivil = await _financialApi.Clientes.DevuelveDistribuidosWithHttpMessagesAsync(customHeaders);
 
-                return new ObtenerDistribuidosMS() { TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuesta.Body.TiposIdentificacion), TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas) };
+                return new ObtenerDistribuidosMS() 
+                { 
+                    TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuestaTiposIdentificacion.Body.TiposIdentificacion), 
+                    TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas),
+                    Paises = _mapper.Map<IEnumerable<DistribuidoPaises>>(respuestaPaisEstadoCivil.Body.Paises),
+                    EstadoCivil = _mapper.Map<IEnumerable<DistribuidoEstadoCivil>>(respuestaPaisEstadoCivil.Body.EstadosCiviles)
+                };
             }
             catch (Exception e)
             {
