@@ -58,9 +58,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<Catalogo, DistribuidoAlerta>();
             CreateMap<PaisMS, DistribuidoPaises>();
             CreateMap<EstadoCivilMS, DistribuidoEstadoCivil>();
-            CreateMap<CrearClienteME, CreaClienteME> ()
-                .ForMember(m => m.CodigoPais, opt => opt.MapFrom(d => d.PaisNacimiento))
-                .ForMember(m => m.CodigoEstadoCivil, opt => opt.MapFrom(d => d.EstadoCivil));
+            CreateMap<CreaClienteME, CrearClienteME> ();
             #endregion
 
             #region Transacciones

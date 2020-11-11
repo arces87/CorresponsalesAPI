@@ -69,7 +69,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(_mapper.Map<CreaClienteME>(request), customHeaders);
+            var mapResult = _mapper.Map<CreaClienteME>(request);
+
+            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(mapResult, customHeaders);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),

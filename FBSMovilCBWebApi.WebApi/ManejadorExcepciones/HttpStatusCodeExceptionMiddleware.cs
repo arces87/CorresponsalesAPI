@@ -57,11 +57,14 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
 
                         mensajeSalida = "Sistema no disponible en estos momentos, por favor intentarlo más tardes o comunicarse con su supervisor";
 
-                        if (mensaje.InnerException.ExceptionMessage.Substring(0, 4) == "CNB-")
-                        {
-                            int length = mensaje.InnerException.ExceptionMessage.Length - 4;
-                            mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(4, length);
-                        }
+                        if (mensaje.InnerException != null) 
+                        { 
+                            if (mensaje.InnerException.ExceptionMessage.Substring(0, 4) == "CNB-")
+                            {
+                                int length = mensaje.InnerException.ExceptionMessage.Length - 4;
+                                mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(4, length);
+                            }
+                        }                        
                         break;
                     case SqlException e:
                         mensajeSalida = "Ah ocurrido un error al ejecutar la operación en la Base de Datos.";
