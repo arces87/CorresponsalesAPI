@@ -14,7 +14,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
-using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using ServiciosFinancial.Models;

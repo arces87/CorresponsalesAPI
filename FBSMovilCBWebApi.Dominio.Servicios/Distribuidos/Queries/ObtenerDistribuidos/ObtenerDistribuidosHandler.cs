@@ -63,7 +63,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
             {
                 await _mediador.Send(new CrearLogME()
                 {
-                    JsonLog = JsonConvert.SerializeObject(customHeaders),
+                    JsonLog = JsonConvert.SerializeObject(request),
                     IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });

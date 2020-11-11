@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
