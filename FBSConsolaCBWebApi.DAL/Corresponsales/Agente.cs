@@ -33,7 +33,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
 
         public bool ValdiarDispotivo(string imei, string mac)
         {
-            return Dispositivo != null && Dispositivo.Imei.ToUpper() == imei.ToUpper() && Dispositivo.MacAddress.ToUpper() == mac.ToUpper();
+            return Dispositivo != null && Dispositivo.EstaActivo && Dispositivo.Imei.ToUpper() == imei.ToUpper() && Dispositivo.MacAddress.ToUpper() == mac.ToUpper();
         }
 
         public bool ValdiarGeolocalizacion(Geolocalizacion geolocalizacion, double latitud, double longitud)
