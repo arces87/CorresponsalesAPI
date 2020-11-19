@@ -59,7 +59,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
                 if (agente != null) //Comprobacion de existencia del Agente y si se encuentra Activo
                 {
-                    if (agente.Dispositivo != null && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
+                    if (agente.Dispositivo != null && agente.Dispositivo.EstaActivo && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
                     {
                         var _usuario = _mapper.Map<LoginUsuarioME>(request);
                         _usuario.Dispositivo = "Movil";
