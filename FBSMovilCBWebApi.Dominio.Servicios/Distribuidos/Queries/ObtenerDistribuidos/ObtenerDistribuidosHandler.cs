@@ -87,7 +87,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                     IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
-                throw new ExcepcionApp("Ha ocurrido un error al obtener los tipos de identificación.");
+                throw new ExcepcionApp("Ha ocurrido un error al obtener los distribuidos.");
             }
         }
     }
