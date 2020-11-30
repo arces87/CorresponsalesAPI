@@ -58,7 +58,37 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 
             var catalogos = await _repositorioCatalogo.GetAllWithAssociations(true);
             var tiposAlertas = catalogos.Where(c => c.TipoCatalogo.Id == new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTipoAlerta").Valor)).ToList();
+            var respuesta = new ObtenerDistribuidosMS() { 
+                TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas)
+            };                  
 
+            await RecuperarTiposIdentificacion(request, customHeaders, respuesta);
+            await RecuperarDistribuidos(customHeaders, respuesta);
+            return respuesta;
+        }
+
+        private async Task RecuperarDistribuidos(Dictionary<string, List<string>> customHeaders, ObtenerDistribuidosMS respuesta)
+        {
+            try
+            {
+                var respuestaPaisEstadoCivil = await _financialApi.Clientes.DevuelveDistribuidosWithHttpMessagesAsync(customHeaders);
+                respuesta.Paises = _mapper.Map<IEnumerable<DistribuidoPaises>>(respuestaPaisEstadoCivil.Body.Paises);
+                respuesta.EstadoCivil = _mapper.Map<IEnumerable<DistribuidoEstadoCivil>>(respuestaPaisEstadoCivil.Body.EstadosCiviles);
+            }
+            catch (Exception e)
+            {
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(e.Message),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+                throw new ExcepcionApp("Ha ocurrido un error al obtener los distribuidos.");
+            }
+        }
+
+        private async Task RecuperarTiposIdentificacion(ObtenerDistribuidosME request, Dictionary<string, List<string>> customHeaders, ObtenerDistribuidosMS respuesta)
+        {
             try
             {
                 await _mediador.Send(new CrearLogME()
@@ -69,15 +99,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                 });
 
                 var respuestaTiposIdentificacion = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
-                var respuestaPaisEstadoCivil = await _financialApi.Clientes.DevuelveDistribuidosWithHttpMessagesAsync(customHeaders);
-
-                return new ObtenerDistribuidosMS() 
-                { 
-                    TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuestaTiposIdentificacion.Body.TiposIdentificacion), 
-                    TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas),
-                    Paises = _mapper.Map<IEnumerable<DistribuidoPaises>>(respuestaPaisEstadoCivil.Body.Paises),
-                    EstadoCivil = _mapper.Map<IEnumerable<DistribuidoEstadoCivil>>(respuestaPaisEstadoCivil.Body.EstadosCiviles)
-                };
+                respuesta.TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuestaTiposIdentificacion.Body.TiposIdentificacion);
             }
             catch (Exception e)
             {
