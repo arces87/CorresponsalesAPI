@@ -91,7 +91,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     Comisiones = new ComisionesMS(),
                                     Identificacion = agente.Identificacion,
                                     JsonNegocio = jsonNegocio,
-                                    Estado = agente.Estado.Nombre
+                                    Estado = agente.Estado.Nombre,
+                                    NombreMostrar = usuarioAutenticado.NombreMostrar,
+                                    TelefonoCelular = usuarioAutenticado.TelefonoCelular,
+                                    ReferenciaUbicacion = agente.Ubicacion                                    
                                 };
                                 if (jsonNegocio != null)
                                 {

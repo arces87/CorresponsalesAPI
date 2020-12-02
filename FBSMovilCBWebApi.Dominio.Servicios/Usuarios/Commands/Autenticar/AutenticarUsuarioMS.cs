@@ -10,5 +10,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         public string Estado { get; set; }
         public JsonNegocioMS JsonNegocio { get; set; }
         public ComisionesMS Comisiones { get; set; }
+        public string NombreMostrar { get; set; }
+        public string ReferenciaUbicacion { get; set; }
+        public string TelefonoCelular { get; set; }
     }
 }
