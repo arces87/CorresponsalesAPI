@@ -108,7 +108,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
             }
 
-            if (cuentaDestino != "" && nombreDestino != "")
+            if (String.IsNullOrEmpty(cuentaDestino) || String.IsNullOrEmpty(nombreDestino))
+            {
+                respuestaOTP.NotificationEmailError = true;
+                respuestaOTP.NotificationEmailErrorMensaje = "No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino";
+            } else
             {
                 try
                 {
@@ -125,10 +129,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     respuestaOTP.NotificationEmailError = true;
                     respuestaOTP.NotificationEmailErrorMensaje = "No se ha podido enviar el Correo Electrónico con el OTP solicitado.";
                 }
-            } else
-            {
-                respuestaOTP.NotificationEmailError = true;
-                respuestaOTP.NotificationEmailErrorMensaje = "No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino";
             }
 
             if (request.SecuencialTipoIdentificacion <= 0 || String.IsNullOrEmpty(request.Identificacion))
