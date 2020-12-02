@@ -75,8 +75,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                 {
                     CodigoUsuarioCorresponsal = notification.NombreUsuarioCorresponsal,
                     MensajeTexto = notification.PlantillaSMS,
-                    NumeroIdentificacion = notification.IdentificacionCorresponsal,
-                    SecuencialTipoIdentificacion = notification.TipoIdentificacionCorresponsal
+                    NumeroIdentificacion = notification.Identificacion,
+                    SecuencialTipoIdentificacion = notification.TipoIdentificacion
                 };
 
                 try

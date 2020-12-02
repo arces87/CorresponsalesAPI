@@ -13,5 +13,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         public string NombreMostrar { get; set; }
         public string ReferenciaUbicacion { get; set; }
         public string TelefonoCelular { get; set; }
+        public int SecuencialTipoIdentificacion { get; set; }
     }
 }

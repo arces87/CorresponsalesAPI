@@ -94,8 +94,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     Estado = agente.Estado.Nombre,
                                     NombreMostrar = usuarioAutenticado.NombreMostrar,
                                     TelefonoCelular = usuarioAutenticado.TelefonoCelular,
-                                    ReferenciaUbicacion = agente.Ubicacion                                    
+                                    ReferenciaUbicacion = agente.Ubicacion,
+                                    SecuencialTipoIdentificacion = agente.TipoIdentificacion
                                 };
+
                                 if (jsonNegocio != null)
                                 {
                                     if (jsonNegocio.CobroServicios != null)
@@ -105,6 +107,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     if (jsonNegocio.Retiro != null)
                                         usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
                                 }
+
                                 if (jsonNegocio.VerificarGeolocalizacion)
                                 {
                                     var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(agente.Id.ToString());

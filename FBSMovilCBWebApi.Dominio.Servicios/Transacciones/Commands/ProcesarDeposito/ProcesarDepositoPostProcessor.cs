@@ -1,11 +1,14 @@
 ﻿using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Notificaciones;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using MimeKit;
 using Newtonsoft.Json;
+using ServiciosFinancial;
 using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
@@ -20,7 +23,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IMediator _mediador;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IHttpContextAccessor _httpContext;
-        public ProcesarDepositoPostProcessor(IMediator mediador, IRepositorioAgente repositorioAgente, IHttpContextAccessor httpContext)
+        public ProcesarDepositoPostProcessor(
+            IMediator mediador, 
+            IRepositorioAgente repositorioAgente, 
+            IHttpContextAccessor httpContext)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -66,23 +72,37 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     
                 }
 
-                valores.Add("[:VALOROPERACION:]", request.Valor.ToString());
-                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
-                valores.Add("[:FECHAACTUAL:]", fechaActual);
+                valoresSMS.Add("[:VALOROPERACION:]", request.Valor.ToString());
+                valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
             }
-        
+
+            var buscarClienteME = new BuscarClienteME
+            {
+                SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
+                Identificacion = request.IdentificacionCliente,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Usuario = request.Usuario,
+                Latitud = request.Latitud,
+                Longitud = request.Longitud,  
+            };
+
+            var datosCliente = await _mediador.Send(buscarClienteME);
 
             await _mediador.Publish(new NotificacionME
             {
                 PlantillaCorreoElectronico = jsonNegocio.Deposito.NotificarCorreoElectronico ? jsonNegocio.Deposito.PlantillaCorreoElectronico : null,
                 PlantillaSMS = jsonNegocio.Deposito.NotificarSMS ? jsonNegocio.Deposito.PlantillaSMS : null,
-                CorreoElectronicoDestinatario = agente.Usuario.Email,
-                NombreDestinatario = agente.NombreAgente,
+                CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
+                NombreDestinatario = request.NombreCliente,
                 AsuntoCorreoElectronico = "Operación Déposito realizada con éxito",
                 NumeroCliente = 1,
                 SecuencialEmpresa = 1,
                 ValoresEmail = valores,
-                ValoresSms = valoresSMS
+                ValoresSms = valoresSMS,
+                TipoIdentificacion = request.TipoIdentificacionCliente,
+                Identificacion = request.IdentificacionCliente
             });
         }
     }

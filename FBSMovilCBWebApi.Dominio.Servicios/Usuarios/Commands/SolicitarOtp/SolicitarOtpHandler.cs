@@ -80,6 +80,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
             var cuentaDestino = "";
             var nombreDestino = "";
+            string userName = "";
+            string identificacion = "";
+            int tipoIdentificacion = 0;
 
             var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
 
@@ -122,10 +125,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     respuestaOTP.NotificationEmailError = true;
                     respuestaOTP.NotificationEmailErrorMensaje = "No se ha podido enviar el Correo Electrónico con el OTP solicitado.";
                 }
+            } else
+            {
+                respuestaOTP.NotificationEmailError = true;
+                respuestaOTP.NotificationEmailErrorMensaje = "No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino";
+            }
 
+            if (request.SecuencialTipoIdentificacion <= 0 || String.IsNullOrEmpty(request.Identificacion))
+            {
+                respuestaOTP.NotificationSMSError = true;
+                respuestaOTP.NotificationSMSErrorMensaje = "No se ha podido enviar el SMS con el OTP solicitado.";
+            } else
+            {
                 try
                 {
-                    var respuesta = await EnviarSMS(agente, tiempoVidaMinutos, otp, nombreDestino, fechaActual);
+                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, nombreDestino, fechaActual, agente.Dispositivo.Imei);
 
                     await _mediador.Send(new CrearLogME()
                     {
@@ -147,19 +161,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     respuestaOTP.NotificationSMSError = true;
                     respuestaOTP.NotificationSMSErrorMensaje = "No se ha podido enviar el SMS con el OTP solicitado.";
                 }
-
-                await _repositorioUsuario.SalvarOtp(request.Usuario, agente.Identificacion, referencia);
-
-                await _mediador.Send(new CrearLogME()
-                {
-                    JsonLog = JsonConvert.SerializeObject(request),
-                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
-                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-                });
-            } else
-            {
-                throw new ExcepcionApp("No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino.");
             }
+
+            await _repositorioUsuario.SalvarOtp(request.Usuario, agente.Identificacion, referencia);
+
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(request),
+                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+            });
 
             if (respuestaOTP.NotificationEmailError && respuestaOTP.NotificationSMSError)
             {
@@ -179,7 +190,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             otp = totp.ComputeTotp();
         }
 
-        private async Task<Microsoft.Rest.HttpOperationResponse<EnvioSMSMS>> EnviarSMS(FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, int tiempoVidaMinutos, string otp, string nombreDestino, string fechaActual)
+        private async Task<Microsoft.Rest.HttpOperationResponse<EnvioSMSMS>> EnviarSMS(
+            string UserName, 
+            string Identificacion, 
+            int TipoIdentificacion, 
+            int tiempoVidaMinutos, 
+            string otp, 
+            string nombreDestino, 
+            string fechaActual,
+            string imei)
         {
             var smsTemplate = File.ReadAllText("Resources/SmsTemplate/template_otp.txt");
 
@@ -190,10 +209,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
             var mensajeSMS = new EnvioSMSME()
             {
-                CodigoUsuarioCorresponsal = agente.Usuario.UserName,
+                CodigoUsuarioCorresponsal = UserName,
                 MensajeTexto = smsTemplate,
-                NumeroIdentificacion = agente.Identificacion,
-                SecuencialTipoIdentificacion = agente.TipoIdentificacion
+                NumeroIdentificacion = Identificacion,
+                SecuencialTipoIdentificacion = TipoIdentificacion
             };
 
             await _mediador.Send(new CrearLogME()
@@ -203,7 +222,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
 
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var apiKey = _apiKeyGenerator.generateApiKey(imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var respuesta = await _servicioFinancial.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, customHeaders);

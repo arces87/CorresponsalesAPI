@@ -1,5 +1,6 @@
 ﻿using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Notificaciones;
 using MediatR;
 using MediatR.Pipeline;
@@ -67,22 +68,37 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
-                valores.Add("[:VALOROPERACION:]", request.Valor.ToString());
-                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
-                valores.Add("[:FECHAACTUAL:]", fechaActual);
+                valoresSMS.Add("[:VALOROPERACION:]", request.Valor.ToString());
+                valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
             }
-                      
+
+            var buscarClienteME = new BuscarClienteME
+            {
+                SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
+                Identificacion = request.IdentificacionCliente,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Usuario = request.Usuario,
+                Latitud = request.Latitud,
+                Longitud = request.Longitud,
+            };
+
+            var datosCliente = await _mediador.Send(buscarClienteME);
+            
             await _mediador.Publish(new NotificacionME
             {
                 PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,
                 PlantillaSMS = jsonNegocio.Retiro.NotificarSMS ? jsonNegocio.Retiro.PlantillaSMS : null,
-                CorreoElectronicoDestinatario = agente.Usuario.Email,
-                NombreDestinatario = agente.NombreAgente,
+                CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
+                NombreDestinatario = request.NombreCliente,
                 AsuntoCorreoElectronico = "Operación Retiro realizada con éxito",
                 NumeroCliente = 1,
                 SecuencialEmpresa = 1,
                 ValoresEmail = valores,
-                ValoresSms = valoresSMS
+                ValoresSms = valoresSMS,
+                TipoIdentificacion = request.TipoIdentificacionCliente,
+                Identificacion = request.IdentificacionCliente
             });
         }
     }
