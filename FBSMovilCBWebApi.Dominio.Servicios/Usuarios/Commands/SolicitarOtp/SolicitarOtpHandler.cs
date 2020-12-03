@@ -100,10 +100,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             }
             else
             {
+                var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+                var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
                 var cliente = await _servicioFinancial.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(new PorIdentificacionSocioME()
                 {
                     Identificacion = request.Identificacion
-                });
+                }, customHeaders);
                 cuentaDestino = cliente.Body.CorreoElectronico;
                 nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
             }
