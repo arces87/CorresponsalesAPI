@@ -102,12 +102,32 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
                 var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-                var cliente = await _servicioFinancial.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(new PorIdentificacionSocioME()
+
+                try
                 {
-                    Identificacion = request.Identificacion
-                }, customHeaders);
-                cuentaDestino = cliente.Body.CorreoElectronico;
-                nombreDestino = cliente.Body.Nombres + cliente.Body.Apellidos != null && cliente.Body.Apellidos != "" ? " " + cliente.Body.Apellidos : "";
+                    var cliente = await _servicioFinancial.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(new PorIdentificacionSocioME()
+                    {
+                        Identificacion = request.Identificacion,
+                        SecuencialTipoIdentificacion = request.SecuencialTipoIdentificacion
+                    }, customHeaders);
+
+                    if (cliente != null && cliente.Body != null)
+                    {
+                        cuentaDestino = cliente.Body.CorreoElectronico;
+                        nombreDestino = String.IsNullOrEmpty(cliente.Body.Nombres + cliente.Body.Apellidos) ? "" : cliente.Body.Nombres + cliente.Body.Apellidos;
+                    }
+                }
+                catch (Exception e)
+                {
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(e.Message),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
+                    respuestaOTP.NotificationEmailError = true;
+                    respuestaOTP.NotificationEmailErrorMensaje = "No se ha podido enviar el Correo Electrónico con el otp solicitado, no fue posible optener los datos del cliente.";
+                }               
             }
 
             if (String.IsNullOrEmpty(cuentaDestino) || String.IsNullOrEmpty(nombreDestino))
@@ -240,7 +260,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} minutos")
                         .Replace("[:FECHAACTUAL:]", fechaActual);
 
-            await _mediador.Publish(new EnviarCorreoElectronicoME
+            var email = new EnviarCorreoElectronicoME
             {
                 Asunto = "OTP Corresponsales Solidarios",
                 Mensaje = emailTemplate,
@@ -250,7 +270,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                             Nombre = nombreDestino
                         }
                     }
+            };
+
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(email),
+                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
+
+            await _mediador.Publish(email);
         }
     }
 }
