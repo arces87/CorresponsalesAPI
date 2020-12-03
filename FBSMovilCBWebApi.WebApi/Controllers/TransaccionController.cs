@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -22,15 +24,15 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("procesarDeposito", Name = "Transaccion_ProcesarDeposito")]
-        [Produces(typeof(AfectacionAUnCorresponsalMS))]
-        public async Task<ActionResult<AfectacionAUnCorresponsalMS>> ProcesarDeposito([FromBody] ProcesarDepositoME modelo)
+        [Produces(typeof(AfectacionAUnCorresponsalDepositoMS))]
+        public async Task<ActionResult<AfectacionAUnCorresponsalDepositoMS>> ProcesarDeposito([FromBody] ProcesarDepositoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("procesarRetiro", Name = "Transaccion_ProcesarRetiro")]
-        [Produces(typeof(AfectacionAUnCorresponsalMS))]
-        public async Task<ActionResult<AfectacionAUnCorresponsalMS>> ProcesarRetiro([FromBody] ProcesarRetiroME modelo)
+        [Produces(typeof(AfectacionAUnCorresponsalRepositorioMS))]
+        public async Task<ActionResult<AfectacionAUnCorresponsalRepositorioMS>> ProcesarRetiro([FromBody] ProcesarRetiroME modelo)
         {
             return await _mediador.Send(modelo);
         }

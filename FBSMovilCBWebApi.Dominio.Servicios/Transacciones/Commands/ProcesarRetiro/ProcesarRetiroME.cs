@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro;
+using MediatR;
 using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarRetiroME : IRequest<AfectacionAUnCorresponsalMS>
+    public class ProcesarRetiroME : IRequest<AfectacionAUnCorresponsalRepositorioMS>
     {
         public int SecuencialCuenta { get; set; }
         public string NumeroCuentaCliente { get; set; }

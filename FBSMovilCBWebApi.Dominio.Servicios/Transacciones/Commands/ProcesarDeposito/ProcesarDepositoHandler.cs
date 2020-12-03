@@ -22,10 +22,11 @@ using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Utiles;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, AfectacionAUnCorresponsalMS>
+    public class ProcesarDepositoHandler : IRequestHandler<ProcesarDepositoME, AfectacionAUnCorresponsalDepositoMS>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -62,7 +63,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _apiKeyGenerator = apiKeyGenerator;
         }
 
-        public async Task<AfectacionAUnCorresponsalMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
+        public async Task<AfectacionAUnCorresponsalDepositoMS> Handle(ProcesarDepositoME request, CancellationToken cancellationToken)
         {
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
             await _mediador.Send(new CrearLogME()
@@ -196,7 +197,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body;
+
+            var afectacionAUnCorresponsalDepositoMS = (AfectacionAUnCorresponsalDepositoMS)(respuesta.Body);
+            return afectacionAUnCorresponsalDepositoMS;
         }
 
         private static void ValidarTransaccion(
