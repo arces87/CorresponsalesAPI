@@ -36,7 +36,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries
             });
 
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var transacciones = await _repositorio.GetForAgente(agente.Id.ToString());
+            var transacciones = await _repositorio.GetAllWithAssociations(agente.Id.ToString());
             transacciones = transacciones.Where(t => t.FechaSistema >= request.FechaInicio && t.FechaSistema <= request.FechaFin).ToList();
             var _retorno = new ListarTransaccionesMS();
             _retorno.Transacciones = _mapper.Map<IEnumerable<ModeloTransaccion>>(transacciones);

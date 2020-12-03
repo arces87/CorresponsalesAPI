@@ -84,21 +84,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
             }
 
-            var buscarClienteME = new BuscarClienteME
-            {
-                SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
-                Identificacion = request.IdentificacionCliente,
-                Imei = request.Imei,
-                Mac = request.Mac,
-                Usuario = request.Usuario,
-                Latitud = request.Latitud,
-                Longitud = request.Longitud,
-            };
-
-            var datosCliente = await _mediador.Send(buscarClienteME);
-
             try
             {
+                var buscarClienteME = new BuscarClienteME
+                {
+                    SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
+                    Identificacion = request.IdentificacionCliente,
+                    Imei = request.Imei,
+                    Mac = request.Mac,
+                    Usuario = request.Usuario,
+                    Latitud = request.Latitud,
+                    Longitud = request.Longitud
+                };
+
+                var datosCliente = await _mediador.Send(buscarClienteME);
+
                 await _mediador.Publish(new NotificacionME
                 {
                     PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,

@@ -60,7 +60,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 VerificarGeolocalizacion = false
             });
 
-            var referencia = await _repositorioUsuario.ReferenciaOtp(request.Usuario, agente.Identificacion);
+            var referencia = await _repositorioUsuario.ReferenciaOtp(request.Usuario, request.Identificacion);
 
             if (referencia == null)
             {

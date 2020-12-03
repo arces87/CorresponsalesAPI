@@ -11,5 +11,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         public double Latitud { get; set; }
         public double Longitud { get; set; }
         public string Mac { get; set; }
+        public string Identificaion { get; set; }
     }
 }

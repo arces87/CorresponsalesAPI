@@ -198,7 +198,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
 
-            var afectacionAUnCorresponsalDepositoMS = (AfectacionAUnCorresponsalDepositoMS)(respuesta.Body);
+            var afectacionAUnCorresponsalDepositoMS = new AfectacionAUnCorresponsalDepositoMS
+            {
+                FechaTransaccion = respuesta.Body.FechaTransaccion,
+                NumeroCuenta = respuesta.Body.NumeroCuenta,
+                NumeroTransaccion = respuesta.Body.NumeroTransaccion,
+                SaldoCuentaCorresponsal = respuesta.Body.SaldoCuentaCorresponsal,
+                Valor = respuesta.Body.Valor
+            };
             return afectacionAUnCorresponsalDepositoMS;
         }
 

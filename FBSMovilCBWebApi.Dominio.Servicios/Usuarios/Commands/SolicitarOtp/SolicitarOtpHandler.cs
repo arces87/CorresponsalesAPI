@@ -208,7 +208,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 }
             }
 
-            await _repositorioUsuario.SalvarOtp(request.Usuario, agente.Identificacion, referencia);
+            await _repositorioUsuario.SalvarOtp(request.Usuario, request.Identificacion, referencia);
 
             await _mediador.Send(new CrearLogME()
             {
