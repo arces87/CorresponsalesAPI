@@ -42,21 +42,31 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 
                 try
                 {
-                    await _mediador.Publish(new EnviarCorreoElectronicoME
+
+                    var email = new EnviarCorreoElectronicoME
                     {
                         Asunto = notification.AsuntoCorreoElectronico,
                         Mensaje = notification.PlantillaCorreoElectronico,
                         DireccionesDestino = new List<ModeloCuentaCorreo> { new ModeloCuentaCorreo {
                         Direccion = notification.CorreoElectronicoDestinatario,
                         Nombre = notification.NombreDestinatario} }
+                    };
+
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(email),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
+
+                    await _mediador.Publish(email);
                 }
                 catch (Exception e)
                 {
                     await _mediador.Send(new CrearLogME()
                     {
                         JsonLog = JsonConvert.SerializeObject(e.Message),
-                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                     throw new ExcepcionApp($"Error en el envio del correo electrónico al notificar la operación");
@@ -71,16 +81,23 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         notification.PlantillaSMS = notification.PlantillaSMS.Replace(key, notification.ValoresSms[key]);
                 }
 
-                var mensajeSMS = new EnvioSMSME()
-                {
-                    CodigoUsuarioCorresponsal = notification.NombreUsuarioCorresponsal,
-                    MensajeTexto = notification.PlantillaSMS,
-                    NumeroIdentificacion = notification.Identificacion,
-                    SecuencialTipoIdentificacion = notification.TipoIdentificacion
-                };
-
                 try
                 {
+                    var mensajeSMS = new EnvioSMSME()
+                    {
+                        CodigoUsuarioCorresponsal = notification.NombreUsuarioCorresponsal,
+                        MensajeTexto = notification.PlantillaSMS,
+                        NumeroIdentificacion = notification.Identificacion,
+                        SecuencialTipoIdentificacion = notification.TipoIdentificacion
+                    };
+
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(mensajeSMS),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
+
                     await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
                 } catch(Exception e) {
                     await _mediador.Send(new CrearLogME()

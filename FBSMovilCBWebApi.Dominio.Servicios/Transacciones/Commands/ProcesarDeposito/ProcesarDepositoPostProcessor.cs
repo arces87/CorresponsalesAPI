@@ -43,6 +43,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         public async Task Process(ProcesarDepositoME request, AfectacionAUnCorresponsalDepositoMS response, CancellationToken cancellationToken)
         {
 
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
+
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);    
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             var valores = new Dictionary<string, string>();
@@ -100,7 +102,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
                 var datosCliente = await _mediador.Send(buscarClienteME);
 
-                await _mediador.Publish(new NotificacionME
+                var notificacion = new NotificacionME
                 {
                     PlantillaCorreoElectronico = jsonNegocio.Deposito.NotificarCorreoElectronico ? jsonNegocio.Deposito.PlantillaCorreoElectronico : null,
                     PlantillaSMS = jsonNegocio.Deposito.NotificarSMS ? jsonNegocio.Deposito.PlantillaSMS : null,
@@ -113,11 +115,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     ValoresSms = valoresSMS,
                     TipoIdentificacion = request.TipoIdentificacionCliente,
                     Identificacion = request.IdentificacionCliente
+                };
+
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(notificacion),
+                    IdTipoAccion = IdTipoAccion,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
                 });
+
+                await _mediador.Publish(notificacion);
             }
             catch (Exception error)
             {
-                var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
 
                 await _mediador.Send(new CrearLogME()
                 {
