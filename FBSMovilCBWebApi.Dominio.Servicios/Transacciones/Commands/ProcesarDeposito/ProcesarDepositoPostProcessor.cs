@@ -29,16 +29,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJsonConfiguracion _jsonConfiguracion;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
         public ProcesarDepositoPostProcessor(
             IMediator mediador, 
             IRepositorioAgente repositorioAgente, 
             IHttpContextAccessor httpContext,
-            IJsonConfiguracion jsonConfiguracion)
+            IJsonConfiguracion jsonConfiguracion,
+            IApiKeyGenerator apiKeyGenerator)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _httpContext = httpContext;
             _jsonConfiguracion = jsonConfiguracion;
+            _apiKeyGenerator = apiKeyGenerator;
         }
         public async Task Process(ProcesarDepositoME request, AfectacionAUnCorresponsalDepositoMS response, CancellationToken cancellationToken)
         {
@@ -78,8 +81,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
                         jsonNegocio.Deposito.PlantillaSMS = SourceReader.ReadToEnd();
-                    }
-                    
+                    }                    
                 }
 
                 valoresSMS.Add("[:VALOROPERACION:]", request.Valor.ToString());
@@ -102,6 +104,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
                 var datosCliente = await _mediador.Send(buscarClienteME);
 
+                var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+                var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+
                 var notificacion = new NotificacionME
                 {
                     PlantillaCorreoElectronico = jsonNegocio.Deposito.NotificarCorreoElectronico ? jsonNegocio.Deposito.PlantillaCorreoElectronico : null,
@@ -115,7 +120,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     ValoresEmail = valores,
                     ValoresSms = valoresSMS,
                     TipoIdentificacion = request.TipoIdentificacionCliente,
-                    Identificacion = request.IdentificacionCliente
+                    Identificacion = request.IdentificacionCliente,
+                    Encabezado = customHeaders
                 };
 
                 await _mediador.Send(new CrearLogME()

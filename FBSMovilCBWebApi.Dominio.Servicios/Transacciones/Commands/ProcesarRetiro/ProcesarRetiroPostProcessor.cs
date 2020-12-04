@@ -1,5 +1,6 @@
 ﻿using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
@@ -26,17 +27,20 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJsonConfiguracion _jsonConfiguracion;
+        private readonly IApiKeyGenerator _apiKeyGenerator;
 
         public ProcesarRetiroPostProcessor(
             IMediator mediador, 
             IRepositorioAgente repositorioAgente, 
             IHttpContextAccessor httpContext,
-            IJsonConfiguracion jsonConfiguracion)
+            IJsonConfiguracion jsonConfiguracion,
+            IApiKeyGenerator apiKeyGenerator)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _httpContext = httpContext;
             _jsonConfiguracion = jsonConfiguracion;
+            _apiKeyGenerator = apiKeyGenerator;
         }
         public async Task Process(ProcesarRetiroME request, AfectacionAUnCorresponsalRepositorioMS response, CancellationToken cancellationToken)
         {
@@ -54,7 +58,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             PrepararSMS(request, agente, jsonNegocio, fechaActual, valoresSMS);
 
-            await Notificar(request, response, IdTipoAccion, jsonNegocio, valores, valoresSMS, agente.Usuario.UserName);
+            await Notificar(request, response, IdTipoAccion, jsonNegocio, valores, valoresSMS, agente.Usuario.UserName, agente.Dispositivo.Imei);
         }
 
         private async Task Notificar(
@@ -64,11 +68,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             JsonNegocioMS jsonNegocio, 
             Dictionary<string, string> valores, 
             Dictionary<string, string> valoresSMS,
-            string nombreUsuarioCorresponsal)
+            string nombreUsuarioCorresponsal,
+            string imei)
         {
             try
             {
-                NotificacionME notificacion = await PrepararNotificacion(request, jsonNegocio, valores, valoresSMS, nombreUsuarioCorresponsal);
+                NotificacionME notificacion = await PrepararNotificacion(request, jsonNegocio, valores, valoresSMS, nombreUsuarioCorresponsal, imei); 
 
                 await _mediador.Send(new CrearLogME()
                 {
@@ -112,7 +117,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             JsonNegocioMS jsonNegocio, 
             Dictionary<string, string> valores, 
             Dictionary<string, string> valoresSMS, 
-            string nombreUsuarioCorresponsal)
+            string nombreUsuarioCorresponsal,
+            string imei)
         {
             var buscarClienteME = new BuscarClienteME
             {
@@ -127,6 +133,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var datosCliente = await _mediador.Send(buscarClienteME);
 
+            var apiKey = _apiKeyGenerator.generateApiKey(imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+
             var notificacion = new NotificacionME
             {
                 PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,
@@ -140,7 +149,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 ValoresEmail = valores,
                 ValoresSms = valoresSMS,
                 TipoIdentificacion = request.TipoIdentificacionCliente,
-                Identificacion = request.IdentificacionCliente
+                Identificacion = request.IdentificacionCliente,
+                Encabezado = customHeaders
             };
             return notificacion;
         }

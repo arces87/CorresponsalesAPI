@@ -97,11 +97,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    var respuesta = await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
+                    var respuesta = await _financialApi.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, notification.Encabezado);
 
-                    if (!(bool)respuesta.EsExitoso)
+                    if (!(bool)respuesta.Body.EsExitoso)
                     {
-                        throw new ExcepcionApp(respuesta.MensajeRespuesta);
+                        throw new ExcepcionApp(respuesta.Body.MensajeRespuesta);
                     }
 
                 } catch(Exception e) {
@@ -112,8 +112,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                     throw new ExcepcionApp($"Error en el envio de sms al notificar la operación");
-                }
-                
+                }                
             }
         }
     }
