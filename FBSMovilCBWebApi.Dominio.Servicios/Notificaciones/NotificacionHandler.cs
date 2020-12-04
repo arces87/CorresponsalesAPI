@@ -98,6 +98,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                     });
 
                     var respuesta = await _financialApi.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, notification.Encabezado);
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(respuesta.Body),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
 
                     if (!(bool)respuesta.Body.EsExitoso)
                     {
@@ -108,7 +114,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                     await _mediador.Send(new CrearLogME()
                     {
                         JsonLog = JsonConvert.SerializeObject(e.Message),
-                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                     throw new ExcepcionApp($"Error en el envio de sms al notificar la operación");
