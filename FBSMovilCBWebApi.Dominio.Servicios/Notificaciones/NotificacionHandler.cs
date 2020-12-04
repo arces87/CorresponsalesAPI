@@ -97,7 +97,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
+                    var respuesta = await _financialApi.MensajeriaSMS.EnvioSMSAsync(mensajeSMS);
+
+                    if (!(bool)respuesta.EsExitoso)
+                    {
+                        throw new ExcepcionApp(respuesta.MensajeRespuesta);
+                    }
+
                 } catch(Exception e) {
                     await _mediador.Send(new CrearLogME()
                     {
