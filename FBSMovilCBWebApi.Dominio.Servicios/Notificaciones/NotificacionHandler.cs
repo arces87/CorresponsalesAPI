@@ -42,7 +42,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 
                 try
                 {
-
                     var email = new EnviarCorreoElectronicoME
                     {
                         Asunto = notification.AsuntoCorreoElectronico,

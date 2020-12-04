@@ -45,32 +45,111 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
             var valores = new Dictionary<string, string>();
-            var comision = jsonNegocio.Retiro.Comisiones.AdministracionCanal + jsonNegocio.Retiro.Comisiones.Agente + jsonNegocio.Retiro.Comisiones.Cooperativa;
 
             var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
 
-            if (jsonNegocio.Retiro.NotificarCorreoElectronico)
-            {
-                if(string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaCorreoElectronico))
-                {
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_retiro.html");
-
-                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-                    {
-                        jsonNegocio.Retiro.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
-                    }
-                }
-
-                valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
-                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
-                valores.Add("[:FECHAACTUAL:]", fechaActual);
-            }
+            PrepararCorreoElectronico(request, agente, jsonNegocio, valores, fechaActual);
 
             var valoresSMS = new Dictionary<string, string>();
 
+            PrepararSMS(request, agente, jsonNegocio, fechaActual, valoresSMS);
+
+            await Notificar(request, response, IdTipoAccion, jsonNegocio, valores, valoresSMS, agente.Usuario.UserName);
+        }
+
+        private async Task Notificar(
+            ProcesarRetiroME request, 
+            AfectacionAUnCorresponsalRepositorioMS response, 
+            string IdTipoAccion, 
+            JsonNegocioMS jsonNegocio, 
+            Dictionary<string, string> valores, 
+            Dictionary<string, string> valoresSMS,
+            string nombreUsuarioCorresponsal)
+        {
+            try
+            {
+                NotificacionME notificacion = await PrepararNotificacion(request, jsonNegocio, valores, valoresSMS, nombreUsuarioCorresponsal);
+
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(notificacion),
+                    IdTipoAccion = IdTipoAccion,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
+                });
+
+                await _mediador.Publish(notificacion);
+            }
+            catch (Exception error)
+            {
+                await ManejarError(response, IdTipoAccion, error);
+            }
+        }
+
+        private async Task ManejarError(AfectacionAUnCorresponsalRepositorioMS response, string IdTipoAccion, Exception error)
+        {
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(error.Message),
+                IdTipoAccion = IdTipoAccion,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
+            });
+
+            response.NotificationError = true;
+
+            switch (error)
+            {
+                case ExcepcionApp e:
+                    response.NotificationErrorMensaje = e.Message;
+                    break;
+                default:
+                    response.NotificationErrorMensaje = "Ha ocurrido un error al notificar la opearación.";
+                    break;
+            }
+        }
+
+        private async Task<NotificacionME> PrepararNotificacion(
+            ProcesarRetiroME request, 
+            JsonNegocioMS jsonNegocio, 
+            Dictionary<string, string> valores, 
+            Dictionary<string, string> valoresSMS, 
+            string nombreUsuarioCorresponsal)
+        {
+            var buscarClienteME = new BuscarClienteME
+            {
+                SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
+                Identificacion = request.IdentificacionCliente,
+                Imei = request.Imei,
+                Mac = request.Mac,
+                Usuario = request.Usuario,
+                Latitud = request.Latitud,
+                Longitud = request.Longitud
+            };
+
+            var datosCliente = await _mediador.Send(buscarClienteME);
+
+            var notificacion = new NotificacionME
+            {
+                PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,
+                PlantillaSMS = jsonNegocio.Retiro.NotificarSMS ? jsonNegocio.Retiro.PlantillaSMS : null,
+                CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
+                NombreDestinatario = request.NombreCliente,
+                AsuntoCorreoElectronico = "Operación Retiro realizada con éxito",
+                NombreUsuarioCorresponsal = nombreUsuarioCorresponsal,
+                NumeroCliente = 1,
+                SecuencialEmpresa = 1,
+                ValoresEmail = valores,
+                ValoresSms = valoresSMS,
+                TipoIdentificacion = request.TipoIdentificacionCliente,
+                Identificacion = request.IdentificacionCliente
+            };
+            return notificacion;
+        }
+
+        private static void PrepararSMS(ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, string fechaActual, Dictionary<string, string> valoresSMS)
+        {
             if (jsonNegocio.Retiro.NotificarSMS)
             {
-                if(string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaSMS))
+                if (string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaSMS))
                 {
                     var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_retiro.txt");
 
@@ -84,68 +163,26 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
             }
+        }
 
-            try
+        private static void PrepararCorreoElectronico(ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActual)
+        {
+            if (jsonNegocio.Retiro.NotificarCorreoElectronico)
             {
-                var buscarClienteME = new BuscarClienteME
+                if (string.IsNullOrEmpty(jsonNegocio.Retiro.PlantillaCorreoElectronico))
                 {
-                    SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
-                    Identificacion = request.IdentificacionCliente,
-                    Imei = request.Imei,
-                    Mac = request.Mac,
-                    Usuario = request.Usuario,
-                    Latitud = request.Latitud,
-                    Longitud = request.Longitud
-                };
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_retiro.html");
 
-                var datosCliente = await _mediador.Send(buscarClienteME);
-
-                var notificacion = new NotificacionME
-                {
-                    PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,
-                    PlantillaSMS = jsonNegocio.Retiro.NotificarSMS ? jsonNegocio.Retiro.PlantillaSMS : null,
-                    CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
-                    NombreDestinatario = request.NombreCliente,
-                    AsuntoCorreoElectronico = "Operación Retiro realizada con éxito",
-                    NumeroCliente = 1,
-                    SecuencialEmpresa = 1,
-                    ValoresEmail = valores,
-                    ValoresSms = valoresSMS,
-                    TipoIdentificacion = request.TipoIdentificacionCliente,
-                    Identificacion = request.IdentificacionCliente
-                };
-
-                await _mediador.Send(new CrearLogME()
-                {
-                    JsonLog = JsonConvert.SerializeObject(notificacion),
-                    IdTipoAccion = IdTipoAccion,
-                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
-                });
-
-                await _mediador.Publish(notificacion);
-            }
-            catch (Exception error)
-            {
-
-                await _mediador.Send(new CrearLogME()
-                {
-                    JsonLog = JsonConvert.SerializeObject(error.Message),
-                    IdTipoAccion = IdTipoAccion,
-                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
-                });
-
-                response.NotificationError = true;
-
-                switch (error)
-                {
-                    case ExcepcionApp e:
-                        response.NotificationErrorMensaje = e.Message;
-                        break;
-                    default:
-                        response.NotificationErrorMensaje = "Ha ocurrido un error al notificar la opearación.";
-                        break;
+                    using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                    {
+                        jsonNegocio.Retiro.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                    }
                 }
-            }     
+
+                valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
+                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valores.Add("[:FECHAACTUAL:]", fechaActual);
+            }
         }
     }
 }

@@ -109,6 +109,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
                     NombreDestinatario = request.NombreCliente,
                     AsuntoCorreoElectronico = "Operación Déposito realizada con éxito",
+                    NombreUsuarioCorresponsal= agente.Usuario.UserName,
                     NumeroCliente = 1,
                     SecuencialEmpresa = 1,
                     ValoresEmail = valores,
