@@ -23,9 +23,6 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
 
         public async Task Invoke(HttpContext context)
         {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            context.Response.ContentType = @"text/plain";
-
             try
             {
                 await _next(context);
@@ -33,6 +30,8 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
             catch (HttpOperationException ex)
             {
                 context.Response.Clear();
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                context.Response.ContentType = @"text/plain";
                 var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(ex.Response.Content);
                 await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
                 return;
@@ -40,18 +39,19 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
             catch (Exception ex)
             {
                 context.Response.Clear();
-                var mensaje = "";
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 if (ex.InnerException is HttpOperationException)
                 {
-                    var excepcionFinancial = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
-                    mensaje = excepcionFinancial.InnerException.ExceptionMessage;
+                    context.Response.ContentType = @"text/plain";
+                    var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
+                    await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
                 }
                 else
                 {
-                    mensaje = ex.Message;
+                    context.Response.ContentType = @"application/json";
+                    await context.Response.WriteAsync(ex.Message);
                 }
 
-                await context.Response.WriteAsync(mensaje);
                 return;
             }
         }
