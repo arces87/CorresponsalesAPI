@@ -23,6 +23,9 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
 
         public async Task Invoke(HttpContext context)
         {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.ContentType = @"text/plain";
+
             try
             {
                 await _next(context);
@@ -30,8 +33,6 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
             catch (HttpOperationException ex)
             {
                 context.Response.Clear();
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                context.Response.ContentType = @"text/plain";
                 var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(ex.Response.Content);
                 await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
                 return;
@@ -39,19 +40,18 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
             catch (Exception ex)
             {
                 context.Response.Clear();
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                var mensaje = "";
                 if (ex.InnerException is HttpOperationException)
                 {
-                    context.Response.ContentType = @"text/plain";
-                    var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
-                    await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
+                    var excepcionFinancial = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
+                    mensaje = excepcionFinancial.InnerException.ExceptionMessage;
                 }
                 else
                 {
-                    context.Response.ContentType = @"application/json";
-                    await context.Response.WriteAsync(ex.Message);
+                    mensaje = ex.Message;
                 }
 
+                await context.Response.WriteAsync(mensaje);
                 return;
             }
         }
