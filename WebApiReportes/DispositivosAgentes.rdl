@@ -17,11 +17,12 @@
     <DataSet Name="DispositivosAgentes">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Corresponsales.Agente.NombreAgente AS Nombre, Corresponsales.Agente.Identificacion AS Cedula, Corresponsales.Agente.EstaActivo, 
+        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Corresponsales.Agente.NombreAgente AS Nombre, Corresponsales.Agente.Identificacion AS Cedula, T.Nombre AS Estado, 
                          'Modelo: ' + Canales.Dispositivo.Modelo + ', No. Serie: ' + Canales.Dispositivo.NumeroSerie + ', IMEI: ' + Canales.Dispositivo.Imei AS Dispositivo
 FROM            Corresponsales.Agente INNER JOIN
                          Canales.Dispositivo ON Corresponsales.Agente.DispositivoId = Canales.Dispositivo.Id INNER JOIN
-                         Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usuario.Id</CommandText>
+                         Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usuario.Id INNER JOIN
+                         Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -36,9 +37,9 @@ FROM            Corresponsales.Agente INNER JOIN
           <DataField>Cedula</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="EstaActivo">
-          <DataField>EstaActivo</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
+        <Field Name="Estado">
+          <DataField>Estado</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Dispositivo">
           <DataField>Dispositivo</DataField>
@@ -55,19 +56,19 @@ FROM            Corresponsales.Agente INNER JOIN
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.32021cm</Width>
+                  <Width>2.97625cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.61125cm</Width>
+                  <Width>3.10854cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.58479cm</Width>
+                  <Width>2.52646cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.8175cm</Width>
+                  <Width>2.5cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>8.63833cm</Width>
+                  <Width>15.62333cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -86,11 +87,13 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Value>Usuario</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>Underline</TextDecoration>
+                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox1</rd:DefaultName>
@@ -119,11 +122,13 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Value>Nombre</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>Underline</TextDecoration>
+                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
@@ -152,11 +157,13 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Value>Cédula</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>Underline</TextDecoration>
+                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox5</rd:DefaultName>
@@ -175,25 +182,26 @@ FROM            Corresponsales.Agente INNER JOIN
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox7">
+                        <Textbox Name="Textbox4">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Estado Agente</Value>
+                                  <Value>Estado</Value>
                                   <Style>
-                                    <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>Underline</TextDecoration>
+                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -220,11 +228,13 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>Underline</TextDecoration>
+                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox9</rd:DefaultName>
@@ -259,7 +269,9 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Usuario</rd:DefaultName>
@@ -289,7 +301,9 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Nombre</rd:DefaultName>
@@ -319,7 +333,9 @@ FROM            Corresponsales.Agente INNER JOIN
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Cedula</rd:DefaultName>
@@ -338,23 +354,23 @@ FROM            Corresponsales.Agente INNER JOIN
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="EstaActivo">
+                        <Textbox Name="Estado">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!EstaActivo.Value</Value>
-                                  <Style>
-                                    <FontFamily>Arial</FontFamily>
-                                  </Style>
+                                  <Value>=Fields!Estado.Value</Value>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>EstaActivo</rd:DefaultName>
+                          <rd:DefaultName>Estado</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -383,7 +399,9 @@ FROM            Corresponsales.Agente INNER JOIN
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Dispositivo</rd:DefaultName>
@@ -424,21 +442,56 @@ FROM            Corresponsales.Agente INNER JOIN
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DispositivosAgentes</DataSetName>
-            <Top>0.84349cm</Top>
-            <Left>0.79057cm</Left>
+            <Top>1.79599cm</Top>
+            <Left>0.79059cm</Left>
             <Height>1.2cm</Height>
-            <Width>21.97208cm</Width>
+            <Width>26.73458cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Textbox2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Reporte de Dispositivos y Agentes</Value>
+                    <Style>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox2</rd:DefaultName>
+            <Top>0.68474cm</Top>
+            <Left>0.79059cm</Left>
+            <Height>0.5909cm</Height>
+            <Width>26.73458cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <Height>2in</Height>
         <Style />
       </Body>
-      <Width>8.96168in</Width>
+      <Width>11.32093in</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
