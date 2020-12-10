@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FBS.Infraestructura.Utiles;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
 using Newtonsoft.Json;
@@ -45,6 +46,21 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
                     context.Response.ContentType = @"text/plain";
                     var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
                     await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
+                }
+                else if (ex is ExcepcionApp)
+                {
+                    var excepcionApp = ex as ExcepcionApp;
+                    
+                    if (excepcionApp.TipoError == TipoError.EmailNotification)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                    } else
+                    {
+                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    }
+
+                    context.Response.ContentType = @"application/json";
+                    await context.Response.WriteAsync(ex.Message);
                 }
                 else
                 {
