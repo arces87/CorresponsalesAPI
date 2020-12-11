@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;

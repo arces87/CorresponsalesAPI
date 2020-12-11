@@ -3,7 +3,7 @@ using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;

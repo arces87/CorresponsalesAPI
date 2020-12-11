@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands

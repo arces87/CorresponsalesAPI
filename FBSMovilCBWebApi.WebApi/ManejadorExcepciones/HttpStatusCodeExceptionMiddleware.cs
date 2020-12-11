@@ -1,5 +1,5 @@
 ﻿using FBS.Identidad.DAL.Modelado;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
@@ -36,7 +36,6 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = loggerFactory?.CreateLogger<HttpStatusCodeExceptionMiddleware>() ?? throw new ArgumentNullException(nameof(loggerFactory));
-            //_mediador = mediador;
             _mediador = (IMediator)serviceProvider.CreateScope().ServiceProvider.GetService(typeof(IMediator));
             _jsonConfiguracion = jsonConfiguracion;
         }

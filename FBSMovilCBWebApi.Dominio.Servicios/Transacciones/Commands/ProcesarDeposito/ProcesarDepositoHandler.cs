@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBS.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands

@@ -1,7 +1,7 @@
 ﻿using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;

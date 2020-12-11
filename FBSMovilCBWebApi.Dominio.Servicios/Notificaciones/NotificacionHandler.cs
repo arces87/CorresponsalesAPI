@@ -1,6 +1,6 @@
 ﻿using FBS.Dominio.Servicios.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
