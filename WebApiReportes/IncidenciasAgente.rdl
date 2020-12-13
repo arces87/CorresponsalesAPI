@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -17,11 +17,20 @@
     <DataSet Name="IncidenciasAgente">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@fechaInicio">
+            <Value>=Parameters!fechaInicio.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@fechaFin">
+            <Value>=Parameters!fechaFin.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
         <CommandText>SELECT        Corresponsales.Alerta.Fecha, C.Nombre AS Incidencia, Corresponsales.Agente.NombreAgente, Corresponsales.Alerta.Descripcion, T.Nombre AS Estado, Corresponsales.Alerta.Comentario
 FROM            Corresponsales.Agente INNER JOIN
                          Corresponsales.Alerta ON Corresponsales.Agente.Id = Corresponsales.Alerta.AgenteId INNER JOIN
                          Nomenclador.Catalogo AS C ON Corresponsales.Alerta.TipoId = C.Id INNER JOIN
-                         Nomenclador.Catalogo AS T ON Corresponsales.Alerta.EstadoId = T.Id</CommandText>
+                         Nomenclador.Catalogo AS T ON Corresponsales.Alerta.EstadoId = T.Id
+WHERE Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin</CommandText>
       </Query>
       <Fields>
         <Field Name="Fecha">
@@ -46,6 +55,50 @@ FROM            Corresponsales.Agente INNER JOIN
         </Field>
         <Field Name="Comentario">
           <DataField>Comentario</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Filters>
+        <Filter>
+          <FilterExpression>=Fields!Incidencia.Value</FilterExpression>
+          <Operator>Equal</Operator>
+          <FilterValues>
+            <FilterValue>=Parameters!tipoIncidencia.Value</FilterValue>
+          </FilterValues>
+        </Filter>
+        <Filter>
+          <FilterExpression>=Fields!Estado.Value</FilterExpression>
+          <Operator>Equal</Operator>
+          <FilterValues>
+            <FilterValue>=Parameters!estado.Value</FilterValue>
+          </FilterValues>
+        </Filter>
+      </Filters>
+    </DataSet>
+    <DataSet Name="EstadoAlerta">
+      <Query>
+        <DataSourceName>DataSourceCorresponsales</DataSourceName>
+        <CommandText>SELECT        Nombre
+FROM            Nomenclador.Catalogo
+WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE67')</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Nombre">
+          <DataField>Nombre</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="TipoIncidencia">
+      <Query>
+        <DataSourceName>DataSourceCorresponsales</DataSourceName>
+        <CommandText>SELECT        Nombre
+FROM            Nomenclador.Catalogo
+WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Nombre">
+          <DataField>Nombre</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -525,7 +578,7 @@ FROM            Corresponsales.Agente INNER JOIN
             <Top>2.2987cm</Top>
             <Left>1.10808cm</Left>
             <Height>1.2cm</Height>
-            <Width>26.37708cm</Width>
+            <Width>26.37707cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -539,7 +592,7 @@ FROM            Corresponsales.Agente INNER JOIN
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Reporte de Incidencias de Agentes</Value>
+                    <Value>Reporte de Incidencias del Agentes</Value>
                     <Style>
                       <FontSize>16pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -584,10 +637,64 @@ FROM            Corresponsales.Agente INNER JOIN
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="fechaInicio">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Inicial</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="fechaFin">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Final</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="estado">
+      <DataType>String</DataType>
+      <Prompt>Estado</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>EstadoAlerta</DataSetName>
+          <ValueField>Nombre</ValueField>
+          <LabelField>Nombre</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="tipoIncidencia">
+      <DataType>String</DataType>
+      <Prompt>Tipo de Incidencia</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>TipoIncidencia</DataSetName>
+          <ValueField>Nombre</ValueField>
+          <LabelField>Nombre</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>fechaInicio</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>fechaFin</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>estado</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>tipoIncidencia</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>

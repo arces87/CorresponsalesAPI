@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -17,12 +17,22 @@
     <DataSet Name="DispositivosAgentes">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Corresponsales.Agente.NombreAgente AS Nombre, Corresponsales.Agente.Identificacion AS Cedula, T.Nombre AS Estado, 
-                         'Modelo: ' + Canales.Dispositivo.Modelo + ', No. Serie: ' + Canales.Dispositivo.NumeroSerie + ', IMEI: ' + Canales.Dispositivo.Imei AS Dispositivo
+        <QueryParameters>
+          <QueryParameter Name="@EstadoGPS">
+            <Value>=Parameters!EstadoGPS.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT DISTINCT 
+                         Seguridad.Usuario.Codigo AS Usuario, Corresponsales.Agente.NombreAgente AS Nombre, Corresponsales.Agente.Identificacion AS Cedula, T.Nombre AS Estado, 
+                         'Modelo: ' + Canales.Dispositivo.Modelo + ', No. Serie: ' + Canales.Dispositivo.NumeroSerie + ', IMEI: ' + Canales.Dispositivo.Imei AS Dispositivo, 
+                         CASE Canales.AgenteGeolocalizacion.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS GPS
 FROM            Corresponsales.Agente INNER JOIN
                          Canales.Dispositivo ON Corresponsales.Agente.DispositivoId = Canales.Dispositivo.Id INNER JOIN
                          Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usuario.Id INNER JOIN
-                         Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id</CommandText>
+                         Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id INNER JOIN
+                         Canales.AgenteGeolocalizacion ON Corresponsales.Agente.Id = Canales.AgenteGeolocalizacion.AgenteId LEFT OUTER JOIN
+                         Canales.Geolocalizacion ON Canales.AgenteGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id
+WHERE        (Canales.Geolocalizacion.EstaActivo = @EstadoGPS) AND (Canales.AgenteGeolocalizacion.EstaActivo = @EstadoGPS)</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -45,6 +55,34 @@ FROM            Corresponsales.Agente INNER JOIN
           <DataField>Dispositivo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="GPS">
+          <DataField>GPS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Filters>
+        <Filter>
+          <FilterExpression>=Fields!Estado.Value</FilterExpression>
+          <Operator>Equal</Operator>
+          <FilterValues>
+            <FilterValue>=Parameters!EstadoAgente.Value</FilterValue>
+          </FilterValues>
+        </Filter>
+      </Filters>
+    </DataSet>
+    <DataSet Name="EstadosAgentes">
+      <Query>
+        <DataSourceName>DataSourceCorresponsales</DataSourceName>
+        <CommandText>SELECT        Nomenclador.Catalogo.Nombre
+FROM            Nomenclador.Catalogo INNER JOIN
+                         Nomenclador.TipoCatalogo ON Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id
+WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE64')</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Nombre">
+          <DataField>Nombre</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
     </DataSet>
   </DataSets>
@@ -65,10 +103,13 @@ FROM            Corresponsales.Agente INNER JOIN
                   <Width>2.52646cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.5cm</Width>
+                  <Width>2.94979cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>15.62333cm</Width>
+                  <Width>15.30583cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.65875cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -189,7 +230,7 @@ FROM            Corresponsales.Agente INNER JOIN
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Estado</Value>
+                                  <Value>Estado Agente</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
@@ -238,6 +279,42 @@ FROM            Corresponsales.Agente INNER JOIN
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Estado GPS</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -418,12 +495,47 @@ FROM            Corresponsales.Agente INNER JOIN
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="GPS">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!GPS.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>GPS</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -445,7 +557,7 @@ FROM            Corresponsales.Agente INNER JOIN
             <Top>1.79599cm</Top>
             <Left>0.79059cm</Left>
             <Height>1.2cm</Height>
-            <Width>26.73458cm</Width>
+            <Width>29.52562cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -475,7 +587,7 @@ FROM            Corresponsales.Agente INNER JOIN
             <Top>0.68474cm</Top>
             <Left>0.79059cm</Left>
             <Height>0.5909cm</Height>
-            <Width>26.73458cm</Width>
+            <Width>29.52562cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -491,7 +603,7 @@ FROM            Corresponsales.Agente INNER JOIN
         <Height>2in</Height>
         <Style />
       </Body>
-      <Width>11.32093in</Width>
+      <Width>13.01885in</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
@@ -504,10 +616,51 @@ FROM            Corresponsales.Agente INNER JOIN
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="EstadoAgente">
+      <DataType>String</DataType>
+      <Prompt>Estado del Agente</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>EstadosAgentes</DataSetName>
+          <ValueField>Nombre</ValueField>
+          <LabelField>Nombre</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="EstadoGPS">
+      <DataType>String</DataType>
+      <Prompt>Estado del GPS</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>1</Value>
+            <Label>Activo</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>0</Value>
+            <Label>Inactivo</Label>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>EstadoAgente</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>EstadoGPS</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>

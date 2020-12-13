@@ -10,42 +10,58 @@
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
-      <rd:DataSourceID>c1c287cc-86da-4af3-85db-6a53dae8ea8e</rd:DataSourceID>
+      <rd:DataSourceID>b7ca6a41-20f1-482b-82ae-273f16f1a9ea</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="UsuariosActivos">
+    <DataSet Name="Logs">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.CorreoElectronico AS Email, Seguridad.Rol.Nombre AS Rol, FORMAT(Seguridad.Usuario.FechaUltimoCambioContrasenia, 
-                         'dd/MM/yyyy') AS Fecha, CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
-FROM            Seguridad.Usuario INNER JOIN
-                         Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId INNER JOIN
-                         Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@fechaInicio">
+            <Value>=Parameters!fechaInicio.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@fechaFin">
+            <Value>=Parameters!fechaFin.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@supervisor">
+            <Value>=Parameters!supervisor.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT        TOP (100) FORMAT(Canales.[Log].Fecha, 'dd/MM/yyyy') AS Fecha, U2.NombreCompleto AS Supervisor, JSON_VALUE(Canales.[Log].JsonLog, '$.Usuario') AS Usuario, C.Nombre AS TipoIncidencia, T.Nombre AS Estado, 
+                         Canales.[Log].JsonLog AS JsonOperacion
+FROM            Corresponsales.Agente AS A INNER JOIN
+                         Seguridad.Usuario AS U ON A.UsuarioId = U.Id INNER JOIN
+                         Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id INNER JOIN
+                         Canales.[Log] INNER JOIN
+                         Nomenclador.Catalogo AS C ON Canales.[Log].TipoAccionId = C.Id INNER JOIN
+                         Nomenclador.Catalogo AS T ON Canales.[Log].EstadoId = T.Id ON U.Codigo = JSON_VALUE(Canales.[Log].JsonLog, '$.Usuario')
+WHERE        (JSON_VALUE(Canales.[Log].JsonLog, '$.Usuario') &lt;&gt; 'NULL') AND (Canales.[Log].Fecha BETWEEN @fechaInicio AND @fechaFin) AND (U2.NombreCompleto = @supervisor)</CommandText>
+        <Timeout>1</Timeout>
       </Query>
       <Fields>
-        <Field Name="Usuario">
-          <DataField>Usuario</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NombreCompleto">
-          <DataField>NombreCompleto</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Email">
-          <DataField>Email</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Rol">
-          <DataField>Rol</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Supervisor">
+          <DataField>Supervisor</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Usuario">
+          <DataField>Usuario</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TipoIncidencia">
+          <DataField>TipoIncidencia</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Estado">
           <DataField>Estado</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="JsonOperacion">
+          <DataField>JsonOperacion</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -57,24 +73,19 @@ FROM            Seguridad.Usuario INNER JOIN
             <FilterValue>=”*”+ Parameters!usuario.Value   +”*”</FilterValue>
           </FilterValues>
         </Filter>
-        <Filter>
-          <FilterExpression>=Fields!Rol.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>=Parameters!rol.Value</FilterValue>
-          </FilterValues>
-        </Filter>
       </Filters>
     </DataSet>
-    <DataSet Name="ListaRoles">
+    <DataSet Name="Supervisor">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Nombre
-FROM            Seguridad.Rol</CommandText>
+        <CommandText>SELECT        TOP (1000) Seguridad.Usuario.NombreCompleto
+FROM            Seguridad.UsuarioRol INNER JOIN
+                         Seguridad.Usuario ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId
+WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546')</CommandText>
       </Query>
       <Fields>
-        <Field Name="Nombre">
-          <DataField>Nombre</DataField>
+        <Field Name="NombreCompleto">
+          <DataField>NombreCompleto</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -88,22 +99,22 @@ FROM            Seguridad.Rol</CommandText>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.06104cm</Width>
+                  <Width>2.1825cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.88125cm</Width>
+                  <Width>3.51047cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>5.42333cm</Width>
+                  <Width>3.50542cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.26729cm</Width>
+                  <Width>3.58479cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.94979cm</Width>
+                  <Width>3.21438cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.24083cm</Width>
+                  <Width>15.14708cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -119,10 +130,9 @@ FROM            Seguridad.Rol</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Usuario</Value>
+                                  <Value>Fecha</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -134,29 +144,9 @@ FROM            Seguridad.Rol</CommandText>
                           <rd:DefaultName>Textbox1</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>Silver</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -174,10 +164,9 @@ FROM            Seguridad.Rol</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Nombre Completo</Value>
+                                  <Value>Supervisor</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -189,29 +178,9 @@ FROM            Seguridad.Rol</CommandText>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>Silver</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -229,10 +198,9 @@ FROM            Seguridad.Rol</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Email</Value>
+                                  <Value>Usuario</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -244,29 +212,9 @@ FROM            Seguridad.Rol</CommandText>
                           <rd:DefaultName>Textbox5</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>Silver</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -284,11 +232,10 @@ FROM            Seguridad.Rol</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Rol</Value>
+                                  <Value>Tipo Incidencia</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -300,29 +247,9 @@ FROM            Seguridad.Rol</CommandText>
                           <rd:DefaultName>Textbox7</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>Silver</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -344,7 +271,6 @@ FROM            Seguridad.Rol</CommandText>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -356,29 +282,9 @@ FROM            Seguridad.Rol</CommandText>
                           <rd:DefaultName>Textbox9</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>Silver</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -389,18 +295,17 @@ FROM            Seguridad.Rol</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox4">
+                        <Textbox Name="Textbox11">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Fecha</Value>
+                                  <Value>Json Operación</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -409,32 +314,12 @@ FROM            Seguridad.Rol</CommandText>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox4</rd:DefaultName>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>Silver</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -450,6 +335,70 @@ FROM            Seguridad.Rol</CommandText>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Fecha">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Fecha.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Fecha</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Supervisor">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Supervisor.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Supervisor</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Usuario">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -461,7 +410,9 @@ FROM            Seguridad.Rol</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Usuario</rd:DefaultName>
@@ -480,74 +431,14 @@ FROM            Seguridad.Rol</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="NombreCompleto">
+                        <Textbox Name="TipoIncidencia">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!NombreCompleto.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>NombreCompleto</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Email">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Email.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Email</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Rol">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Rol.Value</Value>
+                                  <Value>=Fields!TipoIncidencia.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -558,7 +449,7 @@ FROM            Seguridad.Rol</CommandText>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Rol</rd:DefaultName>
+                          <rd:DefaultName>TipoIncidencia</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -608,25 +499,25 @@ FROM            Seguridad.Rol</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Fecha">
+                        <Textbox Name="JsonOperacion">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Fecha.Value</Value>
+                                  <Value>=Fields!JsonOperacion.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Center</TextAlign>
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Fecha</rd:DefaultName>
+                          <rd:DefaultName>JsonOperacion</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -664,25 +555,25 @@ FROM            Seguridad.Rol</CommandText>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>UsuariosActivos</DataSetName>
-            <Top>1.95474cm</Top>
-            <Left>0.68474cm</Left>
+            <DataSetName>Logs</DataSetName>
+            <Top>2.03412cm</Top>
+            <Left>0.81703cm</Left>
             <Height>1.2cm</Height>
-            <Width>23.82353cm</Width>
+            <Width>31.14464cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Textbox2">
+          <Textbox Name="Textbox13">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Reporte de Usuarios</Value>
+                    <Value>Reportes de Incidencias de Corresponsales</Value>
                     <Style>
                       <FontSize>16pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -694,11 +585,11 @@ FROM            Seguridad.Rol</CommandText>
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>0.81703cm</Top>
-            <Left>0.68474cm</Left>
-            <Height>0.64382cm</Height>
-            <Width>23.82353cm</Width>
+            <rd:DefaultName>Textbox13</rd:DefaultName>
+            <Top>0.89641cm</Top>
+            <Left>0.81703cm</Left>
+            <Height>0.6cm</Height>
+            <Width>31.14463cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -714,7 +605,7 @@ FROM            Seguridad.Rol</CommandText>
         <Height>2in</Height>
         <Style />
       </Body>
-      <Width>11.36768in</Width>
+      <Width>12.83333in</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
@@ -728,35 +619,59 @@ FROM            Seguridad.Rol</CommandText>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="fechaInicio">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Inicial</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="fechaFin">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Final</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="supervisor">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Supervisor</DataSetName>
+          <ValueField>NombreCompleto</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>Supervisor</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Supervisor</DataSetName>
+          <ValueField>NombreCompleto</ValueField>
+          <LabelField>NombreCompleto</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
     <ReportParameter Name="usuario">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>Nombre del usuario:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="rol">
-      <DataType>String</DataType>
-      <Prompt>Rol del usuario:</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>ListaRoles</DataSetName>
-          <ValueField>Nombre</ValueField>
-          <LabelField>Nombre</LabelField>
-        </DataSetReference>
-      </ValidValues>
+      <Prompt>Usuario</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
-      <NumberOfColumns>5</NumberOfColumns>
+      <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
+          <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>rol</ParameterName>
+          <ParameterName>fechaInicio</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>fechaFin</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>supervisor</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>usuario</ParameterName>
         </CellDefinition>
@@ -764,5 +679,5 @@ FROM            Seguridad.Rol</CommandText>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>793bd824-41da-4ea3-8d4f-bd9b40cf59a6</rd:ReportID>
+  <rd:ReportID>596109cd-3c23-478c-95d2-6fb2bc8afb6a</rd:ReportID>
 </Report>

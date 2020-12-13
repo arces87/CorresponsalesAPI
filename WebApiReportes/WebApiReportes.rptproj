@@ -51,6 +51,8 @@
   <ItemGroup>
     <Report Include="DispositivosAgentes.rdl" />
     <Report Include="IncidenciasAgente.rdl" />
+    <Report Include="IncidenciasLogs.rdl" />
+    <Report Include="Transacciones.rdl" />
     <Report Include="UsuariosActivosInactivos.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
