@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -21,18 +21,25 @@
           <QueryParameter Name="@EstadoGPS">
             <Value>=Parameters!EstadoGPS.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@EstadoAgente">
+            <Value>=Parameters!EstadoAgente.Value</Value>
+          </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT DISTINCT 
-                         Seguridad.Usuario.Codigo AS Usuario, Corresponsales.Agente.NombreAgente AS Nombre, Corresponsales.Agente.Identificacion AS Cedula, T.Nombre AS Estado, 
-                         'Modelo: ' + Canales.Dispositivo.Modelo + ', No. Serie: ' + Canales.Dispositivo.NumeroSerie + ', IMEI: ' + Canales.Dispositivo.Imei AS Dispositivo, 
-                         CASE Canales.AgenteGeolocalizacion.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS GPS
-FROM            Corresponsales.Agente INNER JOIN
-                         Canales.Dispositivo ON Corresponsales.Agente.DispositivoId = Canales.Dispositivo.Id INNER JOIN
-                         Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usuario.Id INNER JOIN
-                         Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id INNER JOIN
-                         Canales.AgenteGeolocalizacion ON Corresponsales.Agente.Id = Canales.AgenteGeolocalizacion.AgenteId LEFT OUTER JOIN
-                         Canales.Geolocalizacion ON Canales.AgenteGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id
-WHERE        (Canales.Geolocalizacion.EstaActivo = @EstadoGPS) AND (Canales.AgenteGeolocalizacion.EstaActivo = @EstadoGPS)</CommandText>
+        <CommandText>SELECT
+Seguridad.Usuario.Codigo AS Usuario, 
+Corresponsales.Agente.NombreAgente AS Nombre, 
+Corresponsales.Agente.Identificacion AS Cedula, 
+T.Nombre AS Estado, 
+'Modelo: ' + Canales.Dispositivo.Modelo + ', No. Serie: ' + Canales.Dispositivo.NumeroSerie + ', IMEI: ' + Canales.Dispositivo.Imei AS Dispositivo, 
+CASE Canales.AgenteGeolocalizacion.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS GPS
+FROM            
+Corresponsales.Agente 
+INNER JOIN Canales.Dispositivo ON Corresponsales.Agente.DispositivoId = Canales.Dispositivo.Id 
+INNER JOIN Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usuario.Id 
+INNER JOIN Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id 
+INNER JOIN Canales.AgenteGeolocalizacion ON Corresponsales.Agente.Id = Canales.AgenteGeolocalizacion.AgenteId 
+LEFT OUTER JOIN Canales.Geolocalizacion ON Canales.AgenteGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id
+WHERE (Canales.Geolocalizacion.EstaActivo IN (@EstadoGPS)) AND (T.Nombre IN (@EstadoAgente))</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -60,15 +67,6 @@ WHERE        (Canales.Geolocalizacion.EstaActivo = @EstadoGPS) AND (Canales.Agen
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
-      <Filters>
-        <Filter>
-          <FilterExpression>=Fields!Estado.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>=Parameters!EstadoAgente.Value</FilterValue>
-          </FilterValues>
-        </Filter>
-      </Filters>
     </DataSet>
     <DataSet Name="EstadosAgentes">
       <Query>
@@ -627,6 +625,7 @@ WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE6
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
     <ReportParameter Name="EstadoGPS">
       <DataType>String</DataType>
@@ -643,6 +642,7 @@ WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE6
           </ParameterValue>
         </ParameterValues>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>

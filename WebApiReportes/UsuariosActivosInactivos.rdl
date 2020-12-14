@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -17,11 +17,16 @@
     <DataSet Name="UsuariosActivos">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.CorreoElectronico AS Email, Seguridad.Rol.Nombre AS Rol, FORMAT(Seguridad.Usuario.FechaUltimoCambioContrasenia, 
-                         'dd/MM/yyyy') AS Fecha, CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
+        <QueryParameters>
+          <QueryParameter Name="@rol">
+            <Value>=Parameters!rol.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.CorreoElectronico AS Email, Seguridad.Rol.Nombre AS Rol, Seguridad.Usuario.FechaUltimoCambioContrasenia AS Fecha, CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
 FROM            Seguridad.Usuario INNER JOIN
                          Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId INNER JOIN
-                         Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id</CommandText>
+                         Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id
+WHERE (Seguridad.Rol.Nombre IN (@rol))</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -42,7 +47,7 @@ FROM            Seguridad.Usuario INNER JOIN
         </Field>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="Estado">
           <DataField>Estado</DataField>
@@ -55,13 +60,6 @@ FROM            Seguridad.Usuario INNER JOIN
           <Operator>Like</Operator>
           <FilterValues>
             <FilterValue>=”*”+ Parameters!usuario.Value   +”*”</FilterValue>
-          </FilterValues>
-        </Filter>
-        <Filter>
-          <FilterExpression>=Fields!Rol.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>=Parameters!rol.Value</FilterValue>
           </FilterValues>
         </Filter>
       </Filters>
@@ -103,7 +101,7 @@ FROM            Seguridad.Rol</CommandText>
                   <Width>2.94979cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.24083cm</Width>
+                  <Width>3.92875cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -668,7 +666,7 @@ FROM            Seguridad.Rol</CommandText>
             <Top>1.95474cm</Top>
             <Left>0.68474cm</Left>
             <Height>1.2cm</Height>
-            <Width>23.82353cm</Width>
+            <Width>24.51145cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -698,7 +696,7 @@ FROM            Seguridad.Rol</CommandText>
             <Top>0.81703cm</Top>
             <Left>0.68474cm</Left>
             <Height>0.64382cm</Height>
-            <Width>23.82353cm</Width>
+            <Width>24.51145cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -743,6 +741,7 @@ FROM            Seguridad.Rol</CommandText>
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>

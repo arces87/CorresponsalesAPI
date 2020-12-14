@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -24,21 +24,31 @@
           <QueryParameter Name="@fechaFin">
             <Value>=Parameters!fechaFin.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@servicio">
+            <Value>=Parameters!servicio.Value</Value>
+          </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT        TOP (1000) FORMAT(Corresponsales.Transaccion.FechaSistema, 'dd/MM/yyyy') AS Fecha, U.Codigo AS Usuario, Corresponsales.Transaccion.Valor AS ValorRecaudado, JSON_VALUE(Corresponsales.Transaccion.Comisiones, 
-                         '$.agente') AS ComisionAgente, JSON_VALUE(Corresponsales.Transaccion.Comisiones, '$.administracionCanal') AS ComisionCanal, JSON_VALUE(Corresponsales.Transaccion.Comisiones, '$.cooperativa') AS ComisionCoop, 
-                         JSON_VALUE(Corresponsales.Transaccion.Comisiones, '$.Facilito') AS ComisionPago, C.Nombre AS Servicio
-FROM            Corresponsales.Transaccion INNER JOIN
-                         Nomenclador.Catalogo AS C ON Corresponsales.Transaccion.Tipo = C.Id CROSS JOIN
-                         Corresponsales.Agente INNER JOIN
-                         Seguridad.Usuario AS U ON Corresponsales.Agente.UsuarioId = U.Id
-WHERE        (Corresponsales.Transaccion.FechaSistema BETWEEN @fechaInicio AND @fechaFin)</CommandText>
+        <CommandText>SELECT TOP (1000)
+Corresponsales.Transaccion.FechaSistema AS Fecha,
+U.Codigo AS Usuario,
+FORMAT(Corresponsales.Transaccion.Valor,  '#.00') AS ValorRecaudado,
+FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.agente')), '#.00') AS ComisionAgente,
+FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.administracioncanal')), '#.00') AS ComisionCanal,
+FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.cooperativa')), '#.00') AS ComisionCoop,
+FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.facilito')), '#.00') AS ComisionFacilito,
+C.Nombre AS Servicio
+FROM
+Corresponsales.Transaccion
+INNER JOIN Nomenclador.Catalogo AS C ON Corresponsales.Transaccion.Tipo = C.Id
+CROSS JOIN Corresponsales.Agente
+INNER JOIN Seguridad.Usuario AS U ON Corresponsales.Agente.UsuarioId = U.Id
+WHERE        (Corresponsales.Transaccion.FechaSistema BETWEEN @fechaInicio AND @fechaFin) AND (C.Nombre IN (@servicio))</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="Usuario">
           <DataField>Usuario</DataField>
@@ -46,7 +56,7 @@ WHERE        (Corresponsales.Transaccion.FechaSistema BETWEEN @fechaInicio AND @
         </Field>
         <Field Name="ValorRecaudado">
           <DataField>ValorRecaudado</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ComisionAgente">
           <DataField>ComisionAgente</DataField>
@@ -64,8 +74,8 @@ WHERE        (Corresponsales.Transaccion.FechaSistema BETWEEN @fechaInicio AND @
           <DataField>ComisionCoop</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ComisionPago">
-          <DataField>ComisionPago</DataField>
+        <Field Name="ComisionFacilito">
+          <DataField>ComisionFacilito</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -75,13 +85,6 @@ WHERE        (Corresponsales.Transaccion.FechaSistema BETWEEN @fechaInicio AND @
           <Operator>Like</Operator>
           <FilterValues>
             <FilterValue>="*"+Parameters!usuario.Value+"*"</FilterValue>
-          </FilterValues>
-        </Filter>
-        <Filter>
-          <FilterExpression>=Fields!Servicio.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>=Parameters!servicio.Value</FilterValue>
           </FilterValues>
         </Filter>
       </Filters>
@@ -109,7 +112,10 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.39417cm</Width>
+                  <Width>3.61125cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.5cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.5cm</Width>
@@ -329,6 +335,41 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox16</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Comision Facilito</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -584,6 +625,40 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="ComisionFacilito">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ComisionFacilito.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ComisionFacilito</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Servicio">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -629,6 +704,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -645,7 +721,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
             <Top>1.95474cm</Top>
             <Left>0.73766cm</Left>
             <Height>1.2cm</Height>
-            <Width>17.55292cm</Width>
+            <Width>21.27cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -675,7 +751,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
             <Top>0.76412cm</Top>
             <Left>0.73766cm</Left>
             <Height>0.6cm</Height>
-            <Width>17.55292cm</Width>
+            <Width>21.27cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -712,7 +788,6 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
     </ReportParameter>
     <ReportParameter Name="servicio">
       <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
       <Prompt>Servicio</Prompt>
       <ValidValues>
         <DataSetReference>
@@ -721,6 +796,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
     <ReportParameter Name="fechaInicio">
       <DataType>DateTime</DataType>

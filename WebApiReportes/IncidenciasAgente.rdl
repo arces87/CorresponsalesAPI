@@ -18,6 +18,12 @@
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
         <QueryParameters>
+          <QueryParameter Name="@estado">
+            <Value>=Parameters!estado.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@tipoIncidencia">
+            <Value>=Parameters!tipoIncidencia.Value</Value>
+          </QueryParameter>
           <QueryParameter Name="@fechaInicio">
             <Value>=Parameters!fechaInicio.Value</Value>
           </QueryParameter>
@@ -30,7 +36,7 @@ FROM            Corresponsales.Agente INNER JOIN
                          Corresponsales.Alerta ON Corresponsales.Agente.Id = Corresponsales.Alerta.AgenteId INNER JOIN
                          Nomenclador.Catalogo AS C ON Corresponsales.Alerta.TipoId = C.Id INNER JOIN
                          Nomenclador.Catalogo AS T ON Corresponsales.Alerta.EstadoId = T.Id
-WHERE Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin</CommandText>
+WHERE (T.Nombre IN (@estado)) AND (C.Nombre IN (@tipoIncidencia)) AND (Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
       </Query>
       <Fields>
         <Field Name="Fecha">
@@ -58,22 +64,6 @@ WHERE Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin</CommandTex
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
-      <Filters>
-        <Filter>
-          <FilterExpression>=Fields!Incidencia.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>=Parameters!tipoIncidencia.Value</FilterValue>
-          </FilterValues>
-        </Filter>
-        <Filter>
-          <FilterExpression>=Fields!Estado.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>=Parameters!estado.Value</FilterValue>
-          </FilterValues>
-        </Filter>
-      </Filters>
     </DataSet>
     <DataSet Name="EstadoAlerta">
       <Query>
@@ -656,6 +646,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
     <ReportParameter Name="tipoIncidencia">
       <DataType>String</DataType>
@@ -667,6 +658,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>

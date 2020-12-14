@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -18,31 +18,38 @@
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
         <QueryParameters>
+          <QueryParameter Name="@supervisor">
+            <Value>=Parameters!supervisor.Value</Value>
+          </QueryParameter>
           <QueryParameter Name="@fechaInicio">
             <Value>=Parameters!fechaInicio.Value</Value>
           </QueryParameter>
           <QueryParameter Name="@fechaFin">
             <Value>=Parameters!fechaFin.Value</Value>
           </QueryParameter>
-          <QueryParameter Name="@supervisor">
-            <Value>=Parameters!supervisor.Value</Value>
-          </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT        TOP (100) FORMAT(Canales.[Log].Fecha, 'dd/MM/yyyy') AS Fecha, U2.NombreCompleto AS Supervisor, JSON_VALUE(Canales.[Log].JsonLog, '$.Usuario') AS Usuario, C.Nombre AS TipoIncidencia, T.Nombre AS Estado, 
-                         Canales.[Log].JsonLog AS JsonOperacion
-FROM            Corresponsales.Agente AS A INNER JOIN
-                         Seguridad.Usuario AS U ON A.UsuarioId = U.Id INNER JOIN
-                         Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id INNER JOIN
-                         Canales.[Log] INNER JOIN
-                         Nomenclador.Catalogo AS C ON Canales.[Log].TipoAccionId = C.Id INNER JOIN
-                         Nomenclador.Catalogo AS T ON Canales.[Log].EstadoId = T.Id ON U.Codigo = JSON_VALUE(Canales.[Log].JsonLog, '$.Usuario')
-WHERE        (JSON_VALUE(Canales.[Log].JsonLog, '$.Usuario') &lt;&gt; 'NULL') AND (Canales.[Log].Fecha BETWEEN @fechaInicio AND @fechaFin) AND (U2.NombreCompleto = @supervisor)</CommandText>
+        <CommandText>SELECT        
+TOP (100) 
+Canales.[Log].Fecha AS Fecha, 
+U2.NombreCompleto AS Supervisor, 
+U.NombreCompleto AS Usuario, 
+C.Nombre AS TipoIncidencia, 
+T.Nombre AS Estado, 
+Canales.[Log].JsonLog AS JsonOperacion
+FROM            
+Corresponsales.Agente AS A 
+INNER JOIN Seguridad.Usuario AS U ON A.UsuarioId = U.Id
+INNER JOIN Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id,
+Canales.[Log] 
+INNER JOIN Nomenclador.Catalogo AS C ON Canales.[Log].TipoAccionId = C.Id 
+INNER JOIN Nomenclador.Catalogo AS T ON Canales.[Log].EstadoId = T.Id
+WHERE   (U2.NombreCompleto IN (@supervisor)) AND (Canales.[Log].Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
         <Timeout>1</Timeout>
       </Query>
       <Fields>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="Supervisor">
           <DataField>Supervisor</DataField>
@@ -99,7 +106,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.1825cm</Width>
+                  <Width>3.98167cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>3.51047cm</Width>
@@ -559,7 +566,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <Top>2.03412cm</Top>
             <Left>0.81703cm</Left>
             <Height>1.2cm</Height>
-            <Width>31.14464cm</Width>
+            <Width>32.94381cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -589,7 +596,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <Top>0.89641cm</Top>
             <Left>0.81703cm</Left>
             <Height>0.6cm</Height>
-            <Width>31.14463cm</Width>
+            <Width>32.94381cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -605,7 +612,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
         <Height>2in</Height>
         <Style />
       </Body>
-      <Width>12.83333in</Width>
+      <Width>14.03125in</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
@@ -643,6 +650,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
           <LabelField>NombreCompleto</LabelField>
         </DataSetReference>
       </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
     <ReportParameter Name="usuario">
       <DataType>String</DataType>
