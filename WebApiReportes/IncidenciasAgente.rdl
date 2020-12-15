@@ -102,7 +102,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.84938cm</Width>
+                  <Width>3.55834cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.92333cm</Width>
@@ -111,13 +111,13 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
                   <Width>4.06104cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>6.20416cm</Width>
+                  <Width>5.48979cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.5cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>6.83916cm</Width>
+                  <Width>6.1777cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -568,7 +568,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
             <Top>2.2987cm</Top>
             <Left>1.10808cm</Left>
             <Height>1.2cm</Height>
-            <Width>26.37707cm</Width>
+            <Width>24.7102cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -598,7 +598,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
             <Top>0.89641cm</Top>
             <Left>1.10808cm</Left>
             <Height>0.6cm</Height>
-            <Width>26.37708cm</Width>
+            <Width>24.7102cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -628,14 +628,6 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="fechaInicio">
-      <DataType>DateTime</DataType>
-      <Prompt>Fecha Inicial</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="fechaFin">
-      <DataType>DateTime</DataType>
-      <Prompt>Fecha Final</Prompt>
-    </ReportParameter>
     <ReportParameter Name="estado">
       <DataType>String</DataType>
       <Prompt>Estado</Prompt>
@@ -660,6 +652,14 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
       </ValidValues>
       <MultiValue>true</MultiValue>
     </ReportParameter>
+    <ReportParameter Name="fechaInicio">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Inicial</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="fechaFin">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Final</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -668,21 +668,21 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandT
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>fechaInicio</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>fechaFin</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
+          <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>estado</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
+          <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>tipoIncidencia</ParameterName>
         </CellDefinition>

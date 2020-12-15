@@ -31,7 +31,7 @@ Corresponsales.Agente.NombreAgente AS Nombre,
 Corresponsales.Agente.Identificacion AS Cedula, 
 T.Nombre AS Estado, 
 'Modelo: ' + Canales.Dispositivo.Modelo + ', No. Serie: ' + Canales.Dispositivo.NumeroSerie + ', IMEI: ' + Canales.Dispositivo.Imei AS Dispositivo, 
-CASE Canales.AgenteGeolocalizacion.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS GPS
+CASE JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion') WHEN 'true' THEN 'Activo' WHEN 'false' THEN 'Inactivo' END AS GPS
 FROM            
 Corresponsales.Agente 
 INNER JOIN Canales.Dispositivo ON Corresponsales.Agente.DispositivoId = Canales.Dispositivo.Id 
@@ -39,7 +39,7 @@ INNER JOIN Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usua
 INNER JOIN Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id 
 INNER JOIN Canales.AgenteGeolocalizacion ON Corresponsales.Agente.Id = Canales.AgenteGeolocalizacion.AgenteId 
 LEFT OUTER JOIN Canales.Geolocalizacion ON Canales.AgenteGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id
-WHERE (Canales.Geolocalizacion.EstaActivo IN (@EstadoGPS)) AND (T.Nombre IN (@EstadoAgente))</CommandText>
+WHERE (JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion') IN (@EstadoGPS)) AND (T.Nombre IN (@EstadoAgente))</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -104,7 +104,7 @@ WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE6
                   <Width>2.94979cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>15.30583cm</Width>
+                  <Width>10.25229cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.65875cm</Width>
@@ -555,7 +555,7 @@ WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE6
             <Top>1.79599cm</Top>
             <Left>0.79059cm</Left>
             <Height>1.2cm</Height>
-            <Width>29.52562cm</Width>
+            <Width>24.47208cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -585,7 +585,7 @@ WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE6
             <Top>0.68474cm</Top>
             <Left>0.79059cm</Left>
             <Height>0.5909cm</Height>
-            <Width>29.52562cm</Width>
+            <Width>24.47208cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -633,11 +633,11 @@ WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE6
       <ValidValues>
         <ParameterValues>
           <ParameterValue>
-            <Value>1</Value>
+            <Value>true</Value>
             <Label>Activo</Label>
           </ParameterValue>
           <ParameterValue>
-            <Value>0</Value>
+            <Value>false</Value>
             <Label>Inactivo</Label>
           </ParameterValue>
         </ParameterValues>

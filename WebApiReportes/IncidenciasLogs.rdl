@@ -106,7 +106,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.98167cm</Width>
+                  <Width>3.29375cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>3.51047cm</Width>
@@ -121,7 +121,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
                   <Width>3.21438cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>15.14708cm</Width>
+                  <Width>8.18854cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -566,7 +566,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <Top>2.03412cm</Top>
             <Left>0.81703cm</Left>
             <Height>1.2cm</Height>
-            <Width>32.94381cm</Width>
+            <Width>25.29735cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -596,7 +596,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <Top>0.89641cm</Top>
             <Left>0.81703cm</Left>
             <Height>0.6cm</Height>
-            <Width>32.94381cm</Width>
+            <Width>25.29735cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -626,13 +626,10 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="fechaInicio">
-      <DataType>DateTime</DataType>
-      <Prompt>Fecha Inicial</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="fechaFin">
-      <DataType>DateTime</DataType>
-      <Prompt>Fecha Final</Prompt>
+    <ReportParameter Name="usuario">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Usuario</Prompt>
     </ReportParameter>
     <ReportParameter Name="supervisor">
       <DataType>String</DataType>
@@ -652,10 +649,13 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
       </ValidValues>
       <MultiValue>true</MultiValue>
     </ReportParameter>
-    <ReportParameter Name="usuario">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Usuario</Prompt>
+    <ReportParameter Name="fechaInicio">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Inicial</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="fechaFin">
+      <DataType>DateTime</DataType>
+      <Prompt>Fecha Final</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -665,21 +665,21 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>fechaInicio</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>fechaFin</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
+          <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>supervisor</ParameterName>
         </CellDefinition>
         <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
+          <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>usuario</ParameterName>
         </CellDefinition>
