@@ -25,8 +25,6 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
-
-
         public HttpStatusCodeExceptionMiddleware(
             RequestDelegate next, 
             ILoggerFactory loggerFactory, 
@@ -107,12 +105,17 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
 
                 if (guardarLog)
                 {
-
+                    var errorDetalle = new DetalleError
+                    {
+                        CodigoEstado = response.StatusCode,
+                        Mensaje = mensajeSalida,
+                        MensajeExcepcion = error.Message
+                    };
                     await _mediador.Send(new CrearLogME()
                     {
-                        JsonLog = JsonConvert.SerializeObject(error.Message),
+                        JsonLog = JsonConvert.SerializeObject(errorDetalle),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
-                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                 }
                 await response.WriteAsync(mensajeSalida);

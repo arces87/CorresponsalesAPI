@@ -34,7 +34,10 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
             }
             catch (Exception ex)
             {
-                var errorDetalle = new DetalleError();
+                var errorDetalle = new DetalleError()
+                {
+                    MensajeExcepcion = ex.Message
+                };
 
                 var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                 if (contextFeature != null)

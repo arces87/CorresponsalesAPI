@@ -66,7 +66,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.Configure<IdentityOptions>(opt =>
             {
                 opt.Lockout.AllowedForNewUsers = true;
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(jsonNegocio.TiempoBloqueo);
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(36500);
                 opt.Lockout.MaxFailedAccessAttempts = jsonNegocio.NumeroMaximoIntentosFallidos;
             });
         }
