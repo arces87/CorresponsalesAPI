@@ -35,6 +35,7 @@ U2.NombreCompleto AS Supervisor,
 U.NombreCompleto AS Usuario, 
 C.Nombre AS TipoIncidencia, 
 T.Nombre AS Estado, 
+Canales.[Log].JsonDispositivo AS JsonOrigen,
 Canales.[Log].JsonLog AS JsonOperacion
 FROM            
 Corresponsales.Agente AS A 
@@ -67,6 +68,10 @@ WHERE   (U2.NombreCompleto IN (@supervisor)) AND (Canales.[Log].Fecha BETWEEN @f
           <DataField>Estado</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="JsonOrigen">
+          <DataField>JsonOrigen</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="JsonOperacion">
           <DataField>JsonOperacion</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -85,7 +90,7 @@ WHERE   (U2.NombreCompleto IN (@supervisor)) AND (Canales.[Log].Fecha BETWEEN @f
     <DataSet Name="Supervisor">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        TOP (1000) Seguridad.Usuario.NombreCompleto
+        <CommandText>SELECT        Seguridad.Usuario.NombreCompleto
 FROM            Seguridad.UsuarioRol INNER JOIN
                          Seguridad.Usuario ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId
 WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546')</CommandText>
@@ -121,7 +126,10 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
                   <Width>3.21438cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>8.18854cm</Width>
+                  <Width>4.59021cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>4.88125cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -287,6 +295,41 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Json Origen</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -506,6 +549,40 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="JsonOrigen">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!JsonOrigen.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>JsonOrigen</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="JsonOperacion">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -550,6 +627,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -566,7 +644,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <Top>2.03412cm</Top>
             <Left>0.81703cm</Left>
             <Height>1.2cm</Height>
-            <Width>25.29735cm</Width>
+            <Width>26.58027cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -596,7 +674,7 @@ WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546
             <Top>0.89641cm</Top>
             <Left>0.81703cm</Left>
             <Height>0.6cm</Height>
-            <Width>25.29735cm</Width>
+            <Width>26.58027cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
