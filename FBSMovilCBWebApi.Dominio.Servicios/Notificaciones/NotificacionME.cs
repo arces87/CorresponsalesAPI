@@ -18,5 +18,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
         public int? SecuencialEmpresa { get; set; }
         public Dictionary<string, string> ValoresEmail { get; set; }
         public Dictionary<string, string> ValoresSms { get; set; }
+        public Dictionary<string, List<string>> Encabezado { get; set; }
     }
 }

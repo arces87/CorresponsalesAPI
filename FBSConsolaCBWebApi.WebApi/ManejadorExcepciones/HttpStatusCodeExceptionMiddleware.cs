@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FBS.Infraestructura;
+using FBS.Infraestructura.Excepciones;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
 using Newtonsoft.Json;
 using System;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
@@ -27,30 +32,56 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
             {
                 await _next(context);
             }
-            catch (HttpOperationException ex)
-            {
-                context.Response.Clear();
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                context.Response.ContentType = @"text/plain";
-                var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(ex.Response.Content);
-                await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
-                return;
-            }
             catch (Exception ex)
             {
+                var errorDetalle = new DetalleError()
+                {
+                    MensajeExcepcion = ex.Message
+                };
+
+                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (contextFeature != null)
+                {
+                    _logger.LogError($"Ha ocurrido un error: {contextFeature.Error}");
+                }
+
                 context.Response.Clear();
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                if (ex.InnerException is HttpOperationException)
-                {
-                    context.Response.ContentType = @"text/plain";
-                    var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
-                    await context.Response.WriteAsync(mensaje.InnerException.ExceptionMessage);
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = "application/json";
+                switch (ex)
+                {                     
+                    case HttpOperationException e:
+                        
+                        var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        errorDetalle.Mensaje = mensaje.InnerException.ExceptionMessage;
+                        break;
+                    case ExcepcionApp e:
+                        var excepcionApp = ex as ExcepcionApp;
+
+                        if (excepcionApp.TipoError == TipoError.EmailNotification)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                        }
+                        errorDetalle.Mensaje = ex.Message;
+                        break;
+                    case SqlException e:
+                        errorDetalle.Mensaje = "Ah ocurrido un error al ejecutar la operación en la Base de Datos.";
+                        break;
+                    case DbException e:
+                        errorDetalle.Mensaje = "Ah ocurrido un error al ejecutar la operación en la Base de Datos.";
+                        break; 
+                    default:
+                        errorDetalle.Mensaje = "Ha ocurrido un error, contacte al administrador";
+                        break;
                 }
-                else
-                {
-                    context.Response.ContentType = @"application/json";
-                    await context.Response.WriteAsync(ex.Message);
-                }
+
+                errorDetalle.CodigoEstado = context.Response.StatusCode;
+                await context.Response.WriteAsync(errorDetalle.Mensaje);
 
                 return;
             }

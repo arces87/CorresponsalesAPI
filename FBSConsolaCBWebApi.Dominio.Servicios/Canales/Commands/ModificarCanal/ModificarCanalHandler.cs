@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;

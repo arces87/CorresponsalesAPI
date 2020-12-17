@@ -1,5 +1,7 @@
-﻿using FBS.Infraestructura.Utiles;
+﻿using FBS.Identidad.DAL.Modelado;
+using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Agentes.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,15 +23,19 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
         private readonly RequestDelegate _next;
         private readonly ILogger<HttpStatusCodeExceptionMiddleware> _logger;
         private readonly IMediator _mediador;
+        private readonly IJsonConfiguracion _jsonConfiguracion;
 
-
-
-        public HttpStatusCodeExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IMediator mediador, IServiceScopeFactory serviceProvider)
+        public HttpStatusCodeExceptionMiddleware(
+            RequestDelegate next, 
+            ILoggerFactory loggerFactory, 
+            IMediator mediador, 
+            IServiceScopeFactory serviceProvider,
+            IJsonConfiguracion jsonConfiguracion)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = loggerFactory?.CreateLogger<HttpStatusCodeExceptionMiddleware>() ?? throw new ArgumentNullException(nameof(loggerFactory));
-            //_mediador = mediador;
             _mediador = (IMediator)serviceProvider.CreateScope().ServiceProvider.GetService(typeof(IMediator));
+            _jsonConfiguracion = jsonConfiguracion;
         }
 
         public async Task Invoke(HttpContext context)
@@ -42,16 +48,17 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
             {
                 var mensajeSalida = "";
                 var notificar = true;
+                var guardarLog = true;
                 var response = context.Response;
                 response.ContentType = @"text/plain";
+                response.StatusCode = StatusCodes.Status400BadRequest;
                 switch (error)
                 {
+                   
                     case ExcepcionApp e:
-                        response.StatusCode = StatusCodes.Status400BadRequest;
                         mensajeSalida = e.Message;
                         break;
                     case HttpOperationException e:
-                        response.StatusCode = StatusCodes.Status400BadRequest;
                         var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(e.Response.Content);
                         //var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>((ex.InnerException as HttpOperationException).Response.Content);
 
@@ -73,6 +80,7 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                     case DbException e:
                         mensajeSalida = "No fue posible conectarse a la Base de Datos";
                         notificar = false;
+                        guardarLog = false;
                         break;
                     case SmtpException e:
                         mensajeSalida = "No fue posible enviar el email";
@@ -92,6 +100,22 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                     {
                         MensajeExcepcion = mensajeSalida,
                         IdUsuario = context.User.Identity.Name
+                    });
+                }
+
+                if (guardarLog)
+                {
+                    var errorDetalle = new DetalleError
+                    {
+                        CodigoEstado = response.StatusCode,
+                        Mensaje = mensajeSalida,
+                        MensajeExcepcion = error.Message
+                    };
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(errorDetalle),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
                 }
                 await response.WriteAsync(mensajeSalida);

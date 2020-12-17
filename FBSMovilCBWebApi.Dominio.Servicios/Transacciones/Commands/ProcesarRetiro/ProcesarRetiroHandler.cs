@@ -21,11 +21,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarRetiroHandler : IRequestHandler<ProcesarRetiroME, AfectacionAUnCorresponsalMS>
+    public class ProcesarRetiroHandler : IRequestHandler<ProcesarRetiroME, AfectacionAUnCorresponsalRepositorioMS>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -62,7 +63,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _apiKeyGenerator = apiKeyGenerator;
         }
 
-        public async Task<AfectacionAUnCorresponsalMS> Handle(ProcesarRetiroME request, CancellationToken cancellationToken)
+        public async Task<AfectacionAUnCorresponsalRepositorioMS> Handle(ProcesarRetiroME request, CancellationToken cancellationToken)
         {
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro").Valor;
             await _mediador.Send(new CrearLogME()
@@ -199,7 +200,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body;
+
+            var afectacionAUnCorresponsalRepositorioMS = new AfectacionAUnCorresponsalRepositorioMS
+            {
+                FechaTransaccion = respuesta.Body.FechaTransaccion,
+                NumeroCuenta = respuesta.Body.NumeroCuenta,
+                NumeroTransaccion = respuesta.Body.NumeroTransaccion,
+                SaldoCuentaCorresponsal = respuesta.Body.SaldoCuentaCorresponsal,
+                Valor = respuesta.Body.Valor
+            };
+            return afectacionAUnCorresponsalRepositorioMS;
         }
 
         private static void ValidarTransaccion(

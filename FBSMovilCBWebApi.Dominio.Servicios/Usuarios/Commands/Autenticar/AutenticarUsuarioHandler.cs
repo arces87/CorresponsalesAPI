@@ -2,7 +2,7 @@
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Usuarios.Commands;
-using FBS.Infraestructura.Utiles;
+using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -57,6 +57,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
                 var idEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
                 var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
+
                 if (agente != null) //Comprobacion de existencia del Agente y si se encuentra Activo
                 {
                     if (agente.Dispositivo != null && agente.Dispositivo.EstaActivo && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
@@ -98,6 +99,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     SecuencialTipoIdentificacion = agente.TipoIdentificacion
                                 };
 
+                                await _mediador.Send(new CrearLogME()
+                                {
+                                    JsonLog = JsonConvert.SerializeObject(usuario),
+                                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
+                                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                                });
+
                                 if (jsonNegocio != null)
                                 {
                                     if (jsonNegocio.CobroServicios != null)
@@ -119,13 +127,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         var longitud_fin = geolocalizacion.Longitud + 1;
                                         if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
                                         {
-
-                                            await _mediador.Send(new CrearLogME()
-                                            {
-                                                JsonLog = JsonConvert.SerializeObject(usuario),
-                                                IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAutenticacion").Valor,
-                                                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-                                            });
                                             return usuario;
 
                                         }
