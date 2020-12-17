@@ -59,4 +59,6 @@
     <ProjectReference Include="..\FBSConsolaCBWebApi.Dominio.Servicios\FBSConsolaCBWebApi.Dominio.Servicios.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
