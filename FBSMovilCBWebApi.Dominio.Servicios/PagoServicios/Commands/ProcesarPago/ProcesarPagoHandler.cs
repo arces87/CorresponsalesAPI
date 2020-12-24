@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
+using Microsoft.Extensions.Configuration;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 {
@@ -35,6 +36,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         private readonly IHttpContextAccessor _httpContext;
         private readonly byte[] _llave;
         private readonly IApiKeyGenerator _apiKeyGenerator;
+        private readonly IConfiguration _configuracion;
 
         public ProcesarPagoHandler(
             IMediator mediador, 
@@ -45,7 +47,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             IRepositorioAgente repositorioAgente, 
             IRepositorioCuenta repositorioCuenta,
             IHttpContextAccessor httpContext,
-            IApiKeyGenerator apiKeyGenerator)
+            IApiKeyGenerator apiKeyGenerator,
+            IConfiguration configurarion)
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
@@ -57,6 +60,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             _httpContext = httpContext;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
             _apiKeyGenerator = apiKeyGenerator;
+            _configuracion = configurarion;
         }
 
         public async Task<AfectacionMS> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
@@ -69,6 +73,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 Longitud = request.Longitud,
                 Latitud = request.Latitud
             });
+
+            request.Valor = DeterminarValorAPagar(request);
 
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
@@ -164,8 +170,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialServicio = request.SecuencialServicio,
                 SecuencialRequerimientoConsulta = request.SecuencialRequerimientoConsulta,
-                Campos =  request.Campos,
-                CorreoCliente =  request.CorreoCliente
+                Campos = request.Campos,
+                CorreoCliente = request.CorreoCliente
             };
 
             await _mediador.Send(new CrearLogME()
@@ -197,6 +203,32 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
             return respuesta;
+        }
+
+        private double DeterminarValorAPagar(ProcesarPagoME request)
+        {
+
+            if (request.Campos.Count == 0)
+            {
+                throw new ExcepcionApp("No se ha especificado el campo pago.");
+            }
+
+            double ValorAPagar = double.Parse(request.Campos[0].Valor);
+
+            if (request.SecuencialServicio == Int32.Parse(_configuracion["SecuencialProductoCnel"]))
+            {
+                var campos = request.Campos.Where(x => x.Id == Int32.Parse(_configuracion["IdPagoCampoCnel"])).ToList();
+                if (campos.Count == 0)
+                    throw new ExcepcionApp("No se ha especificado el campo pago.");
+                var campoPago = campos.First();
+                ValorAPagar = double.Parse(campoPago.Valor);
+            }
+            else
+            {
+                throw new ExcepcionApp("Ambiguedad en los campos pago para este producto.");
+            }
+
+            return ValorAPagar;
         }
 
         private static void ValidarTransaccion(
