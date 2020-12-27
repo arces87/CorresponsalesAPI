@@ -76,13 +76,40 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             int tiempoVidaMinutos;
             string otp;
             string referencia;
-            GenerarOtp(request, out tiempoVidaMinutos, out otp, out referencia);
+
+            try
+            {
+                GenerarOtp(request, out tiempoVidaMinutos, out otp, out referencia);
+
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(otp),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+            }
+            catch (Exception e)
+            {
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(e.Message),
+                    IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+
+                throw new Exception("Ha ocurrido un error al generar el otp.");
+            }
+
+            var otpReferencia = new OtpReferencia()
+            {
+                Referencia = referencia
+            };
 
             var cuentaDestino = "";
             var nombreDestino = "";
-            string userName = "";
-            string identificacion = "";
-            int tipoIdentificacion = 0;
+            //string userName = "";
+            //string identificacion = "";
+            //int tipoIdentificacion = 0;
 
             var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
 
@@ -208,7 +235,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 }
             }
 
-            await _repositorioUsuario.SalvarOtp(request.Usuario, request.Identificacion, referencia);
+            await _repositorioUsuario.SalvarOtp(request.Usuario, request.Identificacion, JsonConvert.SerializeObject(otpReferencia));
 
             await _mediador.Send(new CrearLogME()
             {
