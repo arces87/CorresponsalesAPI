@@ -9,6 +9,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         public string Nombre { get; set; }
 
         public string JsonNegocio { get; set; }
+        
+        public int TiempoVidaOtp { get; set; } = 600;
 
     }
 }
