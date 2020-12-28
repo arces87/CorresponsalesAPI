@@ -116,7 +116,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
-                throw new Exception("Ha ocurrido un error al verificar el otp.");
+                throw new ExcepcionApp("Ha ocurrido un error al verificar el otp.");
             }            
 
             if (verificacion)
