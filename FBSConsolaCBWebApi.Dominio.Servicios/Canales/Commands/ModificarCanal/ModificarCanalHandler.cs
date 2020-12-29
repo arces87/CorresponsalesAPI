@@ -37,6 +37,11 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
             var jsonCanalNegocioActual = JsonConvert.DeserializeObject<JsonNegocioMS>(_model.JsonNegocio);
             var jsonCanalNegocioNuevo = JsonConvert.DeserializeObject<JsonNegocioMS>(request.JsonNegocio);
             _mapper.Map(request, _model);
+
+            var jsonCanalConfiguracion = JsonConvert.DeserializeObject<FBS.Identidad.DAL.Modelado.JsonConfiguracion>(_model.JsonConfiguracion);
+            jsonCanalConfiguracion.TiempoVidaOtp = request.TiempoVidaOtp;
+            _model.JsonConfiguracion = JsonConvert.SerializeObject(jsonCanalConfiguracion);
+
             await _repositorio.Update(_model);
             await ActualizarAgentes(new Guid(request.Id), jsonCanalNegocioNuevo, jsonCanalNegocioActual);
             return _model.Id.ToString();
