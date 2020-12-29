@@ -215,19 +215,22 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             double ValorAPagar = double.Parse(request.Campos[0].Valor);
 
-            if (request.SecuencialServicio == Int32.Parse(_configuracion["SecuencialProductoCnel"]))
+            if (request.Campos.Count > 1)
             {
-                var campos = request.Campos.Where(x => x.Id == Int32.Parse(_configuracion["IdPagoCampoCnel"])).ToList();
-                if (campos.Count == 0)
-                    throw new ExcepcionApp("No se ha especificado el campo pago.");
-                var campoPago = campos.First();
-                ValorAPagar = double.Parse(campoPago.Valor);
+                if (request.SecuencialServicio == Int32.Parse(_configuracion["SecuencialProductoCnel"]))
+                {
+                    var campos = request.Campos.Where(x => x.Id == Int32.Parse(_configuracion["IdPagoCampoCnel"])).ToList();
+                    if (campos.Count == 0)
+                        throw new ExcepcionApp("No se ha especificado el campo pago.");
+                    var campoPago = campos.First();
+                    ValorAPagar = double.Parse(campoPago.Valor);
+                }
+                else
+                {
+                    throw new ExcepcionApp("Ambiguedad en los campos pago para este producto.");
+                }
             }
-            else
-            {
-                throw new ExcepcionApp("Ambiguedad en los campos pago para este producto.");
-            }
-
+        
             return ValorAPagar;
         }
 
