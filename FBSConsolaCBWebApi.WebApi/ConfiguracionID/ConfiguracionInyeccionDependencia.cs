@@ -62,6 +62,15 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 
             services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
 
+            var configuracionCanal = new ConfiguracionCanal
+            {
+                IdCanal = configuracion["CanalBase"],
+                Configuracion = jsonConfiguracion,
+                Negocio = JsonConvert.DeserializeObject<JsonNegocio>(canal.JsonNegocio)
+            };
+
+            services.AddSingleton<IConfiguracionCanal>(configuracionCanal);
+
             var urlApiCore = jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor;
             var httpClient = new HttpClient
             {

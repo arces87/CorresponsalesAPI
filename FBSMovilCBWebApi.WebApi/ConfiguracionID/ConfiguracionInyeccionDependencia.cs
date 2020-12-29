@@ -57,6 +57,15 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
             services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
 
+            var configuracionCanal = new ConfiguracionCanal
+            {
+                IdCanal = configuracion["CanalBase"],
+                Configuracion = jsonConfiguracion,
+                Negocio = JsonConvert.DeserializeObject<JsonNegocio>(canal.JsonNegocio)
+            };
+
+            services.AddSingleton<IConfiguracionCanal>(configuracionCanal);
+
             var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor),
