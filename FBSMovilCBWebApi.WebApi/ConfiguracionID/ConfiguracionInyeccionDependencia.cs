@@ -48,36 +48,73 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
         internal static void LoadServices(IServiceCollection services, IConfiguration configuracion)
         {
-            var _contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
-            var canal = _contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
+
+            var contexto = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
+            var canal = contexto.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
             var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
             jsonConfiguracion.IdCanal = configuracion["CanalBase"];
 
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
 
-            services.AddSingleton<IJsonConfiguracion>(jsonConfiguracion);
+            PreprarIntanciaConfiguracionCanal(services, configuracion);
 
-            var configuracionCanal = new ConfiguracionCanal
-            {
-                IdCanal = configuracion["CanalBase"],
-                Configuracion = jsonConfiguracion,
-                Negocio = JsonConvert.DeserializeObject<JsonNegocio>(canal.JsonNegocio)
-            };
+            PrepararIntanciaParamtetrizacionCanal(services, configuracion);
 
-            services.AddSingleton<IConfiguracionCanal>(configuracionCanal);
+            ConfigurarApiCoreFinanciero(services, jsonConfiguracion);
 
+            ConfigurarIdentity(services, jsonNegocio);
+        }
+
+        private static void ConfigurarApiCoreFinanciero(IServiceCollection services, JsonConfiguracion jsonConfiguracion)
+        {
             var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor),
             };
             services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+        }
 
+        private static void ConfigurarIdentity(IServiceCollection services, JsonNegocioMS jsonNegocio)
+        {
             services.Configure<IdentityOptions>(opt =>
             {
                 opt.Lockout.AllowedForNewUsers = true;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(36500);
                 opt.Lockout.MaxFailedAccessAttempts = jsonNegocio.NumeroMaximoIntentosFallidos;
             });
+        }
+
+        private static void PrepararIntanciaParamtetrizacionCanal(IServiceCollection services, IConfiguration configuracion)
+        {
+            services.AddScoped<IConfiguracionCanal>((serviceProvider =>
+            {
+                var contextoScoped = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
+                var canalObjeto = contextoScoped.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
+                var jsonConfiguracionObjeto = JsonConvert.DeserializeObject<JsonConfiguracion>(canalObjeto.JsonConfiguracion);
+                jsonConfiguracionObjeto.IdCanal = configuracion["CanalBase"];
+
+                var configuracionCanal = new ConfiguracionCanal
+                {
+                    IdCanal = configuracion["CanalBase"],
+                    Configuracion = jsonConfiguracionObjeto,
+                    Negocio = JsonConvert.DeserializeObject<JsonNegocio>(canalObjeto.JsonNegocio)
+                };
+
+                return configuracionCanal;
+            }));
+        }
+
+        private static void PreprarIntanciaConfiguracionCanal(IServiceCollection services, IConfiguration configuracion)
+        {
+            services.AddScoped<IJsonConfiguracion>((serviceProvider =>
+            {
+                var contextoScoped = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
+                var canalScoped = contextoScoped.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
+                var jsonConfiguracionScoped = JsonConvert.DeserializeObject<JsonConfiguracion>(canalScoped.JsonConfiguracion);
+                jsonConfiguracionScoped.IdCanal = configuracion["CanalBase"];
+
+                return jsonConfiguracionScoped;
+            }));
         }
     }
 }
