@@ -29,13 +29,12 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
             RequestDelegate next, 
             ILoggerFactory loggerFactory, 
             IMediator mediador, 
-            IServiceScopeFactory serviceProvider,
-            IJsonConfiguracion jsonConfiguracion)
+            IServiceScopeFactory serviceProvider)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = loggerFactory?.CreateLogger<HttpStatusCodeExceptionMiddleware>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _mediador = (IMediator)serviceProvider.CreateScope().ServiceProvider.GetService(typeof(IMediator));
-            _jsonConfiguracion = jsonConfiguracion;
+            _jsonConfiguracion = (IJsonConfiguracion)serviceProvider.CreateScope().ServiceProvider.GetService(typeof(IJsonConfiguracion));
         }
 
         public async Task Invoke(HttpContext context)
