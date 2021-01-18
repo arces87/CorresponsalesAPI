@@ -13,6 +13,7 @@ namespace FBSConsolaCBWebApi.DAL.Canales
         public Guid Id { get; set; }
         public Catalogo TipoAccion { get; set; }
         public Catalogo Estado { get; set; }
+        public string UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }

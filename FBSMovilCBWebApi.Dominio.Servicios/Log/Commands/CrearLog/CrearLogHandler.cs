@@ -5,8 +5,10 @@ using FBSConsolaCBWebApi.DAL.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,19 +21,33 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands
         private readonly IRepositorioLog _repositorio;
         private readonly IMapper _mapper;
         private readonly byte[] _llave;
+        private readonly UserManager<Usuario> _manejadorUsuario;
 
-        public CrearLogHandler(IRepositorioLog repositorio, IMapper mapper, IHttpContextAccessor httpContext)
+        public CrearLogHandler(IRepositorioLog repositorio, IMapper mapper, IHttpContextAccessor httpContext, UserManager<Usuario> manejadorUsuario)
         {
             _repositorio = repositorio;
             _mapper = mapper;
             _httpContext = httpContext;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
+            _manejadorUsuario = manejadorUsuario;
         }
 
         public async Task<string> Handle(CrearLogME request, CancellationToken cancellationToken)
         {
             var _model = _mapper.Map<Log>(request);
-            _model.Usuario = new Usuario() { UserName = _httpContext.HttpContext.User.Identity.Name };
+            _model.UsuarioId = null;
+
+            // Esto no es reponsabilidad del Logger, se le debería pasar como aprametro el Id del usuario.
+            if (_httpContext.HttpContext.User.Identity.Name != null)
+            {
+                var usuario = _manejadorUsuario.Users.FirstOrDefault(u => u.Id == _httpContext.HttpContext.User.Identity.Name);
+
+                if (usuario != null)
+                {
+                    _model.UsuarioId = usuario.Id;
+                }
+            }
+
             var logDispositivo = new LogDispositivo()
             {
                 Agente = _httpContext.HttpContext.Request.Headers["User-Agent"],

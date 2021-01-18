@@ -86,7 +86,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
         {
             entidad.TipoAccion = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.TipoAccion.Id);
             entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id == entidad.Estado.Id);
-            entidad.Usuario = Context.Users.FirstOrDefault(c => c.UserName == entidad.Usuario.UserName);
+            entidad.UsuarioId = entidad.UsuarioId;
             entidad.EstaActivo = true;
             Context.Logs.Add(entidad);
             await Context.SaveChangesAsync();
