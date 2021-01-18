@@ -22,10 +22,10 @@
             <Value>=Parameters!rol.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT        Seguridad.Usuario.Codigo AS Usuario, Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.CorreoElectronico AS Email, Seguridad.Rol.Nombre AS Rol, Seguridad.Usuario.FechaUltimoCambioContrasenia AS Fecha, CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
-FROM            Seguridad.Usuario INNER JOIN
-                         Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId INNER JOIN
-                         Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id
+        <CommandText>SELECT Seguridad.Usuario.Codigo AS Usuario, Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.CorreoElectronico AS Email, Seguridad.Rol.Nombre AS Rol, Seguridad.Usuario.FechaUltimoCambioContrasenia AS Fecha, CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
+FROM Seguridad.Usuario INNER JOIN
+Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId INNER JOIN
+Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id
 WHERE (Seguridad.Rol.Nombre IN (@rol))</CommandText>
       </Query>
       <Fields>
@@ -67,8 +67,9 @@ WHERE (Seguridad.Rol.Nombre IN (@rol))</CommandText>
     <DataSet Name="ListaRoles">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Nombre
-FROM            Seguridad.Rol</CommandText>
+        <CommandText>SELECT Nombre
+FROM Seguridad.Rol
+WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="Nombre">

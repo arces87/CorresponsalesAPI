@@ -31,12 +31,12 @@
             <Value>=Parameters!fechaFin.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT        Corresponsales.Alerta.Fecha, C.Nombre AS Incidencia, Corresponsales.Agente.NombreAgente, Corresponsales.Alerta.Descripcion, T.Nombre AS Estado, Corresponsales.Alerta.Comentario
-FROM            Corresponsales.Agente INNER JOIN
-                         Corresponsales.Alerta ON Corresponsales.Agente.Id = Corresponsales.Alerta.AgenteId INNER JOIN
-                         Nomenclador.Catalogo AS C ON Corresponsales.Alerta.TipoId = C.Id INNER JOIN
-                         Nomenclador.Catalogo AS T ON Corresponsales.Alerta.EstadoId = T.Id
-WHERE (T.Nombre IN (@estado)) AND (C.Nombre IN (@tipoIncidencia)) AND (Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
+        <CommandText>SELECT Corresponsales.Alerta.Fecha, C.Nombre AS Incidencia, Corresponsales.Agente.NombreAgente, Corresponsales.Alerta.Descripcion, T.Nombre AS Estado, Corresponsales.Alerta.Comentario
+FROM Corresponsales.Agente INNER JOIN
+Corresponsales.Alerta ON Corresponsales.Agente.Id = Corresponsales.Alerta.AgenteId INNER JOIN
+Nomenclador.Catalogo AS C ON Corresponsales.Alerta.TipoId = C.Id INNER JOIN
+Nomenclador.Catalogo AS T ON Corresponsales.Alerta.EstadoId = T.Id
+WHERE (Corresponsales.Agente.EstaActivo = 1) AND (T.Nombre IN (@estado)) AND (C.Nombre IN (@tipoIncidencia)) AND (Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
       </Query>
       <Fields>
         <Field Name="Fecha">
@@ -68,9 +68,9 @@ WHERE (T.Nombre IN (@estado)) AND (C.Nombre IN (@tipoIncidencia)) AND (Correspon
     <DataSet Name="EstadoAlerta">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Nombre
-FROM            Nomenclador.Catalogo
-WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE67')</CommandText>
+        <CommandText>SELECT Nombre
+FROM Nomenclador.Catalogo
+WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE67') AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="Nombre">
@@ -82,9 +82,9 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE67')</CommandT
     <DataSet Name="TipoIncidencia">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Nombre
-FROM            Nomenclador.Catalogo
-WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')</CommandText>
+        <CommandText>SELECT Nombre
+FROM  Nomenclador.Catalogo
+WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')  AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="Nombre">

@@ -28,23 +28,22 @@
             <Value>=Parameters!fechaFin.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT        
-TOP (100) 
-Canales.[Log].Fecha AS Fecha, 
+        <CommandText>SELECT
+LOGS.Fecha AS Fecha, 
 U2.NombreCompleto AS Supervisor, 
 U.NombreCompleto AS Usuario, 
 C.Nombre AS TipoIncidencia, 
 T.Nombre AS Estado, 
-Canales.[Log].JsonDispositivo AS JsonOrigen,
-Canales.[Log].JsonLog AS JsonOperacion
-FROM            
+LOGS.JsonDispositivo AS JsonOrigen,
+LOGS.JsonLog AS JsonOperacion
+FROM      
+Canales.[Log] AS LOGS
+INNER JOIN Seguridad.Usuario AS U ON U.Id = LOGS.UsuarioId
+INNER JOIN Nomenclador.Catalogo AS C ON LOGS.TipoAccionId = C.Id 
+INNER JOIN Nomenclador.Catalogo AS T ON LOGS.EstadoId = T.Id,
 Corresponsales.Agente AS A 
-INNER JOIN Seguridad.Usuario AS U ON A.UsuarioId = U.Id
-INNER JOIN Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id,
-Canales.[Log] 
-INNER JOIN Nomenclador.Catalogo AS C ON Canales.[Log].TipoAccionId = C.Id 
-INNER JOIN Nomenclador.Catalogo AS T ON Canales.[Log].EstadoId = T.Id
-WHERE   (U2.NombreCompleto IN (@supervisor)) AND (Canales.[Log].Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
+INNER JOIN Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id
+WHERE (LOGS.EstaActivo = 1) AND (U2.NombreCompleto IN (@supervisor)) AND (LOGS.Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
         <Timeout>1</Timeout>
       </Query>
       <Fields>
@@ -90,10 +89,10 @@ WHERE   (U2.NombreCompleto IN (@supervisor)) AND (Canales.[Log].Fecha BETWEEN @f
     <DataSet Name="Supervisor">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Seguridad.Usuario.NombreCompleto
-FROM            Seguridad.UsuarioRol INNER JOIN
-                         Seguridad.Usuario ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId
-WHERE        (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546')</CommandText>
+        <CommandText>SELECT Seguridad.Usuario.NombreCompleto
+FROM Seguridad.UsuarioRol INNER JOIN
+Seguridad.Usuario ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId
+WHERE (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546') AND (Seguridad.Usuario.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="NombreCompleto">

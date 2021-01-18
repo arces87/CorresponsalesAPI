@@ -25,7 +25,7 @@
             <Value>=Parameters!EstadoAgente.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT
+        <CommandText>SELECT DISTINCT
 Seguridad.Usuario.Codigo AS Usuario, 
 Corresponsales.Agente.NombreAgente AS Nombre, 
 Corresponsales.Agente.Identificacion AS Cedula, 
@@ -39,7 +39,7 @@ INNER JOIN Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usua
 INNER JOIN Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id 
 INNER JOIN Canales.AgenteGeolocalizacion ON Corresponsales.Agente.Id = Canales.AgenteGeolocalizacion.AgenteId 
 LEFT OUTER JOIN Canales.Geolocalizacion ON Canales.AgenteGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id
-WHERE (JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion') IN (@EstadoGPS)) AND (T.Nombre IN (@EstadoAgente))</CommandText>
+WHERE (Corresponsales.Agente.EstaActivo = 1) AND (JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion') IN (@EstadoGPS)) AND (T.Nombre IN (@EstadoAgente))</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -71,10 +71,10 @@ WHERE (JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion')
     <DataSet Name="EstadosAgentes">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Nomenclador.Catalogo.Nombre
-FROM            Nomenclador.Catalogo INNER JOIN
-                         Nomenclador.TipoCatalogo ON Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id
-WHERE        (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE64')</CommandText>
+        <CommandText>SELECT Nomenclador.Catalogo.Nombre
+FROM Nomenclador.Catalogo INNER JOIN
+Nomenclador.TipoCatalogo ON Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id
+WHERE (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE64') AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="Nombre">

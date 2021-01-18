@@ -28,7 +28,7 @@
             <Value>=Parameters!servicio.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT TOP (1000)
+        <CommandText>SELECT
 Corresponsales.Transaccion.FechaSistema AS Fecha,
 U.Codigo AS Usuario,
 FORMAT(Corresponsales.Transaccion.Valor,  '#.00') AS ValorRecaudado,
@@ -92,9 +92,9 @@ WHERE        (Corresponsales.Transaccion.FechaSistema BETWEEN @fechaInicio AND @
     <DataSet Name="Servicios">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT        Nombre
-FROM            Nomenclador.Catalogo
-WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandText>
+        <CommandText>SELECT Nombre
+FROM Nomenclador.Catalogo
+WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="Nombre">
@@ -133,7 +133,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
                   <Width>2.5cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.65875cm</Width>
+                  <Width>4.69604cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -721,7 +721,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
             <Top>1.95474cm</Top>
             <Left>0.73766cm</Left>
             <Height>1.2cm</Height>
-            <Width>21.27cm</Width>
+            <Width>23.30729cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -751,7 +751,7 @@ WHERE        (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65')</CommandT
             <Top>0.76412cm</Top>
             <Left>0.73766cm</Left>
             <Height>0.6cm</Height>
-            <Width>21.27cm</Width>
+            <Width>23.30729cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
