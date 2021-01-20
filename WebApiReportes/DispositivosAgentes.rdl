@@ -39,7 +39,7 @@ INNER JOIN Seguridad.Usuario ON Corresponsales.Agente.UsuarioId = Seguridad.Usua
 INNER JOIN Nomenclador.Catalogo AS T ON Corresponsales.Agente.EstadoId = T.Id 
 INNER JOIN Canales.AgenteGeolocalizacion ON Corresponsales.Agente.Id = Canales.AgenteGeolocalizacion.AgenteId 
 LEFT OUTER JOIN Canales.Geolocalizacion ON Canales.AgenteGeolocalizacion.GeolocalizacionId = Canales.Geolocalizacion.Id
-WHERE (Corresponsales.Agente.EstaActivo = 1) AND (JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion') IN (@EstadoGPS)) AND (T.Nombre IN (@EstadoAgente))</CommandText>
+WHERE (Corresponsales.Agente.EstaActivo = 1) AND (JSON_VALUE(Corresponsales.Agente.JsonAgente,'$.verificarGeolocalizacion') IN (@EstadoGPS)) AND (T.Id IN (@EstadoAgente))</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -71,7 +71,7 @@ WHERE (Corresponsales.Agente.EstaActivo = 1) AND (JSON_VALUE(Corresponsales.Agen
     <DataSet Name="EstadosAgentes">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT Nomenclador.Catalogo.Nombre
+        <CommandText>SELECT Nomenclador.Catalogo.Nombre, Nomenclador.Catalogo.Id
 FROM Nomenclador.Catalogo INNER JOIN
 Nomenclador.TipoCatalogo ON Nomenclador.Catalogo.TipoCatalogoId = Nomenclador.TipoCatalogo.Id
 WHERE (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE64') AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
@@ -80,6 +80,10 @@ WHERE (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE64') AND
         <Field Name="Nombre">
           <DataField>Nombre</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -621,7 +625,7 @@ WHERE (Nomenclador.TipoCatalogo.Id = '84C279C0-63D2-45F1-B3E3-3D70522AFE64') AND
       <ValidValues>
         <DataSetReference>
           <DataSetName>EstadosAgentes</DataSetName>
-          <ValueField>Nombre</ValueField>
+          <ValueField>Id</ValueField>
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>

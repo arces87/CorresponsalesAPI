@@ -26,7 +26,7 @@
 FROM Seguridad.Usuario INNER JOIN
 Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId INNER JOIN
 Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id
-WHERE (Seguridad.Rol.Nombre IN (@rol))</CommandText>
+WHERE (Seguridad.Rol.Id IN (@rol))</CommandText>
       </Query>
       <Fields>
         <Field Name="Usuario">
@@ -67,13 +67,17 @@ WHERE (Seguridad.Rol.Nombre IN (@rol))</CommandText>
     <DataSet Name="ListaRoles">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT Nombre
+        <CommandText>SELECT Nombre, Id
 FROM Seguridad.Rol
 WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
       </Query>
       <Fields>
         <Field Name="Nombre">
           <DataField>Nombre</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -738,7 +742,7 @@ WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
       <ValidValues>
         <DataSetReference>
           <DataSetName>ListaRoles</DataSetName>
-          <ValueField>Nombre</ValueField>
+          <ValueField>Id</ValueField>
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>

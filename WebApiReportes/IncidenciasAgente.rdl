@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_Tulcan</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -36,7 +36,7 @@ FROM Corresponsales.Agente INNER JOIN
 Corresponsales.Alerta ON Corresponsales.Agente.Id = Corresponsales.Alerta.AgenteId INNER JOIN
 Nomenclador.Catalogo AS C ON Corresponsales.Alerta.TipoId = C.Id INNER JOIN
 Nomenclador.Catalogo AS T ON Corresponsales.Alerta.EstadoId = T.Id
-WHERE (Corresponsales.Agente.EstaActivo = 1) AND (T.Nombre IN (@estado)) AND (C.Nombre IN (@tipoIncidencia)) AND (Corresponsales.Alerta.Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
+WHERE (Corresponsales.Agente.EstaActivo = 1) AND (T.Id IN (@estado)) AND (C.Id IN (@tipoIncidencia)) AND (Corresponsales.Alerta.Fecha &gt;= @fechaInicio) AND (Corresponsales.Alerta.Fecha &lt;= DATEADD(day,1,@fechaFin))</CommandText>
       </Query>
       <Fields>
         <Field Name="Fecha">
@@ -68,7 +68,7 @@ WHERE (Corresponsales.Agente.EstaActivo = 1) AND (T.Nombre IN (@estado)) AND (C.
     <DataSet Name="EstadoAlerta">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT Nombre
+        <CommandText>SELECT Nombre, Id
 FROM Nomenclador.Catalogo
 WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE67') AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
       </Query>
@@ -77,12 +77,16 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE67') AND (Nomenclador
           <DataField>Nombre</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
       </Fields>
     </DataSet>
     <DataSet Name="TipoIncidencia">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT Nombre
+        <CommandText>SELECT Nombre, Id
 FROM  Nomenclador.Catalogo
 WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')  AND (Nomenclador.Catalogo.EstaActivo = 1)</CommandText>
       </Query>
@@ -90,6 +94,10 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')  AND (Nomenclado
         <Field Name="Nombre">
           <DataField>Nombre</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -634,7 +642,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')  AND (Nomenclado
       <ValidValues>
         <DataSetReference>
           <DataSetName>EstadoAlerta</DataSetName>
-          <ValueField>Nombre</ValueField>
+          <ValueField>Id</ValueField>
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>
@@ -646,7 +654,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE70')  AND (Nomenclado
       <ValidValues>
         <DataSetReference>
           <DataSetName>TipoIncidencia</DataSetName>
-          <ValueField>Nombre</ValueField>
+          <ValueField>Id</ValueField>
           <LabelField>Nombre</LabelField>
         </DataSetReference>
       </ValidValues>

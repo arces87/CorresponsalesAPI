@@ -31,7 +31,7 @@
         <CommandText>SELECT
 LOGS.Fecha AS Fecha, 
 U2.NombreCompleto AS Supervisor, 
-U.NombreCompleto AS Usuario, 
+U.Codigo AS Usuario, 
 C.Nombre AS TipoIncidencia, 
 T.Nombre AS Estado, 
 LOGS.JsonDispositivo AS JsonOrigen,
@@ -43,7 +43,7 @@ INNER JOIN Nomenclador.Catalogo AS C ON LOGS.TipoAccionId = C.Id
 INNER JOIN Nomenclador.Catalogo AS T ON LOGS.EstadoId = T.Id,
 Corresponsales.Agente AS A 
 INNER JOIN Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id
-WHERE (LOGS.EstaActivo = 1) AND (U2.NombreCompleto IN (@supervisor)) AND (LOGS.Fecha BETWEEN @fechaInicio AND @fechaFin)</CommandText>
+WHERE (LOGS.EstaActivo = 1) AND (U2.Id IN (@supervisor)) AND (LOGS.Fecha &gt;= @fechaInicio) AND (LOGS.Fecha &lt;= DATEADD(day,1,@fechaFin))</CommandText>
         <Timeout>1</Timeout>
       </Query>
       <Fields>
@@ -89,7 +89,7 @@ WHERE (LOGS.EstaActivo = 1) AND (U2.NombreCompleto IN (@supervisor)) AND (LOGS.F
     <DataSet Name="Supervisor">
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
-        <CommandText>SELECT Seguridad.Usuario.NombreCompleto
+        <CommandText>SELECT Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.Id
 FROM Seguridad.UsuarioRol INNER JOIN
 Seguridad.Usuario ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId
 WHERE (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546') AND (Seguridad.Usuario.EstaActivo = 1)</CommandText>
@@ -97,6 +97,10 @@ WHERE (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546') AND 
       <Fields>
         <Field Name="NombreCompleto">
           <DataField>NombreCompleto</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Id">
+          <DataField>Id</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -720,7 +724,7 @@ WHERE (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546') AND 
       <ValidValues>
         <DataSetReference>
           <DataSetName>Supervisor</DataSetName>
-          <ValueField>NombreCompleto</ValueField>
+          <ValueField>Id</ValueField>
           <LabelField>NombreCompleto</LabelField>
         </DataSetReference>
       </ValidValues>
