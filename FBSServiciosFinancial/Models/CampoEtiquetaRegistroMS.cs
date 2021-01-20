@@ -9,22 +9,23 @@ namespace ServiciosFinancial.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CampoRegistroMS
+    public partial class CampoEtiquetaRegistroMS
     {
         /// <summary>
-        /// Initializes a new instance of the CampoRegistroMS class.
+        /// Initializes a new instance of the CampoEtiquetaRegistroMS class.
         /// </summary>
-        public CampoRegistroMS()
+        public CampoEtiquetaRegistroMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CampoRegistroMS class.
+        /// Initializes a new instance of the CampoEtiquetaRegistroMS class.
         /// </summary>
-        public CampoRegistroMS(int? id = default(int?), string valor = default(string))
+        public CampoEtiquetaRegistroMS(int? id = default(int?), string name = default(string), string valor = default(string))
         {
             Id = id;
+            Name = name;
             Valor = valor;
             CustomInit();
         }
@@ -38,6 +39,11 @@ namespace ServiciosFinancial.Models
         /// </summary>
         [JsonProperty(PropertyName = "Id")]
         public int? Id { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// </summary>

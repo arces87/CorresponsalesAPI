@@ -11,23 +11,23 @@ namespace ServiciosFinancial.Models
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class RegistroMS
+    public partial class CampoTransaccionConsultaMS
     {
         /// <summary>
-        /// Initializes a new instance of the RegistroMS class.
+        /// Initializes a new instance of the CampoTransaccionConsultaMS class.
         /// </summary>
-        public RegistroMS()
+        public CampoTransaccionConsultaMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the RegistroMS class.
+        /// Initializes a new instance of the CampoTransaccionConsultaMS class.
         /// </summary>
-        public RegistroMS(string tipo = default(string), IList<CampoRegistroMS> campo = default(IList<CampoRegistroMS>))
+        public CampoTransaccionConsultaMS(int? secuencial = default(int?), IList<CampoEtiquetaRegistroMS> campos = default(IList<CampoEtiquetaRegistroMS>))
         {
-            Tipo = tipo;
-            Campo = campo;
+            Secuencial = secuencial;
+            Campos = campos;
             CustomInit();
         }
 
@@ -38,13 +38,13 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Tipo")]
-        public string Tipo { get; set; }
+        [JsonProperty(PropertyName = "Secuencial")]
+        public int? Secuencial { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Campo")]
-        public IList<CampoRegistroMS> Campo { get; set; }
+        [JsonProperty(PropertyName = "Campos")]
+        public IList<CampoEtiquetaRegistroMS> Campos { get; set; }
 
     }
 }

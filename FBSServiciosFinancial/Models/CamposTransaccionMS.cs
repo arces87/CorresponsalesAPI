@@ -24,10 +24,10 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the CamposTransaccionMS class.
         /// </summary>
-        public CamposTransaccionMS(IList<EtiquetaMS> etiqueta = default(IList<EtiquetaMS>), IList<RegistroMS> registro = default(IList<RegistroMS>))
+        public CamposTransaccionMS(IList<CampoTransaccionConsultaMS> cabecera = default(IList<CampoTransaccionConsultaMS>), IList<CampoTransaccionConsultaMS> detalle = default(IList<CampoTransaccionConsultaMS>))
         {
-            Etiqueta = etiqueta;
-            Registro = registro;
+            Cabecera = cabecera;
+            Detalle = detalle;
             CustomInit();
         }
 
@@ -38,13 +38,13 @@ namespace ServiciosFinancial.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Etiqueta")]
-        public IList<EtiquetaMS> Etiqueta { get; set; }
+        [JsonProperty(PropertyName = "Cabecera")]
+        public IList<CampoTransaccionConsultaMS> Cabecera { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Registro")]
-        public IList<RegistroMS> Registro { get; set; }
+        [JsonProperty(PropertyName = "Detalle")]
+        public IList<CampoTransaccionConsultaMS> Detalle { get; set; }
 
     }
 }

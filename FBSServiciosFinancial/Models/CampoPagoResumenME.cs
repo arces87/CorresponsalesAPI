@@ -22,8 +22,9 @@ namespace ServiciosFinancial.Models
         /// <summary>
         /// Initializes a new instance of the CampoPagoResumenME class.
         /// </summary>
-        public CampoPagoResumenME(int? id = default(int?), string valor = default(string))
+        public CampoPagoResumenME(int? secuencial = default(int?), int? id = default(int?), string valor = default(string))
         {
+            Secuencial = secuencial;
             Id = id;
             Valor = valor;
             CustomInit();
@@ -33,6 +34,11 @@ namespace ServiciosFinancial.Models
         /// An initialization method that performs custom operations like setting defaults
         /// </summary>
         partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "Secuencial")]
+        public int? Secuencial { get; set; }
 
         /// <summary>
         /// </summary>
