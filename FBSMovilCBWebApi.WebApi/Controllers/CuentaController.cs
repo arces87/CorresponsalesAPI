@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using MediatR;
@@ -37,6 +38,12 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         [HttpPost("buscarCuentas", Name = "Cuenta_DevuelveCuentas")]
         [Produces(typeof(ConsolidadoCuentasMSL))]
         public async Task<ActionResult<ConsolidadoCuentasMSL>> BuscarCuenta([FromBody] FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries.DevuelveCuentaME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("solicitudSaldoCuenta", Name = "Cuenta_SolicitarSaldoCuenta")]
+        public async Task<ActionResult<double>> SolicitarSaldoCuenta([FromBody] SolicitarSaldoCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }
