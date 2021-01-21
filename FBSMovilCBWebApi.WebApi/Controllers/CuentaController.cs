@@ -36,7 +36,7 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
         [HttpPost("buscarCuentas", Name = "Cuenta_DevuelveCuentas")]
         [Produces(typeof(ConsolidadoCuentasMSL))]
-        public async Task<ActionResult<ConsolidadoCuentasMSL>> BuscarCuenta([FromBody] DevuelveCuentaME modelo)
+        public async Task<ActionResult<ConsolidadoCuentasMSL>> BuscarCuenta([FromBody] FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries.DevuelveCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }
