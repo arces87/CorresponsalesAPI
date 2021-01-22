@@ -156,11 +156,29 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
 
+            var valorPagadoPorCaja = .0;
+            var valorPagadoPorNegocio = .0;
+
+            if (saldoActual > 0)
+            {
+                if (saldoActual >= request.Valor)
+                {
+                    valorPagadoPorCaja = request.Valor;
+                } else
+                {
+                    valorPagadoPorCaja = saldoActual;
+                    valorPagadoPorNegocio = request.Valor - saldoActual;
+                }
+            } else
+            {
+                valorPagadoPorNegocio = request.Valor;
+            }
+
             var transaccionRetiro = new TransaccionRetiro()
             {
                 IdTransaccion = Guid.Parse(idTransaccion),
-                ValorCaja = saldoActual,
-                FondoNegocio = request.Valor - saldoActual
+                ValorCaja = valorPagadoPorCaja,
+                FondoNegocio = valorPagadoPorNegocio
             };
             var idTransaccionRetiro = await _repositorioTransaccionRetiro.Add(transaccionRetiro);
 
