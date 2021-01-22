@@ -39,7 +39,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         private readonly byte[] _llave;
-       
+        private readonly IRepositorioTransaccionRetiro _repositorioTransaccionRetiro;
+
         public ProcesarRetiroHandler(
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion, 
@@ -49,7 +50,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             IRepositorioAgente repositorioAgente, 
             IRepositorioCuenta repositorioCuenta,
             IHttpContextAccessor httpContext,
-            IApiKeyGenerator apiKeyGenerator)
+            IApiKeyGenerator apiKeyGenerator,
+            IRepositorioTransaccionRetiro repositorioTransaccionRetiro)
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
@@ -61,6 +63,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _httpContext = httpContext;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
             _apiKeyGenerator = apiKeyGenerator;
+            _repositorioTransaccionRetiro = repositorioTransaccionRetiro;
         }
 
         public async Task<AfectacionAUnCorresponsalRepositorioMS> Handle(ProcesarRetiroME request, CancellationToken cancellationToken)
@@ -85,7 +88,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
-            var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
+
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);             
+            var saldoCuenta = respuestaCuentaAsociada.Body.Saldo.Value;
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
@@ -148,6 +156,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             };
             var idTransaccion = await _repositorioTransaccion.Add(transaccion);
 
+            var transaccionRetiro = new TransaccionRetiro()
+            {
+                IdTransaccion = Guid.Parse(idTransaccion),
+                ValorCaja = saldoActual,
+                FondoNegocio = request.Valor - saldoActual
+            };
+            var idTransaccionRetiro = await _repositorioTransaccionRetiro.Add(transaccionRetiro);
+
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -181,9 +197,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            
             var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo, customHeaders);
             await _mediador.Send(new CrearLogME()
             {
@@ -260,11 +274,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
             {
                 throw new ExcepcionApp($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (montoTransaccionesTipoDiarias + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones} USD.");
-            }
-
-            if (saldoActual - Valor < 0)
-            {
-                throw new ExcepcionApp($"No puede realizar esta operación, no tiene fondos suficientes en caja. Fondo en caja {saldoActual}");
             }
         }
     }

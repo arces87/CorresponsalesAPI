@@ -86,7 +86,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
-            var saldoCuenta = await _repositorioTransaccion.GetSaldoCuenta(agente.Id.ToString());
+
+            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
+            var saldoCuenta = respuestaCuentaAsociada.Body.Saldo.Value;           
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
@@ -179,12 +184,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 JsonLog = JsonConvert.SerializeObject(modelo),
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
-            });
+            });            
 
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeader = _apiKeyGenerator.generateCustomHeaders(apiKey);
-
-            var respuestaHttp = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodWithHttpMessagesAsync(modelo, customHeader);
+            var respuestaHttp = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodWithHttpMessagesAsync(modelo, customHeaders);
             var respuesta = respuestaHttp.Body;
 
             await _mediador.Send(new CrearLogME()
