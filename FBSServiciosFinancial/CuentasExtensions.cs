@@ -119,5 +119,31 @@ namespace ServiciosFinancial
                 }
             }
 
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            public static DevuelveCuentaMS DevuelveCuenta(this ICuentas operations, DevuelveCuentaME request)
+            {
+                return operations.DevuelveCuentaAsync(request).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='request'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<DevuelveCuentaMS> DevuelveCuentaAsync(this ICuentas operations, DevuelveCuentaME request, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.DevuelveCuentaWithHttpMessagesAsync(request, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
     }
 }

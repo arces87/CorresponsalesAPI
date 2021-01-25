@@ -21,6 +21,7 @@ namespace FBSConsolaCBWebApi.DAL
         public DbSet<Alerta> Alertas { get; set; }
         public DbSet<Agente> Agentes { get; set; }
         public DbSet<Transaccion> Transacciones { get; set; }
+        public DbSet<TransaccionRetiro> TransaccionesRetiro { get; set; }
 
         #endregion
 

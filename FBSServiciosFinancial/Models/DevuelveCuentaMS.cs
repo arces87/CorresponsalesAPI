@@ -9,20 +9,20 @@ namespace ServiciosFinancial.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CuentaDetalleConsolidadoMS
+    public partial class DevuelveCuentaMS
     {
         /// <summary>
-        /// Initializes a new instance of the CuentaDetalleConsolidadoMS class.
+        /// Initializes a new instance of the DevuelveCuentaMS class.
         /// </summary>
-        public CuentaDetalleConsolidadoMS()
+        public DevuelveCuentaMS()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CuentaDetalleConsolidadoMS class.
+        /// Initializes a new instance of the DevuelveCuentaMS class.
         /// </summary>
-        public CuentaDetalleConsolidadoMS(string codigo = default(string), int? secuencialCuenta = default(int?), string tipoCuentaNombre = default(string), string monedaNombre = default(string), double? retencion = default(double?), double? bloqueo = default(double?), double? valorNoParteSaldo = default(double?), double? saldo = default(double?), double? disponibleParaTransaccion = default(double?), bool? bloqueadaTransaccionOperativa = default(bool?), string estadoNombre = default(string))
+        public DevuelveCuentaMS(string codigo = default(string), int? secuencialCuenta = default(int?), string tipoCuentaNombre = default(string), string monedaNombre = default(string), double? retencion = default(double?), double? bloqueo = default(double?), double? valorNoParteSaldo = default(double?), double? saldo = default(double?), double? disponibleParaTransaccion = default(double?), bool? bloqueadaTransaccionOperativa = default(bool?), string estadoNombre = default(string))
         {
             Codigo = codigo;
             SecuencialCuenta = secuencialCuenta;
