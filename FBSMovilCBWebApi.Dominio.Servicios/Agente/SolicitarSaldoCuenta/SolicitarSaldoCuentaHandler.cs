@@ -74,7 +74,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
             var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
-            return respuestaCuentaAsociada.Body.Saldo.Value;
+            return respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
         }
     }
 }
