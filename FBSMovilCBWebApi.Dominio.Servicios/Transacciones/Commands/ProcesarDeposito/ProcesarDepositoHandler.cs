@@ -107,14 +107,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
 
-            var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
-            var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
-
-            var enReposicion = transaccionesRepuestas == transaccionesProcesadas;
-            
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-
-            saldoCuenta = (saldoCuenta == 0 && cantidadTransacciones == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
             
             ValidarTransaccion(
                 request.Valor, 
