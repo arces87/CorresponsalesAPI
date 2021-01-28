@@ -91,7 +91,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
             var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
-            var saldoCuenta = respuestaCuentaAsociada.Body.Saldo.Value;           
+            var saldoCuenta = respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
@@ -108,14 +108,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
 
-            var transaccionesRepuestas = await _repositorioTransaccion.TransaccionesRepuestas(agente.Id.ToString());
-            var transaccionesProcesadas = await _repositorioTransaccion.TransaccionesProcesadas(agente.Id.ToString());
-
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-
-            var enReposicion = transaccionesRepuestas == transaccionesProcesadas;
-
-            saldoCuenta = (saldoCuenta == 0 && transacciones.Count() == 0) || enReposicion ? jsonNegocio.Limites.SaldoMaximoCuentaAsociada.Value : saldoCuenta;
 
             ValidarTransaccion(
                 request.Valor,
@@ -282,7 +275,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             if (cuentaAsociada && saldoCuenta - Valor <= 0)
             {
-                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta");
+                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta.");
             }
         }
     }

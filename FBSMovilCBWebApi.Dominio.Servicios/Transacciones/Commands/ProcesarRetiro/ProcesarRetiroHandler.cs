@@ -93,7 +93,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
             var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);             
-            var saldoCuenta = respuestaCuentaAsociada.Body.Saldo.Value;
+            var saldoCuenta = respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);

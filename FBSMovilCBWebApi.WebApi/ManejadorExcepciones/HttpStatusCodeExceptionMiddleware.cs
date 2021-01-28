@@ -77,19 +77,19 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                         notificar = true;
                         break;
                     case DbException e:
-                        mensajeSalida = "No fue posible conectarse a la Base de Datos";
+                        mensajeSalida = "No fue posible conectarse a la Base de Datos.";
                         notificar = false;
                         guardarLog = false;
                         break;
                     case SmtpException e:
-                        mensajeSalida = "No fue posible enviar el email";
+                        mensajeSalida = "No fue posible enviar el email.";
                         notificar = false;
                         break;
                     case SocketException e:
-                        mensajeSalida = "Ha ocurrido un error al establecer la conexión con el servicio";
+                        mensajeSalida = "Ha ocurrido un error al establecer la conexión con el servicio.";
                         break;
                     default:
-                        mensajeSalida = "Ha ocurrido un error, contacte al administrador";
+                        mensajeSalida = "Ha ocurrido un error, contacte al administrador.";
                         break;
                 }
 
