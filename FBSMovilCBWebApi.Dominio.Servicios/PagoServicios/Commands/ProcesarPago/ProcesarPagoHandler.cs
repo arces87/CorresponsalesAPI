@@ -208,7 +208,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 throw new ExcepcionApp("No se ha especificado el campo pago.");
             }
 
-            double ValorAPagar = double.Parse(request.Campos[0].Valor);
+            var valor = request.Campos[0].Valor.Replace(",", ".");
+            double ValorAPagar = double.Parse(valor, System.Globalization.CultureInfo.InvariantCulture);
 
             if (request.Campos.Count > 1)
             {
