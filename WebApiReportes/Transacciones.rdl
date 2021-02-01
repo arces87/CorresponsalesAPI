@@ -35,7 +35,7 @@ FORMAT(Corresponsales.Transaccion.Valor,  '#.00') AS ValorRecaudado,
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.agente')), '#.00') AS ComisionAgente,
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.administracioncanal')), '#.00') AS ComisionCanal,
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.cooperativa')), '#.00') AS ComisionCoop,
-FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.facilito')), '#.00') AS ComisionFacilito,
+FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.facilito')), '#.00') AS ComisionPagoAgil,
 C.Nombre AS Servicio
 FROM
 Corresponsales.Transaccion
@@ -74,8 +74,8 @@ WHERE (Corresponsales.Transaccion.FechaSistema &gt;= @fechaInicio) AND (Correspo
           <DataField>ComisionCoop</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ComisionFacilito">
-          <DataField>ComisionFacilito</DataField>
+        <Field Name="ComisionPagoAgil">
+          <DataField>ComisionPagoAgil</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -361,7 +361,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Comision Facilito</Value>
+                                  <Value>Comisión Pago Ágil</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -629,14 +629,14 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="ComisionFacilito">
+                        <Textbox Name="ComisionPagoAgil">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ComisionFacilito.Value</Value>
+                                  <Value>=Fields!ComisionPagoAgil.Value</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -647,7 +647,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ComisionFacilito</rd:DefaultName>
+                          <rd:DefaultName>ComisionPagoAgil</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
