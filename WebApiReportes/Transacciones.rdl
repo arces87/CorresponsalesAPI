@@ -42,7 +42,7 @@ Corresponsales.Transaccion
 INNER JOIN Nomenclador.Catalogo AS C ON Corresponsales.Transaccion.Tipo = C.Id
 CROSS JOIN Corresponsales.Agente
 INNER JOIN Seguridad.Usuario AS U ON Corresponsales.Agente.UsuarioId = U.Id
-WHERE (Corresponsales.Transaccion.FechaSistema &gt;= @fechaInicio) AND (Corresponsales.Transaccion.FechaSistema &lt;= DATEADD(day,1,@fechaFin)) AND (C.Id IN (@servicio))</CommandText>
+WHERE (Corresponsales.Transaccion.EstadoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE94') AND (Corresponsales.Transaccion.FechaSistema &gt;= @fechaInicio) AND (Corresponsales.Transaccion.FechaSistema &lt;= DATEADD(day,1,@fechaFin)) AND (C.Id IN (@servicio))</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
