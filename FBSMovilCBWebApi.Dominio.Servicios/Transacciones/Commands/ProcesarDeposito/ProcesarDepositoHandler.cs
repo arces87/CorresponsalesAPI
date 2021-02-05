@@ -260,9 +260,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 throw new ExcepcionApp($"No puede realizar la operación porque excedería el saldo máximo de la caja en: { (jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} . Su saldo máximo en caja permitido es {jsonNegocio.Limites.SaldoMaximoAgente.Value} USD");
             }
 
-            if (cuentaAsociada && saldoCuenta - Valor <= 0)
+            if (cuentaAsociada && (saldoCuenta - Valor <= 0))
             {
-                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta");
+                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta. Saldo disponible para transacción: "+saldoCuenta+". Monto: "+Valor);
             }
         }
     }
