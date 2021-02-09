@@ -18,6 +18,9 @@
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
         <QueryParameters>
+          <QueryParameter Name="@usuario">
+            <Value>=Parameters!usuario.Value</Value>
+          </QueryParameter>
           <QueryParameter Name="@supervisor">
             <Value>=Parameters!supervisor.Value</Value>
           </QueryParameter>
@@ -43,7 +46,7 @@ INNER JOIN Nomenclador.Catalogo AS C ON LOGS.TipoAccionId = C.Id
 INNER JOIN Nomenclador.Catalogo AS T ON LOGS.EstadoId = T.Id,
 Corresponsales.Agente AS A 
 INNER JOIN Seguridad.Usuario AS U2 ON A.SupervisorId = U2.Id
-WHERE (LOGS.EstaActivo = 1) AND (U2.Id IN (@supervisor)) AND (LOGS.Fecha &gt;= @fechaInicio) AND (LOGS.Fecha &lt;= DATEADD(day,1,@fechaFin))</CommandText>
+WHERE (U.Id IN (@usuario)) AND (LOGS.EstaActivo = 1) AND (U2.Id IN (@supervisor)) AND (LOGS.Fecha &gt;= @fechaInicio) AND (LOGS.Fecha &lt;= DATEADD(day,1,@fechaFin))</CommandText>
         <Timeout>1</Timeout>
       </Query>
       <Fields>
@@ -76,15 +79,6 @@ WHERE (LOGS.EstaActivo = 1) AND (U2.Id IN (@supervisor)) AND (LOGS.Fecha &gt;= @
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
-      <Filters>
-        <Filter>
-          <FilterExpression>=Fields!Usuario.Value</FilterExpression>
-          <Operator>Like</Operator>
-          <FilterValues>
-            <FilterValue>=”*”+ Parameters!usuario.Value   +”*”</FilterValue>
-          </FilterValues>
-        </Filter>
-      </Filters>
     </DataSet>
     <DataSet Name="Supervisor">
       <Query>
@@ -101,6 +95,23 @@ WHERE (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546') AND 
         </Field>
         <Field Name="Id">
           <DataField>Id</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="Usuarios">
+      <Query>
+        <DataSourceName>DataSourceCorresponsales</DataSourceName>
+        <CommandText>SELECT        Id, Codigo
+FROM            Seguridad.Usuario</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Codigo">
+          <DataField>Codigo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -709,8 +720,15 @@ WHERE (Seguridad.UsuarioRol.RolId = 'c3399529-96f3-4014-94ce-bf36ee695546') AND 
   <ReportParameters>
     <ReportParameter Name="usuario">
       <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
       <Prompt>Usuario</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Usuarios</DataSetName>
+          <ValueField>Id</ValueField>
+          <LabelField>Codigo</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
     </ReportParameter>
     <ReportParameter Name="supervisor">
       <DataType>String</DataType>
