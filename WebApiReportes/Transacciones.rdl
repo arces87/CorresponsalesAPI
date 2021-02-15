@@ -36,7 +36,8 @@ FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisio
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.administracioncanal')), '#.00') AS ComisionCanal,
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.cooperativa')), '#.00') AS ComisionCoop,
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.facilito')), '#.00') AS ComisionPagoAgil,
-C.Nombre AS Servicio
+C.Nombre AS Servicio,
+JSON_VALUE(Corresponsales.Transaccion.JsonDatos, '$.Descripcion') AS Descripcion
 FROM
 Corresponsales.Transaccion
 INNER JOIN Nomenclador.Catalogo AS C ON Corresponsales.Transaccion.Tipo = C.Id
@@ -76,6 +77,10 @@ WHERE (Corresponsales.Transaccion.EstadoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE
         </Field>
         <Field Name="ComisionPagoAgil">
           <DataField>ComisionPagoAgil</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Descripcion">
+          <DataField>Descripcion</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -137,7 +142,10 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                   <Width>2.5cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.69604cm</Width>
+                  <Width>3.34666cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.79646cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -361,7 +369,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Comisión Pago Ágil</Value>
+                                  <Value>Comisión Recaudación</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -409,6 +417,41 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Descripción</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -695,12 +738,47 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Descripcion">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Descripcion.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Descripcion</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -725,7 +803,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
             <Top>1.95474cm</Top>
             <Left>0.73766cm</Left>
             <Height>1.2cm</Height>
-            <Width>23.30729cm</Width>
+            <Width>25.75437cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -755,7 +833,7 @@ WHERE (TipoCatalogoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE65') AND (Nomenclador
             <Top>0.76412cm</Top>
             <Left>0.73766cm</Left>
             <Height>0.6cm</Height>
-            <Width>23.30729cm</Width>
+            <Width>25.75437cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
