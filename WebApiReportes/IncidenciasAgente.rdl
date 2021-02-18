@@ -31,7 +31,9 @@
             <Value>=Parameters!fechaFin.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT Corresponsales.Alerta.Fecha, C.Nombre AS Incidencia, Corresponsales.Agente.NombreAgente, Corresponsales.Alerta.Descripcion, T.Nombre AS Estado, Corresponsales.Alerta.Comentario
+        <CommandText>SELECT 
+FORMAT(Corresponsales.Alerta.Fecha, 'dd/MM/yyyy HH:mm:ss') AS Fecha, 
+C.Nombre AS Incidencia, Corresponsales.Agente.NombreAgente, Corresponsales.Alerta.Descripcion, T.Nombre AS Estado, Corresponsales.Alerta.Comentario
 FROM Corresponsales.Agente INNER JOIN
 Corresponsales.Alerta ON Corresponsales.Agente.Id = Corresponsales.Alerta.AgenteId INNER JOIN
 Nomenclador.Catalogo AS C ON Corresponsales.Alerta.TipoId = C.Id INNER JOIN
@@ -41,7 +43,7 @@ WHERE (Corresponsales.Agente.EstaActivo = 1) AND (T.Id IN (@estado)) AND (C.Id I
       <Fields>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Incidencia">
           <DataField>Incidencia</DataField>

@@ -29,7 +29,7 @@
           </QueryParameter>
         </QueryParameters>
         <CommandText>SELECT
-Corresponsales.Transaccion.FechaSistema AS Fecha,
+FORMAT(Corresponsales.Transaccion.FechaSistema, 'dd/MM/yyyy HH:mm:ss') AS Fecha, 
 U.Codigo AS Usuario,
 FORMAT(Corresponsales.Transaccion.Valor,  '#.00') AS ValorRecaudado,
 FORMAT(CONVERT(decimal(2,2), JSON_VALUE(LOWER(Corresponsales.Transaccion.Comisiones), '$.agente')), '#.00') AS ComisionAgente,
@@ -49,7 +49,7 @@ WHERE (Corresponsales.Transaccion.EstadoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE
       <Fields>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Usuario">
           <DataField>Usuario</DataField>

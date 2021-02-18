@@ -32,7 +32,7 @@
           </QueryParameter>
         </QueryParameters>
         <CommandText>SELECT
-LOGS.Fecha AS Fecha, 
+FORMAT(LOGS.Fecha, 'dd/MM/yyyy HH:mm:ss') AS Fecha, 
 U2.NombreCompleto AS Supervisor, 
 U.Codigo AS Usuario, 
 C.Nombre AS TipoIncidencia, 
@@ -52,7 +52,7 @@ WHERE (U.Id IN (@usuario)) AND (LOGS.EstaActivo = 1) AND (U2.Id IN (@supervisor)
       <Fields>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Supervisor">
           <DataField>Supervisor</DataField>

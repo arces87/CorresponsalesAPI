@@ -22,9 +22,17 @@
             <Value>=Parameters!rol.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT Seguridad.Usuario.Codigo AS Usuario, Seguridad.Usuario.NombreCompleto, Seguridad.Usuario.CorreoElectronico AS Email, Seguridad.Rol.Nombre AS Rol, Seguridad.Usuario.FechaUltimoCambioContrasenia AS Fecha, CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
-FROM Seguridad.Usuario INNER JOIN
-Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId INNER JOIN
+        <CommandText>SELECT 
+Seguridad.Usuario.Codigo AS Usuario, 
+Seguridad.Usuario.NombreCompleto, 
+Seguridad.Usuario.CorreoElectronico AS Email, 
+Seguridad.Rol.Nombre AS Rol, 
+FORMAT(Seguridad.Usuario.FechaUltimoCambioContrasenia, 'dd/MM/yyyy HH:mm:ss') AS Fecha, 
+CASE Seguridad.Usuario.EstaActivo WHEN 1 THEN 'Activo' WHEN 0 THEN 'Inactivo' END AS Estado
+FROM Seguridad.Usuario 
+INNER JOIN
+Seguridad.UsuarioRol ON Seguridad.Usuario.Id = Seguridad.UsuarioRol.UsuarioId 
+INNER JOIN
 Seguridad.Rol ON Seguridad.UsuarioRol.RolId = Seguridad.Rol.Id
 WHERE (Seguridad.Rol.Id IN (@rol))</CommandText>
       </Query>
@@ -47,7 +55,7 @@ WHERE (Seguridad.Rol.Id IN (@rol))</CommandText>
         </Field>
         <Field Name="Fecha">
           <DataField>Fecha</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Estado">
           <DataField>Estado</DataField>

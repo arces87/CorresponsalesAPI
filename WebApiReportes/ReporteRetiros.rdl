@@ -29,7 +29,7 @@
 Corresponsales.TransaccionRetiro.IdTransaccion, 
 Format(Corresponsales.TransaccionRetiro.ValorCaja, '#.00') AS FondoCaja, 
 Format(Corresponsales.TransaccionRetiro.FondoNegocio, '#.00') AS FondoNegocio, 
-Corresponsales.Transaccion.FechaSistema, 
+FORMAT(Corresponsales.Transaccion.FechaSistema, 'dd/MM/yyyy HH:mm:ss') AS Fecha,
 Corresponsales.Agente.NombreAgente, 
 Format((-1)*convert(int,Corresponsales.Transaccion.Valor), '#.00') AS ValorTotal
 FROM            
@@ -54,9 +54,9 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
           <DataField>FondoNegocio</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="FechaSistema">
-          <DataField>FechaSistema</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="Fecha">
+          <DataField>Fecha</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="NombreAgente">
           <DataField>NombreAgente</DataField>
@@ -323,14 +323,14 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="FechaSistema">
+                        <Textbox Name="Fecha">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!FechaSistema.Value</Value>
+                                  <Value>=Fields!Fecha.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -339,7 +339,7 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>FechaSistema</rd:DefaultName>
+                          <rd:DefaultName>Fecha</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -549,7 +549,7 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
             <Top>2.21932cm</Top>
             <Left>0.79057cm</Left>
             <Height>1.2cm</Height>
-            <Width>26.24479cm</Width>
+            <Width>26.2448cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
