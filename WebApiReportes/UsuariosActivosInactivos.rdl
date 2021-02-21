@@ -24,7 +24,7 @@
         </QueryParameters>
         <CommandText>SELECT 
 Seguridad.Usuario.Codigo AS Usuario, 
-Seguridad.Usuario.NombreCompleto, 
+Seguridad.Usuario.NombreMostrar, 
 Seguridad.Usuario.CorreoElectronico AS Email, 
 Seguridad.Rol.Nombre AS Rol, 
 FORMAT(Seguridad.Usuario.FechaUltimoCambioContrasenia, 'dd/MM/yyyy HH:mm:ss') AS Fecha, 
@@ -41,8 +41,8 @@ WHERE (Seguridad.Rol.Id IN (@rol))</CommandText>
           <DataField>Usuario</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="NombreCompleto">
-          <DataField>NombreCompleto</DataField>
+        <Field Name="NombreMostrar">
+          <DataField>NombreMostrar</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Email">
@@ -99,10 +99,10 @@ WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.06104cm</Width>
+                  <Width>3.77cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.88125cm</Width>
+                  <Width>6.41583cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5.42333cm</Width>
@@ -185,7 +185,7 @@ WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Nombre Completo</Value>
+                                  <Value>Nombre a Mostrar / Nombre Negocio</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
@@ -491,21 +491,21 @@ WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="NombreCompleto">
+                        <Textbox Name="NombreMostrar">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!NombreCompleto.Value</Value>
+                                  <Value>=Fields!NombreMostrar.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>NombreCompleto</rd:DefaultName>
+                          <rd:DefaultName>NombreMostrar</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -679,7 +679,7 @@ WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
             <Top>1.95474cm</Top>
             <Left>0.68474cm</Left>
             <Height>1.2cm</Height>
-            <Width>24.51145cm</Width>
+            <Width>25.75499cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -709,7 +709,7 @@ WHERE (Seguridad.Rol.EstaActivo = 1)</CommandText>
             <Top>0.81703cm</Top>
             <Left>0.68474cm</Left>
             <Height>0.64382cm</Height>
-            <Width>24.51145cm</Width>
+            <Width>25.75499cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
