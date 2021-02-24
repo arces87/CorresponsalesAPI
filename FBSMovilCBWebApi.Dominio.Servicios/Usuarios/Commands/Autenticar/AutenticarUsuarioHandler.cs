@@ -73,7 +73,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                 usuario = new AutenticarUsuarioMS()
                                 {
                                     Token = usuarioAutenticado.Token,
-                                    CambioContrasenia = true
+                                    CambioContrasenia = true,
+                                    Estado = agente.Estado.Nombre
                                 };
                                 await _mediador.Send(new CrearLogME()
                                 {
