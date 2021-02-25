@@ -27,6 +27,7 @@
         </QueryParameters>
         <CommandText>SELECT 
 Corresponsales.TransaccionRetiro.IdTransaccion, 
+Corresponsales.Transaccion.JsonDatos AS DatosOperacion,
 Format(Corresponsales.TransaccionRetiro.ValorCaja, '#.00') AS FondoCaja, 
 Format(Corresponsales.TransaccionRetiro.FondoNegocio, '#.00') AS FondoNegocio, 
 FORMAT(Corresponsales.Transaccion.FechaSistema, 'dd/MM/yyyy HH:mm:ss') AS Fecha,
@@ -45,6 +46,10 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
         <Field Name="IdTransaccion">
           <DataField>IdTransaccion</DataField>
           <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
+        <Field Name="DatosOperacion">
+          <DataField>DatosOperacion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="FondoCaja">
           <DataField>FondoCaja</DataField>
@@ -86,22 +91,25 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.47896cm</Width>
+                  <Width>2.39417cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>8.45313cm</Width>
+                  <Width>3.53188cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>6.81271cm</Width>
+                  <Width>10.76853cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.5cm</Width>
+                  <Width>3.90229cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.5cm</Width>
+                  <Width>1.89146cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.5cm</Width>
+                  <Width>1.91792cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.83854cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -164,6 +172,41 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Datos de la Operación</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -389,6 +432,40 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="DatosOperacion">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DatosOperacion.Value</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DatosOperacion</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="NombreAgente">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -533,6 +610,7 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -549,7 +627,7 @@ ORDER BY Corresponsales.Transaccion.FechaSistema DESC</CommandText>
             <Top>2.21932cm</Top>
             <Left>0.79057cm</Left>
             <Height>1.2cm</Height>
-            <Width>26.2448cm</Width>
+            <Width>26.24479cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
