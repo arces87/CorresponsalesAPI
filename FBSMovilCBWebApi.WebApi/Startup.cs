@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +22,7 @@ using FBS.Dominio.Servicios.GestionFicheros;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using FBSMovilCBWebApi.Dominio.Servicios.Canal;
+using Microsoft.OpenApi.Models;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -57,29 +57,36 @@ namespace FBSMovilCBWebApi.WebApi
             #region Swagger Configuration
             services.AddSwaggerGen(swagger =>
             {
-                var contact = new Contact() { Name = SwaggerConfiguration.SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.SwaggerConfiguration.ContactUrl };
-                swagger.SwaggerDoc(SwaggerConfiguration.SwaggerConfiguration.DocNameV1,
-                                   new Info
-                                   {
-                                       Title = SwaggerConfiguration.SwaggerConfiguration.DocInfoTitle,
-                                       Version = SwaggerConfiguration.SwaggerConfiguration.DocInfoVersion,
-                                       Description = SwaggerConfiguration.SwaggerConfiguration.DocInfoDescription,
-                                       Contact = contact
-                                   }
-                                    );
-                var security = new Dictionary<string, IEnumerable<string>>
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "AutorizacionFBS.Api", Version = "v1" });
+
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    {"Bearer", new string[] { }},
-                };
-                swagger.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description = "Cabecera de Autorización JWT usando Bearer Ejemplo: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
                 });
-                swagger.AddSecurityRequirement(security);
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                     {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+
+                                },
+                                new List<string>()
+                            }
+                     });
             });
+
             #endregion
 
             #region Authentication Configuration
@@ -105,16 +112,6 @@ namespace FBSMovilCBWebApi.WebApi
                 };
             });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    var _contexto = services.BuildServiceProvider().GetService<GeNeDBContext>();
-            //    foreach (var item in _contexto.Permisos)
-            //    {
-            //        options.AddPolicy(item.Nombre,
-            //            policy => policy.RequireClaim(item.Descripcion, item.Identificador));
-            //    }
-
-            //});
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSMovilCB));
@@ -159,8 +156,12 @@ namespace FBSMovilCBWebApi.WebApi
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             #endregion
 
-            app.UseAuthentication();
-            app.UseMvc();
+            app.UseAuthentication()
+                .UseRouting()
+                .UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

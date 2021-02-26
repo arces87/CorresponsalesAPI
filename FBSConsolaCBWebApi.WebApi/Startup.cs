@@ -24,19 +24,15 @@ using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBS.Dominio.Servicios.GestionFicheros;
 using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
+using Microsoft.OpenApi.Models;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                 .SetBasePath(env.ContentRootPath)
-                 .AddJsonFile("appsettings.json")
-                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
-                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -51,29 +47,36 @@ namespace FBSConsolaCBWebApi.WebApi
             #region Swagger Configuration
             services.AddSwaggerGen(swagger =>
             {
-                var contact = new Contact() { Name = SwaggerConfiguration.SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.SwaggerConfiguration.ContactUrl };
-                swagger.SwaggerDoc(SwaggerConfiguration.SwaggerConfiguration.DocNameV1,
-                                   new Info
-                                   {
-                                       Title = SwaggerConfiguration.SwaggerConfiguration.DocInfoTitle,
-                                       Version = SwaggerConfiguration.SwaggerConfiguration.DocInfoVersion,
-                                       Description = SwaggerConfiguration.SwaggerConfiguration.DocInfoDescription,
-                                       Contact = contact
-                                   }
-                                    );
-                var security = new Dictionary<string, IEnumerable<string>>
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "AutorizacionFBS.Api", Version = "v1" });
+
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    {"Bearer", new string[] { }},
-                };
-                swagger.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description = "Cabecera de Autorización JWT usando Bearer Ejemplo: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
                 });
-                swagger.AddSecurityRequirement(security);
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                     {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+
+                                },
+                                new List<string>()
+                            }
+                     });
             });
+
             #endregion
 
             #region Authentication Configuration
@@ -113,7 +116,7 @@ namespace FBSConsolaCBWebApi.WebApi
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
 
 
             #region Configuracion Inyeccion Dependencia 
@@ -125,12 +128,9 @@ namespace FBSConsolaCBWebApi.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-         
+
             #region Swagger Configuration
-            app.UseSwagger(c =>
-            {
-                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = httpReq.Host.Value);
-            });
+            app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
@@ -167,8 +167,11 @@ namespace FBSConsolaCBWebApi.WebApi
 
             app.UseAuthentication();
 
-            
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+           {
+               endpoints.MapControllers();
+           });
         }
     }
 }
