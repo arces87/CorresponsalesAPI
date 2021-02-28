@@ -102,22 +102,17 @@ namespace FBSConsolaCBWebApi.WebApi
                 };
             });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    var _contexto = services.BuildServiceProvider().GetService<GeNeDBContext>();
-            //    foreach (var item in _contexto.Permisos)
-            //    {
-            //        options.AddPolicy(item.Nombre,
-            //            policy => policy.RequireClaim(item.Descripcion, item.Identificador));
-            //    }
-
-            //});
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddControllers();
-
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+                config.ReportApiVersions = true;
+            });
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);

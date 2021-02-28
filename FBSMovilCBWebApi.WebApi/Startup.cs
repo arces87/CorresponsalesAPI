@@ -28,14 +28,9 @@ namespace FBSMovilCBWebApi.WebApi
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                 .SetBasePath(env.ContentRootPath)
-                 .AddJsonFile("appsettings.json")
-                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
-                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -43,7 +38,6 @@ namespace FBSMovilCBWebApi.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddResponseCompression();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
@@ -120,7 +114,13 @@ namespace FBSMovilCBWebApi.WebApi
                 typeof(ConfiguracionAutoMapper).Assembly, 
                 typeof(GuardarFicheroME).Assembly,
                 typeof(ObtenerRequisitoCanalME).Assembly);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+                config.ReportApiVersions = true;
+            });
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
