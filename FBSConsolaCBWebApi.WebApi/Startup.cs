@@ -25,6 +25,7 @@ using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBS.Dominio.Servicios.GestionFicheros;
 using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
 using Microsoft.OpenApi.Models;
+using FBS.Infraestructura.Utiles;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
@@ -106,13 +107,17 @@ namespace FBSConsolaCBWebApi.WebApi
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+            });
+
             services.AddApiVersioning(config =>
             {
                 config.DefaultApiVersion = new ApiVersion(1, 0);
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 config.ReportApiVersions = true;
-            });
+            });            
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);

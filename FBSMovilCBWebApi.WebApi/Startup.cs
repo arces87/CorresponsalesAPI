@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using FBSMovilCBWebApi.Dominio.Servicios.Canal;
 using Microsoft.OpenApi.Models;
+using FBS.Infraestructura.Utiles;
 
 namespace FBSMovilCBWebApi.WebApi
 {
@@ -114,13 +115,19 @@ namespace FBSMovilCBWebApi.WebApi
                 typeof(ConfiguracionAutoMapper).Assembly, 
                 typeof(GuardarFicheroME).Assembly,
                 typeof(ObtenerRequisitoCanalME).Assembly);
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+            }); 
             services.AddApiVersioning(config =>
             {
                 config.DefaultApiVersion = new ApiVersion(1, 0);
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 config.ReportApiVersions = true;
             });
+
+            
+
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
