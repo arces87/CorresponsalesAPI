@@ -158,6 +158,7 @@ namespace FBSMovilCBWebApi.WebApi
 
             app.UseAuthentication()
                 .UseRouting()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

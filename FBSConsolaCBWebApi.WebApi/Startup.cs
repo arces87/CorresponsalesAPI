@@ -162,8 +162,9 @@ namespace FBSConsolaCBWebApi.WebApi
 
             app.UseAuthentication();
 
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
+            app.UseRouting()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
            {
                endpoints.MapControllers();
            });
