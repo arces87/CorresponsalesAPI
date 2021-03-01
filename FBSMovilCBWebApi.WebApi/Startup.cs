@@ -134,7 +134,7 @@ namespace FBSMovilCBWebApi.WebApi
 
             app.UseResponseCompression();
             #region Swagger Configuration
-            app.UseSwagger();
+            app.UseSwagger(o => o.SerializeAsV2 = true);
 
             app.UseSwaggerUI(c =>
             {
