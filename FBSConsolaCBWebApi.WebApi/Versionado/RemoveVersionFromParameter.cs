@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ArchitectTest.Versionado
+namespace FBSConsolaCBWebApi.WebApi.Versionado
 {
     public class RemoveVersionFromParameter : IOperationFilter
     {

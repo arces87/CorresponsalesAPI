@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 
-namespace ArchitectTest.Versionado
+namespace FBSConsolaCBWebApi.WebApi.Versionado
 {
     public static class IApplicationBuilderExtension
     {

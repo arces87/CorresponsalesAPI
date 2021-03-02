@@ -24,7 +24,7 @@ using System.IO.Compression;
 using FBSMovilCBWebApi.Dominio.Servicios.Canal;
 using Microsoft.OpenApi.Models;
 using FBS.Infraestructura.Utiles;
-using ArchitectTest.Versionado;
+using FBSMovilCBWebApi.WebApi.Versionado;
 
 namespace FBSMovilCBWebApi.WebApi
 {

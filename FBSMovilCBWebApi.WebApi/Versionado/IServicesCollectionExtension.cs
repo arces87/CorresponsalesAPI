@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ArchitectTest.Versionado
+namespace FBSMovilCBWebApi.WebApi.Versionado
 {
     public static class IServicesCollectionExtension
     {

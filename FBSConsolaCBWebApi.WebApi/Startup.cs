@@ -26,7 +26,7 @@ using FBS.Dominio.Servicios.GestionFicheros;
 using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
 using Microsoft.OpenApi.Models;
 using FBS.Infraestructura.Utiles;
-using ArchitectTest.Versionado;
+using FBSConsolaCBWebApi.WebApi.Versionado;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
