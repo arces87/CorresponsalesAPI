@@ -9,20 +9,16 @@ namespace FBSConsolaCBWebApi.WebApi.Versionado
     {
         public static IApplicationBuilder UseSwaggerApiVersion(this IApplicationBuilder app, IWebHostEnvironment env, List<string> apiVersion)
         {
-            
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    apiVersion.ForEach(x =>
-                    {
-                        c.SwaggerEndpoint($"/swagger/v{x}/swagger.json", $"FBS Corresponsales Solidario Web Api {x}");
-                    });
-                });
 
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger(o => o.SerializeAsV2 = true);
+            app.UseSwaggerUI(c =>
+            {
+                apiVersion.ForEach(x =>
+                {
+                    c.SwaggerEndpoint($"/swagger/v{x}/swagger.json", $"FBS Corresponsales Solidario Web Api {x}");
+                });
+            });
 
             return app;
         }

@@ -9,20 +9,16 @@ namespace FBSMovilCBWebApi.WebApi.Versionado
     {
         public static IApplicationBuilder UseSwaggerApiVersion(this IApplicationBuilder app, IWebHostEnvironment env, List<string> apiVersion)
         {
-            
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    apiVersion.ForEach(x =>
-                    {
-                        c.SwaggerEndpoint($"/swagger/v{x}/swagger.json", $"FBS Corresponsales Solidario Móvil Api{x}");
-                    });
-                });
 
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                apiVersion.ForEach(x =>
+                {
+                    c.SwaggerEndpoint($"/swagger/v{x}/swagger.json", $"FBS Corresponsales Solidario Móvil Api{x}");
+                });
+            });
 
             return app;
         }

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using FBS.Identidad.DAL.Seguridad;
@@ -143,28 +144,27 @@ namespace FBSConsolaCBWebApi.WebApi
             app.UseSwaggerApiVersion(env, apiVersion);
             #endregion
 
-            #region Swagger Configuration
-            app.UseSwagger(o => o.SerializeAsV2 = true);
+            //#region Swagger Configuration
+            //app.UseSwagger(o => o.SerializeAsV2 = true);
 
-            app.UseSwaggerUI(c =>
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
+
+            //});
+            //#endregion
+
+
+            if (env.IsDevelopment())
             {
-                c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-            });
-            #endregion
-
-
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
-
-            app.UseHsts();
             app.UseHttpsRedirection();
             app.UseMiddleware<HttpStatusCodeExceptionMiddleware>();
 
