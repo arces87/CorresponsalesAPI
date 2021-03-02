@@ -24,11 +24,13 @@ using System.IO.Compression;
 using FBSMovilCBWebApi.Dominio.Servicios.Canal;
 using Microsoft.OpenApi.Models;
 using FBS.Infraestructura.Utiles;
+using ArchitectTest.Versionado;
 
 namespace FBSMovilCBWebApi.WebApi
 {
     public class Startup
     {
+        List<string> apiVersion = new List<string>() { "1.0", "2.0" };
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -118,15 +120,22 @@ namespace FBSMovilCBWebApi.WebApi
             services.AddControllers().AddJsonOptions(opts =>
             {
                 opts.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
-            }); 
-            services.AddApiVersioning(config =>
-            {
-                config.DefaultApiVersion = new ApiVersion(1, 0);
-                config.AssumeDefaultVersionWhenUnspecified = true;
-                config.ReportApiVersions = true;
             });
 
-            
+
+            #region Include Versioning
+
+            services.AddSwagger(apiVersion);
+            services.AddApiVersioning();
+
+            #endregion
+
+            //services.AddApiVersioning(config =>
+            //{
+            //    config.DefaultApiVersion = new ApiVersion(1, 0);
+            //    config.AssumeDefaultVersionWhenUnspecified = true;
+            //    config.ReportApiVersions = true;
+            //});
 
 
             #region Configuracion Inyeccion Dependencia 
@@ -136,28 +145,35 @@ namespace FBSMovilCBWebApi.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             app.UseResponseCompression();
-            #region Swagger Configuration
-            app.UseSwagger(o => o.SerializeAsV2 = true);
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
-            });
+            #region Versioning Swagger
+            app.UseSwaggerApiVersion(env, apiVersion);
             #endregion
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //#region Swagger Configuration
+            //app.UseSwagger(o => o.SerializeAsV2 = true);
+
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
+            //});
+            //#endregion
+
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
+
+            app.UseHsts();
             app.UseMiddleware<HttpStatusCodeExceptionMiddleware>();
             #region Cors Configuration
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

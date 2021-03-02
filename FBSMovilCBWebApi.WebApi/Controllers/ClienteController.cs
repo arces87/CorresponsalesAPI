@@ -11,8 +11,9 @@ using ServiciosFinancial.Models;
 
 namespace FBSMovilCBWebApi.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
+    [ApiVersion("1.0")]
     public class ClienteController : Controller
     {
         private readonly IMediator _mediador;
