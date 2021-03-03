@@ -28,7 +28,7 @@ namespace FBSConsolaCBWebApi.WebApi.Versionado
             {
                 apiVersion.ForEach(version =>
                 {
-                    c.SwaggerDoc($"v{version}", new OpenApiInfo { Title = "FBS Corresponsales Solidario Web Api", Version = $"v{version}" });
+                    c.SwaggerDoc($"v{version}", new OpenApiInfo { Title = "FBSConsolaCBAPI", Version = $"v{version}" });
                 });
 
                 c.ResolveConflictingActions(a => a.First());

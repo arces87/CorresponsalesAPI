@@ -16,7 +16,7 @@ namespace FBSConsolaCBWebApi.WebApi.Versionado
             {
                 apiVersion.ForEach(x =>
                 {
-                    c.SwaggerEndpoint($"/swagger/v{x}/swagger.json", $"FBS Corresponsales Solidario Web Api {x}");
+                    c.SwaggerEndpoint($"/swagger/v{x}/swagger.json", $"FBSConsolaCBAPI{x}");
                 });
             });
 

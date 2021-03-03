@@ -6,7 +6,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries
     {
         public string Id { get; set; }
         public DateTime Fecha { get; set; }
-        public TimeSpan Hora { get; set; }
+        public string Hora { get; set; }
         public string Descripcion { get; set; }
         public string IdEstado { get; set; }
         public string NombreEstado { get; set; }
