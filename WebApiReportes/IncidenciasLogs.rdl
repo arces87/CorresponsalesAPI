@@ -18,6 +18,9 @@
       <Query>
         <DataSourceName>DataSourceCorresponsales</DataSourceName>
         <QueryParameters>
+          <QueryParameter Name="@registros">
+            <Value>=Parameters!registros.Value</Value>
+          </QueryParameter>
           <QueryParameter Name="@usuario">
             <Value>=Parameters!usuario.Value</Value>
           </QueryParameter>
@@ -31,7 +34,9 @@
             <Value>=Parameters!fechaFin.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT TOP(100)
+        <CommandText>DECLARE @TOP INT
+SET @TOP = @registros
+SELECT TOP (@TOP)
 FORMAT(LOGS.Fecha, 'dd/MM/yyyy HH:mm:ss') AS Fecha, 
 U2.NombreCompleto AS Supervisor, 
 U.Codigo AS Usuario, 
@@ -748,6 +753,15 @@ FROM            Seguridad.Usuario</CommandText>
       </ValidValues>
       <MultiValue>true</MultiValue>
     </ReportParameter>
+    <ReportParameter Name="registros">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>50</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Cantidad de registros</Prompt>
+    </ReportParameter>
     <ReportParameter Name="fechaInicio">
       <DataType>DateTime</DataType>
       <Prompt>Fecha Inicial</Prompt>
@@ -781,6 +795,11 @@ FROM            Seguridad.Usuario</CommandText>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>usuario</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>registros</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
