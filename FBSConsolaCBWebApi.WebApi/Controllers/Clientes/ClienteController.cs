@@ -9,7 +9,8 @@ using ServiciosFinancial.Models;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class ClienteController : Controller
     {
         private readonly IMediator _mediador;

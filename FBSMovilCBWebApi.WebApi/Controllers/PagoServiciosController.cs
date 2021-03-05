@@ -11,8 +11,9 @@ using ObtenerFormatosME = FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queri
 
 namespace FBSMovilCBWebApi.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
+    [ApiVersion("1.0")]
     public class PagoServiciosController : Controller
     {
         private readonly IMediator _mediador;

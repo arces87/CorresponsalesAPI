@@ -8,7 +8,8 @@ using FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Commands;
 
 namespace FBSConsolaCBWebApi.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class TransaccionController : Controller
     {
         private readonly IMediator _mediador;

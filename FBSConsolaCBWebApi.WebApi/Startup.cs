@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using FBS.Identidad.DAL.Seguridad;
@@ -24,19 +25,18 @@ using FBS.Identidad.Dominio.Servicios.ConfiguracionMapeo;
 using FBSConsolaCBWebApi.Dominio.Servicios.Catalogos.Commands;
 using FBS.Dominio.Servicios.GestionFicheros;
 using FBSConsolaCBWebApi.WebApi.ManejadorExcepciones;
+using Microsoft.OpenApi.Models;
+using FBS.Infraestructura.Utiles;
+using FBSConsolaCBWebApi.WebApi.Versionado;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        List<string> apiVersion = new List<string>() { "1.0", "2.0" };
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                 .SetBasePath(env.ContentRootPath)
-                 .AddJsonFile("appsettings.json")
-                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
-                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -51,29 +51,36 @@ namespace FBSConsolaCBWebApi.WebApi
             #region Swagger Configuration
             services.AddSwaggerGen(swagger =>
             {
-                var contact = new Contact() { Name = SwaggerConfiguration.SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.SwaggerConfiguration.ContactUrl };
-                swagger.SwaggerDoc(SwaggerConfiguration.SwaggerConfiguration.DocNameV1,
-                                   new Info
-                                   {
-                                       Title = SwaggerConfiguration.SwaggerConfiguration.DocInfoTitle,
-                                       Version = SwaggerConfiguration.SwaggerConfiguration.DocInfoVersion,
-                                       Description = SwaggerConfiguration.SwaggerConfiguration.DocInfoDescription,
-                                       Contact = contact
-                                   }
-                                    );
-                var security = new Dictionary<string, IEnumerable<string>>
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "AutorizacionFBS.Api", Version = "v1" });
+
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    {"Bearer", new string[] { }},
-                };
-                swagger.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description = "Cabecera de Autorización JWT usando Bearer Ejemplo: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
                 });
-                swagger.AddSecurityRequirement(security);
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                     {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+
+                                },
+                                new List<string>()
+                            }
+                     });
             });
+
             #endregion
 
             #region Authentication Configuration
@@ -99,22 +106,29 @@ namespace FBSConsolaCBWebApi.WebApi
                 };
             });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    var _contexto = services.BuildServiceProvider().GetService<GeNeDBContext>();
-            //    foreach (var item in _contexto.Permisos)
-            //    {
-            //        options.AddPolicy(item.Nombre,
-            //            policy => policy.RequireClaim(item.Descripcion, item.Identificador));
-            //    }
-
-            //});
             #endregion
             services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers().AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+            });
 
+
+            #region Include Versioning
+
+            services.AddSwagger(apiVersion);
+            services.AddApiVersioning();
+
+            #endregion
+
+            //services.AddApiVersioning(config =>
+            //{
+            //    config.DefaultApiVersion = new ApiVersion(1, 0);
+            //    config.AssumeDefaultVersionWhenUnspecified = true;
+            //    config.ReportApiVersions = true;
+            //});            
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
@@ -123,21 +137,22 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-         
-            #region Swagger Configuration
-            app.UseSwagger(c =>
-            {
-                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = httpReq.Host.Value);
-            });
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
-
-            });
+            #region Versioning Swagger
+            app.UseSwaggerApiVersion(env, apiVersion);
             #endregion
+
+            //#region Swagger Configuration
+            //app.UseSwagger(o => o.SerializeAsV2 = true);
+
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
+
+            //});
+            //#endregion
 
 
             if (env.IsDevelopment())
@@ -149,6 +164,7 @@ namespace FBSConsolaCBWebApi.WebApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseMiddleware<HttpStatusCodeExceptionMiddleware>();
 
@@ -167,8 +183,12 @@ namespace FBSConsolaCBWebApi.WebApi
 
             app.UseAuthentication();
 
-            
-            app.UseMvc();
+            app.UseRouting()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+           {
+               endpoints.MapControllers();
+           });
         }
     }
 }

@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FBSConsolaCBWebApi.WebApi
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class MenuController : Controller
     {
         private readonly IMediator _mediador;

@@ -8,7 +8,8 @@ using FBSConsolaCBWebApi.Dominio.Servicios.TiposCatalogos.Queries;
 
 namespace FBSConsolaCBWebApi.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class TipoCatalogoController : Controller
     {
         private readonly IMediator _mediador;
