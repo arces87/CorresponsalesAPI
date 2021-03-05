@@ -8,7 +8,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
 
         public DateTime FechaSistema { get; set; }
         public DateTime FechaDispositivo { get; set; }
-        public TimeSpan HoraDispositivo { get; set; }
+        public string HoraDispositivo { get; set; }
         public string IdAgente { get; set; }
         public string NombreCliente { get; set; }
         public string IdentificacionCliente { get; set; }

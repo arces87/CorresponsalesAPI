@@ -24,7 +24,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
         {
             var _modelo = _mapper.Map<LoginUsuarioME>(request);
             _modelo.Dispositivo = "Consola";
-            var _usuario = _mapper.Map<AutenticarUsuarioMS>(await _mediador.Send(_modelo));
+            var respuesta = await _mediador.Send(_modelo);
+            var _usuario = _mapper.Map<AutenticarUsuarioMS>(respuesta);
             if (_usuario.Errores == null && _usuario.Errores != "")
             {
                 var persona = await _repositorio.GetForUserName(_modelo.Usuario);
