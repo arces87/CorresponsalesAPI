@@ -121,14 +121,7 @@ namespace FBSConsolaCBWebApi.WebApi
             services.AddSwagger(apiVersion);
             services.AddApiVersioning();
 
-            #endregion
-
-            //services.AddApiVersioning(config =>
-            //{
-            //    config.DefaultApiVersion = new ApiVersion(1, 0);
-            //    config.AssumeDefaultVersionWhenUnspecified = true;
-            //    config.ReportApiVersions = true;
-            //});            
+            #endregion       
 
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
@@ -143,17 +136,6 @@ namespace FBSConsolaCBWebApi.WebApi
             #region Versioning Swagger
             app.UseSwaggerApiVersion(env, apiVersion);
             #endregion
-
-            //#region Swagger Configuration
-            //app.UseSwagger(o => o.SerializeAsV2 = true);
-
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
-
-            //});
-            //#endregion
-
 
             if (env.IsDevelopment())
             {
@@ -181,9 +163,8 @@ namespace FBSConsolaCBWebApi.WebApi
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             #endregion
 
-            app.UseAuthentication();
-
-            app.UseRouting()
+            app.UseAuthentication()
+                .UseRouting()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
            {

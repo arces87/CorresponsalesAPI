@@ -2,12 +2,14 @@
 using FBS.Identidad.Dominio.Servicios.Menus.Commands;
 using FBS.Identidad.Dominio.Servicios.Menus.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FBSConsolaCBWebApi.WebApi
 {
+    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class MenuController : Controller

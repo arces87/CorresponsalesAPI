@@ -131,14 +131,6 @@ namespace FBSMovilCBWebApi.WebApi
 
             #endregion
 
-            //services.AddApiVersioning(config =>
-            //{
-            //    config.DefaultApiVersion = new ApiVersion(1, 0);
-            //    config.AssumeDefaultVersionWhenUnspecified = true;
-            //    config.ReportApiVersions = true;
-            //});
-
-
             #region Configuracion Inyeccion Dependencia 
             ConfiguracionInyeccionDependencia.LoadRepositories(services);
             ConfiguracionInyeccionDependencia.LoadServices(services, Configuration);
@@ -154,15 +146,6 @@ namespace FBSMovilCBWebApi.WebApi
             #region Versioning Swagger
             app.UseSwaggerApiVersion(env, apiVersion);
             #endregion
-
-            //#region Swagger Configuration
-            //app.UseSwagger(o => o.SerializeAsV2 = true);
-
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint(SwaggerConfiguration.SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.SwaggerConfiguration.EndpointDescription);
-            //});
-            //#endregion
 
             if (env.IsDevelopment())
             {
