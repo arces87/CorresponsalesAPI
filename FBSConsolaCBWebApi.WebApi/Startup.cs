@@ -105,9 +105,18 @@ namespace FBSConsolaCBWebApi.WebApi
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
             #endregion
-            services.AddCors();
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins(Configuration["AllowedHostsCors"]);
+            }));
+
+            //services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddControllers().AddJsonOptions(opts =>
@@ -160,13 +169,15 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
 
             #region Cors Configuration
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("CorsPolicy");
             #endregion
+            app.UseRouting();
 
-            app.UseAuthentication()
-                .UseRouting()
-                .UseAuthorization()
-                .UseEndpoints(endpoints =>
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
            {
                endpoints.MapControllers();
            });
