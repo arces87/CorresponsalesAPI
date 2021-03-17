@@ -33,7 +33,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
 
         public async Task<string> Handle(ModificarCanalME request, CancellationToken cancellationToken)
         {
-            var _model = await _repositorio.Get(request.Id);
+            var _model = await _repositorio.GetWithAssociations(request.Id);
             var jsonCanalNegocioActual = JsonConvert.DeserializeObject<JsonNegocioMS>(_model.JsonNegocio);
             var jsonCanalNegocioNuevo = JsonConvert.DeserializeObject<JsonNegocioMS>(request.JsonNegocio);
             _mapper.Map(request, _model);
