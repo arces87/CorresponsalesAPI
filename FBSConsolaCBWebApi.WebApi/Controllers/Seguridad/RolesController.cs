@@ -2,6 +2,7 @@
 using FBS.Identidad.Dominio.Servicios.Roles.Commands;
 using FBS.Identidad.Dominio.Servicios.Roles.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FBSConsolaCBWebApi.WebApi.Controllers
 {
+    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class RoleController : Controller

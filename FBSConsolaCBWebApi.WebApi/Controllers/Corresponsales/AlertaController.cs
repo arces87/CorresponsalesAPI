@@ -3,11 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Commands;
 using FBSConsolaCBWebApi.Dominio.Servicios.Alertas.Queries;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FBSConsolaCBWebApi.WebApi.Controllers
 {
+    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class AlertaController : Controller
