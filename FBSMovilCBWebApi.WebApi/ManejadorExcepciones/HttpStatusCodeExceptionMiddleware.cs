@@ -108,7 +108,8 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                     {
                         CodigoEstado = response.StatusCode,
                         Mensaje = mensajeSalida,
-                        MensajeExcepcion = error.Message
+                        MensajeExcepcion = error.Message,
+                        SeguimientoPila = error.StackTrace
                     };
                     await _mediador.Send(new CrearLogME()
                     {
