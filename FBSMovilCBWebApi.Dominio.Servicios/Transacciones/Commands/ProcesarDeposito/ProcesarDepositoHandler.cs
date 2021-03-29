@@ -86,11 +86,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
 
+            ValidarCuentaAsocida(cuenta);
+
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
             var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
-            var saldoCuenta = respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;            
+            var saldoCuenta = respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
@@ -101,20 +103,20 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var cantidadTransaccionesTipo = transaccionesTipo.Count();
             var cantidadTransaccionesDiarias = transaccionesDiarias.Count();
             var cantidadTransaccionesDiariasTipo = transaccionesDiariasTipo.Count();
-            
+
             var montoTransacciones = transacciones.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesTipo = transaccionesTipo.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
 
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-            
+
             ValidarTransaccion(
-                request.Valor, 
-                cuenta != null, 
-                saldoActual, 
-                saldoCuenta, 
-                cantidadTransacciones, 
+                request.Valor,
+                cuenta != null,
+                saldoActual,
+                saldoCuenta,
+                cantidadTransacciones,
                 cantidadTransaccionesTipo,
                 cantidadTransaccionesDiarias,
                 cantidadTransaccionesDiariasTipo,
@@ -176,7 +178,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
-            
+
             var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo, customHeaders);
             await _mediador.Send(new CrearLogME()
             {
@@ -203,6 +205,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Valor = respuesta.Body.Valor
             };
             return afectacionAUnCorresponsalDepositoMS;
+        }
+
+        private static void ValidarCuentaAsocida(Cuenta cuenta)
+        {
+            if (cuenta == null)
+            {
+                throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
+            }
         }
 
         private static void ValidarTransaccion(

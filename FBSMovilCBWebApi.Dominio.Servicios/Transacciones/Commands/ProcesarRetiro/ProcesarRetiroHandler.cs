@@ -89,6 +89,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
 
+            ValidarCuentaAsocida(cuenta);
+
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
@@ -285,6 +287,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones)
             {
                 throw new ExcepcionApp($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (montoTransaccionesTipoDiarias + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+            }
+        }
+
+        private static void ValidarCuentaAsocida(Cuenta cuenta)
+        {
+            if (cuenta == null)
+            {
+                throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
             }
         }
     }

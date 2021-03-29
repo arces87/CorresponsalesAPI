@@ -1,4 +1,5 @@
 ﻿using FBS.Identidad.DAL.Modelado;
+using FBS.Infraestructura.Excepciones;
 using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
@@ -69,7 +70,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
             });
 
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
+
+            if (cuenta == null)
+            {
+                throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
+            }
+
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };

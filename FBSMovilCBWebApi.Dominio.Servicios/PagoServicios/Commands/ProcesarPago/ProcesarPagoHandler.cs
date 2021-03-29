@@ -87,6 +87,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
             var saldoActual = await _repositorioTransaccion.GetSaldoActual(agente.Id.ToString());
 
+            ValidarCuentaAsocida(cuenta);
+
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
@@ -277,6 +279,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             if (cuentaAsociada && saldoCuenta - Valor <= 0)
             {
                 throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta.");
+            }
+        }
+
+        private static void ValidarCuentaAsocida(Cuenta cuenta)
+        {
+            if (cuenta == null)
+            {
+                throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
             }
         }
     }
