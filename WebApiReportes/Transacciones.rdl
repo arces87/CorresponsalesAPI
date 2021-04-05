@@ -6,7 +6,7 @@
     <DataSource Name="DataSourceCorresponsales">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato</ConnectString>
+        <ConnectString>Data Source=DESKTOP-V86PTLD\SQLEXPRESS;Initial Catalog=FBS_Corresponsales_Solidarios_SanFranciscoAmbato20210319</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -42,8 +42,8 @@ JSON_VALUE(Corresponsales.Transaccion.JsonDatos, '$.Descripcion') AS Descripcion
 FROM
 Corresponsales.Transaccion
 INNER JOIN Nomenclador.Catalogo AS C ON Corresponsales.Transaccion.Tipo = C.Id
-CROSS JOIN Corresponsales.Agente
-INNER JOIN Seguridad.Usuario AS U ON Corresponsales.Agente.UsuarioId = U.Id
+INNER JOIN Corresponsales.Agente AS A ON Corresponsales.Transaccion.AgenteId = A.Id
+INNER JOIN Seguridad.Usuario AS U ON A.UsuarioId = U.Id
 WHERE (Corresponsales.Transaccion.EstadoId = '84C279C0-63D2-45F1-B3E3-3D70522AFE94') AND (Corresponsales.Transaccion.FechaSistema &gt;= @fechaInicio) AND (Corresponsales.Transaccion.FechaSistema &lt;= DATEADD(day,1,@fechaFin)) AND (C.Id IN (@servicio))</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
