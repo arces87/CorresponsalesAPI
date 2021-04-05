@@ -107,16 +107,7 @@ namespace FBSConsolaCBWebApi.WebApi
             });
             #endregion
 
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
-            {
-                builder
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
-                .WithOrigins(Configuration["AllowedHostsCors"]);
-            }));
-
-            //services.AddCors();
+            services.AddCors();
             services.AddAutoMapper(typeof(ConfiguracionPerfilAutoMapperFBSConsolaCB));
             services.AddMediatR(typeof(CrearCatalogoME).Assembly, typeof(ConfiguracionAutoMapper).Assembly, typeof(GuardarFicheroME).Assembly);
             services.AddControllers().AddJsonOptions(opts =>
@@ -169,8 +160,12 @@ namespace FBSConsolaCBWebApi.WebApi
             #endregion
 
             #region Cors Configuration
-            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseCors("CorsPolicy");
+            app.UseCors(x => 
+            x.AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true) // allow any origin
+            .AllowCredentials());
+  
             #endregion
             app.UseRouting();
 

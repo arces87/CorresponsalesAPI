@@ -55,15 +55,12 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             var jsonConfiguracion = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
             jsonConfiguracion.IdCanal = configuracion["CanalBase"];
 
-            var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
 
             PreprarIntanciaConfiguracionCanal(services, configuracion);
 
             PrepararIntanciaParamtetrizacionCanal(services, configuracion);
 
             ConfigurarApiCoreFinanciero(services, jsonConfiguracion);
-
-            ConfigurarIdentity(services, jsonNegocio);
         }
 
         private static void ConfigurarApiCoreFinanciero(IServiceCollection services, JsonConfiguracion jsonConfiguracion)
@@ -110,9 +107,14 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddScoped<IJsonConfiguracion>((serviceProvider =>
             {
                 var contextoScoped = services.BuildServiceProvider().GetService<ContextoFBSConsolaCB>();
-                var canalScoped = contextoScoped.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
-                var jsonConfiguracionScoped = JsonConvert.DeserializeObject<JsonConfiguracion>(canalScoped.JsonConfiguracion);
+                var canal= contextoScoped.Canales.FirstOrDefault(c => c.Id == new Guid(configuracion["CanalBase"]));
+                var jsonConfiguracionScoped = JsonConvert.DeserializeObject<JsonConfiguracion>(canal.JsonConfiguracion);
                 jsonConfiguracionScoped.IdCanal = configuracion["CanalBase"];
+
+
+                var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
+
+                ConfigurarIdentity(services, jsonNegocio);
 
                 return jsonConfiguracionScoped;
             }));
