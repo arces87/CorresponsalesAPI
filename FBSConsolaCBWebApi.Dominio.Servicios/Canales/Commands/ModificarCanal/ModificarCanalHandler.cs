@@ -5,6 +5,8 @@ using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Threading;
@@ -18,17 +20,20 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
+        private IdentityOptions _identityOptions;
 
         public ModificarCanalHandler(
             IRepositorioCanal repositorio, 
             IRepositorioAgente repositorioAgente, 
             IMapper mapper, 
-            IRepositorioGeolocalizacion repositorioGeolocalizacion)
+            IRepositorioGeolocalizacion repositorioGeolocalizacion,
+            IOptions<IdentityOptions> identityOptions)
         {
             _repositorio = repositorio;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
+            _identityOptions = identityOptions.Value;
         }
 
         public async Task<string> Handle(ModificarCanalME request, CancellationToken cancellationToken)
@@ -44,7 +49,14 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
 
             await _repositorio.Update(_model);
             await ActualizarAgentes(new Guid(request.Id), jsonCanalNegocioNuevo, jsonCanalNegocioActual);
+            ActulizarOpcionesIdentity(jsonCanalNegocioNuevo);
             return _model.Id.ToString();
+        }
+
+        private void ActulizarOpcionesIdentity(JsonNegocioMS jsonCanalNegocioNuevo)
+        {
+            _identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(jsonCanalNegocioNuevo.TiempoBloqueo);
+            _identityOptions.Lockout.MaxFailedAccessAttempts = jsonCanalNegocioNuevo.NumeroMaximoIntentosFallidos;
         }
 
         private async Task ActualizarAgentes(Guid idCanal, JsonNegocioMS jsonCanalNegocioNuevo, JsonNegocioMS jsonCanalNegocioActual)

@@ -12,6 +12,9 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FBSConsolaCBWebApi.Infraestructura.Interfaces.Utiles;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
@@ -22,15 +25,28 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
+        private readonly IManejadorMensajes _manejadorMensajes;
+        private readonly IConfiguracionCanal _configuracionCanal;
+        private IdentityOptions _identityOptions;
 
-        public AutenticarUsuarioHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper,
-            IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
+        public AutenticarUsuarioHandler(
+            IMediator mediador,
+            IRepositorioAgente repositorioAgente,
+            IMapper mapper,
+            IJsonConfiguracion jsonConfiguracion,
+            IRepositorioGeolocalizacion repositorioGeolocalizacion,
+            IOptions<IdentityOptions> identityOptions,
+            IConfiguracionCanal configuracionCanal)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _mapper = mapper;
             _jsonConfiguracion = jsonConfiguracion;
+            _configuracionCanal = configuracionCanal;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
+            _identityOptions = identityOptions.Value;
+            _identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(_configuracionCanal.Negocio.TiempoBloqueo);
+            _identityOptions.Lockout.MaxFailedAccessAttempts = _configuracionCanal.Negocio.NumeroMaximoIntentosFallidos;
         }
 
         public async Task<AutenticarUsuarioMS> Handle(AutenticarUsuarioME request, CancellationToken cancellationToken)
