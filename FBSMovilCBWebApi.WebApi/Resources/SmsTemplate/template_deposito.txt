@@ -1,0 +1,1 @@
+﻿COAC San Francisco Ltda. Informa que ha realizado un depósito Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].

@@ -1,0 +1,14 @@
+﻿using System.Collections.Generic;
+
+namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Queries
+{
+    public class ListarCanalMS
+    {
+        public int Pagina { get; set; }
+
+        public int CantidadElementos { get; set; }
+
+        public int TotalElementos { get; set; }
+        public List<ModeloListaCanal> Catalogos { get; set; }
+    }
+}

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FBSConsolaCBWebApi.DAL\FBSConsolaCBWebApi.DAL.csproj" />
+    <ProjectReference Include="..\FBS_Core\FBS.Identidad.DAL\FBS.Identidad.DAL.csproj" />
+    <ProjectReference Include="..\FBS_Core\FBS.Infraestructura\FBS.Infraestructura.csproj" />
+  </ItemGroup>
+
+</Project>
