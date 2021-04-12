@@ -1,0 +1,7 @@
+.vs
+.vscode
+obj/
+bin/
+*.pdf
+PublishProfiles/
+/FBS_SST.WebApi/Properties/launchSettings.json
