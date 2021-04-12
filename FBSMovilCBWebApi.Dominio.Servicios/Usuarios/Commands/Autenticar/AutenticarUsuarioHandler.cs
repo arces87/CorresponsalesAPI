@@ -12,7 +12,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FBSConsolaCBWebApi.Infraestructura.Interfaces.Utiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
@@ -25,7 +24,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IManejadorMensajes _manejadorMensajes;
         private readonly IConfiguracionCanal _configuracionCanal;
         private IdentityOptions _identityOptions;
 
