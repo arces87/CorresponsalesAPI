@@ -102,71 +102,81 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                 return retorno;
             }            
             
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var canal = await _repositorioCanal.GetCanalUsuario(_user.Id);
-                var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
-                var contrasennaExpiro = (DateTime.Now - _user.FechaUltimoCambioContrasenia).TotalDays >= jsonNegocio.DiasValidosContrasenna;
-
-                var rolAgente = await _manejadorUsuario.IsInRoleAsync(_user, "AGENTE");
-
-                if (rolAgente && request.Dispositivo == "Consola")
-                {
-                    retorno.Errores = "El usuario con rol Agente no puede autenticarse en el módulo Consola Administrativa";
-                }
-                else if (!rolAgente && request.Dispositivo == "Movil")
-                {
-                    retorno.Errores = "En el móvil solo pueden acceder los Agentes de Corresponsales Solidarios";
-                }
-
-                if (_user.CambioContrasenia || contrasennaExpiro)
-                {
-                    var token = await GenerateJwtTokenCambioContrasenia(_user);
-                    await _repositorio.SalvarTokenRecuperarContrasenia(_user.Id, token);
-                    retorno.CambioContrasenia = true;
-                    retorno.IdUsuario = _user.Id;
-                    retorno.Token = token;                    
-                    _user.CambioContrasenia = true;
-                    await _manejadorUsuario.UpdateAsync(_user);
-                    if (contrasennaExpiro)
-                    {
-                        retorno.Errores = "Usted debe de cambiar su contraseña porque ha expirado";
-                    }
-                    else
-                    {
-                        retorno.Errores = "Usted debe de cambiar su contraseña en el primer acceso";
-                    }
-
-                    return retorno;
-                }
-                try
-                {
-
-                    var token = await GenerateJwtToken(_user);
-                    var roles = await _manejadorUsuario.GetRolesAsync(_user);
-                    var _roles = new List<LoginUsuarioRol>();
-                    foreach (var item in roles)
-                    {
-                        var role = _mapper.Map<LoginUsuarioRol>(await _repositorioRol.GetForName(item));
-                        _roles.Insert(_roles.Count, role);
-                    }
-                    retorno.IdUsuario = _user.Id;
-                    retorno.Usuario = _user.UserName;
-                    retorno.CorreoElectronico = _user.Email;
-                    retorno.Imagen = _user.Imagen;
-                    retorno.NombreMostrar = _user.NombreMostrar;
-                    retorno.Roles = _roles;
-                    retorno.Token = (string)token;                   
-                    retorno.TelefonoCelular = _user.PhoneNumber;
-                }
-                catch (Exception e)
-                {
-                    retorno.Errores = e.Message;
-                }
+                retorno.Errores = "Usuario o contraseña incorrectos.";
+                return retorno;
             }
-            else
+
+            if (!_user.EstaActivo)
             {
-                retorno.Errores = "Usuario o contraseña incorrectos";
+                retorno.Errores = "El usuario se encuentra bloqueado.";
+                return retorno;
+            }           
+
+            var rolAgente = await _manejadorUsuario.IsInRoleAsync(_user, "AGENTE");
+
+            if (rolAgente && request.Dispositivo == "Consola")
+            {
+                retorno.Errores = "El usuario con rol Agente no puede autenticarse en el módulo Consola Administrativa";
+                return retorno;
+            }
+            
+            if (!rolAgente && request.Dispositivo == "Movil")
+            {
+                retorno.Errores = "En el móvil solo pueden acceder los Agentes de Corresponsales Solidarios";
+                return retorno;
+            }
+
+            var canal = await _repositorioCanal.GetCanalUsuario(_user.Id);
+            var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
+            var contrasennaExpiro = (DateTime.Now - _user.FechaUltimoCambioContrasenia).TotalDays >= jsonNegocio.DiasValidosContrasenna;
+
+            if (_user.CambioContrasenia || contrasennaExpiro)
+            {
+                var token = await GenerateJwtTokenCambioContrasenia(_user);
+                await _repositorio.SalvarTokenRecuperarContrasenia(_user.Id, token);
+                retorno.CambioContrasenia = true;
+                retorno.IdUsuario = _user.Id;
+                retorno.Token = token;
+                _user.CambioContrasenia = true;
+                await _manejadorUsuario.UpdateAsync(_user);
+
+                if (contrasennaExpiro)
+                {
+                    retorno.Errores = "Usted debe de cambiar su contraseña porque ha expirado";
+                }
+                else
+                {
+                    retorno.Errores = "Usted debe de cambiar su contraseña en el primer acceso";
+                }
+
+                return retorno;
+            }
+
+            try
+            {
+
+                var token = await GenerateJwtToken(_user);
+                var roles = await _manejadorUsuario.GetRolesAsync(_user);
+                var _roles = new List<LoginUsuarioRol>();
+                foreach (var item in roles)
+                {
+                    var role = _mapper.Map<LoginUsuarioRol>(await _repositorioRol.GetForName(item));
+                    _roles.Insert(_roles.Count, role);
+                }
+                retorno.IdUsuario = _user.Id;
+                retorno.Usuario = _user.UserName;
+                retorno.CorreoElectronico = _user.Email;
+                retorno.Imagen = _user.Imagen;
+                retorno.NombreMostrar = _user.NombreMostrar;
+                retorno.Roles = _roles;
+                retorno.Token = (string)token;
+                retorno.TelefonoCelular = _user.PhoneNumber;
+            }
+            catch (Exception e)
+            {
+                retorno.Errores = "Ha ocurrido un error durante la autenticación.";
             }
 
             return retorno;
