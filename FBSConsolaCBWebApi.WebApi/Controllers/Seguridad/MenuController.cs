@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FBSConsolaCBWebApi.WebApi
 {
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Authorize(Roles = "Administrador,Supervisor")]
+    [Authorize]
     [ApiVersion("1.0")]
     public class MenuController : Controller
     {

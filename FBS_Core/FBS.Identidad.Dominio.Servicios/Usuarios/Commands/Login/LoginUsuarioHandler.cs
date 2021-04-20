@@ -86,7 +86,8 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         public async Task<ModeloLoginUsuario> Handle(LoginUsuarioME request, CancellationToken cancellationToken)
         {
             var retorno = new ModeloLoginUsuario();
-            var _user = _manejadorUsuario.Users.Where(u => u.UserName == request.Usuario && u.EstaActivo == true).FirstOrDefault();
+            var _user = _manejadorUsuario.Users.Where(u => u.UserName == request.Usuario).FirstOrDefault();
+
             if (_user == null)
             {
                 retorno.Errores = "El usuario no se encuentra registrado en el sistema";
