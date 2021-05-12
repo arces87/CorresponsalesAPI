@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Infraestructura.Interfaces;
@@ -28,10 +29,11 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly IConfiguration _configuracion;
         private readonly byte[] _llave;
         private readonly IRepositorioCanal _repositorioCanal;
+        private readonly IConfiguracionCanal _configuracionCanal;
 
         public LoginUsuarioHandler(UserManager<Usuario> manejadorUsuario,
             SignInManager<Usuario> manejadorAutenticacion, IRepositorioRol repositorioRol, IRepositorioUsuario repositorio, IMapper mapper,
-            IConfiguration configuracion, IRepositorioCanal repositorioCanal)
+            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal)
         {
             _manejadorUsuario = manejadorUsuario;
             _manejadorAutenticacion = manejadorAutenticacion;
@@ -41,6 +43,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _configuracion = configuracion;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY-+2He.");
             _repositorioCanal = repositorioCanal;
+            _configuracionCanal = configuracionCanal;
         }
 
         private async Task<string> GenerateJwtToken(Usuario user)
@@ -56,7 +59,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims.ToArray<Claim>()),
-                Expires = DateTime.UtcNow.AddMinutes(120),
+                Expires = DateTime.UtcNow.AddHours(_configuracionCanal.Negocio.TiempoVidaToken),                
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -76,7 +79,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims.ToArray<Claim>()),
-                Expires = DateTime.UtcNow.AddMinutes(120),
+                Expires = DateTime.UtcNow.AddHours(_configuracionCanal.Negocio.TiempoVidaToken),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
