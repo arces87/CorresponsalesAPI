@@ -3,6 +3,7 @@ using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,15 +14,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
     {
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public VerificarAgenteHandler(IRepositorioAgente repositorioAgente, IRepositorioGeolocalizacion repositorioGeolocalizacion)
+        public VerificarAgenteHandler(IRepositorioAgente repositorioAgente, IRepositorioGeolocalizacion repositorioGeolocalizacion, IHttpContextAccessor httpContext)
         {
             _repositorioAgente = repositorioAgente;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
+            _httpContext = httpContext;        
         }
         public async Task<bool> Handle(VerificarAgenteME request, CancellationToken cancellationToken)
         {
-            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+            var idUsuario = _httpContext.HttpContext.User.Identity.Name;
+
+            var agente = await _repositorioAgente.GetForUserName(idUsuario);
                         
             var error = "Error en la validación de los datos de autenticación ";
 
@@ -31,7 +36,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente
             {
                 throw new ExcepcionApp($"{error} | A001");
             }
-            else if (! agente.ValdiarDispotivo(request.Imei, request.Mac))
+
+            if (agente.Usuario.Id.ToString().ToLower() != idUsuario.ToLower())
+            {
+                throw new ExcepcionApp($"{error} | A001");
+            }
+
+            if (! agente.ValdiarDispotivo(request.Imei, request.Mac))
             {
                 throw new ExcepcionApp($"{error} | A002");
             }
