@@ -1,0 +1,1 @@
+﻿Estimado (a) “[:NOMBRECORRESPONSAL:]”. Su clave temporal es: “[:OTP:]”. Duración: [:TIEMPO_VIDA:] - [:FECHAACTUAL:].

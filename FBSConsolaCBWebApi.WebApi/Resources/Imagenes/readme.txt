@@ -1,0 +1,1 @@
+﻿Para la gestión de los archivos estáticos.

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FBS.Infraestructura\FBS.Infraestructura.csproj" />
+    <ProjectReference Include="..\FBS.Identidad.DAL\FBS.Identidad.DAL.csproj" />
+  </ItemGroup>
+
+</Project>

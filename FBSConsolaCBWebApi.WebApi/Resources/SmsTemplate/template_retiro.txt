@@ -1,0 +1,1 @@
+﻿COAC San Francisco Ltda. Informa que ha realizado un retiro Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].

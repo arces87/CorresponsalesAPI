@@ -1,0 +1,85 @@
+12/6/2019 3:15:24 PM	This log contains information about the import schema operation into project 'FBSConsolaCBBaseDatos' on computer 'XPS-COOL' by user 'alfre'.
+12/6/2019 3:15:24 PM	Import of database schema has started.
+12/6/2019 3:15:28 PM	Gathering database credentials
+12/6/2019 3:15:28 PM	Gathering database options
+12/6/2019 3:15:28 PM	Gathering generic database scoped configuration option
+12/6/2019 3:15:28 PM	Gathering users
+12/6/2019 3:15:28 PM	Gathering roles
+12/6/2019 3:15:28 PM	Gathering application roles
+12/6/2019 3:15:28 PM	Gathering role memberships
+12/6/2019 3:15:28 PM	Gathering filegroups
+12/6/2019 3:15:28 PM	Gathering full-text catalogs
+12/6/2019 3:15:28 PM	Gathering assemblies
+12/6/2019 3:15:28 PM	Gathering certificates
+12/6/2019 3:15:28 PM	Gathering asymmetric keys
+12/6/2019 3:15:28 PM	Gathering symmetric keys
+12/6/2019 3:15:28 PM	Gathering encrypted symmetric keys
+12/6/2019 3:15:28 PM	Gathering schemas
+12/6/2019 3:15:28 PM	Gathering XML schema collections
+12/6/2019 3:15:28 PM	Gathering user-defined data types
+12/6/2019 3:15:28 PM	Gathering user-defined types
+12/6/2019 3:15:28 PM	Gathering table types
+12/6/2019 3:15:28 PM	Gathering unique keys for table types
+12/6/2019 3:15:28 PM	Gathering primary keys for table types
+12/6/2019 3:15:28 PM	Gathering indexes for table types
+12/6/2019 3:15:28 PM	Gathering check constraints for table types
+12/6/2019 3:15:28 PM	Gathering default constraints for table types
+12/6/2019 3:15:28 PM	Gathering partition functions
+12/6/2019 3:15:28 PM	Gathering partition schemes
+12/6/2019 3:15:28 PM	Gathering functions
+12/6/2019 3:15:28 PM	Gathering encrypted functions
+12/6/2019 3:15:28 PM	Gathering aggregates
+12/6/2019 3:15:28 PM	Gathering procedures
+12/6/2019 3:15:28 PM	Gathering encrypted procedures
+12/6/2019 3:15:28 PM	Gathering tables
+12/6/2019 3:15:28 PM	Gathering primary keys
+12/6/2019 3:15:28 PM	Gathering unique constraints
+12/6/2019 3:15:28 PM	Gathering foreign keys
+12/6/2019 3:15:28 PM	Gathering default constraints
+12/6/2019 3:15:28 PM	Gathering check constraints
+12/6/2019 3:15:28 PM	Gathering views
+12/6/2019 3:15:28 PM	Gathering encrypted views
+12/6/2019 3:15:28 PM	Gathering indexes
+12/6/2019 3:15:28 PM	Gathering statistics
+12/6/2019 3:15:29 PM	Gathering full-text index stoplists
+12/6/2019 3:15:29 PM	Gathering search property lists
+12/6/2019 3:15:29 PM	Gathering search properties
+12/6/2019 3:15:29 PM	Gathering full-text indexes
+12/6/2019 3:15:29 PM	Gathering column store indexes
+12/6/2019 3:15:29 PM	Gathering spatial indexes
+12/6/2019 3:15:29 PM	Gathering XML indexes
+12/6/2019 3:15:29 PM	Gathering Selective XML indexes
+12/6/2019 3:15:29 PM	Gathering encrypted triggers
+12/6/2019 3:15:29 PM	Gathering triggers
+12/6/2019 3:15:29 PM	Gathering encrypted and clr ddl triggers
+12/6/2019 3:15:29 PM	Gathering ddl triggers
+12/6/2019 3:15:29 PM	Gathering synonyms
+12/6/2019 3:15:29 PM	Gathering defaults
+12/6/2019 3:15:29 PM	Gathering data constraint uddt bindings
+12/6/2019 3:15:29 PM	Gathering rules
+12/6/2019 3:15:29 PM	Gathering data constraint uddt bindings
+12/6/2019 3:15:29 PM	Gathering message types
+12/6/2019 3:15:29 PM	Gathering queues
+12/6/2019 3:15:29 PM	Gathering contracts
+12/6/2019 3:15:29 PM	Gathering services
+12/6/2019 3:15:29 PM	Gathering event notifications
+12/6/2019 3:15:29 PM	Gathering remote service bindings
+12/6/2019 3:15:29 PM	Gathering broker priorities
+12/6/2019 3:15:29 PM	Gathering signatures
+12/6/2019 3:15:29 PM	Gathering data compression options
+12/6/2019 3:15:29 PM	Gathering sequence types
+12/6/2019 3:15:29 PM	Gathering security policies
+12/6/2019 3:15:29 PM	Gather column encryption keys
+12/6/2019 3:15:29 PM	Gathering column master keys
+12/6/2019 3:15:29 PM	Gathering external data sources
+12/6/2019 3:15:29 PM	Gathering external file formats
+12/6/2019 3:15:29 PM	Gathering external tables
+12/6/2019 3:15:29 PM	Gathering extended properties
+12/6/2019 3:15:29 PM	Gathering credentials
+12/6/2019 3:15:29 PM	Gathering logins
+12/6/2019 3:15:29 PM	Gathering server audits
+12/6/2019 3:15:29 PM	Scanning project for duplicate elements
+12/6/2019 3:15:30 PM	Finished duplicate element processing
+12/6/2019 3:15:31 PM	Finished importing database.
+12/6/2019 3:15:31 PM	A summary of the import was saved to the following location: C:\Users\alfre\Work\Sifizsoft\FBSConsolaCBWebApi\FBSConsolaCBBaseDatos\Import Schema Logs\FBSConsolaCBBaseDato_20191206081524.log
+12/6/2019 3:15:31 PM	Click Finish to continue...
