@@ -12,8 +12,6 @@ using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using MimeKit;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -102,7 +100,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     Longitud = request.Longitud,
                 };
 
-                var datosCliente = await _mediador.Send(buscarClienteME);
+                //var datosCliente = await _mediador.Send(buscarClienteME);
 
                 var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
                 var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
@@ -111,7 +109,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 {
                     PlantillaCorreoElectronico = jsonNegocio.Deposito.NotificarCorreoElectronico ? jsonNegocio.Deposito.PlantillaCorreoElectronico : null,
                     PlantillaSMS = jsonNegocio.Deposito.NotificarSMS ? jsonNegocio.Deposito.PlantillaSMS : null,
-                    CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
+                    //CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
                     NombreDestinatario = request.NombreCliente,
                     AsuntoCorreoElectronico = "Operación Déposito realizada con éxito",
                     NombreUsuarioCorresponsal= agente.Usuario.UserName,

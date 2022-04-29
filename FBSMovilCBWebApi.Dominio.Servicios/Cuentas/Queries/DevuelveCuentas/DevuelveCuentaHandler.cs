@@ -2,24 +2,24 @@
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class DevuelveCuentaHandler : IRequestHandler<DevuelveCuentaME, ConsolidadoCuentasMSL>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
 
-        public DevuelveCuentaHandler(IFBSCorresponsalesApi financialApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public DevuelveCuentaHandler(ICuentasApi cuentaApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
-            _financialApi = financialApi;
+            _cuentaApi = cuentaApi;
             _mediador = mediador;
             _apiKeyGenerator = apiKeyGenerator;
             _repositorioAgente = repositorioAgente;
@@ -41,8 +41,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasWithHttpMessagesAsync(request, customHeaders);
-            return respuesta.Body;
+            var respuesta = await _cuentaApi.CuentasDevuelveConsolidadoCuentasAsync(request);
+            return respuesta;
         }
     }
 }

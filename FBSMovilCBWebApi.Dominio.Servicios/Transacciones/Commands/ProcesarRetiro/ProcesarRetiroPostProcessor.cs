@@ -11,7 +11,6 @@ using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -131,7 +130,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 Longitud = request.Longitud
             };
 
-            var datosCliente = await _mediador.Send(buscarClienteME);
+            //var datosCliente = await _mediador.Send(buscarClienteME);
 
             var apiKey = _apiKeyGenerator.generateApiKey(imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
@@ -140,7 +139,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 PlantillaCorreoElectronico = jsonNegocio.Retiro.NotificarCorreoElectronico ? jsonNegocio.Retiro.PlantillaCorreoElectronico : null,
                 PlantillaSMS = jsonNegocio.Retiro.NotificarSMS ? jsonNegocio.Retiro.PlantillaSMS : null,
-                CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
+                //CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
                 NombreDestinatario = request.NombreCliente,
                 AsuntoCorreoElectronico = "Operación Retiro realizada con éxito",
                 NombreUsuarioCorresponsal = nombreUsuarioCorresponsal,

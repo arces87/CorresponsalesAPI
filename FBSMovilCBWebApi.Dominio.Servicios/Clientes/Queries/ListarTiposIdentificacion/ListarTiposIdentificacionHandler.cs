@@ -1,29 +1,25 @@
 ﻿using AutoMapper;
-using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
+using Org.OpenAPITools.Model;
+using Org.OpenAPITools.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentificacion
 {
     public class ListarTiposIdentificacionHandler: IRequestHandler<ListarTiposIdentificacionME, TiposIdentificacionMSL>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IClientesApi _clienteApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
-        public ListarTiposIdentificacionHandler(IFBSCorresponsalesApi financialApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public ListarTiposIdentificacionHandler(IClientesApi clienteApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
-            _financialApi = financialApi;
+            _clienteApi = clienteApi;
             _mapper = mapper;
             _mediador = mediador;
             _apiKeyGenerator = apiKeyGenerator;
@@ -44,9 +40,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentif
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            var respuesta = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
-
-            return respuesta.Body;
+            var respuesta = await _clienteApi.ClientesDevuelveTiposIdentificacionAsync();
+            return respuesta;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using ServiciosFinancial.Models;
+﻿using Org.OpenAPITools.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;

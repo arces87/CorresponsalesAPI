@@ -16,9 +16,10 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
-using ServiciosFinancial.Models;
 using System;
 using Newtonsoft.Json.Linq;
+using Org.OpenAPITools.Model;
+using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 {
@@ -73,7 +74,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<CrearCuentaME, CreaCuentaME>();
             CreateMap<CrearClienteME, CreaClienteME>();
             CreateMap<BuscarClienteME, PorIdentificacionSocioME>();
-            CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVista>();
+            CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVistaME>();
             #endregion
 
             #region Pago Servicios

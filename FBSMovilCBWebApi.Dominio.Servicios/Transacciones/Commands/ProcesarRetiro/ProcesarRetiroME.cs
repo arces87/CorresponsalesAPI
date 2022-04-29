@@ -1,6 +1,6 @@
 ﻿using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro;
 using MediatR;
-using ServiciosFinancial.Models;
+
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {

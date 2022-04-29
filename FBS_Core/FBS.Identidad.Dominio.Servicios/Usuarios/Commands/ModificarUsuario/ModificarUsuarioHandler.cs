@@ -7,14 +7,14 @@ using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 {
@@ -26,7 +26,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly byte[] _llave;
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IClientesApi _clienteApi;
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         public ModificarUsuarioHandler(
@@ -34,7 +34,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             IMediator mediador,
             UserManager<Usuario> manejadorUsuario, 
             IMapper mapper,
-            IFBSCorresponsalesApi financialApi,
+            IClientesApi clienteApi,
             IApiKeyGenerator apiKeyGenerator,
             IRepositorioUsuario repositorioUsuario)
         {
@@ -43,7 +43,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _manejadorUsuario = manejadorUsuario;
             _mapper = mapper;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
-            _financialApi = financialApi;
+            _clienteApi = clienteApi;
             _apiKeyGenerator = apiKeyGenerator;
             _repositorioUsuario = repositorioUsuario;
         }
@@ -77,9 +77,9 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
                     var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-                    var respuesta = await _financialApi.Clientes.CreaUsuarioWithHttpMessagesAsync(new PorCodigoUsuarioCorresponsalME() { CodigoUsuarioCorresponsal = request.Usuario }, customHeaders);
+                    var respuesta = await _clienteApi.ClientesCreaUsuarioAsync(new PorCodigoUsuarioCorresponsalME() { CodigoUsuarioCorresponsal = request.Usuario });
 
-                    if (!(bool)respuesta.Body)
+                    if (!(bool)respuesta)
                     {
                         throw new ExcepcionApp("No se ha podido crear el nuevo usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
                     }

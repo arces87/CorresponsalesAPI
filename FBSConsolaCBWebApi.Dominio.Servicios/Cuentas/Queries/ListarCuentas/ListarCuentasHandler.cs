@@ -1,20 +1,20 @@
 ﻿using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using MediatR;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
+using Org.OpenAPITools.Model;
+using Org.OpenAPITools.Api;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class ListarCuentasHandler : IRequestHandler<ListaCuentaME, ConsolidadoCuentasMSL>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IApiKeyGenerator _apiKeyGenerator;
-        public ListarCuentasHandler(IFBSCorresponsalesApi financialApi, IApiKeyGenerator apiKeyGenerator)
+        public ListarCuentasHandler(ICuentasApi cuentaApi, IApiKeyGenerator apiKeyGenerator)
         {
-            _financialApi = financialApi;
+            _cuentaApi = cuentaApi;
             _apiKeyGenerator = apiKeyGenerator;
         }
 
@@ -24,13 +24,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
             var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _financialApi.Cuentas.DevuelveConsolidadoCuentasIdentificacionWithHttpMessagesAsync(new PorIdentificacionClienteDeUnaEmpresa()
+            var respuesta = await _cuentaApi.CuentasDevuelveConsolidadoCuentasIdentificacionAsync(new PorIdentificacionClienteDeUnaEmpresaME()
             {
                 Identificacion = request.Identificacion,
                 SecuencialTipoIdentificacion = request.TipoIdentificacion,
                 SecuencialEmpresa = 1
-            }, customHeaders);
-            return respuesta.Body;
+            });
+            return respuesta;
         }
     }
 }

@@ -2,19 +2,18 @@
 using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
-using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
-using ServiciosFinancial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Org.OpenAPITools.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 {
@@ -22,16 +21,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
     {
 
         private readonly IRepositorioCatalogo _repositorioCatalogo;
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IClientesApi _clienteApi;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IMediator _mediador;
 
-        public ObtenerDistribuidosHandler(IFBSCorresponsalesApi financialApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public ObtenerDistribuidosHandler(IClientesApi clienteApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
-            _financialApi = financialApi;
+            _clienteApi = clienteApi;
             _repositorioCatalogo = repositorioCatalogo;
             _jsonConfiguracion = jsonConfiguracion;
             _mapper = mapper;
@@ -71,9 +70,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
         {
             try
             {
-                var respuestaPaisEstadoCivil = await _financialApi.Clientes.DevuelveDistribuidosWithHttpMessagesAsync(customHeaders);
-                respuesta.Paises = _mapper.Map<IEnumerable<DistribuidoPaises>>(respuestaPaisEstadoCivil.Body.Paises);
-                respuesta.EstadoCivil = _mapper.Map<IEnumerable<DistribuidoEstadoCivil>>(respuestaPaisEstadoCivil.Body.EstadosCiviles);
+                var respuestaPaisEstadoCivil = await _clienteApi.ClientesDevuelveDistribuidosAsync();
+                respuesta.Paises = _mapper.Map<IEnumerable<DistribuidoPaises>>(respuestaPaisEstadoCivil.Paises);
+                respuesta.EstadoCivil = _mapper.Map<IEnumerable<DistribuidoEstadoCivil>>(respuestaPaisEstadoCivil.EstadosCiviles);
             }
             catch (Exception e)
             {
@@ -98,8 +97,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
 
-                var respuestaTiposIdentificacion = await _financialApi.Clientes.DevuelveTiposIdentificacionWithHttpMessagesAsync(customHeaders);
-                respuesta.TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuestaTiposIdentificacion.Body.TiposIdentificacion);
+                var respuestaTiposIdentificacion = await _clienteApi.ClientesDevuelveTiposIdentificacionAsync();
+                respuesta.TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuestaTiposIdentificacion.TiposIdentificacion);
             }
             catch (Exception e)
             {

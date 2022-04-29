@@ -10,8 +10,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +21,9 @@ using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
+using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
@@ -30,7 +31,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IAfectacionApi _afectacionApi;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IMapper _mapper;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAgente _repositorioAgente;
@@ -42,8 +44,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
         public ProcesarDepositoHandler(
             IMediator mediador, 
-            IJsonConfiguracion jsonConfiguracion, 
-            IFBSCorresponsalesApi financialApi,
+            IJsonConfiguracion jsonConfiguracion,
+            IAfectacionApi afectacionApi,
+            ICuentasApi cuentaApi,
             IMapper mapper, 
             IRepositorioTransaccion repositorioTransaccion, 
             IRepositorioAgente repositorioAgente, 
@@ -53,7 +56,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
-            _financialApi = financialApi;
+            _afectacionApi = afectacionApi;
+            _cuentaApi = cuentaApi;
             _mapper = mapper;
             _repositorioTransaccion = repositorioTransaccion;
             _repositorioAgente = repositorioAgente;
@@ -90,9 +94,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
-            var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
-            var saldoCuenta = respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
+            DevuelveCuentaME cuentaAsociada = new Org.OpenAPITools.Model.DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
+            var saldoCuenta = respuestaCuentaAsociada.DisponibleParaTransaccion;
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
@@ -159,7 +163,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
 
-            var modelo = new ServiciosFinancial.Models.AfectacionAUnCorresponsalME()
+            var modelo = new AfectacionAUnCorresponsalME()
             {
                 TipoTransaccion = "NCCliente",
                 CodigoUsuario = agente.Usuario.UserName,
@@ -179,7 +183,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
 
-            var respuesta = await _financialApi.Afectacion.AfectacionAUnCorresponsalWithHttpMessagesAsync(modelo, customHeaders);
+            var respuesta = await _afectacionApi.AfectacionAfectacionAUnCorresponsalAsync(modelo);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),
@@ -187,7 +191,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
-            transaccion.SaldoCuenta = respuesta.Body.SaldoCuentaCorresponsal.Value;
+            transaccion.SaldoCuenta = respuesta.SaldoCuentaCorresponsal;
             await _repositorioTransaccion.Update(transaccion);
             await _mediador.Send(new CrearLogME()
             {
@@ -198,11 +202,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var afectacionAUnCorresponsalDepositoMS = new AfectacionAUnCorresponsalDepositoMS
             {
-                FechaTransaccion = respuesta.Body.FechaTransaccion,
-                NumeroCuenta = respuesta.Body.NumeroCuenta,
-                NumeroTransaccion = respuesta.Body.NumeroTransaccion,
-                SaldoCuentaCorresponsal = respuesta.Body.SaldoCuentaCorresponsal,
-                Valor = respuesta.Body.Valor
+                FechaTransaccion = respuesta.FechaTransaccion,
+                NumeroCuenta = respuesta.NumeroCuenta,
+                NumeroTransaccion = respuesta.NumeroTransaccion,
+                SaldoCuentaCorresponsal = respuesta.SaldoCuentaCorresponsal,
+                Valor = respuesta.Valor
             };
             return afectacionAUnCorresponsalDepositoMS;
         }

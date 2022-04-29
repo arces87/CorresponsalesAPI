@@ -1,19 +1,15 @@
 ﻿using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Excepciones;
 using FBS.Infraestructura.Interfaces;
-using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
-using System;
-using System.Collections.Generic;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +19,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioTransaccionRetiro _repositorioTransaccionRetiro;
         private readonly IRepositorioCuenta _repositorioCuenta;
@@ -34,7 +30,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
         public SolicitarSaldoCuentaHandler(
             IMediator mediador,
             IJsonConfiguracion jsonConfiguracion,
-            IFBSCorresponsalesApi financialApi,
+            ICuentasApi cuentaApi,
             IRepositorioAgente repositorioAgente,
             IRepositorioTransaccionRetiro repositoriotransaccionRetiro,
             IRepositorioCuenta repositorioCuenta,
@@ -43,7 +39,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
-            _financialApi = financialApi;
+            _cuentaApi = cuentaApi;
             _repositorioAgente = repositorioAgente;
             _repositorioTransaccionRetiro = repositoriotransaccionRetiro;
             _repositorioCuenta = repositorioCuenta;
@@ -81,8 +77,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
-            var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
-            return respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
+            var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
+            return respuestaCuentaAsociada.DisponibleParaTransaccion;
         }
     }
 }

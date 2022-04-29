@@ -11,8 +11,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using OtpNet;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +18,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
@@ -29,14 +29,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioUsuario _repositorioUsuario;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IFBSCorresponsalesApi _servicioFinancial;
+        private readonly IClientesApi _clienteApi;
+        private readonly IMensajeriaSMSApi _mensajeriaApi;
         private readonly byte[] _llave;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         public SolicitarOtpHandler(IMediator mediador,
             IRepositorioAgente repositorioAgente,
-            IFBSCorresponsalesApi servicioFinancial,
+            IClientesApi clienteApi,
+            IMensajeriaSMSApi mensajeriaApi,
             IRepositorioUsuario repositorioUsuario,
             IJsonConfiguracion jsonConfiguracion,
             IHttpContextAccessor httpContext,
@@ -44,7 +46,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
-            _servicioFinancial = servicioFinancial;
+            _clienteApi = clienteApi;
+            _mensajeriaApi = mensajeriaApi;
             _repositorioUsuario = repositorioUsuario;
             _jsonConfiguracion = jsonConfiguracion;
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
@@ -152,7 +155,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    var cliente = await _servicioFinancial.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(porIdentificacionSocioME, customHeaders);
+                    var cliente = await _clienteApi.ClientesDevuelveDatosPersonaIdentificacionAsync(porIdentificacionSocioME);
                   
                     await _mediador.Send(new CrearLogME()
                     {
@@ -161,10 +164,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    if (cliente != null && cliente.Body != null)
+                    if (cliente != null)
                     {
-                        cuentaDestino = cliente.Body.CorreoElectronico;
-                        nombreDestino = String.IsNullOrEmpty(cliente.Body.Nombres + cliente.Body.Apellidos) ? "" : cliente.Body.Nombres + cliente.Body.Apellidos;
+                        cuentaDestino = cliente.CorreoElectronico;
+                        nombreDestino = String.IsNullOrEmpty(cliente.Nombres + cliente.Apellidos) ? "" : cliente.Nombres + cliente.Apellidos;
                     }
                 }
                 catch (Exception e)
@@ -262,7 +265,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             otp = totp.ComputeTotp();
         }
 
-        private async Task<Microsoft.Rest.HttpOperationResponse<EnvioSMSMS>> EnviarSMS(
+        private async Task<EnvioSMSMS> EnviarSMS(
             string UserName, 
             string Identificacion, 
             int TipoIdentificacion, 
@@ -297,7 +300,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             var apiKey = _apiKeyGenerator.generateApiKey(imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _servicioFinancial.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, customHeaders);
+            var respuesta = await _mensajeriaApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
             return respuesta;
         }
 

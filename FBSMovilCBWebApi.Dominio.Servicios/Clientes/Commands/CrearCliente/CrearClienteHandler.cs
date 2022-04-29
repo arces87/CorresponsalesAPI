@@ -6,8 +6,8 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 {
     public class CrearClienteHandler : IRequestHandler<CrearClienteME, bool>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IClientesApi _clienteApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -24,14 +24,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         public CrearClienteHandler(
-            IFBSCorresponsalesApi financialApi, 
+            IClientesApi clienteApi, 
             IMapper mapper,
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion,
             IRepositorioAgente repositorioAgente,
             IApiKeyGenerator apiKeyGenerator)
         {
-            _financialApi = financialApi;
+            _clienteApi = clienteApi;
             _mapper = mapper;
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
@@ -71,7 +71,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 
             var mapResult = _mapper.Map<CreaClienteME>(request);
 
-            var respuesta = await _financialApi.Clientes.CreaClienteWithHttpMessagesAsync(mapResult, customHeaders);
+            var respuesta = await _clienteApi.ClientesCreaClienteAsync(mapResult);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -84,7 +84,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCliente").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body.Value;
+            return respuesta;
         }
     }
 }

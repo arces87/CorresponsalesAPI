@@ -1,7 +1,4 @@
-﻿using ServiciosFinancial.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Org.OpenAPITools.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro
 {

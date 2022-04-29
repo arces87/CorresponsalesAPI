@@ -4,8 +4,8 @@ using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +17,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 {
     public class NotificacionHandler : INotificationHandler<NotificacionME>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IMensajeriaSMSApi _envioSMSApi;
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        public NotificacionHandler(IFBSCorresponsalesApi financialApi, IMediator mediador, IJsonConfiguracion jsonConfiguracion)
+        public NotificacionHandler(IMensajeriaSMSApi envioSMSApi, IMediator mediador, IJsonConfiguracion jsonConfiguracion)
         {
-            _financialApi = financialApi;
+            _envioSMSApi = envioSMSApi;
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
         }
@@ -97,17 +97,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    var respuesta = await _financialApi.MensajeriaSMS.EnvioSMSWithHttpMessagesAsync(mensajeSMS, notification.Encabezado);
+                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
                     await _mediador.Send(new CrearLogME()
                     {
-                        JsonLog = JsonConvert.SerializeObject(respuesta.Body),
+                        JsonLog = JsonConvert.SerializeObject(respuesta),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    if (!(bool)respuesta.Body.EsExitoso)
+                    if (!(bool)respuesta.EsExitoso)
                     {
-                        throw new ExcepcionApp(respuesta.Body.MensajeRespuesta);
+                        throw new ExcepcionApp(respuesta.MensajeRespuesta);
                     }
 
                 } catch(Exception e) {

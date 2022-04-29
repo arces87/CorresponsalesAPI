@@ -3,8 +3,6 @@ using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
@@ -12,12 +10,14 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using Newtonsoft.Json;
 using FBS.Identidad.DAL.Modelado;
 using System.Linq;
+using Org.OpenAPITools.Model;
+using Org.OpenAPITools.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
 {
     public class BuscarClienteHandler : IRequestHandler<BuscarClienteME, InformacionPersonaMS>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IClientesApi _clienteApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
@@ -25,14 +25,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
         public BuscarClienteHandler(
-            IFBSCorresponsalesApi financialApi, 
+            IClientesApi clienteApi, 
             IMapper mapper, 
             IMediator mediador, 
             IApiKeyGenerator apiKeyGenerator, 
             IRepositorioAgente repositorioAgente,
             IJsonConfiguracion jsonConfiguracion)
         {
-            _financialApi = financialApi;
+            _clienteApi = clienteApi;
             _mapper = mapper;
             _mediador = mediador;
             _apiKeyGenerator = apiKeyGenerator;
@@ -69,8 +69,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
-            var respuesta = await _financialApi.Clientes.DevuelveDatosPersonaIdentificacionWithHttpMessagesAsync(porIdentificacionSocioME, customHeaders);
-            return respuesta.Body;
+            var respuesta = await _clienteApi.ClientesDevuelveDatosPersonaIdentificacionAsync(porIdentificacionSocioME);
+            return respuesta;
         }
     }
 }

@@ -3,26 +3,26 @@ using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
+using Org.OpenAPITools.Model;
+using Org.OpenAPITools.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
     public class DevuelveTipoCuentaHandler : IRequestHandler<DevuelveTipoCuentaME, TiposCuentaClienteMSL>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
 
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
 
-        public DevuelveTipoCuentaHandler(IFBSCorresponsalesApi financialApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public DevuelveTipoCuentaHandler(ICuentasApi cuentaApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
-            _financialApi = financialApi;
+            _cuentaApi = cuentaApi;
             _mapper = mapper;
             _mediador = mediador;
             _apiKeyGenerator = apiKeyGenerator;
@@ -45,8 +45,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _financialApi.Cuentas.DevuelveTiposDeCuentasDeUnClienteWithHttpMessagesAsync(_mapper.Map<PorSecuencialClienteDeUnaEmpresaProductoVista>(request), customHeaders);
-            return respuesta.Body;
+            var respuesta = await _cuentaApi.CuentasDevuelveTiposDeCuentasDeUnClienteAsync(_mapper.Map<PorSecuencialClienteDeUnaEmpresaProductoVistaME>(request));
+            return respuesta;
         }
     }
 }

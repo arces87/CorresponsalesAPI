@@ -1,24 +1,23 @@
 ﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
-using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
+using Org.OpenAPITools.Model;
+using Org.OpenAPITools.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {
     public class CrearCuentaHandler : IRequestHandler<CrearCuentaME, CreaCuentaMSL>
     {
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IHttpContextAccessor _httpContextAccesor;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
@@ -27,7 +26,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
         private readonly IRepositorioAgente _repositorioAgente;
 
         public CrearCuentaHandler(
-            IFBSCorresponsalesApi financialApi, 
+            ICuentasApi cuentaApi, 
             IMapper mapper,
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion, 
@@ -35,7 +34,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
             IApiKeyGenerator apiKeyGenerator, 
             IRepositorioAgente repositorioAgente)
         {
-            _financialApi = financialApi;
+            _cuentaApi = cuentaApi;
             _mapper = mapper;
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
@@ -72,7 +71,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            var respuesta = await _financialApi.Cuentas.CreaCuentaWithHttpMessagesAsync(_mapper.Map<CreaCuentaME>(request), customHeaders);
+            var respuesta = await _cuentaApi.CuentasCreaCuentaAsync(_mapper.Map<CreaCuentaME>(request));
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -85,7 +84,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCuenta").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta.Body;
+            return respuesta;
         }
     }
 }

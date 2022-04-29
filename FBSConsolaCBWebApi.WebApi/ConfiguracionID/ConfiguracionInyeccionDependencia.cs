@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using ServiciosFinancial;
+using Org.OpenAPITools.Api;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -73,11 +73,17 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
 
         private static void ConfigurarApiCoreFinanciero(IServiceCollection services, JsonConfiguracion jsonConfiguracion)
         {
+            var urlCoreFinanciero = jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor;
             var httpClient = new HttpClient
             {
-                BaseAddress = new Uri(jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor),
+                BaseAddress = new Uri(urlCoreFinanciero),
             };
-            services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+            //services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
+            services.AddSingleton<IClientesApi>(new ClientesApi(urlCoreFinanciero));
+            services.AddSingleton<IAfectacionApi>(new AfectacionApi(urlCoreFinanciero));
+            services.AddSingleton<ICuentasApi>(new CuentasApi(urlCoreFinanciero));
+            services.AddSingleton<IMensajeriaSMSApi>(new MensajeriaSMSApi(urlCoreFinanciero));
+            services.AddSingleton<IPrestamosApi>(new PrestamosApi(urlCoreFinanciero));
         }
 
         private static void ConfigurarIdentity(IServiceCollection services, JsonNegocioMS jsonNegocio)

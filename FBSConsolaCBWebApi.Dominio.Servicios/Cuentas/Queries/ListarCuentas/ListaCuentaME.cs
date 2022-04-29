@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ServiciosFinancial.Models;
+using Org.OpenAPITools.Model;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
