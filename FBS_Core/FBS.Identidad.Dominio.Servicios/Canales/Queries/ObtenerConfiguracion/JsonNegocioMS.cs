@@ -12,7 +12,10 @@ namespace FBS.Identidad.Dominio.Servicios.Canales.Queries
         [JsonProperty("retiro")]
         public Operacion Retiro { get; set; }
         [JsonProperty("cobroServicios")]
-        public Operacion CobroServicios { get; set; }        
+        public Operacion CobroServicios { get; set; }
+
+        [JsonProperty("abonoPrestamos")]
+        public Operacion AbonoPrestamos { get; set; }
 
         [JsonProperty("verificarGeolocalizacion")]
         public bool VerificarGeolocalizacion { get; set; }
