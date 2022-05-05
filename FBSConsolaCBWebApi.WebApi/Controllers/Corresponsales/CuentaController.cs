@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using System.Threading.Tasks;
-using ServiciosFinancial.Models;
 using Microsoft.AspNetCore.Authorization;
+using Org.OpenAPITools.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
