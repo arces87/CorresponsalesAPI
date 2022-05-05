@@ -1,1 +1,1 @@
-﻿COAC San Francisco Ltda. Informa que ha realizado un pago de servicio  Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].
+﻿COAC. Informa que ha realizado un pago de servicio  Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].
