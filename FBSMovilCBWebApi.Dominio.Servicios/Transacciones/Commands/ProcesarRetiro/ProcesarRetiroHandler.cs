@@ -4,7 +4,6 @@ using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
-using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
@@ -23,7 +22,7 @@ using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarRetiro;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
-using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
+
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {

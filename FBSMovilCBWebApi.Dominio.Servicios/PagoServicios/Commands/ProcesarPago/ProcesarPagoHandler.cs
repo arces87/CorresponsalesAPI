@@ -10,8 +10,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using ServiciosFinancial;
-using ServiciosFinancial.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +19,18 @@ using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Rest;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 {
-    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, AfectacionMS>
+    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, PagoFacilitoMSL>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IFBSCorresponsalesApi _financialApi;
+        private readonly IPagoServiciosFacilitoApi _pago;
+        private readonly ICuentasApi _cuentaApi;
         private readonly IMapper _mapper;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAgente _repositorioAgente;
@@ -40,8 +42,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
         public ProcesarPagoHandler(
             IMediator mediador, 
-            IJsonConfiguracion jsonConfiguracion, 
-            IFBSCorresponsalesApi financialApi,
+            IJsonConfiguracion jsonConfiguracion,
+            IPagoServiciosFacilitoApi pago,
+            ICuentasApi cuentaApi,
             IMapper mapper, 
             IRepositorioTransaccion repositorioTransaccion, 
             IRepositorioAgente repositorioAgente, 
@@ -52,7 +55,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         {
             _mediador = mediador;
             _jsonConfiguracion = jsonConfiguracion;
-            _financialApi = financialApi;
+            _pago = pago;
+            _cuentaApi = cuentaApi;            
             _mapper = mapper;
             _repositorioTransaccion = repositorioTransaccion;
             _repositorioAgente = repositorioAgente;
@@ -63,7 +67,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             _configuracion = configurarion;
         }
 
-        public async Task<AfectacionMS> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
+        public async Task<PagoFacilitoMSL> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -73,8 +77,6 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 Longitud = request.Longitud,
                 Latitud = request.Latitud
             });
-
-            request.Valor = DeterminarValorAPagar(request);
 
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
@@ -91,9 +93,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
-            var respuestaCuentaAsociada = await _financialApi.Cuentas.DevuelveCuentaWithHttpMessagesAsync(cuentaAsociada, customHeaders);
-            var saldoCuenta = respuestaCuentaAsociada.Body.DisponibleParaTransaccion.Value;
+            DevuelveCuentaME cuentaAsociada = new Org.OpenAPITools.Model.DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
+            var saldoCuenta = respuestaCuentaAsociada.DisponibleParaTransaccion;         
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
             var transaccionesDiarias = transacciones.Where(t => t.FechaDispositivo.Date == DateTime.Now.Date);
@@ -108,10 +110,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var montoTransacciones = transacciones.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesTipo = transaccionesTipo.Aggregate(0.0, (result, t) => result + t.Valor);
             var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
-            var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);            
 
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
-
+                        
             ValidarTransaccion(
                 request.Valor,
                 cuenta != null,
@@ -131,94 +133,164 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var comisionPago = _mapper.Map<ComisionPago>(comision);
             comisionPago.Facilito = request.Comision;
             var comisiones = JsonConvert.SerializeObject(comisionPago);
-            var transaccion = new Transaccion()
-            {
-                CanalId = _jsonConfiguracion.IdCanal,
-                Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
-                Comisiones = comisiones,
-                Agente = agente,
-                Descripcion = request.Descripcion,
-                FechaDispositivo = DateTime.Now,
-                FechaSistema = DateTime.Now,
-                HoraDispositivo = DateTime.Now.TimeOfDay,
-                IdentificacionCliente = request.Identificacion,
-                NombreCliente = request.NombreCliente,
-                SecuencialCuenta = request.SecuencialCuentaCliente.ToString(),
-                Valor = request.Valor,
-                JsonDatos = JsonConvert.SerializeObject(request),
-                SaldoDisponible = saldoActual + request.Valor + comision.Agente.Value + comision.AdministracionCanal.Value + comision.Cooperativa.Value + request.Comision.Value,
-                Tipo = IdTipoAccion,
-                EstaActivo = true,
-                Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
-            };
-            var idTransaccion = await _repositorioTransaccion.Add(transaccion);
-            await _mediador.Send(new CrearLogME()
-            {
-                JsonLog = JsonConvert.SerializeObject(request),
-                IdTipoAccion = IdTipoAccion,
-                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
-            });
+
             var arregloComisiones = new List<ComisionFinancial>();
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", Valor = comision.AdministracionCanal });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Pago Agil", Valor = request.Comision });
-            var modelo = new AfectacionME()
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Facilito", Valor = request.Comision });
+            var transaccionesNuevas = new List<Transaccion>();
+
+            PreprarTransacciones(request, IdTipoAccion, agente, cuenta, saldoActual, comision, comisiones, transaccionesNuevas);
+
+            var respuesta = new PagoFacilitoMSL()
             {
-                CodigoUsuario = agente.Usuario.UserName,
-                JsonComision = JsonConvert.SerializeObject(arregloComisiones),
-                SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
-                SecuencialServicio = request.SecuencialServicio,
-                SecuencialRequerimientoConsulta = request.SecuencialRequerimientoConsulta,
-                Campos = request.Campos,
-                CorreoCliente = request.CorreoCliente
+                PagosFacilito = new List<PagoFacilitoMS>()
             };
 
-            await _mediador.Send(new CrearLogME()
-            {
-                JsonLog = JsonConvert.SerializeObject(modelo),
-                IdTipoAccion = IdTipoAccion,
-                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
-            });            
+            int? secuencialCuenta = cuenta == null ? 0 : Convert.ToInt32(cuenta.SecuencialCuenta);
 
-            var respuestaHttp = await _financialApi.PagoServiciosPagoAgil.AfectacionMethodWithHttpMessagesAsync(modelo, customHeaders);
-            var respuesta = respuestaHttp.Body;
+            await EjecutarPagos(request, IdTipoAccion, arregloComisiones, transaccionesNuevas, respuesta, secuencialCuenta);
 
-            await _mediador.Send(new CrearLogME()
-            {
-                JsonLog = JsonConvert.SerializeObject(respuesta),
-                IdTipoAccion = IdTipoAccion,
-                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
-            });
-            transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
-            transaccion.SaldoCuenta = respuesta.SaldoCuentaCorresponsal.Value;
-            await _repositorioTransaccion.Update(transaccion);
-            await _mediador.Send(new CrearLogME()
-            {
-                JsonLog = JsonConvert.SerializeObject(respuesta),
-                IdTipoAccion = IdTipoAccion,
-                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-            });
             return respuesta;
         }
 
-        private double DeterminarValorAPagar(ProcesarPagoME request)
+        private async Task EjecutarPagos(
+            ProcesarPagoME request, 
+            string IdTipoAccion, 
+            List<ComisionFinancial> arregloComisiones, 
+            List<Transaccion> transaccionesNuevas, 
+            PagoFacilitoMSL respuesta, 
+            int? secuencialCuenta)
         {
-
-            if (request.Campos.Count == 0)
+            for (int indice = 0; indice < transaccionesNuevas.Count; indice++)
             {
-                throw new ExcepcionApp("No se ha especificado el campo pago.");
+
+                var transaccion = transaccionesNuevas[indice];
+
+                var pago = new PagoFacilitoME
+                {
+                    CodigoPagarPensionesAlimenticiaEmpresa = request.CodigoPagarPensionesAlimenticiaEmpresa,
+                    CodigoUsuarioBanca = request.Usuario,
+                    ComisionRubro = (bool)request.ComisionRubro,
+                    EsUnSoloCobroComision = true,
+                    IdProducto = (Guid)request.IdProducto,
+                    Identificacion = request.Identificacion,
+                    JsonComision = JsonConvert.SerializeObject(arregloComisiones),
+                    NumeroCuotasPensionesAlimenticiaPersona = (int)request.NumeroCuotasPensionesAlimenticiaPersona,
+                    Referencia = request.Referencia,
+                    Rubros = (List<RubroME>)request.Rubros,
+                    SecuencialCuentaCorresponsal = (int)secuencialCuenta,
+                    SecuencialResultadoTransaccion = (int)request.SecuencialResultadoTransaccion,
+                    Valor = transaccion.Valor,
+                    ValorTonelaje = request.ValorTonelaje
+                };
+
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(pago),
+                    IdTipoAccion = IdTipoAccion,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
+                });
+
+                var respuestaHttp = await _pago.PagoServiciosFacilitoPagoFacilitoAsync(pago);
+
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(respuestaHttp),
+                    IdTipoAccion = IdTipoAccion,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
+                });
+
+                var respuestaFacilito = respuestaHttp;
+                var pagoFacilito = respuestaFacilito.PagosFacilito[0];
+
+                transaccion.Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
+                transaccion.SaldoCuenta = respuestaFacilito.SaldoCuentaCorresponsal;
+                await _repositorioTransaccion.Add(transaccion);
+
+                await _mediador.Send(new CrearLogME()
+                {
+                    JsonLog = JsonConvert.SerializeObject(pagoFacilito),
+                    IdTipoAccion = IdTipoAccion,
+                    IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                });
+
+                respuesta.PagosFacilito.Add(pagoFacilito);
+                respuesta.SaldoCuentaCorresponsal = respuestaFacilito.SaldoCuentaCorresponsal;
             }
+        }
 
-            var valor = request.Campos[0].Valor.Replace(",", ".");
-            double ValorAPagar = double.Parse(valor, System.Globalization.CultureInfo.InvariantCulture);
-
-            if (request.Campos.Count > 1)
+        private void PreprarTransacciones(
+            ProcesarPagoME request, 
+            string IdTipoAccion,
+            FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, 
+            Cuenta cuenta, 
+            double saldoActual, 
+            FBS.Identidad.Dominio.Servicios.Canales.Queries.ComisionOperacion comision, 
+            string comisiones, 
+            List<Transaccion> transaccionesNuevas)
+        {
+            if ((bool)request.ComisionRubro)
             {
-                throw new ExcepcionApp("Ambiguedad en los campos pago para este producto.");
+                foreach (var rubro in request.Rubros)
+                {
+                    var transaccion = new Transaccion()
+                    {
+                        CanalId = _jsonConfiguracion.IdCanal,
+                        Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
+                        Comisiones = comisiones,
+                        Agente = agente,
+                        Descripcion = request.Descripcion,
+                        FechaDispositivo = DateTime.Now,
+                        FechaSistema = DateTime.Now,
+                        HoraDispositivo = DateTime.Now.TimeOfDay,
+                        IdentificacionCliente = request.Identificacion,
+                        NombreCliente = request.NombreCliente,
+                        SecuencialCuenta = cuenta.SecuencialCuenta.ToString(),
+                        Valor = (double)rubro.ValorPagado,
+                        JsonDatos = JsonConvert.SerializeObject(request),
+                        SaldoDisponible = saldoActual + request.Valor + comision.Agente.Value + comision.AdministracionCanal.Value + comision.Cooperativa.Value + request.Comision.Value,
+                        Tipo = IdTipoAccion,
+                        EstaActivo = true,
+                        Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
+                    };
+                    transaccionesNuevas.Add(transaccion);
+                }
             }
-        
-            return ValorAPagar;
+            else
+            {
+
+                var transaccion = new Transaccion()
+                {
+                    CanalId = _jsonConfiguracion.IdCanal,
+                    Estado = new Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
+                    Comisiones = comisiones,
+                    Agente = agente,
+                    Descripcion = request.Descripcion,
+                    FechaDispositivo = DateTime.Now,
+                    FechaSistema = DateTime.Now,
+                    HoraDispositivo = DateTime.Now.TimeOfDay,
+                    IdentificacionCliente = request.Identificacion,
+                    NombreCliente = request.NombreCliente,
+                    SecuencialCuenta = cuenta.SecuencialCuenta.ToString(),
+                    Valor = request.Valor,
+                    JsonDatos = JsonConvert.SerializeObject(request),
+                    SaldoDisponible = saldoActual + request.Valor + comision.Agente.Value + comision.AdministracionCanal.Value + comision.Cooperativa.Value + request.Comision.Value,
+                    Tipo = IdTipoAccion,
+                    EstaActivo = true,
+                    Criptografia = Encoding.UTF8.GetString(Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request), _llave, _llave))
+                };
+                transaccionesNuevas.Add(transaccion);
+            }
+        }
+
+        private static void ValidarCuentaAsocida(Cuenta cuenta)
+        {
+            if (cuenta == null)
+            {
+                throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
+            }
         }
 
         private static void ValidarTransaccion(
@@ -278,16 +350,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             if (cuentaAsociada && saldoCuenta - Valor <= 0)
             {
-                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta.");
+                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta");
             }
         }
 
-        private static void ValidarCuentaAsocida(Cuenta cuenta)
-        {
-            if (cuenta == null)
-            {
-                throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
-            }
-        }
+        
     }
 }

@@ -17,13 +17,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
-using FBSConsolaCBWebApi.Infraestructura.Utiles;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
-using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
+
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {

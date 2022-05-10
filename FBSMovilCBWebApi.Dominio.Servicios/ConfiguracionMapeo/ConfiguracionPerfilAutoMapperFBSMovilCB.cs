@@ -19,7 +19,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using System;
 using Newtonsoft.Json.Linq;
 using Org.OpenAPITools.Model;
-using FBSMovilCBWebApi.Dominio.Servicios.Facilito.Commands;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 {

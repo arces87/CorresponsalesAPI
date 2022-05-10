@@ -3,7 +3,7 @@ using Org.OpenAPITools.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
 {
-    public class ObtenerServiciosME : IRequest<ObtenerServiciosMS>
+    public class ObtenerProductoME : ObtenerProductosME, IRequest<ObtenerProductosMS>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }
