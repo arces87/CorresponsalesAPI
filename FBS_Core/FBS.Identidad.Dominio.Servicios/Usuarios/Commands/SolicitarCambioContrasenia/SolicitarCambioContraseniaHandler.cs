@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -59,17 +60,16 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             {
                 var token = await GenerateJwtToken(usuario);
                 await _repositorio.SalvarTokenRecuperarContrasenia(usuario.Id, token);
+
+                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/cambio_contrasenia.html");
+
+                emailTemplate = emailTemplate.Replace("[:URL:]", request.Url).Replace("[:TOKEN:]", token);
+
+
                 await _mediador.Publish(new EnviarCorreoElectronicoME
                 {
                     Asunto = "Solicitud de cambio de contraseña en la Consola de Administración de Corresponsales Solidarios",
-                    Mensaje = $"<html><head></head>" +
-                               "<body lang=EN-US link=\"#0563C1\" vlink=\"#954F72\">" +
-                               "<p>Se ha solicitado un cambio de contraseña desde su usuario, para proceder con el cambio acceda al siguiente link: " +
-                               "<a target=\"_blank\" href=\"" + request.Url + "/" + token + "\">LINK</a>," +
-                               " si no puede acceder al vínculo, copie la siguiente" +
-                               " URL y peguela en su navegador web: </p><br/><p>" + request.Url + "/" + token + "</p>" +
-                               "<p>Si no ha sido usted el que solicitó el cambio contacte con su Administrador.</p><br/><br/>" +
-                               "<p>Sistema Mensajeria<br/><b>Corresponsales Solidarios</b></p></body></html>",
+                    Mensaje = emailTemplate,
                     DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
                             Direccion = usuario.Email,

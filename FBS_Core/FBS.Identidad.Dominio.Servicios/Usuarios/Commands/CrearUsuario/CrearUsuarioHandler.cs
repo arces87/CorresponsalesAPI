@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
+using System.IO;
 
 namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 {
@@ -121,10 +122,14 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         {
             try
             {
+                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/cambio_credenciales.html");
+
+                emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", userName).Replace("[:CONTRASENIA:]", contrasenna);
+
                 await _mediador.Publish(new EnviarCorreoElectronicoME
                 {
                     Asunto = "Creación de usuario en la Consola de Administración de Corresponsales Solidarios",
-                    Mensaje = "Se ha creado una cuenta con su correo electrónico, con el usuario: " + userName + " y contraseña: " + contrasenna,
+                    Mensaje = emailTemplate,
                     DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
                             Direccion = email,

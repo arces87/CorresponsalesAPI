@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
+using System.IO;
 
 namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 {
@@ -97,10 +98,14 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             {
                 try
                 {
+                    var emailTemplate = File.ReadAllText("Resources/EmailTemplate/cambio_credenciales.html");
+
+                    emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", usuario.UserName).Replace("[:CONTRASENIA:]", request.Contrasenna);
+
                     await _mediador.Publish(new EnviarCorreoElectronicoME
                     {
                         Asunto = "Modificación de las credenciasles de autenticación en la Consola de Administración de Corresponsales Solidarios",
-                        Mensaje = "Sus nuevas credencailes son: " + usuario.UserName + ", contraseña: " + request.Contrasenna,
+                        Mensaje = emailTemplate,
                         DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
                             Direccion = usuario.Email,
