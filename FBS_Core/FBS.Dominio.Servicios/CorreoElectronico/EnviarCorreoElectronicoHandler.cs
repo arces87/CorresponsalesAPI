@@ -19,6 +19,7 @@ namespace FBS.Dominio.Servicios.CorreoElectronico
         private readonly string _contrasenna;
         private readonly string _direccionCuentaRemitente;
         private readonly string _nombreCuentaRemitente;
+        private readonly bool _enableSsl;
 
         public EnviarCorreoElectronicoHandler(IConfiguration configuracion)
         {
@@ -29,6 +30,7 @@ namespace FBS.Dominio.Servicios.CorreoElectronico
             _contrasenna = configuracionCorreo["Password"];
             _direccionCuentaRemitente = configuracionCorreo["DireccionCuentaRemitente"];
             _nombreCuentaRemitente = configuracionCorreo["NombreCuentaRemitente"];
+            _enableSsl = bool.Parse(configuracionCorreo["EnableSsl"]);
         }
 
         public async Task Handle(EnviarCorreoElectronicoME request, CancellationToken cancellationToken)
@@ -51,7 +53,7 @@ namespace FBS.Dominio.Servicios.CorreoElectronico
 
             System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(_servidorSmtp, _puertoSmtp);
             smtp.Credentials = new NetworkCredential(_usuario, _contrasenna);
-            smtp.EnableSsl = true;
+            smtp.EnableSsl = _enableSsl;
             smtp.ServicePoint.MaxIdleTime = 1;
             smtp.Send(mail);
         }
