@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FBSServiciosFinancial\FBSServiciosFinancial.csproj" />
     <ProjectReference Include="..\..\FBSServiciosFinancial\Org.OpenAPITools.csproj" />
     <ProjectReference Include="..\FBS.Dominio.Modelos\FBS.Dominio.Modelos.csproj" />
     <ProjectReference Include="..\FBS.Dominio.Servicios\FBS.Dominio.Servicios.csproj" />

@@ -19,7 +19,6 @@ using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Rest;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
 

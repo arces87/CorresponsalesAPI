@@ -1,5 +1,4 @@
-﻿using FBS.Infraestructura;
-using FBS.Infraestructura.Excepciones;
+﻿using FBS.Infraestructura.Excepciones;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

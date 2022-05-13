@@ -15,8 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />
-    <ProjectReference Include="..\FBSServiciosFinancial\FBSServiciosFinancial.csproj" />
+    <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />   
     <ProjectReference Include="..\FBSServiciosFinancial\Org.OpenAPITools.csproj" />
     <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj" />
   </ItemGroup>

@@ -6,7 +6,6 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using Microsoft.Rest;
 using System;
 using Org.OpenAPITools.Model;
 using Org.OpenAPITools.Api;
