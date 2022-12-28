@@ -134,10 +134,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var comisiones = JsonConvert.SerializeObject(comisionPago);
 
             var arregloComisiones = new List<ComisionFinancial>();
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", Valor = comision.AdministracionCanal });
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", Valor = comision.Agente });
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", Valor = comision.Cooperativa });
-            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Facilito", Valor = request.Comision });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", ValorComision = comision.AdministracionCanal });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", ValorComision = comision.Agente });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", ValorComision = comision.Cooperativa });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Facilito", ValorComision = request.Comision });
             var transaccionesNuevas = new List<Transaccion>();
 
             PreprarTransacciones(request, IdTipoAccion, agente, cuenta, saldoActual, comision, comisiones, transaccionesNuevas);

@@ -3,7 +3,7 @@
     public class ComisionFinancial
     {
         public string NombreComision { get; set; }
-        public double? Valor { get; set; }
+        public double? ValorComision { get; set; }
         
     }
 }
