@@ -59,7 +59,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims.ToArray<Claim>()),
-                Expires = DateTime.UtcNow.AddHours(_configuracionCanal.Negocio.TiempoVidaToken),                
+                Expires = DateTime.UtcNow.AddMinutes(_configuracionCanal.Negocio.TiempoVidaToken),                
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -79,7 +79,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims.ToArray<Claim>()),
-                Expires = DateTime.UtcNow.AddHours(_configuracionCanal.Negocio.TiempoVidaToken),
+                Expires = DateTime.UtcNow.AddMinutes(_configuracionCanal.Negocio.TiempoVidaToken),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
