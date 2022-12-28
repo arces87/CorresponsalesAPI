@@ -37,8 +37,8 @@ namespace FBS.Identidad.Infraestructura.Repositorio
             var menu = await GetContext.Menus.OrderBy(m => m.Orden).Join(GetContext.RolesMenus, m => m.Id, r => r.Menu.Id, (m, r) => new { Menu = m, RoleMenu = r })
                  .Join(GetContext.UserRoles, mr => mr.RoleMenu.Rol.Id, ur => ur.RoleId, (mr, ur) => new { MenuRole = mr, UserRole = ur })
                  .Where(mru => mru.MenuRole.Menu.EstaActivo == true && mru.UserRole.UserId == idUsuario)
-                 .Select(mru => mru.MenuRole.Menu).Distinct().ToListAsync();
-            return menu.Where(m => m.MenuId == null).OrderBy(m => m.Orden);
+                 .Select(mru => mru.MenuRole.Menu).Distinct().OrderBy(m => m.Orden).ToListAsync();
+            return menu.Where(m => m.MenuId == null);
         }
         public override async Task<Menu> Get(string Id)
         {
