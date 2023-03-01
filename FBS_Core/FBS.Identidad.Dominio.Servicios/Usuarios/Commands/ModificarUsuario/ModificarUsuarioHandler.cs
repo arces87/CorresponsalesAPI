@@ -56,7 +56,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             var cambioNombreUsuario = CambioNombreUsuario(request, usuario);
             var cambioContrasenia = CambioContrasenia(request);
 
-            await GenerarUsaurioFinancial(request, cambioNombreUsuario);
+            //await GenerarUsaurioFinancial(request, cambioNombreUsuario);
             ManejaCambioContrasenia(request, usuario, cambioContrasenia);
             var usuarioMapeado = _mapper.Map<Usuario>(request);
             MapeaDatosUsuarios(request, usuario);
