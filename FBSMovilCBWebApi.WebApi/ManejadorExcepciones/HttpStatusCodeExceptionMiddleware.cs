@@ -88,19 +88,33 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                     case SocketException e:
                         mensajeSalida = "Ha ocurrido un error al establecer la conexión con el servicio.";
                         break;
-                    default:
+                    default:                        
                         mensajeSalida = "Ha ocurrido un error, contacte al administrador.";
+                        var mensajeError = error.Message;
+                        int primerEspacio = mensajeError.IndexOf(":");
+                        mensajeError = mensajeError.Remove(0, primerEspacio + 1);   
+                        var mensajeErrorConvertido = JsonConvert.DeserializeObject<ExcepcionFinancial>(mensajeError);
+                        var mensajeFinancial = mensajeErrorConvertido.InnerException.ExceptionMessage;
+                        if (mensajeFinancial != null)
+                        {
+                           if (mensajeFinancial.Substring(0, 4) == "CNB-")
+                           {
+                                    int length = mensajeFinancial.Length - 4;
+                                    mensajeSalida = mensajeFinancial.Substring(4, length);
+                           }
+                        }         
+                       
                         break;
                 }
 
-                if (notificar && context.User.Identity.Name != null)
-                {
-                    await _mediador.Publish(new NotificaSupervisorME
-                    {
-                        MensajeExcepcion = mensajeSalida,
-                        IdUsuario = context.User.Identity.Name
-                    });
-                }
+                //if (notificar && context.User.Identity.Name != null)
+                //{
+                //    await _mediador.Publish(new NotificaSupervisorME
+                //    {
+                //        MensajeExcepcion = mensajeSalida,
+                //        IdUsuario = context.User.Identity.Name
+                //    });
+                //}
 
                 if (guardarLog)
                 {
