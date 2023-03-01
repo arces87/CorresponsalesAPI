@@ -76,6 +76,7 @@ namespace FBS.Identidad.Infraestructura.Repositorio
             var canal = _contexto.Set<Canal>().FirstOrDefault(o => o.Id == entidad.Id);
             canal.Nombre = entidad.Nombre;
             canal.JsonNegocio = entidad.JsonNegocio;
+            canal.JsonConfiguracion = entidad.JsonConfiguracion;
             _contexto.Entry(canal).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
