@@ -152,19 +152,19 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Canales.Commands
                     operacionAgente.Limites.NumeroMaximoDiarioDeTransacciones = operacionCanal.Limites.NumeroMaximoDiarioDeTransacciones;
             }
 
-
-            if (operacionAgente.Comisiones == null)
-            {
-                operacionAgente.Comisiones = operacionCanal.Comisiones;
-            } else
-            {
-                if (operacionCanal.Comisiones.AdministracionCanal < operacionAgente.Comisiones.AdministracionCanal)
-                    operacionAgente.Comisiones.AdministracionCanal = operacionCanal.Comisiones.AdministracionCanal;
-                if (operacionCanal.Comisiones.Agente < operacionAgente.Comisiones.Agente)
-                    operacionAgente.Comisiones.Agente = operacionCanal.Comisiones.Agente;
-                if (operacionCanal.Comisiones.Cooperativa < operacionAgente.Comisiones.Cooperativa)
-                    operacionAgente.Comisiones.Cooperativa = operacionCanal.Comisiones.Cooperativa;
-            }
+            operacionAgente.Comisiones = operacionCanal.Comisiones;
+            //if (operacionAgente.Comisiones == null)
+            //{
+            //    operacionAgente.Comisiones = operacionCanal.Comisiones;
+            //} else
+            //{
+            //    if (operacionCanal.Comisiones.AdministracionCanal < operacionAgente.Comisiones.AdministracionCanal)
+            //        operacionAgente.Comisiones.AdministracionCanal = operacionCanal.Comisiones.AdministracionCanal;
+            //    if (operacionCanal.Comisiones.Agente < operacionAgente.Comisiones.Agente)
+            //        operacionAgente.Comisiones.Agente = operacionCanal.Comisiones.Agente;
+            //    if (operacionCanal.Comisiones.Cooperativa < operacionAgente.Comisiones.Cooperativa)
+            //        operacionAgente.Comisiones.Cooperativa = operacionCanal.Comisiones.Cooperativa;
+            //}
 
             return operacionAgente;
         }
