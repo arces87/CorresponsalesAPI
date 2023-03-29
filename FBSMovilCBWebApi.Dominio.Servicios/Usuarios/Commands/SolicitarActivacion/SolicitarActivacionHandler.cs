@@ -20,14 +20,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IMediator _mediador;
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioDispositivo _repositorioDispositivo;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
-        public SolicitarActivacionHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IMapper mapper,
-            IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
+        public SolicitarActivacionHandler(IMediator mediador, IRepositorioAgente repositorioAgente, IRepositorioDispositivo repositorioDispositivo, IMapper mapper,
+            IRepositorioDispositivoAgente repositorioDispositivoAgente, IJsonConfiguracion jsonConfiguracion, IRepositorioGeolocalizacion repositorioGeolocalizacion)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
+            _repositorioDispositivo = repositorioDispositivo;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
             _mapper = mapper;
             _jsonConfiguracion = jsonConfiguracion;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
@@ -45,6 +49,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             try
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+                var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+                var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
                 var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoUbicado").Valor;
                 var idEstadoInactivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoEliminado").Valor;
 
@@ -54,7 +60,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     {
                         throw new ExcepcionApp("Error en la validación de los datos de autenticación | A003");
                     }
-                    else if (agente.Dispositivo != null && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
+                    else if (dispositivo != null && dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
                     {
                         var _usuario = new LoginUsuarioME() { Usuario = request.Usuario, Contrasenna = request.Contrasenia, Dispositivo = "Movil" };
                         var usuarioAutenticado = await _mediador.Send(_usuario);

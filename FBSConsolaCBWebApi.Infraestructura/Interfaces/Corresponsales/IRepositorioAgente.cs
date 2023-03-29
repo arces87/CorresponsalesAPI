@@ -22,8 +22,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task<IEnumerable<Usuario>> GetSupervisoresDisponibles();
         Task<IEnumerable<Dispositivo>> GetDispositivosDisponibles();
         Task UpdateEstado(Agente entidad);
+        Task Desactivar(Agente entidad);
         Task<bool> Verificaridentificacion(string Identificacion);
-        Task<bool> Verificaridentificacion(string Identificacion, string idAgente);
-
+        Task<bool> Verificaridentificacion(string Identificacion, string idAgente);       
     }
 }

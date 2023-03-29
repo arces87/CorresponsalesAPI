@@ -2,6 +2,7 @@
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,12 +12,14 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
     {
         private readonly IRepositorioAgente _repositorio;
         private readonly IRepositorioCuenta _repositorioCuenta;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
         private readonly IMapper _mapper;
 
-        public CrearAgenteHandler(IRepositorioAgente repositorio, IRepositorioCuenta repositorioCuenta, IMapper mapper)
+        public CrearAgenteHandler(IRepositorioAgente repositorio, IRepositorioCuenta repositorioCuenta, IRepositorioDispositivoAgente repositorioDispositivoAgente, IMapper mapper)
         {
             _repositorio = repositorio;
             _repositorioCuenta = repositorioCuenta;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
             _mapper = mapper;
         }
 
@@ -34,6 +37,15 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
                     NumeroCuenta = request.NumeroCuenta,
                     SecuencialCuenta = request.SecuencialCuenta
                 });
+
+            var dispositivoagente = new DispositivoAgente()
+            {
+                DispositivoId = Guid.Parse(request.IdDispositivo),
+                AgenteId = Guid.Parse(identificador)
+            };
+            await _repositorioDispositivoAgente.Add(dispositivoagente);
+
+
             return identificador;
         }
     }

@@ -131,6 +131,14 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Canales
             return dispositivo != null ? true : false;
         }
 
+        public async Task<bool> VerificarImei(string Imei, string IdDispositivo)
+        {
+            var dispositivo = await Context.Dispositivos.FirstOrDefaultAsync(d => d.Imei == Imei);
+            if (dispositivo != null && dispositivo.Id.ToString() == IdDispositivo)
+                return false;
+            return dispositivo != null ? true : false;
+        }
+
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
         public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));

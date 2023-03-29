@@ -74,8 +74,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
                 throw new ExcepcionApp("El corresponsal no tiene cuenta asociada.");
             }
 
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
             var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
             return respuestaCuentaAsociada.DisponibleParaTransaccion;

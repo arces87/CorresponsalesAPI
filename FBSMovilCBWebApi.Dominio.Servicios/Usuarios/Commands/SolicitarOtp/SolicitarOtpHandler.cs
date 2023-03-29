@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Org.OpenAPITools.Api;
 using Org.OpenAPITools.Model;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
@@ -27,6 +28,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
     {
         private readonly IMediator _mediador;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
+        private readonly IRepositorioDispositivo _repositorioDispositivo;
         private readonly IRepositorioUsuario _repositorioUsuario;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IClientesApi _clienteApi;
@@ -37,6 +40,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
         public SolicitarOtpHandler(IMediator mediador,
             IRepositorioAgente repositorioAgente,
+            IRepositorioDispositivoAgente repositorioDispositivoAgente,
+            IRepositorioDispositivo repositorioDispositivo,
             IClientesApi clienteApi,
             IMensajeriaSMSApi mensajeriaApi,
             IRepositorioUsuario repositorioUsuario,
@@ -46,6 +51,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
+            _repositorioDispositivo = repositorioDispositivo;
             _clienteApi = clienteApi;
             _mensajeriaApi = mensajeriaApi;
             _repositorioUsuario = repositorioUsuario;
@@ -130,14 +137,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             }
             else
             {
-                var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-                var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+                //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+                //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
                 try
                 {
                     await _mediador.Send(new CrearLogME()
                     {
-                        JsonLog = JsonConvert.SerializeObject(customHeaders),
+                        //JsonLog = JsonConvert.SerializeObject(customHeaders),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
@@ -214,11 +221,13 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 try
                 {
-                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, nombreDestino, fechaActual, agente.Dispositivo.Imei);
+                    var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+                    var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
+                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, nombreDestino, fechaActual, dispositivo.Imei);
 
                     await _mediador.Send(new CrearLogME()
                     {
-                        JsonLog = JsonConvert.SerializeObject(respuesta),
+                        //JsonLog = JsonConvert.SerializeObject(respuesta),
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });

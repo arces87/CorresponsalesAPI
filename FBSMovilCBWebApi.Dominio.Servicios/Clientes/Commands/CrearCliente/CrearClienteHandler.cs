@@ -65,9 +65,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
 
-            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            //var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+            //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var mapResult = _mapper.Map<CreaClienteME>(request);
 

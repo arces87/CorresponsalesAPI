@@ -22,6 +22,7 @@ namespace FBSConsolaCBWebApi.DAL
         public DbSet<Agente> Agentes { get; set; }
         public DbSet<Transaccion> Transacciones { get; set; }
         public DbSet<TransaccionRetiro> TransaccionesRetiro { get; set; }
+        public DbSet<DispositivoAgente> DispositivoAgente { get; set; }
 
         #endregion
 

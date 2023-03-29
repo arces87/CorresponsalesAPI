@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
@@ -24,6 +25,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
     {
         private readonly IMediator _mediador;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
+        private readonly IRepositorioDispositivo _repositorioDispositivo;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IApiKeyGenerator _apiKeyGenerator;
@@ -33,18 +36,24 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             IRepositorioAgente repositorioAgente, 
             IHttpContextAccessor httpContext,
             IJsonConfiguracion jsonConfiguracion,
-            IApiKeyGenerator apiKeyGenerator)
+            IApiKeyGenerator apiKeyGenerator, 
+            IRepositorioDispositivoAgente repositorioDispositivoAgente, 
+            IRepositorioDispositivo repositorioDispositivo)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
             _httpContext = httpContext;
             _jsonConfiguracion = jsonConfiguracion;
             _apiKeyGenerator = apiKeyGenerator;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
+            _repositorioDispositivo = repositorioDispositivo;
         }
         public async Task Process(ProcesarRetiroME request, AfectacionAUnCorresponsalRepositorioMS response, CancellationToken cancellationToken)
         {
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro").Valor;
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+            var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+            var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
 
             var valores = new Dictionary<string, string>();
@@ -57,7 +66,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             PrepararSMS(request, agente, jsonNegocio, fechaActual, valoresSMS);
 
-            await Notificar(request, response, IdTipoAccion, jsonNegocio, valores, valoresSMS, agente.Usuario.UserName, agente.Dispositivo.Imei);
+            await Notificar(request, response, IdTipoAccion, jsonNegocio, valores, valoresSMS, agente.Usuario.UserName, dispositivo.Imei);
         }
 
         private async Task Notificar(
@@ -132,8 +141,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var datosCliente = await _mediador.Send(buscarClienteME);
 
-            var apiKey = _apiKeyGenerator.generateApiKey(imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            //var apiKey = _apiKeyGenerator.generateApiKey(imei);
+            //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var notificacion = new NotificacionME
             {
@@ -149,7 +158,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 ValoresSms = valoresSMS,
                 TipoIdentificacion = request.TipoIdentificacionCliente,
                 Identificacion = request.IdentificacionCliente,
-                Encabezado = customHeaders
+                //Encabezado = customHeaders
             };
             return notificacion;
         }

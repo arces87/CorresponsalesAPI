@@ -53,19 +53,19 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
                 VerificarGeolocalizacion = false
             });
             
-            var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            //var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+            //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             await _mediador.Send(new CrearLogME()
             {
-                JsonLog = JsonConvert.SerializeObject(customHeaders),
+                //JsonLog = JsonConvert.SerializeObject(customHeaders),
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
             var porIdentificacionSocioME = _mapper.Map<PorIdentificacionSocioME>(request);
             await _mediador.Send(new CrearLogME()
             {
-                JsonLog = JsonConvert.SerializeObject(porIdentificacionSocioME),
+                //JsonLog = JsonConvert.SerializeObject(porIdentificacionSocioME),
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });

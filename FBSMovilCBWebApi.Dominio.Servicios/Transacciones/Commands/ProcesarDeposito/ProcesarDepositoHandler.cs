@@ -91,8 +91,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             ValidarCuentaAsocida(cuenta);
 
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+            //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
             DevuelveCuentaME cuentaAsociada = new Org.OpenAPITools.Model.DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
             var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
             var saldoCuenta = respuestaCuentaAsociada.DisponibleParaTransaccion;

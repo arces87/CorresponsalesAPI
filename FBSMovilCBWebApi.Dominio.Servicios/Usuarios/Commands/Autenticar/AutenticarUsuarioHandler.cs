@@ -22,6 +22,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IMediator _mediador;
         private readonly IMapper _mapper;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
+        private readonly IRepositorioDispositivo _repositorioDispositivo;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IConfiguracionCanal _configuracionCanal;
@@ -30,6 +32,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         public AutenticarUsuarioHandler(
             IMediator mediador,
             IRepositorioAgente repositorioAgente,
+            IRepositorioDispositivoAgente repositorioDispositivoAgente, 
+            IRepositorioDispositivo repositorioDispositivo,
             IMapper mapper,
             IJsonConfiguracion jsonConfiguracion,
             IRepositorioGeolocalizacion repositorioGeolocalizacion,
@@ -38,6 +42,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
+            _repositorioDispositivo = repositorioDispositivo;
             _mapper = mapper;
             _jsonConfiguracion = jsonConfiguracion;
             _configuracionCanal = configuracionCanal;
@@ -69,12 +75,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             try
             {
                 var agente = await _repositorioAgente.GetForUserName(request.Usuario);
+                var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+                var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
                 var idEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
                 var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
 
                 if (agente != null) //Comprobacion de existencia del Agente y si se encuentra Activo
                 {
-                    if (agente.Dispositivo != null && agente.Dispositivo.EstaActivo && agente.Dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && agente.Dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
+                    if (dispositivo != null && dispositivo.EstaActivo && dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
                     {
                         var _usuario = _mapper.Map<LoginUsuarioME>(request);
                         _usuario.Dispositivo = "Movil";

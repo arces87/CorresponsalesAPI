@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Org.OpenAPITools.Api;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 {
@@ -26,9 +27,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
         private readonly IMapper _mapper;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
+        private readonly IRepositorioDispositivo _repositorioDispositivo;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
         private readonly IMediator _mediador;
 
-        public ObtenerDistribuidosHandler(IClientesApi clienteApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public ObtenerDistribuidosHandler(IClientesApi clienteApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente, IRepositorioDispositivo repositorioDispositivo, IRepositorioDispositivoAgente repositorioDispositivoAgente)
         {
             _clienteApi = clienteApi;
             _repositorioCatalogo = repositorioCatalogo;
@@ -37,6 +40,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
             _mediador = mediador;
             _apiKeyGenerator = apiKeyGenerator;
             _repositorioAgente = repositorioAgente;
+            _repositorioDispositivo = repositorioDispositivo;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
         }
 
         public async Task<ObtenerDistribuidosMS> Handle(ObtenerDistribuidosME request, CancellationToken cancellationToken)
@@ -52,8 +57,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
             });
 
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-            var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            //var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+            //var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
+            //var apiKey = _apiKeyGenerator.generateApiKey(dispositivo.Imei);
+            //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
             var catalogos = await _repositorioCatalogo.GetAllWithAssociations(true);
             var tiposAlertas = catalogos.Where(c => c.TipoCatalogo.Id == new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTipoAlerta").Valor)).ToList();
@@ -61,12 +68,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                 TiposAlertas = _mapper.Map<IEnumerable<DistribuidoAlerta>>(tiposAlertas)
             };                  
 
-            await RecuperarTiposIdentificacion(request, customHeaders, respuesta);
-            await RecuperarDistribuidos(customHeaders, respuesta);
+            await RecuperarTiposIdentificacion(request, respuesta);
+            await RecuperarDistribuidos(respuesta);
             return respuesta;
         }
 
-        private async Task RecuperarDistribuidos(Dictionary<string, List<string>> customHeaders, ObtenerDistribuidosMS respuesta)
+        private async Task RecuperarDistribuidos(ObtenerDistribuidosMS respuesta)
         {
             try
             {
@@ -86,7 +93,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
             }
         }
 
-        private async Task RecuperarTiposIdentificacion(ObtenerDistribuidosME request, Dictionary<string, List<string>> customHeaders, ObtenerDistribuidosMS respuesta)
+        private async Task RecuperarTiposIdentificacion(ObtenerDistribuidosME request, ObtenerDistribuidosMS respuesta)
         {
             try
             {

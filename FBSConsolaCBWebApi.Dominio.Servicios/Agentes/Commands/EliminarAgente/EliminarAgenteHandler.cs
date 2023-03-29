@@ -20,8 +20,16 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
 
         public async Task<bool> Handle(EliminarAgenteME request, CancellationToken cancellationToken)
         {
-            var _model = _mapper.Map<Agente>(request);
-            await _repositorio.Remove(_model);
+            if (request.Eliminar)
+            {
+                var _model = _mapper.Map<Agente>(request);
+                await _repositorio.Remove(_model);
+            }
+            else
+            {
+                var _model = _mapper.Map<Agente>(request);
+                await _repositorio.Desactivar(_model);
+            }      
             return true;
         }
     }

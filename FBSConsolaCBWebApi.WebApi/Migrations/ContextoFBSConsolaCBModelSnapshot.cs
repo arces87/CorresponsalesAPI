@@ -15,90 +15,112 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FBS.DAL.Nomenclador.Catalogo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("Descripcion");
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Nombre");
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TipoCatalogoId");
+                    b.Property<Guid?>("TipoCatalogoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TipoCatalogoId");
 
-                    b.ToTable("Catalogo","Nomenclador");
+                    b.ToTable("Catalogo", "Nomenclador");
                 });
 
             modelBuilder.Entity("FBS.DAL.Nomenclador.TipoCatalogo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("Descripcion");
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Nombre");
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TipoCatalogo","Nomenclador");
+                    b.ToTable("TipoCatalogo", "Nomenclador");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Canal", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("JsonConfiguracion");
+                    b.Property<string>("JsonConfiguracion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("JsonNegocio");
+                    b.Property<string>("JsonNegocio")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nombre");
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Canal","Seguridad");
+                    b.ToTable("Canal", "Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.CanalUsuario", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CanalId");
+                    b.Property<Guid?>("CanalId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("UsuarioId");
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -106,92 +128,112 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("CanalUsuario","Seguridad");
+                    b.ToTable("CanalUsuario", "Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Icono");
+                    b.Property<string>("Icono")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("MenuId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("MenuPadreId");
 
-                    b.Property<string>("Nombre");
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Orden");
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Ruta");
+                    b.Property<string>("Ruta")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("Menu","Seguridad");
+                    b.ToTable("Menu", "Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Rol", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("Id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Concurrencia");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnName("Descripcion")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Descripcion");
 
                     b.Property<bool>("EstaActivo")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EstaActivo")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("EstaActivo");
 
                     b.Property<string>("Name")
-                        .HasColumnName("Nombre")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Nombre");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnName("NombreNormalizado")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("NombreNormalizado");
 
                     b.Property<bool>("Type")
+                        .HasColumnType("bit")
                         .HasColumnName("Tipo");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NombreNormalizado] IS NOT NULL");
 
-                    b.ToTable("Rol","Seguridad");
+                    b.ToTable("Rol", "Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.RolMenu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("MenuId");
+                    b.Property<Guid?>("MenuId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RolId");
+                    b.Property<string>("RolId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -199,118 +241,146 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("RolMenu","Seguridad");
+                    b.ToTable("RolMenu", "Seguridad");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Usuario", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("Id");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int")
                         .HasColumnName("AccesosFallidos");
 
                     b.Property<bool>("CambioContrasenia")
+                        .HasColumnType("bit")
                         .HasColumnName("CambioContrasenia");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Concurrencia");
 
                     b.Property<string>("Email")
-                        .HasColumnName("CorreoElectronico")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("CorreoElectronico");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit")
                         .HasColumnName("CorreoElectronicoConfirmado");
 
                     b.Property<bool>("EstaActivo")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EstaActivo")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("EstaActivo");
 
                     b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2")
                         .HasColumnName("FechaCreacion");
 
-                    b.Property<DateTime>("FechaUltimoCambioContrasenia");
+                    b.Property<DateTime>("FechaUltimoCambioContrasenia")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Imagen")
-                        .HasColumnName("Imagen")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Imagen");
 
                     b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit")
                         .HasColumnName("BloqueoActivo");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("FinBloqueo");
 
                     b.Property<string>("NombreCompleto")
-                        .HasColumnName("NombreCompleto")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("NombreCompleto");
 
                     b.Property<string>("NombreMostrar")
-                        .HasColumnName("NombreMostrar")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("NombreMostrar");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnName("CorreoElectronicoNormalizado")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("CorreoElectronicoNormalizado");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnName("CodigoNormalizado")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("CodigoNormalizado");
 
-                    b.Property<Guid?>("OperadoraId");
+                    b.Property<Guid?>("OperadoraId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Contrasenia");
 
                     b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("TelefonoCelular");
 
                     b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit")
                         .HasColumnName("TelefonoConfirmado");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("MarcaSeguridad");
 
                     b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit")
                         .HasColumnName("DobleVerificacion");
 
                     b.Property<string>("UserName")
-                        .HasColumnName("Codigo")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Codigo");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[CodigoNormalizado] IS NOT NULL");
 
                     b.HasIndex("OperadoraId");
 
-                    b.ToTable("Usuario","Seguridad");
+                    b.ToTable("Usuario", "Seguridad");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.AgenteGeolocalizacion", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AgenteId");
+                    b.Property<Guid?>("AgenteId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("GeolocalizacionId");
+                    b.Property<Guid?>("GeolocalizacionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -318,39 +388,52 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("GeolocalizacionId");
 
-                    b.ToTable("AgenteGeolocalizacion","Canales");
+                    b.ToTable("AgenteGeolocalizacion", "Canales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Dispositivo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("DireccionImpresora");
+                    b.Property<string>("DireccionImpresora")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Imei");
+                    b.Property<string>("Imei")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MacAddress");
+                    b.Property<string>("MacAddress")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("MarcaId");
+                    b.Property<Guid?>("MarcaId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Modelo");
+                    b.Property<string>("Modelo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NumeroSerie");
+                    b.Property<string>("NumeroSerie")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Observaciones");
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SistemaOperativoId");
+                    b.Property<Guid?>("SistemaOperativoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("TieneImpresora");
+                    b.Property<bool>("TieneImpresora")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Ubicacion");
+                    b.Property<string>("Ubicacion")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -358,105 +441,134 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("SistemaOperativoId");
 
-                    b.ToTable("Dispositivo","Canales");
+                    b.ToTable("Dispositivo", "Canales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Geolocalizacion", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime>("FechaAlta");
+                    b.Property<DateTime>("FechaAlta")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaBaja");
+                    b.Property<DateTime>("FechaBaja")
+                        .HasColumnType("datetime2");
 
-                    b.Property<double>("Latitud");
+                    b.Property<double>("Latitud")
+                        .HasColumnType("float");
 
-                    b.Property<double>("Longitud");
+                    b.Property<double>("Longitud")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Geolocalizacion","Canales");
+                    b.ToTable("Geolocalizacion", "Canales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Imagen", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("DireccionImagen");
+                    b.Property<string>("DireccionImagen")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("DispositivoId");
+                    b.Property<Guid?>("DispositivoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DispositivoId");
 
-                    b.ToTable("Imagen","Canales");
+                    b.ToTable("Imagen", "Canales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.ImagenGeolocalizacion", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("DireccionImagen");
+                    b.Property<string>("DireccionImagen")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("GeolocalizacionId");
+                    b.Property<Guid?>("GeolocalizacionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GeolocalizacionId");
 
-                    b.ToTable("ImagenGeolocalizacion","Canales");
+                    b.ToTable("ImagenGeolocalizacion", "Canales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Log", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("Criptografia");
+                    b.Property<string>("Criptografia")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("EstadoId");
+                    b.Property<Guid?>("EstadoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Fecha");
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("Hora");
+                    b.Property<TimeSpan>("Hora")
+                        .HasColumnType("time");
 
-                    b.Property<string>("JsonDispositivo");
+                    b.Property<string>("JsonDispositivo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("JsonLog");
+                    b.Property<string>("JsonLog")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RelacionadoId");
+                    b.Property<string>("RelacionadoId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TipoAccionId");
+                    b.Property<Guid?>("TipoAccionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UsuarioId");
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -466,37 +578,49 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Log","Canales");
+                    b.ToTable("Log", "Canales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Agente", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<Guid?>("DispositivoId");
+                    b.Property<Guid?>("DispositivoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("EstadoId");
+                    b.Property<Guid?>("EstadoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Identificacion");
+                    b.Property<string>("Identificacion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("JsonAgente");
+                    b.Property<string>("JsonAgente")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NombreAgente");
+                    b.Property<string>("NombreAgente")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SupervisorId");
+                    b.Property<string>("SupervisorId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TipoIdentificacion");
+                    b.Property<int>("TipoIdentificacion")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Ubicacion");
+                    b.Property<string>("Ubicacion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UsuarioId");
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -508,33 +632,43 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Agente","Corresponsales");
+                    b.ToTable("Agente", "Corresponsales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Alerta", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AgenteId");
+                    b.Property<Guid?>("AgenteId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Comentario");
+                    b.Property<string>("Comentario")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("Descripcion");
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("EstadoId");
+                    b.Property<Guid?>("EstadoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Fecha");
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("Hora");
+                    b.Property<TimeSpan>("Hora")
+                        .HasColumnType("time");
 
-                    b.Property<Guid?>("TipoId");
+                    b.Property<Guid?>("TipoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -544,81 +678,109 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("TipoId");
 
-                    b.ToTable("Alerta","Corresponsales");
+                    b.ToTable("Alerta", "Corresponsales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Cuenta", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AgenteId");
+                    b.Property<Guid?>("AgenteId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("NumeroCuenta");
+                    b.Property<string>("NumeroCuenta")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SecuencialCuenta");
+                    b.Property<string>("SecuencialCuenta")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tipo");
+                    b.Property<string>("Tipo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AgenteId");
 
-                    b.ToTable("Cuenta","Corresponsales");
+                    b.ToTable("Cuenta", "Corresponsales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Transaccion", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AgenteId");
+                    b.Property<Guid?>("AgenteId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CanalId");
+                    b.Property<string>("CanalId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Comisiones");
+                    b.Property<string>("Comisiones")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Concurrencia")
                         .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
-                    b.Property<string>("Criptografia");
+                    b.Property<string>("Criptografia")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Descripcion");
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EstaActivo");
+                    b.Property<bool>("EstaActivo")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid?>("EstadoId");
+                    b.Property<Guid?>("EstadoId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("FechaDispositivo");
+                    b.Property<DateTime>("FechaDispositivo")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaSistema");
+                    b.Property<DateTime>("FechaSistema")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("HoraDispositivo");
+                    b.Property<TimeSpan>("HoraDispositivo")
+                        .HasColumnType("time");
 
-                    b.Property<string>("IdentificacionCliente");
+                    b.Property<string>("IdentificacionCliente")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("JsonDatos");
+                    b.Property<string>("JsonDatos")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NombreCliente");
+                    b.Property<string>("NombreCliente")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("ReposicionRealizada");
+                    b.Property<bool>("ReposicionRealizada")
+                        .HasColumnType("bit");
 
-                    b.Property<double>("SaldoCuenta");
+                    b.Property<double>("SaldoCuenta")
+                        .HasColumnType("float");
 
-                    b.Property<double>("SaldoDisponible");
+                    b.Property<double>("SaldoDisponible")
+                        .HasColumnType("float");
 
-                    b.Property<string>("SecuencialCuenta");
+                    b.Property<string>("SecuencialCuenta")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tipo");
+                    b.Property<string>("Tipo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Valor");
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -626,125 +788,146 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
 
                     b.HasIndex("EstadoId");
 
-                    b.ToTable("Transaccion","Corresponsales");
+                    b.ToTable("Transaccion", "Corresponsales");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.TransaccionRetiro", b =>
                 {
                     b.Property<Guid>("IdTransaccion")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("FondoNegocio");
+                    b.Property<double>("FondoNegocio")
+                        .HasColumnType("float");
 
-                    b.Property<double>("ValorCaja");
+                    b.Property<double>("ValorCaja")
+                        .HasColumnType("float");
 
                     b.HasKey("IdTransaccion");
 
-                    b.ToTable("TransaccionRetiro","Corresponsales");
+                    b.ToTable("TransaccionRetiro", "Corresponsales");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Tipo");
 
                     b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Valor");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("RolId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolPermiso","Seguridad");
+                    b.ToTable("RolPermiso", "Seguridad");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Tipo");
 
                     b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Valor");
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("UsuarioId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsuarioPermiso","Seguridad");
+                    b.ToTable("UsuarioPermiso", "Seguridad");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("Proveedor");
 
                     b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("LlaveProveedor");
 
                     b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("NombreProveedor");
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("UsuarioId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AutenticacionUsuario","Seguridad");
+                    b.ToTable("AutenticacionUsuario", "Seguridad");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("UsuarioId");
 
                     b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("RolId");
 
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UsuarioRol","Seguridad");
+                    b.ToTable("UsuarioRol", "Seguridad");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("UsuarioId");
 
                     b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("Proveedor");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("Nombre");
 
                     b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Valor");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UsuarioToken","Seguridad");
+                    b.ToTable("UsuarioToken", "Seguridad");
                 });
 
             modelBuilder.Entity("FBS.DAL.Nomenclador.Catalogo", b =>
@@ -752,6 +935,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.DAL.Nomenclador.TipoCatalogo", "TipoCatalogo")
                         .WithMany("Catalogos")
                         .HasForeignKey("TipoCatalogoId");
+
+                    b.Navigation("TipoCatalogo");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.CanalUsuario", b =>
@@ -763,11 +948,15 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId");
+
+                    b.Navigation("Canal");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>
                 {
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Menu")
+                    b.HasOne("FBS.Identidad.DAL.Seguridad.Menu", null)
                         .WithMany("Menus")
                         .HasForeignKey("MenuId");
                 });
@@ -781,14 +970,19 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.Identidad.DAL.Seguridad.Rol", "Rol")
                         .WithMany("RoleMenu")
                         .HasForeignKey("RolId");
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Rol");
                 });
 
             modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Usuario", b =>
                 {
                     b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Operadora")
                         .WithMany()
-                        .HasForeignKey("OperadoraId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OperadoraId");
+
+                    b.Navigation("Operadora");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.AgenteGeolocalizacion", b =>
@@ -800,6 +994,10 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBSConsolaCBWebApi.DAL.Canales.Geolocalizacion", "Geolocalizacion")
                         .WithMany()
                         .HasForeignKey("GeolocalizacionId");
+
+                    b.Navigation("Agente");
+
+                    b.Navigation("Geolocalizacion");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Dispositivo", b =>
@@ -811,6 +1009,10 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.DAL.Nomenclador.Catalogo", "SistemaOperativo")
                         .WithMany()
                         .HasForeignKey("SistemaOperativoId");
+
+                    b.Navigation("Marca");
+
+                    b.Navigation("SistemaOperativo");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Imagen", b =>
@@ -818,6 +1020,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBSConsolaCBWebApi.DAL.Canales.Dispositivo", "Dispositivo")
                         .WithMany()
                         .HasForeignKey("DispositivoId");
+
+                    b.Navigation("Dispositivo");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.ImagenGeolocalizacion", b =>
@@ -825,6 +1029,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBSConsolaCBWebApi.DAL.Canales.Geolocalizacion", "Geolocalizacion")
                         .WithMany()
                         .HasForeignKey("GeolocalizacionId");
+
+                    b.Navigation("Geolocalizacion");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Canales.Log", b =>
@@ -840,6 +1046,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId");
+
+                    b.Navigation("Estado");
+
+                    b.Navigation("TipoAccion");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Agente", b =>
@@ -859,6 +1071,14 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId");
+
+                    b.Navigation("Dispositivo");
+
+                    b.Navigation("Estado");
+
+                    b.Navigation("Supervisor");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Alerta", b =>
@@ -874,6 +1094,12 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Tipo")
                         .WithMany()
                         .HasForeignKey("TipoId");
+
+                    b.Navigation("Agente");
+
+                    b.Navigation("Estado");
+
+                    b.Navigation("Tipo");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Cuenta", b =>
@@ -881,6 +1107,8 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBSConsolaCBWebApi.DAL.Corresponsales.Agente", "Agente")
                         .WithMany()
                         .HasForeignKey("AgenteId");
+
+                    b.Navigation("Agente");
                 });
 
             modelBuilder.Entity("FBSConsolaCBWebApi.DAL.Corresponsales.Transaccion", b =>
@@ -892,51 +1120,27 @@ namespace FBSConsolaCBWebApi.WebApi.Migrations
                     b.HasOne("FBS.DAL.Nomenclador.Catalogo", "Estado")
                         .WithMany()
                         .HasForeignKey("EstadoId");
+
+                    b.Navigation("Agente");
+
+                    b.Navigation("Estado");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("FBS.DAL.Nomenclador.TipoCatalogo", b =>
                 {
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Rol")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Navigation("Catalogos");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Menu", b =>
                 {
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Navigation("Menus");
+
+                    b.Navigation("RoleMenu");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("FBS.Identidad.DAL.Seguridad.Rol", b =>
                 {
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Rol")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("FBS.Identidad.DAL.Seguridad.Usuario")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Navigation("RoleMenu");
                 });
 #pragma warning restore 612, 618
         }

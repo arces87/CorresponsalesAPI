@@ -102,8 +102,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
                 var datosCliente = await _mediador.Send(buscarClienteME);
 
-                var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-                var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+                //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
+                //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
                 var notificacion = new NotificacionME
                 {
@@ -119,7 +119,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     ValoresSms = valoresSMS,
                     TipoIdentificacion = request.TipoIdentificacionCliente,
                     Identificacion = request.IdentificacionCliente,
-                    Encabezado = customHeaders
+                    //Encabezado = customHeaders
                 };
 
                 await _mediador.Send(new CrearLogME()

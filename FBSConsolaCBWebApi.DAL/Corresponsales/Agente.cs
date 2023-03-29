@@ -18,7 +18,7 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
 
         public Usuario Supervisor { get; set; }
 
-        public Dispositivo Dispositivo { get; set; }
+        //public Dispositivo Dispositivo { get; set; }
 
         public string NombreAgente { get; set; }
 
@@ -31,22 +31,22 @@ namespace FBSConsolaCBWebApi.DAL.Corresponsales
         [Timestamp]
         public byte[] Concurrencia { get; set; }
 
-        public bool ValdiarDispotivo(string imei, string mac)
-        {
-            return Dispositivo != null && Dispositivo.EstaActivo && Dispositivo.Imei.ToUpper() == imei.ToUpper() && Dispositivo.MacAddress.ToUpper() == mac.ToUpper();
-        }
+        //public bool ValdiarDispotivo(string imei, string mac)
+        //{
+        //    return Dispositivo != null && Dispositivo.EstaActivo && Dispositivo.Imei.ToUpper() == imei.ToUpper() && Dispositivo.MacAddress.ToUpper() == mac.ToUpper();
+        //}
 
-        public bool ValdiarGeolocalizacion(Geolocalizacion geolocalizacion, double latitud, double longitud)
-        {
+        //public bool ValdiarGeolocalizacion(Geolocalizacion geolocalizacion, double latitud, double longitud)
+        //{
 
-            if (geolocalizacion == null) return false;
+        //    if (geolocalizacion == null) return false;
 
-            var latitud_inicio = geolocalizacion.Latitud - 1;
-            var latitud_fin = geolocalizacion.Latitud + 1;
-            var longitud_inicio = geolocalizacion.Longitud - 1;
-            var longitud_fin = geolocalizacion.Longitud + 1;
+        //    var latitud_inicio = geolocalizacion.Latitud - 1;
+        //    var latitud_fin = geolocalizacion.Latitud + 1;
+        //    var longitud_inicio = geolocalizacion.Longitud - 1;
+        //    var longitud_fin = geolocalizacion.Longitud + 1;
 
-            return  latitud >= latitud_inicio && latitud <= latitud_fin && longitud >= longitud_inicio && longitud <= longitud_fin;
-        }
+        //    return  latitud >= latitud_inicio && latitud <= latitud_fin && longitud >= longitud_inicio && longitud <= longitud_fin;
+        //}
     }
 }
