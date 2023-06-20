@@ -10,5 +10,6 @@ namespace FBS.Identidad.Infraestructura.Interfaces
         Task<IEnumerable<Rol>> GetAllActive();
         Task<Rol> GetForName(string Name);
         Task AddMenu(RolMenu menu);
+        Task<Rol> GetRolUsuario(string UsuarioId);
     }
 }
