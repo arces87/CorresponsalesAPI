@@ -51,7 +51,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var valores = new Dictionary<string, string>();
             var comision = jsonNegocio.Deposito.Comisiones.AdministracionCanal + jsonNegocio.Deposito.Comisiones.Agente + jsonNegocio.Deposito.Comisiones.Cooperativa;
 
-            var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
+            var fechaActualEmail = response.FechaTransaccion.ToString("dd/MM/yyyy/ H:mm");
+            var fechaActual = response.FechaTransaccion.ToString("yyyy/MM/dd");
+            var horaActual = response.FechaTransaccion.ToString("H:mm:ss");
 
             if (jsonNegocio.Deposito.NotificarCorreoElectronico)
             {
@@ -66,7 +68,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
                 valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
                 valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
-                valores.Add("[:FECHAACTUAL:]", fechaActual);
+                valores.Add("[:FECHAACTUAL:]", fechaActualEmail);
             }
 
             var valoresSMS = new Dictionary<string, string>();
@@ -82,9 +84,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }                    
                 }
 
-                valoresSMS.Add("[:VALOROPERACION:]", request.Valor.ToString());
+                var cuenta = response.NumeroCuenta.ToString();
+                cuenta = cuenta.Substring(0, 3)+"XXXXXXXX";
+
+                valoresSMS.Add("[:VALOROPERACION:]", response.Valor.ToString());
+                valoresSMS.Add("[:CUENTA:]", cuenta);
                 valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
+                valoresSMS.Add("[:HORAACTUAL:]", horaActual);
             }
            
             try

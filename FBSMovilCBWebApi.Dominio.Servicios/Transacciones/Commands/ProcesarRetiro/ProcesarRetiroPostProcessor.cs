@@ -58,13 +58,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             var valores = new Dictionary<string, string>();
 
-            var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
+            var fechaActualEmail = response.FechaTransaccion.ToString("dd/MM/yyyy/ H:mm");
+            var fechaActual = response.FechaTransaccion.ToString("yyyy/MM/dd");
+            var horaActual = response.FechaTransaccion.ToString("H:mm:ss");
 
-            PrepararCorreoElectronico(request, agente, jsonNegocio, valores, fechaActual);
+            PrepararCorreoElectronico(request, agente, jsonNegocio, valores, fechaActualEmail);
 
             var valoresSMS = new Dictionary<string, string>();
 
-            PrepararSMS(request, agente, jsonNegocio, fechaActual, valoresSMS);
+            PrepararSMS(response, agente, jsonNegocio, fechaActual, horaActual, valoresSMS);
 
             await Notificar(request, response, IdTipoAccion, jsonNegocio, valores, valoresSMS, agente.Usuario.UserName, dispositivo.Imei);
         }
@@ -163,7 +165,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             return notificacion;
         }
 
-        private static void PrepararSMS(ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, string fechaActual, Dictionary<string, string> valoresSMS)
+        private static void PrepararSMS(AfectacionAUnCorresponsalRepositorioMS response, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, string fechaActual, string horaActual, Dictionary<string, string> valoresSMS)
         {
             if (jsonNegocio.Retiro.NotificarSMS)
             {
@@ -177,13 +179,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
-                valoresSMS.Add("[:VALOROPERACION:]", request.Valor.ToString());
+                var cuenta = response.NumeroCuenta.ToString();
+                cuenta = cuenta.Substring(0, 3) + "XXXXXXXX";
+
+                valoresSMS.Add("[:VALOROPERACION:]", response.Valor.ToString());
+                valoresSMS.Add("[:CUENTA:]", cuenta);
                 valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
+                valoresSMS.Add("[:HORAACTUAL:]", horaActual);
             }
         }
 
-        private static void PrepararCorreoElectronico(ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActual)
+        private static void PrepararCorreoElectronico(ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActualEmail)
         {
             if (jsonNegocio.Retiro.NotificarCorreoElectronico)
             {
@@ -199,7 +206,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
                 valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
                 valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
-                valores.Add("[:FECHAACTUAL:]", fechaActual);
+                valores.Add("[:FECHAACTUAL:]", fechaActualEmail);
             }
         }
     }
