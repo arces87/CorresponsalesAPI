@@ -1,1 +1,1 @@
-﻿COAC. Informa que ha realizado un depósito Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].
+﻿LUCHA CAMPESINA, deposito exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por $[:VALOROPERACION:] en corresponsal '[:NOMBRECORRESPONSAL:]' 

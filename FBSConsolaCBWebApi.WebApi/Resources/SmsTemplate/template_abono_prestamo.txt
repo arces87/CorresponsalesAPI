@@ -1,0 +1,1 @@
+﻿COAC. Informa que ha realizado un abono de préstamo Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].

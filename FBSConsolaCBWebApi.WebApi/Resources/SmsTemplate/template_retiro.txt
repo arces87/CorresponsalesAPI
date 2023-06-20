@@ -1,1 +1,1 @@
-﻿COAC. Informa que ha realizado un retiro Corresponsal “[:NOMBRECORRESPONSAL:]”, por [:VALOROPERACION:] USD, en la fecha: [:FECHAACTUAL:].
+﻿LUCHA CAMPESINA, retiro exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por $[:VALOROPERACION:] en corresponsal '[:NOMBRECORRESPONSAL:]'
