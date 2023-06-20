@@ -38,12 +38,14 @@ namespace Org.OpenAPITools.Model
         /// <param name="numeroIdentificacion">numeroIdentificacion.</param>
         /// <param name="codigoUsuarioCorresponsal">codigoUsuarioCorresponsal.</param>
         /// <param name="mensajeTexto">mensajeTexto.</param>
-        public EnvioSMSME(int secuencialTipoIdentificacion = default(int), string numeroIdentificacion = default(string), string codigoUsuarioCorresponsal = default(string), string mensajeTexto = default(string))
+        /// <param name="numerocelular">numeroCelular.</param>
+        public EnvioSMSME(int secuencialTipoIdentificacion = default(int), string numeroIdentificacion = default(string), string codigoUsuarioCorresponsal = default(string), string mensajeTexto = default(string), string numerocelular = default(string))
         {
             this.SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
             this.NumeroIdentificacion = numeroIdentificacion;
             this.CodigoUsuarioCorresponsal = codigoUsuarioCorresponsal;
             this.MensajeTexto = mensajeTexto;
+            this.NumeroCelular = numerocelular;
         }
 
         /// <summary>
@@ -71,6 +73,12 @@ namespace Org.OpenAPITools.Model
         public string MensajeTexto { get; set; }
 
         /// <summary>
+        /// Gets or Sets NumeroCelular
+        /// </summary>
+        [DataMember(Name = "NumeroCelular", EmitDefaultValue = false)]
+        public string NumeroCelular { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -82,6 +90,7 @@ namespace Org.OpenAPITools.Model
             sb.Append("  NumeroIdentificacion: ").Append(NumeroIdentificacion).Append("\n");
             sb.Append("  CodigoUsuarioCorresponsal: ").Append(CodigoUsuarioCorresponsal).Append("\n");
             sb.Append("  MensajeTexto: ").Append(MensajeTexto).Append("\n");
+            sb.Append("  NumeroCelular: ").Append(NumeroCelular).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -135,6 +144,11 @@ namespace Org.OpenAPITools.Model
                     this.MensajeTexto == input.MensajeTexto ||
                     (this.MensajeTexto != null &&
                     this.MensajeTexto.Equals(input.MensajeTexto))
+                ) &&
+                (
+                    this.NumeroCelular == input.NumeroCelular ||
+                    (this.NumeroCelular != null &&
+                    this.NumeroCelular.Equals(input.NumeroCelular))
                 );
         }
 
@@ -159,6 +173,10 @@ namespace Org.OpenAPITools.Model
                 if (this.MensajeTexto != null)
                 {
                     hashCode = (hashCode * 59) + this.MensajeTexto.GetHashCode();
+                }
+                if (this.NumeroCelular != null)
+                {
+                    hashCode = (hashCode * 59) + this.NumeroCelular.GetHashCode();
                 }
                 return hashCode;
             }

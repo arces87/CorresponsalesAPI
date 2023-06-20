@@ -29,6 +29,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly byte[] _llave;
         private readonly IClientesApi _clienteApi;
         private readonly IApiKeyGenerator _apiKeyGenerator;
+        private readonly IMensajeriaSMSApi _envioSMSApi;
 
         public ModificarUsuarioHandler(
             IRepositorioRol repositorioRol, 
@@ -37,7 +38,8 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             IMapper mapper,
             IClientesApi clienteApi,
             IApiKeyGenerator apiKeyGenerator,
-            IRepositorioUsuario repositorioUsuario)
+            IRepositorioUsuario repositorioUsuario,
+            IMensajeriaSMSApi envioSMSApi)
         {
             _repositorioRol = repositorioRol;
             _mediador = mediador;
@@ -47,16 +49,17 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _clienteApi = clienteApi;
             _apiKeyGenerator = apiKeyGenerator;
             _repositorioUsuario = repositorioUsuario;
+            _envioSMSApi = envioSMSApi;
         }
 
         public async Task<string> Handle(ModificarUsuarioME request, CancellationToken cancellationToken)
         {
             var usuario = _manejadorUsuario.Users.FirstOrDefault(u => u.Id == request.Id);
-
-            var cambioNombreUsuario = CambioNombreUsuario(request, usuario);
+            var emailActual = usuario.Email;
+            var cambioEmailUsuario = CambioEmailUsuario(request, usuario);
             var cambioContrasenia = CambioContrasenia(request);
+            var cambioMovilUsuario = CambioMovilUsuario(request, usuario);
 
-            //await GenerarUsaurioFinancial(request, cambioNombreUsuario);
             ManejaCambioContrasenia(request, usuario, cambioContrasenia);
             var usuarioMapeado = _mapper.Map<Usuario>(request);
             MapeaDatosUsuarios(request, usuario);
@@ -65,68 +68,106 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             await EliminarRoles(usuario, _nuevosRoles);
             usuario.Operadora = usuarioMapeado.Operadora;
             await _repositorioUsuario.Update(usuario);
-            await NotificarCambioCredenciales(request, usuario, cambioNombreUsuario, cambioContrasenia);
+            await NotificarCambioDatosUsuario(request, emailActual, cambioEmailUsuario, cambioContrasenia, cambioMovilUsuario);
             return usuario.Id;
         }
-
-        private async Task GenerarUsaurioFinancial(ModificarUsuarioME request, bool cambioNombreUsuario)
+        
+        private async Task NotificarCambioDatosUsuario(ModificarUsuarioME request, string emailActual, bool cambioEmailUsuario, bool cambioContrasenia, bool cambioMovilUsuario)
         {
-            if (cambioNombreUsuario && TieneRolAgente(request.Roles))
-            {
-                try
+            try
+            { 
+                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/cambio_credenciales.html");
+                var fechaActual = DateTime.Now.ToString("dd/MM/yyyy H:mm");
+
+                if (cambioContrasenia)
                 {
-                    var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
-                    var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+                    emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                        .Replace("[:CONTRASENIA:]", request.Contrasenna)
+                        .Replace("[:NOMBRE:]", request.NombreMostrar)
+                        .Replace("[:TELEFONO:]", request.Telefono);
 
-                    var respuesta = await _clienteApi.ClientesCreaUsuarioAsync(new PorCodigoUsuarioCorresponsalME() { CodigoUsuarioCorresponsal = request.Usuario });
+                    var plantillaSMS = File.ReadAllText("Resources/SmsTemplate/template_cambio_clave.txt");
+                    plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                            .Replace("[:FECHA:]", fechaActual);
 
-                    if (!(bool)respuesta)
+                    var mensajeSMS = new EnvioSMSME()
                     {
-                        throw new ExcepcionApp("No se ha podido crear el nuevo usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
-                    }
+                        CodigoUsuarioCorresponsal = request.Usuario,
+                        MensajeTexto = plantillaSMS,
+                        NumeroIdentificacion = "",
+                        SecuencialTipoIdentificacion = 0,
+                        NumeroCelular = request.Telefono
+                    };
+
+                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
                 }
-                catch (Exception e)
+                else 
                 {
-                    throw new ExcepcionApp("No se ha podido crear el usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
-                }
-            }
-        }
+                    emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                       .Replace("[:CONTRASENIA:]", "*******")
+                       .Replace("[:NOMBRE:]", request.NombreMostrar)
+                       .Replace("[:TELEFONO:]", request.Telefono);
+                }                
 
-        private async Task NotificarCambioCredenciales(ModificarUsuarioME request, Usuario usuario, bool cambioNombreUsuario, bool cambioContrasenia)
-        {
-            if (cambioContrasenia || cambioNombreUsuario)
-            {
-                try
+                await _mediador.Publish(new EnviarCorreoElectronicoME
                 {
-                    var emailTemplate = File.ReadAllText("Resources/EmailTemplate/cambio_credenciales.html");
-
-                    emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", usuario.UserName).Replace("[:CONTRASENIA:]", request.Contrasenna);
-
-                    await _mediador.Publish(new EnviarCorreoElectronicoME
-                    {
-                        Asunto = "Modificación de las credenciasles de autenticación en la Consola de Administración de Corresponsales Solidarios",
-                        Mensaje = emailTemplate,
-                        DireccionesDestino = new List<ModeloCuentaCorreo>() {
+                    Asunto = "Modificación de datos del usuario en la Consola de Administración de Corresponsales Solidarios",
+                    Mensaje = emailTemplate,
+                    DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
-                            Direccion = usuario.Email,
-                            Nombre = usuario.NombreCompleto
+                            Direccion = request.CorreoElectronico,
+                            Nombre = request.NombreMostrar
                         }
                     }
-                    });
-                }
-                catch (Exception)
-                {
+                });
 
-                    throw new ExcepcionApp("Los datos del usuario fueron actualizados correctamente, pero no pudo ser posible notificar por correo electrónico.", TipoError.EmailNotification);
+                if (cambioEmailUsuario)
+                {
+                    var plantillaSMS = File.ReadAllText("Resources/SmsTemplate/template_cambio_correo.txt");
+                    plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                            .Replace("[:FECHA:]", fechaActual);
+
+                    var mensajeSMS = new EnvioSMSME()
+                    {
+                        CodigoUsuarioCorresponsal = request.Usuario,
+                        MensajeTexto = plantillaSMS,
+                        NumeroIdentificacion = "",
+                        SecuencialTipoIdentificacion = 0,
+                        NumeroCelular = request.Telefono
+                    };
+
+                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                }
+
+                if (cambioMovilUsuario)
+                {
+                    var plantillaSMS = File.ReadAllText("Resources/SmsTemplate/template_cambio_celular.txt");
+                    plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                            .Replace("[:FECHA:]", fechaActual);
+
+                    var mensajeSMS = new EnvioSMSME()
+                    {
+                        CodigoUsuarioCorresponsal = request.Usuario,
+                        MensajeTexto = plantillaSMS,
+                        NumeroIdentificacion = "",
+                        SecuencialTipoIdentificacion = 0,
+                        NumeroCelular = request.Telefono
+                    };
+
+                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
                 }
             }
+            catch (Exception)
+            {                 
+                throw new ExcepcionApp("Los datos del usuario fueron actualizados correctamente, pero no pudo ser posible notificar al usuario.", TipoError.EmailNotification);
+            }
+            
         }
 
         private void ManejaCambioContrasenia(ModificarUsuarioME request, Usuario usuario, bool cambioContrasenia)
         {
             if (cambioContrasenia)
-            {
-                //var _password = string.Format(Criptografia.DecryptPassword(request.Contrasenna, _llave, _llave));
+            {                
                 var _password = request.Contrasenna;
                 usuario.PasswordHash = _manejadorUsuario.PasswordHasher.HashPassword(usuario, _password);
                 usuario.FechaUltimoCambioContrasenia = DateTime.Now;
@@ -192,9 +233,14 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             return roles != null && roles.Any(r => r.Id == "e0aee3b1-57c9-4d4e-8f35-4bf3bc38236e");
         }
 
-        private static bool CambioNombreUsuario(ModificarUsuarioME request, Usuario _user)
+        private static bool CambioEmailUsuario(ModificarUsuarioME request, Usuario _user)
         {
-            return _user.UserName.ToUpper() != request.Usuario.ToUpper();
+            return _user.Email.ToUpper() != request.CorreoElectronico.ToUpper();
+        }
+
+        private static bool CambioMovilUsuario(ModificarUsuarioME request, Usuario _user)
+        {
+            return _user.PhoneNumber != request.Telefono;
         }
     }
 }
