@@ -34,8 +34,9 @@ namespace FBS.Infraestructura.Repositorio
 
         public virtual async Task<T> Get(string Id)
         {
-            //return await _contexto.Set<T>().Where($"t => t.Id == {Id}").FirstOrDefaultAsync();
-            return await _contexto.Set<T>().FirstOrDefaultAsync(t => t.GetType().GetProperty("Id").GetValue(t).ToString() == Id);
+            return await _contexto.Set<T>().FromSqlRaw("SELECT * FROM Nomenclador.Catalogo WHERE Id = '"+Id+"'").FirstOrDefaultAsync();
+            //return await _contexto.Set<T>().Where($"t => t.Id = {Id}").FirstOrDefaultAsync();
+            //return await _contexto.Set<T>().FirstOrDefaultAsync(t => t.GetType().GetProperty("Id").GetValue(t).ToString() == Id);
         }
 
         public virtual async Task<IEnumerable<T>> GetAll()
