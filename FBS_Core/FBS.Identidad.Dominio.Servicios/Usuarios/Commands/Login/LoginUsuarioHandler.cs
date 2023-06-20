@@ -30,10 +30,11 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly byte[] _llave;
         private readonly IRepositorioCanal _repositorioCanal;
         private readonly IConfiguracionCanal _configuracionCanal;
+        private readonly IMediator _mediador;
 
         public LoginUsuarioHandler(UserManager<Usuario> manejadorUsuario,
             SignInManager<Usuario> manejadorAutenticacion, IRepositorioRol repositorioRol, IRepositorioUsuario repositorio, IMapper mapper,
-            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal)
+            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal, IMediator mediador)
         {
             _manejadorUsuario = manejadorUsuario;
             _manejadorAutenticacion = manejadorAutenticacion;
@@ -44,6 +45,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY-+2He.");
             _repositorioCanal = repositorioCanal;
             _configuracionCanal = configuracionCanal;
+            _mediador = mediador;
         }
 
         private async Task<string> GenerateJwtToken(Usuario user)
@@ -89,51 +91,62 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         public async Task<ModeloLoginUsuario> Handle(LoginUsuarioME request, CancellationToken cancellationToken)
         {
             var retorno = new ModeloLoginUsuario();
-            var _user = _manejadorUsuario.Users.Where(u => u.UserName == request.Usuario).FirstOrDefault();
+            var _user = _manejadorUsuario.Users.Where(u => u.UserName == request.Usuario).FirstOrDefault();                     
 
             if (_user == null)
             {
-                retorno.Errores = "El usuario no se encuentra registrado en el sistema";
-                return retorno;
-            }            
-            
-            var result = await _manejadorAutenticacion.PasswordSignInAsync(request.Usuario, request.Contrasenna, false, lockoutOnFailure: true);
-            if (result.IsLockedOut)
-            {
-                retorno.Errores = "Ha excedido el número máximo de intentos, su cuenta fue bloqueada.";
-                _user.EstaActivo = false;
-                await _manejadorUsuario.UpdateAsync(_user);
-                return retorno;
-            }            
-            
-            if (!result.Succeeded)
-            {
-                retorno.Errores = "Usuario o contraseña incorrectos.";
-                return retorno;
-            }
-
-            if (!_user.EstaActivo)
-            {
-                retorno.Errores = "El usuario se encuentra bloqueado.";
-                return retorno;
-            }           
-
-            var rolAgente = await _manejadorUsuario.IsInRoleAsync(_user, "AGENTE");
-
-            if (rolAgente && request.Dispositivo == "Consola")
-            {
-                retorno.Errores = "El usuario con rol Agente no puede autenticarse en el módulo Consola Administrativa";
-                return retorno;
-            }
-            
-            if (!rolAgente && request.Dispositivo == "Movil")
-            {
-                retorno.Errores = "En el móvil solo pueden acceder los Agentes de Corresponsales Solidarios";
+                retorno.Errores = "A031-El usuario no se encuentra registrado en el sistema";                
                 return retorno;
             }
 
             var canal = await _repositorioCanal.GetCanalUsuario(_user.Id);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(canal.JsonNegocio);
+            retorno.Usuario = _user.UserName;
+            retorno.CorreoElectronico = _user.Email;            
+            retorno.NombreMostrar = _user.NombreMostrar;
+
+            if (!_user.EstaActivo)
+            {
+                retorno.Errores = "A032-El usuario se encuentra desactivado.";                
+                return retorno;
+            }
+
+            var intentosFallidos = jsonNegocio.NumeroMaximoIntentosFallidos;
+            var intentosFallidosUser = _user.AccessFailedCount;
+
+            var result = await _manejadorAutenticacion.PasswordSignInAsync(request.Usuario, request.Contrasenna, false, lockoutOnFailure: true);
+
+            intentosFallidosUser = (result.Succeeded) ? intentosFallidosUser : intentosFallidosUser + 1; 
+            
+            if (intentosFallidosUser >= intentosFallidos)
+            {
+                retorno.Errores = "A033-Ha excedido el número máximo de intentos, su cuenta fue desactivada.";
+                _user.EstaActivo = false;
+                await _manejadorUsuario.UpdateAsync(_user);                
+                return retorno;
+            }            
+            
+            if (!result.Succeeded)
+            {
+                retorno.Errores = "A034-Usuario o contraseña incorrectos.";                
+                return retorno;
+            }
+                      
+
+            var rolAgente = await _manejadorUsuario.IsInRoleAsync(_user, "AGENTE");
+
+            if (rolAgente && request.Dispositivo == "Consola")
+            {
+                retorno.Errores = "A035-El usuario con rol Agente no puede autenticarse en el módulo Consola Administrativa";                
+                return retorno;
+            }
+            
+            if (!rolAgente && request.Dispositivo == "Movil")
+            {
+                retorno.Errores = "A036-En el móvil solo pueden acceder los Agentes de Corresponsales Solidarios";                
+                return retorno;
+            }
+            
             var contrasennaExpiro = (DateTime.Now - _user.FechaUltimoCambioContrasenia).TotalDays >= jsonNegocio.DiasValidosContrasenna;
 
             if (_user.CambioContrasenia || contrasennaExpiro)
@@ -148,13 +161,13 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 
                 if (contrasennaExpiro)
                 {
-                    retorno.Errores = "Usted debe de cambiar su contraseña porque ha expirado";
+                    retorno.Errores = "A037-Usted debe de cambiar su contraseña porque ha expirado";
                 }
                 else
                 {
-                    retorno.Errores = "Usted debe de cambiar su contraseña en el primer acceso";
+                    retorno.Errores = "A038-Usted debe de cambiar su contraseña en el primer acceso";
                 }
-
+                
                 return retorno;
             }
 
@@ -180,10 +193,11 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             }
             catch (Exception e)
             {
-                retorno.Errores = "Ha ocurrido un error durante la autenticación.";
-            }
+                retorno.Errores = "A039-Ha ocurrido un error durante la autenticación.";
+            }           
 
             return retorno;
         }
+       
     }
 }

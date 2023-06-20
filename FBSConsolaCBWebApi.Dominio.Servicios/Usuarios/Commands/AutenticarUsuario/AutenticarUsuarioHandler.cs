@@ -34,8 +34,19 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
                     _mapper.Map(persona, _usuario);
                 }
             }
+            
+            if(_usuario.Errores!=null)
+                _usuario.Errores = ProcesarMensajeError(_usuario.Errores);
 
             return _usuario;
+        }
+
+        private string ProcesarMensajeError(string error)
+        {
+            int length = error.Length - 5;
+            var mensaje = error.Substring(5, length);
+            
+            return mensaje;
         }
     }
 }

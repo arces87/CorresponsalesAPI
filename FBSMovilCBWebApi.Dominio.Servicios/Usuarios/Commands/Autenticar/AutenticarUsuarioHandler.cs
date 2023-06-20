@@ -14,6 +14,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using FBS.Dominio.Servicios.CorreoElectronico;
+using System.Collections.Generic;
+using System.IO;
+using Org.OpenAPITools.Model;
+using Org.OpenAPITools.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
@@ -28,6 +33,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IConfiguracionCanal _configuracionCanal;
         private IdentityOptions _identityOptions;
+        private readonly IMensajeriaSMSApi _envioSMSApi;
 
         public AutenticarUsuarioHandler(
             IMediator mediador,
@@ -38,7 +44,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             IJsonConfiguracion jsonConfiguracion,
             IRepositorioGeolocalizacion repositorioGeolocalizacion,
             IOptions<IdentityOptions> identityOptions,
-            IConfiguracionCanal configuracionCanal)
+            IConfiguracionCanal configuracionCanal,
+            IMensajeriaSMSApi envioSMSApi)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -51,6 +58,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             _identityOptions = identityOptions.Value;
             _identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(_configuracionCanal.Negocio.TiempoBloqueo);
             _identityOptions.Lockout.MaxFailedAccessAttempts = _configuracionCanal.Negocio.NumeroMaximoIntentosFallidos;
+            _envioSMSApi = envioSMSApi;
         }
 
         public async Task<AutenticarUsuarioMS> Handle(AutenticarUsuarioME request, CancellationToken cancellationToken)
@@ -74,19 +82,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             });
             try
             {
-                var agente = await _repositorioAgente.GetForUserName(request.Usuario);
-                var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
-                var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
-                var idEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
-                var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
+                var agente = await _repositorioAgente.GetForUserName(request.Usuario);                
 
                 if (agente != null) //Comprobacion de existencia del Agente y si se encuentra Activo
                 {
+                    var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+                    var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
+                    var idEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
+                    var idEstadoCobrando = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoCobrando").Valor;
+                    var estadoAcceso = "fallido";
+
+                    var _usuario = _mapper.Map<LoginUsuarioME>(request);
+                    _usuario.Dispositivo = "Movil";
+                    var usuarioAutenticado = await _mediador.Send(_usuario);
                     if (dispositivo != null && dispositivo.EstaActivo && dispositivo.Imei.ToUpper() == request.Imei.ToUpper() && dispositivo.MacAddress.ToUpper() == request.Mac.ToUpper()) //Comprobación de existencia de dispositivo y sus datos
-                    {
-                        var _usuario = _mapper.Map<LoginUsuarioME>(request);
-                        _usuario.Dispositivo = "Movil";
-                        var usuarioAutenticado = await _mediador.Send(_usuario);
+                    {                        
                         if (usuarioAutenticado.Errores == null || usuarioAutenticado.CambioContrasenia)
                         {
                             AutenticarUsuarioMS usuario = null;
@@ -150,42 +160,51 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         var longitud_fin = geolocalizacion.Longitud + 1;
                                         if (request.Latitud >= latitud_inicio && request.Latitud <= latitud_fin && request.Longitud >= longitud_inicio && request.Longitud <= longitud_fin)
                                         {
+                                            estadoAcceso = "exitoso";
+                                            await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                                             return usuario;
-
                                         }
                                         else
                                         {
                                             error = " | A006";
+                                            await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                                         }
                                     }
                                     else
                                     {
                                         error = " | A005";
+                                        await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                                     }
                                 }
                                 else
                                 {
+                                    estadoAcceso = "exitoso";
+                                    await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                                     return usuario;
                                 }
                             }
                             else
                             {
                                 error = " | A004";
+                                await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                             }
                         }
                         else
                         {
-                            error = " | A003";
+                            //error = " | A003"; //usuarioAutenticado.Errores clave, usuario inactivo, intentos fallidos, ...
+                            error = ProcesarMensajeError(usuarioAutenticado.Errores);
+                            await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                         }
                     }
                     else
                     {
-                        error = " | A002";
+                        error = " | A002"; // Los datos del dispositivo no son correctos
+                        await NotificarAcceso(usuarioAutenticado, agente, estadoAcceso, error);
                     }
                 }
                 else
                 {
-                    error = " | A001";
+                    error = " | A001"; // No se encuentra registrado
                 }
 
                 throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
@@ -194,6 +213,57 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
             }
+        }
+
+        private async Task NotificarAcceso(ModeloLoginUsuario usuario, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, string estado, string error)
+        {
+            try
+            {
+                var plantillaCorreo = File.ReadAllText("Resources/EmailTemplate/notificacion_acceso.html");
+                var fechaActual = DateTime.Now.ToString("dd/MM/yyyy H:mm");
+                plantillaCorreo = plantillaCorreo.Replace("[:NOMBREUSUARIO:]", usuario.Usuario)
+                        .Replace("[:ESTADO:]", estado)
+                        .Replace("[:FECHA:]", fechaActual);
+
+                await _mediador.Publish(new EnviarCorreoElectronicoME
+                {
+                    Asunto = "Notificación de Acceso",
+                    Mensaje = plantillaCorreo,
+                    DireccionesDestino = new List<ModeloCuentaCorreo>() {
+                        new ModeloCuentaCorreo() {
+                            Direccion = usuario.CorreoElectronico,
+                            Nombre = usuario.NombreMostrar
+                        }
+                    }
+                });
+
+                var plantillaSMS = File.ReadAllText("Resources/SmsTemplate/template_acceso.txt");
+                plantillaSMS = plantillaSMS.Replace("[:ESTADO:]", estado)
+                        .Replace("[:FECHA:]", fechaActual);
+
+                var mensajeSMS = new EnvioSMSME()
+                {
+                    CodigoUsuarioCorresponsal = usuario.Usuario,
+                    MensajeTexto = plantillaSMS,                 
+                    NumeroIdentificacion = "",
+                    SecuencialTipoIdentificacion = 0,
+                    NumeroCelular = usuario.TelefonoCelular
+                };                
+
+                var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+            }
+            catch (Exception)
+            {
+                if(error != null && error != "")
+                    throw new ExcepcionApp("Error en la validación de los datos de autenticación" + error);
+            }
+
+        }
+
+        private string ProcesarMensajeError(string error)
+        {
+            var mensaje = " | " + error.Substring(0, 4);
+            return mensaje;
         }
     }
 }
