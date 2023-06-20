@@ -60,7 +60,7 @@ namespace FBSConsolaCBWebApi.WebApi.ManejadorExcepciones
 
                         if (excepcionApp.TipoError == TipoError.EmailNotification)
                         {
-                            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;                            
                         }
                         else
                         {

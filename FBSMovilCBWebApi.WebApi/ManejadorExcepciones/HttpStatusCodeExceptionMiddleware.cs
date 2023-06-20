@@ -46,7 +46,7 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
             catch (Exception error)
             {
                 var mensajeSalida = "";
-                var notificar = true;
+                var notificar = false;
                 var guardarLog = true;
                 var response = context.Response;
                 response.ContentType = @"text/plain";
@@ -56,6 +56,7 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                    
                     case ExcepcionApp e:
                         mensajeSalida = e.Message;
+                        notificar = true;
                         break;
                     case HttpOperationException e:
                         var mensaje = JsonConvert.DeserializeObject<ExcepcionFinancial>(e.Response.Content);
@@ -69,6 +70,7 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                             {
                                 int length = mensaje.InnerException.ExceptionMessage.Length - 4;
                                 mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(4, length);
+                                notificar = true;
                             }
                         }                        
                         break;
@@ -78,7 +80,7 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                         break;
                     case DbException e:
                         mensajeSalida = "No fue posible conectarse a la Base de Datos.";
-                        notificar = false;
+                        notificar = true;
                         guardarLog = false;
                         break;
                     case SmtpException e:
@@ -101,6 +103,7 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                            {
                                     int length = mensajeFinancial.Length - 4;
                                     mensajeSalida = mensajeFinancial.Substring(4, length);
+                                    notificar = true;
                            }
                         }         
                        

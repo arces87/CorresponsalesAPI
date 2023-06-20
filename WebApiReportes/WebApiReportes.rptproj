@@ -12,7 +12,7 @@
     <TargetDatasetFolder>Conjuntos de datos</TargetDatasetFolder>
     <TargetDatasourceFolder>Orígenes de datos</TargetDatasourceFolder>
     <TargetReportPartFolder>Elementos de informe</TargetReportPartFolder>
-    <TargetServerURL>http://desktop-v86ptld:8001/ServidorReportes</TargetServerURL>
+    <TargetServerURL>http://desktop-fpp3atm:9020/ServidorReportes</TargetServerURL>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'DebugLocal' ">
     <FullPath>DebugLocal</FullPath>

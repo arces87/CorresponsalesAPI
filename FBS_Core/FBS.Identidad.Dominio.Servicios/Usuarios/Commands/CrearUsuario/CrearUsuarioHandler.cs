@@ -74,7 +74,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 
                 await _repositorio.AsignarCanal(new CanalUsuario() { Usuario = _user, Canal = new Canal() { Id = new Guid(_configuracion["CanalBase"]) } });
 
-                await NotificarPorEmail(_user.UserName, request.CorreoElectronico, request.NombreCompleto, request.Contrasenna);
+                await NotificarPorEmail(request);
                 return _user.Id;
             }
             else
@@ -118,13 +118,16 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             }
         }
 
-        private async Task NotificarPorEmail(string userName, string email, string nombreCompleto, string contrasenna)
+        private async Task NotificarPorEmail(CrearUsuarioME request)
         {
             try
             {
-                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/cambio_credenciales.html");
+                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/creacion_usuario.html");                
 
-                emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", userName).Replace("[:CONTRASENIA:]", contrasenna);
+                 emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                        .Replace("[:CONTRASENIA:]", request.Contrasenna)
+                        .Replace("[:NOMBRE:]", request.NombreMostrar)
+                        .Replace("[:TELEFONO:]", request.Telefono);
 
                 await _mediador.Publish(new EnviarCorreoElectronicoME
                 {
@@ -132,8 +135,8 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     Mensaje = emailTemplate,
                     DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
-                            Direccion = email,
-                            Nombre = nombreCompleto
+                            Direccion = request.NombreMostrar,
+                            Nombre = request.CorreoElectronico
                         }
                     }
                 });

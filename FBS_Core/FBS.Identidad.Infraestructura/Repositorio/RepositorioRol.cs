@@ -5,14 +5,19 @@ using FBS.Infraestructura.Repositorio;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Infraestructura.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Dapper;
 
 namespace FBS.Identidad.Infraestructura.Repositorio
 {
     public class RepositorioRol : Repositorio<Rol>, IRepositorioRol
     {
-        public RepositorioRol(ContextoFBSIdentidad context) : base(context)
+        private readonly IConfiguration _configuracion; 
+        public RepositorioRol(ContextoFBSIdentidad context, IConfiguration configuracion) : base(context)
         {
-
+            _configuracion = configuracion;
         }
 
         public override async Task<Rol> Get(string Id)
@@ -55,5 +60,16 @@ namespace FBS.Identidad.Infraestructura.Repositorio
             await GetContext.SaveChangesAsync();
         }
 
+        public async Task<Rol> GetRolUsuario(string UsuarioId)
+        {
+            var conexion = Conexion;
+            conexion.Open();
+            var rol = await conexion.QueryAsync<Rol>("SELECT Nombre AS Descripcion FROM Seguridad.UsuarioRol " +
+                "JOIN Seguridad.Rol AS R ON Seguridad.UsuarioRol.RolId = R.Id " +
+                "WHERE UsuarioId = '" + UsuarioId +"'");
+            return rol.FirstOrDefault();
+        }
+
+        public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));
     }
 }

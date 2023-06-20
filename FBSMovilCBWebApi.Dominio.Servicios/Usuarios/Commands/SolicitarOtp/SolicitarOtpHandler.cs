@@ -121,7 +121,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             //string identificacion = "";
             //int tipoIdentificacion = 0;
 
-            var fechaActual = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
+            var fechaActualEmail = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
+            var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+            var horaActual = DateTime.Now.ToString("H:mm");
 
             var respuestaOTP = new SolicitarOtpMS
             {
@@ -198,7 +200,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 try
                 {
-                    await EnviarEmail(tiempoVidaMinutos, otp, cuentaDestino, nombreDestino, fechaActual);
+                    await EnviarEmail(tiempoVidaMinutos, otp, cuentaDestino, nombreDestino, fechaActualEmail);
                 }
                 catch (Exception e)
                 {
@@ -223,7 +225,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 {
                     var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
                     var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
-                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, nombreDestino, fechaActual, dispositivo.Imei);
+                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp);
 
                     await _mediador.Send(new CrearLogME()
                     {
@@ -279,17 +281,12 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             string Identificacion, 
             int TipoIdentificacion, 
             int tiempoVidaMinutos, 
-            string otp, 
-            string nombreDestino, 
-            string fechaActual,
-            string imei)
+            string otp)
         {
             var smsTemplate = File.ReadAllText("Resources/SmsTemplate/template_otp.txt");
 
-            smsTemplate = smsTemplate.Replace("[:NOMBRECORRESPONSAL:]", nombreDestino)
-                .Replace("[:OTP:]", otp)
-                .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()} m")
-                .Replace("[:FECHAACTUAL:]", fechaActual);
+            smsTemplate = smsTemplate.Replace("[:OTP:]", otp)
+                .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()}");
 
             var mensajeSMS = new EnvioSMSME()
             {
@@ -304,10 +301,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 JsonLog = JsonConvert.SerializeObject(mensajeSMS),
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-            });
-
-            var apiKey = _apiKeyGenerator.generateApiKey(imei);
-            var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            });           
 
             var respuesta = await _mensajeriaApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
             return respuesta;
