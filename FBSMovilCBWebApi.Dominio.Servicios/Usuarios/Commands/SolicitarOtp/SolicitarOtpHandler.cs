@@ -65,6 +65,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         public async Task<SolicitarOtpMS> Handle(SolicitarOtpME request, CancellationToken cancellationToken)
         {
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
+            var user = await _repositorioUsuario.GetPorUsuario(request.Usuario);
 
             await _mediador.Send(new CrearLogME()
             {
@@ -116,7 +117,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             };
 
             var cuentaDestino = "";
-            var nombreDestino = "";
+            //var nombreDestino = "";
             //string userName = "";
             //string identificacion = "";
             //int tipoIdentificacion = 0;
@@ -124,6 +125,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             var fechaActualEmail = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
             var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
             var horaActual = DateTime.Now.ToString("H:mm");
+            var nombreDestino = user.NombreMostrar;
 
             var respuestaOTP = new SolicitarOtpMS
             {
@@ -135,7 +137,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             if (request.ParaAgente)
             {
                 cuentaDestino = agente.Usuario.Email;
-                nombreDestino = agente.NombreAgente;
+                //nombreDestino = agente.NombreAgente;
             }
             else
             {
@@ -176,7 +178,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     if (cliente != null)
                     {
                         cuentaDestino = cliente.CorreoElectronico;
-                        nombreDestino = String.IsNullOrEmpty(cliente.Nombres + cliente.Apellidos) ? "" : cliente.Nombres + cliente.Apellidos;
+                        //nombreDestino = String.IsNullOrEmpty(cliente.Nombres + cliente.Apellidos) ? "" : cliente.Nombres + cliente.Apellidos;
                     }
                 }
                 catch (Exception e)
@@ -195,7 +197,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             if (String.IsNullOrEmpty(cuentaDestino) || String.IsNullOrEmpty(nombreDestino))
             {
                 respuestaOTP.NotificationEmailError = true;
-                respuestaOTP.NotificationEmailErrorMensaje = "No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre defino";
+                respuestaOTP.NotificationEmailErrorMensaje = "No fue posible notificar el otp generado, el agente no cuenta con un email o un nombre definido";
             } else
             {
                 try
