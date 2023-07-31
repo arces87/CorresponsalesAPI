@@ -16,7 +16,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task<double> GetSaldoCuenta(string IdAgente);
         Task ReponerTransaccion(string IdAgente);
         Task<int> TransaccionesRepuestas(string IdAgente);
-        Task<int> TransaccionesProcesadas(string IdAgente);
+        Task<int> TransaccionesProcesadas(string IdAgente); 
+        Task<int> GetCountTipoPago();
 
     }
 }

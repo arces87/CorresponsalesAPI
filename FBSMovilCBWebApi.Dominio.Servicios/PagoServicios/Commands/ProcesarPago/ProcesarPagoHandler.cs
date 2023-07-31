@@ -67,7 +67,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         }
 
         public async Task<PagoFacilitoMSL> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
-        {
+        {            
             await _mediador.Send(new VerificarAgenteME()
             {
                 Usuario = request.Usuario,
@@ -162,6 +162,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             PagoFacilitoMSL respuesta, 
             int? secuencialCuenta)
         {
+            
             for (int indice = 0; indice < transaccionesNuevas.Count; indice++)
             {
 
@@ -169,6 +170,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
                 var pago = new PagoFacilitoME
                 {
+                    NumeroDocumento = await generarNumeroDocumentoAsync(),
                     CodigoPagarPensionesAlimenticiaEmpresa = request.CodigoPagarPensionesAlimenticiaEmpresa,
                     CodigoUsuarioBanca = request.Usuario,
                     ComisionRubro = (bool)request.ComisionRubro,
@@ -353,6 +355,16 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             }
         }
 
+        private async Task<string> generarNumeroDocumentoAsync() 
+        {
+            string documento = "0000000000";
+            var cantidadTransaccionesPago = await _repositorioTransaccion.GetCountTipoPago();            
+            var secuencial = cantidadTransaccionesPago + 1;
+            var longSecuencial = secuencial >= 1000000 ? 7 : 6;
+            var secuencialFormateado = secuencial.ToString().PadLeft(longSecuencial,'0');
+            documento = DateTime.UtcNow.ToString("yyyy") + secuencialFormateado;
+            return documento;
+        }
         
     }
 }

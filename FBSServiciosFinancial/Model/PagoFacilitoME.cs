@@ -48,7 +48,8 @@ namespace Org.OpenAPITools.Model
         /// <param name="secuencialResultadoTransaccion">secuencialResultadoTransaccion.</param>
         /// <param name="comisionRubro">comisionRubro.</param>
         /// <param name="rubros">rubros.</param>
-        public PagoFacilitoME(int secuencialCuentaCorresponsal = default(int), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool esUnSoloCobroComision = default(bool), Guid idProducto = default(Guid), string referencia = default(string), double valor = default(double), string valorTonelaje = default(string), string identificacion = default(string), int numeroCuotasPensionesAlimenticiaPersona = default(int), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int secuencialResultadoTransaccion = default(int), bool comisionRubro = default(bool), List<RubroME> rubros = default(List<RubroME>))
+        /// <param name="numeroDocumento">rubros.</param>
+        public PagoFacilitoME(int secuencialCuentaCorresponsal = default(int), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool esUnSoloCobroComision = default(bool), Guid idProducto = default(Guid), string referencia = default(string), double valor = default(double), string valorTonelaje = default(string), string identificacion = default(string), int numeroCuotasPensionesAlimenticiaPersona = default(int), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int secuencialResultadoTransaccion = default(int), bool comisionRubro = default(bool), List<RubroME> rubros = default(List<RubroME>), string numeroDocumento = default(string))
         {
             this.SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             this.JsonComision = jsonComision;
@@ -64,6 +65,7 @@ namespace Org.OpenAPITools.Model
             this.SecuencialResultadoTransaccion = secuencialResultadoTransaccion;
             this.ComisionRubro = comisionRubro;
             this.Rubros = rubros;
+            this.NumeroDocumento = numeroDocumento;
         }
 
         /// <summary>
@@ -151,6 +153,12 @@ namespace Org.OpenAPITools.Model
         public List<RubroME> Rubros { get; set; }
 
         /// <summary>
+        /// Gets or Sets NumeroDocumento
+        /// </summary>
+        [DataMember(Name = "NumeroDocumento", EmitDefaultValue = false)]
+        public string NumeroDocumento { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -172,6 +180,7 @@ namespace Org.OpenAPITools.Model
             sb.Append("  SecuencialResultadoTransaccion: ").Append(SecuencialResultadoTransaccion).Append("\n");
             sb.Append("  ComisionRubro: ").Append(ComisionRubro).Append("\n");
             sb.Append("  Rubros: ").Append(Rubros).Append("\n");
+            sb.Append("  NumeroDocumento: ").Append(NumeroDocumento).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -271,6 +280,11 @@ namespace Org.OpenAPITools.Model
                     this.Rubros != null &&
                     input.Rubros != null &&
                     this.Rubros.SequenceEqual(input.Rubros)
+                ) &&
+                (
+                    this.NumeroDocumento == input.NumeroDocumento ||
+                    (this.NumeroDocumento != null &&
+                    this.NumeroDocumento.Equals(input.NumeroDocumento))
                 );
         }
 
@@ -320,6 +334,10 @@ namespace Org.OpenAPITools.Model
                 if (this.Rubros != null)
                 {
                     hashCode = (hashCode * 59) + this.Rubros.GetHashCode();
+                }
+                if (this.NumeroDocumento != null)
+                {
+                    hashCode = (hashCode * 59) + this.NumeroDocumento.GetHashCode();
                 }
                 return hashCode;
             }

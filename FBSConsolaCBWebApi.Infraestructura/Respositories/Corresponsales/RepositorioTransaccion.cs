@@ -7,6 +7,7 @@ using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -246,6 +247,21 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
 
                 var cantidadTransacciones = resultado.Single();
 
+                return cantidadTransacciones;
+            }
+        }
+
+        public async Task<int> GetCountTipoPago()
+        {
+            using (var conexion = Conexion)
+            {
+                conexion.Open();
+                var tipoTransaccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
+                var fecha = DateTime.UtcNow.ToString("yyyy")+'%';
+                var resultado = await conexion.QueryAsync<Transaccion>(@"SELECT * FROM Corresponsales.Transaccion transaccion " +         
+                  "where transaccion.Tipo = @tipoTransaccion and FechaSistema like @fecha", param: new { tipoTransaccion, fecha });
+
+                var cantidadTransacciones = resultado.Count();
                 return cantidadTransacciones;
             }
         }
