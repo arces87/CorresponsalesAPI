@@ -156,7 +156,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                         response.NotificationErrorMensaje = e.Message;
                         break;
                     default:
-                        response.NotificationErrorMensaje = "Ha ocurrido un error al notificar la opearación.";
+                        response.NotificationErrorMensaje = "Ha ocurrido un error al notificar la operación.";
                         break;
                 }
             }
