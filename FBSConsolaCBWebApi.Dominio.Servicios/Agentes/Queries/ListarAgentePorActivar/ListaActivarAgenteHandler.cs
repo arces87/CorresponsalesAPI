@@ -16,14 +16,18 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
         private readonly IRepositorioAgente _repositorio;
         private readonly IRepositorioGeolocalizacion _repositorioGeolocalizacion;
         private readonly IRepositorioCuenta _repositorioCuenta;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
+        private readonly IRepositorioDispositivo _repositorioDispositivo;
         private readonly IMapper _mapper;
 
         public ListaActivarAgenteHandler(IRepositorioAgente repositorio, IRepositorioGeolocalizacion repositorioGeolocalizacion,
-            IRepositorioCuenta repositorioCuenta, IMapper mapper)
+            IRepositorioCuenta repositorioCuenta, IRepositorioDispositivoAgente repositorioDispositivoAgente, IRepositorioDispositivo repositorioDispositivo, IMapper mapper)
         {
             _repositorio = repositorio;
             _repositorioGeolocalizacion = repositorioGeolocalizacion;
             _repositorioCuenta = repositorioCuenta;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
+            _repositorioDispositivo = repositorioDispositivo;
             _mapper = mapper;
         }
 
@@ -37,6 +41,10 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Queries
             _retorno.Agentes = _mapper.Map<List<ModeloListaActivarAgente>>(_model);
             foreach (var item in _retorno.Agentes)
             {
+                var dispositivoAgente = await _repositorioDispositivoAgente.GetForAgente(item.Id);
+                item.IdDispositivo = dispositivoAgente.DispositivoId.ToString();
+                var dispositivo = await _repositorioDispositivo.Get(dispositivoAgente.DispositivoId.ToString());
+                item.NombreDispositivo = dispositivo.Marca + " " + dispositivo.Modelo + " " + dispositivo.Imei;
                 var geolocalizacion = await _repositorioGeolocalizacion.GetForAgente(item.Id);
                 if (geolocalizacion != null)
                     _mapper.Map(geolocalizacion, item);
