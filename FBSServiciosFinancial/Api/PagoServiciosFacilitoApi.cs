@@ -274,7 +274,7 @@ namespace Org.OpenAPITools.Api
             );
             this.Client = new Org.OpenAPITools.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new Org.OpenAPITools.Client.ApiClient(this.Configuration.BasePath);
-            this.ExceptionFactory = Org.OpenAPITools.Client.Configuration.DefaultExceptionFactory;
+            this.ExceptionFactory = Org.OpenAPITools.Client.Configuration.DefaultExceptionFactory;            
         }
 
         /// <summary>
@@ -287,10 +287,11 @@ namespace Org.OpenAPITools.Api
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
 
-            this.Configuration = Org.OpenAPITools.Client.Configuration.MergeConfigurations(
-                Org.OpenAPITools.Client.GlobalConfiguration.Instance,
-                configuration
-            );
+            //this.Configuration = Org.OpenAPITools.Client.Configuration.MergeConfigurations(
+            //    Org.OpenAPITools.Client.GlobalConfiguration.Instance,
+            //    configuration
+            //);
+            this.Configuration = configuration;
             this.Client = new Org.OpenAPITools.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new Org.OpenAPITools.Client.ApiClient(this.Configuration.BasePath);
             ExceptionFactory = Org.OpenAPITools.Client.Configuration.DefaultExceptionFactory;
@@ -764,6 +765,7 @@ namespace Org.OpenAPITools.Api
 
 
             // make the HTTP request
+            
             var localVarResponse = await this.AsynchronousClient.GetAsync<ObtenerServiciosMS>("/PagoServiciosFacilito/ObtenerServicios", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)

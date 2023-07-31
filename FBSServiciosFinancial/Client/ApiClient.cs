@@ -29,6 +29,8 @@ using RestSharp;
 using RestSharp.Deserializers;
 using RestSharpMethod = RestSharp.Method;
 using Polly;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Http;
 
 namespace Org.OpenAPITools.Client
 {
@@ -213,6 +215,29 @@ namespace Org.OpenAPITools.Client
                 throw new ArgumentException("basePath cannot be empty");
 
             _baseUrl = basePath;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiClient" />
+        /// </summary>
+        /// <param name="basePath">The target service's base path in URL format.</param>
+        /// /// <param name="certificado">The target service's base path in URL format.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public ApiClient(string basePath, X509Certificate2 certificado)
+        {
+            if (string.IsNullOrEmpty(basePath))
+                throw new ArgumentException("basePath cannot be empty");
+
+            //_baseUrl = basePath;
+            var handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            handler.ClientCertificates.Add(certificado);
+
+            HttpClient ApiClient = new HttpClient(handler)
+            {
+                BaseAddress = new Uri(basePath),
+                Timeout = new TimeSpan(0, 6, 0)
+            };
         }
 
         /// <summary>
@@ -577,6 +602,7 @@ namespace Org.OpenAPITools.Client
             client.AddHandler("text/xml", () => xmlDeserializer);
             client.AddHandler("*+xml", () => xmlDeserializer);
             client.AddHandler("*", () => xmlDeserializer);
+            client.RemoteCertificateValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
             client.Timeout = configuration.Timeout;
 

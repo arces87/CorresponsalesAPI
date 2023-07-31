@@ -17,9 +17,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Org.OpenAPITools.Api;
 using System;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 {
@@ -68,18 +73,38 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
         private static void ConfigurarApiCoreFinanciero(IServiceCollection services, JsonConfiguracion jsonConfiguracion)
         {
             var urlCoreFinanciero = jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor;
-            var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(urlCoreFinanciero),
-            };
-            //services.AddSingleton<IFBSCorresponsalesApi>(new FBSCorresponsalesApi(httpClient, false));
-            services.AddSingleton<IClientesApi>(new ClientesApi(urlCoreFinanciero));
-            services.AddSingleton<IAfectacionApi>(new AfectacionApi(urlCoreFinanciero));
-            services.AddSingleton<ICuentasApi>(new CuentasApi(urlCoreFinanciero));
-            services.AddSingleton<IMensajeriaSMSApi>(new MensajeriaSMSApi(urlCoreFinanciero));
-            services.AddSingleton<IPrestamosApi>(new PrestamosApi(urlCoreFinanciero));
-            services.AddSingleton<IPagoServiciosFacilitoApi>(new PagoServiciosFacilitoApi(urlCoreFinanciero));
+            
+            //var urlCoreFinanciero = "https://SRVINFRA.luchacampesina.local:9004";
+
+            var certificadoByte = GetResourceAsBytes("FBSMovilCBWebApi.WebApi.ConfiguracionID.certinfrahttps.pfx");
+            var certificado = new X509Certificate2(certificadoByte, "Lc1234*");
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var conf =
+                new Org.OpenAPITools.Client.Configuration
+                {
+                    BasePath = urlCoreFinanciero,
+                    ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
+                };
+            
+            services.AddSingleton<IClientesApi>(new ClientesApi(conf));
+            services.AddSingleton<IAfectacionApi>(new AfectacionApi(conf));
+            services.AddSingleton<ICuentasApi>(new CuentasApi(conf));
+            services.AddSingleton<IMensajeriaSMSApi>(new MensajeriaSMSApi(conf));
+            services.AddSingleton<IPrestamosApi>(new PrestamosApi(conf));
+            services.AddSingleton<IPagoServiciosFacilitoApi>(new PagoServiciosFacilitoApi(conf));
         }
+
+        public static byte[] GetResourceAsBytes(string resourceName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using var resFilestream = assembly.GetManifestResourceStream(resourceName);
+
+            if (resFilestream == null) return null;
+
+            byte[] array = new byte[resFilestream.Length];
+            resFilestream.Read(array, 0, array.Length);
+            return array;
+        }            
 
         private static void ConfigurarIdentity(IServiceCollection services, JsonNegocioMS jsonNegocio)
         {

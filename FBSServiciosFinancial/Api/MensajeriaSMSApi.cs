@@ -127,10 +127,11 @@ namespace Org.OpenAPITools.Api
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
 
-            this.Configuration = Org.OpenAPITools.Client.Configuration.MergeConfigurations(
-                Org.OpenAPITools.Client.GlobalConfiguration.Instance,
-                configuration
-            );
+            //this.Configuration = Org.OpenAPITools.Client.Configuration.MergeConfigurations(
+            //    Org.OpenAPITools.Client.GlobalConfiguration.Instance,
+            //    configuration
+            //);
+            this.Configuration = configuration;
             this.Client = new Org.OpenAPITools.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new Org.OpenAPITools.Client.ApiClient(this.Configuration.BasePath);
             ExceptionFactory = Org.OpenAPITools.Client.Configuration.DefaultExceptionFactory;
