@@ -135,8 +135,8 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     Mensaje = emailTemplate,
                     DireccionesDestino = new List<ModeloCuentaCorreo>() {
                         new ModeloCuentaCorreo() {
-                            Direccion = request.NombreMostrar,
-                            Nombre = request.CorreoElectronico
+                            Direccion = request.CorreoElectronico,
+                            Nombre = request.NombreMostrar
                         }
                     }
                 });
