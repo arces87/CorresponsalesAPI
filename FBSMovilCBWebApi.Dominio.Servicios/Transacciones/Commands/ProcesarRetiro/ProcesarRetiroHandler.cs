@@ -110,10 +110,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var cantidadTransaccionesDiarias = transaccionesDiarias.Count();
             var cantidadTransaccionesDiariasTipo = transaccionesDiariasTipo.Count();
 
-            var montoTransacciones = transacciones.Aggregate(0.0, (result, t) => result + t.Valor);
-            var montoTransaccionesTipo = transaccionesTipo.Aggregate(0.0, (result, t) => result + t.Valor);
-            var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + t.Valor);
-            var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + t.Valor);
+            var montoTransacciones = transacciones.Aggregate(0.0, (result, t) => result + Math.Abs(t.Valor));
+            var montoTransaccionesTipo = transaccionesTipo.Aggregate(0.0, (result, t) => result + Math.Abs(t.Valor));
+            var montoTransaccionesDiarias = transaccionesDiarias.Aggregate(0.0, (result, t) => result + Math.Abs(t.Valor));
+            var montoTransaccionesTipoDiarias = transaccionesDiariasTipo.Aggregate(0.0, (result, t) => result + Math.Abs(t.Valor));
 
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             
@@ -198,6 +198,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 TipoTransaccion = "NDCliente",
                 CodigoUsuario = agente.Usuario.UserName,
+                //CodigoUsuario = "ADMIN",
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 SecuencialCuentaSocio = request.SecuencialCuenta,
