@@ -117,11 +117,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             };
 
             var cuentaDestino = "";
-            //var nombreDestino = "";
-            //string userName = "";
-            //string identificacion = "";
-            //int tipoIdentificacion = 0;
-
+            var numeroMovil = "";
             var fechaActualEmail = DateTime.Now.ToString("dd/MM/yyyy/ H:mm");
             var fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
             var horaActual = DateTime.Now.ToString("H:mm");
@@ -137,18 +133,15 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             if (request.ParaAgente)
             {
                 cuentaDestino = agente.Usuario.Email;
-                //nombreDestino = agente.NombreAgente;
+                numeroMovil = agente.Usuario.PhoneNumber;               
             }
             else
-            {
-                //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
-                //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
+            {                
 
                 try
                 {
                     await _mediador.Send(new CrearLogME()
-                    {
-                        //JsonLog = JsonConvert.SerializeObject(customHeaders),
+                    {                        
                         IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
@@ -177,8 +170,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
                     if (cliente != null)
                     {
-                        cuentaDestino = cliente.CorreoElectronico;
-                        //nombreDestino = String.IsNullOrEmpty(cliente.Nombres + cliente.Apellidos) ? "" : cliente.Nombres + cliente.Apellidos;
+                        cuentaDestino = cliente.CorreoElectronico;                        
                     }
                 }
                 catch (Exception e)
@@ -221,13 +213,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 respuestaOTP.NotificationSMSError = true;
                 respuestaOTP.NotificationSMSErrorMensaje = "No se ha podido enviar el SMS con el OTP solicitado.";
-            } else
+            } 
+            else
             {
                 try
                 {
                     var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
                     var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
-                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp);
+                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, numeroMovil);
 
                     await _mediador.Send(new CrearLogME()
                     {
@@ -283,7 +276,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             string Identificacion, 
             int TipoIdentificacion, 
             int tiempoVidaMinutos, 
-            string otp)
+            string otp,
+            string numeroMovil)
         {
             var smsTemplate = File.ReadAllText("Resources/SmsTemplate/template_otp.txt");
 
@@ -295,7 +289,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 CodigoUsuarioCorresponsal = UserName,
                 MensajeTexto = smsTemplate,
                 NumeroIdentificacion = Identificacion,
-                SecuencialTipoIdentificacion = TipoIdentificacion
+                SecuencialTipoIdentificacion = TipoIdentificacion,
+                NumeroCelular = numeroMovil
             };
 
             await _mediador.Send(new CrearLogME()
