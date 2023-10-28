@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ConfiguracionID\certinfrahttps.pfx" />
     <None Remove="Resources\EmailTemplate\index_otp.html" />
     <None Remove="Resources\EmailTemplate\index_retiro.html" />
     <None Remove="Resources\EmailTemplate\index_deposito.html" />
@@ -43,6 +44,10 @@
     <Content Include="Resources\SmsTemplate\template_pago_servicios.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ConfiguracionID\certinfrahttps.pfx" />
   </ItemGroup>
 
   <ItemGroup>

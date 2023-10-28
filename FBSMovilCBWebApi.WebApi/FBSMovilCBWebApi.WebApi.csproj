@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ConfiguracionID\certinfrahttps.pfx" />
+    <None Remove="ConfiguracionID\SRVINFRA.luchacampesina.crt" />
     <None Remove="Resources\EmailTemplate\index_otp.html" />
     <None Remove="Resources\EmailTemplate\index_retiro.html" />
     <None Remove="Resources\EmailTemplate\index_deposito.html" />
@@ -44,11 +46,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ConfiguracionID\certinfrahttps.pfx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.3" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
