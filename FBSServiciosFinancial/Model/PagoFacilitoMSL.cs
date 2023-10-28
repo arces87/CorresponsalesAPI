@@ -35,11 +35,14 @@ namespace Org.OpenAPITools.Model
         /// Initializes a new instance of the <see cref="PagoFacilitoMSL" /> class.
         /// </summary>
         /// <param name="pagosFacilito">pagosFacilito.</param>
-        /// <param name="saldoCuentaCorresponsal">saldoCuentaCorresponsal.</param>
-        public PagoFacilitoMSL(List<PagoFacilitoMS> pagosFacilito = default(List<PagoFacilitoMS>), double saldoCuentaCorresponsal = default(double))
+        /// <param name="saldoCuentaCorresponsal">saldoCuentaCorresponsal.</param>        
+        /// <param name="cuentaDebitar">saldoCuentaCorresponsal.</param>
+        
+        public PagoFacilitoMSL(List<PagoFacilitoMS> pagosFacilito = default(List<PagoFacilitoMS>), double saldoCuentaCorresponsal = default(double), int cuentaDebitar = default(int))
         {
             this.PagosFacilito = pagosFacilito;
             this.SaldoCuentaCorresponsal = saldoCuentaCorresponsal;
+            this.CuentaDebitar = cuentaDebitar;
         }
 
         /// <summary>
@@ -55,6 +58,12 @@ namespace Org.OpenAPITools.Model
         public double SaldoCuentaCorresponsal { get; set; }
 
         /// <summary>
+        /// Gets or Sets CuentaDebitar
+        /// </summary>
+        [DataMember(Name = "CuentaDebitar", EmitDefaultValue = false)]
+        public int CuentaDebitar { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -64,6 +73,7 @@ namespace Org.OpenAPITools.Model
             sb.Append("class PagoFacilitoMSL {\n");
             sb.Append("  PagosFacilito: ").Append(PagosFacilito).Append("\n");
             sb.Append("  SaldoCuentaCorresponsal: ").Append(SaldoCuentaCorresponsal).Append("\n");
+            sb.Append("  CuentaDebitar: ").Append(CuentaDebitar).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -108,6 +118,10 @@ namespace Org.OpenAPITools.Model
                 (
                     this.SaldoCuentaCorresponsal == input.SaldoCuentaCorresponsal ||
                     this.SaldoCuentaCorresponsal.Equals(input.SaldoCuentaCorresponsal)
+                ) &&
+                (
+                    this.CuentaDebitar == input.CuentaDebitar ||
+                    this.CuentaDebitar.Equals(input.CuentaDebitar)
                 );
         }
 
@@ -125,6 +139,7 @@ namespace Org.OpenAPITools.Model
                     hashCode = (hashCode * 59) + this.PagosFacilito.GetHashCode();
                 }
                 hashCode = (hashCode * 59) + this.SaldoCuentaCorresponsal.GetHashCode();
+                hashCode = (hashCode * 59) + this.CuentaDebitar.GetHashCode();                
                 return hashCode;
             }
         }

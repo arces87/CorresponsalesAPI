@@ -43,7 +43,14 @@ namespace Org.OpenAPITools.Model
         /// <param name="valorPagado">valorPagado.</param>
         /// <param name="secuencialRespuestaPago">secuencialRespuestaPago.</param>
         /// <param name="secuencialEnvioPago">secuencialEnvioPago.</param>
-        public PagoFacilitoMS(string fechaTransaccion = default(string), string documento = default(string), string codigoResultado = default(string), string fechaTransaccionFinancial = default(string), string horaTransaccion = default(string), string mensaje = default(string), double valorPagado = default(double), int secuencialRespuestaPago = default(int), int secuencialEnvioPago = default(int))
+        /// <param name="operadoPor">secuencialEnvioPago.</param>
+        /// <param name="url">secuencialEnvioPago.</param>
+        /// <param name="factura">secuencialEnvioPago.</param>
+        /// <param name="informacionGenerica">secuencialEnvioPago.</param>
+        /// <param name="setLog">secuencialEnvioPago.</param>
+        /// <param name="idcliente">secuencialEnvioPago.</param>
+        /// <param name="nombrecliente">secuencialEnvioPago.</param>
+        public PagoFacilitoMS(string fechaTransaccion = default(string), string documento = default(string), string codigoResultado = default(string), string fechaTransaccionFinancial = default(string), string horaTransaccion = default(string), string mensaje = default(string), double valorPagado = default(double), int secuencialRespuestaPago = default(int), int secuencialEnvioPago = default(int), string operadoPor = default(string), string url = default(string), string factura = default(string), string informacionGenerica = default(string), string setLog = default(string), string idcliente = default(string), string nombrecliente = default(string))
         {
             this.FechaTransaccion = fechaTransaccion;
             this.Documento = documento;
@@ -54,6 +61,13 @@ namespace Org.OpenAPITools.Model
             this.ValorPagado = valorPagado;
             this.SecuencialRespuestaPago = secuencialRespuestaPago;
             this.SecuencialEnvioPago = secuencialEnvioPago;
+            this.OperadoPor = operadoPor;
+            this.Url = url;
+            this.Factura = factura;
+            this.InformacionGenerica = informacionGenerica;
+            this.SetLog = setLog;
+            this.IdCliente = idcliente;
+            this.NombreCliente = nombrecliente;
         }
 
         /// <summary>
@@ -111,6 +125,48 @@ namespace Org.OpenAPITools.Model
         public int SecuencialEnvioPago { get; set; }
 
         /// <summary>
+        /// Gets or Sets OperadoPor
+        /// </summary>
+        [DataMember(Name = "OperadoPor", EmitDefaultValue = false)]
+        public string OperadoPor { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Url
+        /// </summary>
+        [DataMember(Name = "Url", EmitDefaultValue = false)]
+        public string Url { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Factura
+        /// </summary>
+        [DataMember(Name = "Factura", EmitDefaultValue = false)]
+        public string Factura { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InformacionGenerica 
+        /// </summary>
+        [DataMember(Name = "InformacionGenerica ", EmitDefaultValue = false)]
+        public string InformacionGenerica { get; set; }
+
+        /// <summary>
+        /// Gets or Sets SetLog
+        /// </summary>
+        [DataMember(Name = "SetLog", EmitDefaultValue = false)]
+        public string SetLog { get; set; }
+        
+        /// <summary>
+        /// Gets or Sets SetLog
+        /// </summary>
+        [DataMember(Name = "IdCliente", EmitDefaultValue = false)]
+        public string IdCliente { get; set; }
+
+        /// <summary>
+        /// Gets or Sets SetLog
+        /// </summary>
+        [DataMember(Name = "NombreCliente", EmitDefaultValue = false)]
+        public string NombreCliente { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -127,6 +183,13 @@ namespace Org.OpenAPITools.Model
             sb.Append("  ValorPagado: ").Append(ValorPagado).Append("\n");
             sb.Append("  SecuencialRespuestaPago: ").Append(SecuencialRespuestaPago).Append("\n");
             sb.Append("  SecuencialEnvioPago: ").Append(SecuencialEnvioPago).Append("\n");
+            sb.Append("  OperadoPor: ").Append(OperadoPor).Append("\n");
+            sb.Append("  Url: ").Append(Url).Append("\n");
+            sb.Append("  Factura: ").Append(Factura).Append("\n");
+            sb.Append("  InformacionGenerica: ").Append(InformacionGenerica).Append("\n");
+            sb.Append("  SetLog: ").Append(SetLog).Append("\n");
+            sb.Append("  IdCliente: ").Append(IdCliente).Append("\n");
+            sb.Append("  NombreCliente: ").Append(NombreCliente).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -203,6 +266,41 @@ namespace Org.OpenAPITools.Model
                 (
                     this.SecuencialEnvioPago == input.SecuencialEnvioPago ||
                     this.SecuencialEnvioPago.Equals(input.SecuencialEnvioPago)
+                ) &&
+                (
+                    this.OperadoPor == input.OperadoPor ||
+                    (this.OperadoPor != null &&
+                    this.OperadoPor.Equals(input.OperadoPor))
+                ) &&
+                (
+                    this.Url == input.Url ||
+                    (this.Url != null &&
+                    this.Url.Equals(input.Url))
+                ) &&
+                (
+                    this.Factura == input.Factura ||
+                    (this.Factura != null &&
+                    this.Factura.Equals(input.Factura))
+                ) &&
+                (
+                    this.InformacionGenerica == input.InformacionGenerica ||
+                    (this.InformacionGenerica != null &&
+                    this.InformacionGenerica.Equals(input.InformacionGenerica))
+                ) &&
+                (
+                    this.SetLog == input.SetLog ||
+                    (this.SetLog != null &&
+                    this.SetLog.Equals(input.SetLog))
+                ) &&
+                (
+                    this.IdCliente == input.IdCliente ||
+                    (this.IdCliente != null &&
+                    this.IdCliente.Equals(input.IdCliente))
+                ) &&
+                (
+                    this.NombreCliente == input.NombreCliente ||
+                    (this.NombreCliente != null &&
+                    this.NombreCliente.Equals(input.NombreCliente))
                 );
         }
 
@@ -242,6 +340,34 @@ namespace Org.OpenAPITools.Model
                 hashCode = (hashCode * 59) + this.ValorPagado.GetHashCode();
                 hashCode = (hashCode * 59) + this.SecuencialRespuestaPago.GetHashCode();
                 hashCode = (hashCode * 59) + this.SecuencialEnvioPago.GetHashCode();
+                if (this.OperadoPor != null)
+                {
+                    hashCode = (hashCode * 59) + this.OperadoPor.GetHashCode();
+                }
+                if (this.Url != null)
+                {
+                    hashCode = (hashCode * 59) + this.Url.GetHashCode();
+                }
+                if (this.Factura != null)
+                {
+                    hashCode = (hashCode * 59) + this.Factura.GetHashCode();
+                }
+                if (this.InformacionGenerica != null)
+                {
+                    hashCode = (hashCode * 59) + this.InformacionGenerica.GetHashCode();
+                }
+                if (this.SetLog != null)
+                {
+                    hashCode = (hashCode * 59) + this.SetLog.GetHashCode();
+                }
+                if (this.IdCliente != null)
+                {
+                    hashCode = (hashCode * 59) + this.IdCliente.GetHashCode();
+                }
+                if (this.NombreCliente != null)
+                {
+                    hashCode = (hashCode * 59) + this.NombreCliente.GetHashCode();
+                }
                 return hashCode;
             }
         }
