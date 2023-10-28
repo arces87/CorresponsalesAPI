@@ -66,9 +66,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
+                var cuenta = response.NumeroCuenta.ToString();
+                cuenta = cuenta.Substring(0, 4) + "XXXXXXXX";
+
                 valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
-                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valores.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valores.Add("[:FECHAACTUAL:]", fechaActualEmail);
+                valores.Add("[:CUENTA:]", cuenta);
+                valores.Add("[:VALOR:]", response.Valor.ToString());
             }
 
             var valoresSMS = new Dictionary<string, string>();
@@ -85,11 +90,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 }
 
                 var cuenta = response.NumeroCuenta.ToString();
-                cuenta = cuenta.Substring(0, 3)+"XXXXXXXX";
+                cuenta = cuenta.Substring(0, 4)+"XXXXXXXX";
 
                 valoresSMS.Add("[:VALOROPERACION:]", response.Valor.ToString());
                 valoresSMS.Add("[:CUENTA:]", cuenta);
-                valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
                 valoresSMS.Add("[:HORAACTUAL:]", horaActual);
             }

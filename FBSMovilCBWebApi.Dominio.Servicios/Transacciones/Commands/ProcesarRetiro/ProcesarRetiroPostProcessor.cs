@@ -62,7 +62,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var fechaActual = response.FechaTransaccion.ToString("yyyy/MM/dd");
             var horaActual = response.FechaTransaccion.ToString("H:mm:ss");
 
-            PrepararCorreoElectronico(request, agente, jsonNegocio, valores, fechaActualEmail);
+            PrepararCorreoElectronico(response, request, agente, jsonNegocio, valores, fechaActualEmail);
 
             var valoresSMS = new Dictionary<string, string>();
 
@@ -180,17 +180,17 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 }
 
                 var cuenta = response.NumeroCuenta.ToString();
-                cuenta = cuenta.Substring(0, 3) + "XXXXXXXX";
+                cuenta = cuenta.Substring(0, 4) + "XXXXXXXX";
 
                 valoresSMS.Add("[:VALOROPERACION:]", response.Valor.ToString());
                 valoresSMS.Add("[:CUENTA:]", cuenta);
-                valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
                 valoresSMS.Add("[:HORAACTUAL:]", horaActual);
             }
         }
 
-        private static void PrepararCorreoElectronico(ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActualEmail)
+        private static void PrepararCorreoElectronico(AfectacionAUnCorresponsalRepositorioMS response, ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActualEmail)
         {
             if (jsonNegocio.Retiro.NotificarCorreoElectronico)
             {
@@ -204,9 +204,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
+                var cuenta = response.NumeroCuenta.ToString();
+                cuenta = cuenta.Substring(0, 4) + "XXXXXXXX";
+
                 valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
-                valores.Add("[:NOMBRECORRESPONSAL:]", agente.NombreAgente);
+                valores.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valores.Add("[:FECHAACTUAL:]", fechaActualEmail);
+                valores.Add("[:CUENTA:]", cuenta);
+                valores.Add("[:VALOR:]", response.Valor.ToString());
             }
         }
     }
