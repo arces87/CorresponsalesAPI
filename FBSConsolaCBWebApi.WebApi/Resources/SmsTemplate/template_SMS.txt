@@ -1,0 +1,27 @@
+﻿retiro
+-------------------
+LUCHA CAMPESINA, retiro exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por [:VALOROPERACION:] en corresponsal [:NOMBRECORRESPONSAL:]
+
+deposito
+-------------------
+LUCHA CAMPESINA, deposito exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por [:VALOROPERACION:] en corresponsal [:NOMBRECORRESPONSAL:]
+
+otp
+-------------------
+LUCHA CAMPESINA informa: Por su seguridad no comparta esta información con NADIE. Su código de seguridad es: [:OTP:]. Valido por [:TIEMPO_VIDA:] min.
+
+template_acceso.txt
+-------------------
+LUCHA CAMPESINA informa que se ha realizado un acceso [:ESTADO:], [:FECHA:]. Si no fue ud contacte al 0991010107
+
+template_cambio_correo.txt
+template_cambio_celular.txt
+template_cambio_clave.txt
+-------------------
+LUCHA CAMPESINA informa que se ha actualizado el correo del usuario: [:NOMBREUSUARIO:]. [:FECHA:]. Si no fue ud contacte al 0991010107
+LUCHA CAMPESINA informa que se ha actualizado el numero celular del usuario: [:NOMBREUSUARIO:]. [:FECHA:]. Si no fue ud contacte al 0991010107
+LUCHA CAMPESINA informa que se ha actualizado la clave del usuario: [:NOMBREUSUARIO:]. [:FECHA:]. Si no fue ud contacte al 0991010107
+
+template_alerta.txt
+-----------
+Corresponsal [:NOMBREUSUARIO:] genero una alerta por [:TIPOALERTA:]. [:FECHA:]
