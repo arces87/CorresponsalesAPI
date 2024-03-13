@@ -17,6 +17,7 @@ using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -110,7 +111,27 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));
 
             services.AddSingleton<IAutorizacionApi>(new AutorizacionApi());
-            
+
+            services.AddTransient<FinancialRequestInfo>();
+            services.AddSingleton(x =>
+            {
+                var opts = x.GetRequiredService<IConfiguration>();
+
+                var token = new AuthInfo
+                {
+                    BaseUrl = opts["FinancialOptions:ServiceUrl"],
+                    LoginEndpoint = opts["FinancialOptions:LoginEndpoint"],
+                    RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"],
+                    UsuarioAdmin = opts["FinancialOptions:UsuarioAdmin"],
+                };
+
+                token.Users.Add(opts["FinancialOptions:UsuarioAdmin"],
+                    new User { Usuario = opts["FinancialOptions:UsuarioAdmin"], Password = opts["FinancialOptions:ClaveAdmin"] });
+
+                return token;
+            });
+
+            ServiceProviderFactory.SetServiceProvider(services.BuildServiceProvider());
         }
 
         public static byte[] GetResourceAsBytes(string resourceName)

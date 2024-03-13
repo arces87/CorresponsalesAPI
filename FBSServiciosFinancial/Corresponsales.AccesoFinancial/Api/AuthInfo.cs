@@ -2,14 +2,19 @@
 
 namespace Corresponsales.AccesoFinancial.Api
 {
-    public class AuthInfo
+    internal static class ClienteConstants
     {
+        public const string Web = "Web";
+        public const string Movils = "Movil";
+    }
+
+    public class AuthInfo
+    { 
         public string BaseUrl { get; set; }
         public string LoginEndpoint { get; set; }
         public string RefreshEndpoint { get; set; }
-        public bool UseDefaultUser { get; set; }
-
-        public Dictionary<string, User> Users { get; set; }
+        public string UsuarioAdmin { get; set; }
+        public Dictionary<string, User> Users { get; set; } = new Dictionary<string, User>();
     }
 
     public class User

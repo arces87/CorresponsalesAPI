@@ -6,8 +6,6 @@ using System.Net;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using RestSharp.Authenticators;
-using System.Linq;
-using System;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -24,19 +22,31 @@ namespace Corresponsales.AccesoFinancial.Api
             _authInfo = authInfo;
         }
 
-        private string GetUserAgent()
-            => _httpContextAccessor.HttpContext?.Request.Headers["X-User-Agent"].ToString();
+        private string GetUserClient()
+            => _httpContextAccessor.HttpContext?.Request.Headers["X-User-Client"].ToString();
+
+        private string GetCodigoUsuario()
+             => _httpContextAccessor.HttpContext?.Request.Headers["X-CodigoUsuario"].ToString();
+
+        private string GetClave()
+             => _httpContextAccessor.HttpContext?.Request.Headers["X-Clave"].ToString();
 
         private User GetTokenData()
         {
-            if (_authInfo.UseDefaultUser)
-                return _authInfo.Users.First().Value;
+            var userAgent = GetUserClient();
 
-            var userAgent = GetUserAgent();
+            if (userAgent == ClienteConstants.Web)
+                return _authInfo.Users[_authInfo.UsuarioAdmin];
 
-            if (!_authInfo.Users.TryGetValue(userAgent, out User user))
-                throw new Exception($"No se ha configurado el usuario para el User-Agent {userAgent}");
+            var codigoUsuario = GetCodigoUsuario();
 
+            var result = _authInfo.Users.TryGetValue(codigoUsuario, out User user);
+
+            if(!result)
+            {
+                user = new User { Usuario = codigoUsuario, Password = GetClave() };
+                _authInfo.Users.Add(codigoUsuario, user);
+            }
             return user;
         }
 
