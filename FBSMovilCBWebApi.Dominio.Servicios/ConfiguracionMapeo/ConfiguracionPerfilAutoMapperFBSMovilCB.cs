@@ -18,7 +18,8 @@ using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands;
 using System;
 using Newtonsoft.Json.Linq;
-using Org.OpenAPITools.Model;
+using Corresponsales.Query.Model;
+using Corresponsales.Command.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 {
@@ -56,9 +57,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Distribuidos
             CreateMap<Catalogo, DistribuidoAlerta>();
-            CreateMap<PaisMS, DistribuidoPaises>();
-            CreateMap<EstadoCivilMS, DistribuidoEstadoCivil>();
-            CreateMap<CreaClienteME, CrearClienteME> ();
+            CreateMap<PaisResponse, DistribuidoPaises>();
+            CreateMap<EstadoCivilResponse, DistribuidoEstadoCivil>();
+            CreateMap<CreaClienteRequest, CrearClienteME> ();
             #endregion
 
             #region Transacciones
@@ -70,14 +71,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             #endregion
 
             #region Servicios Financial
-            CreateMap<CrearCuentaME, CreaCuentaME>();
-            CreateMap<CrearClienteME, CreaClienteME>();
-            CreateMap<BuscarClienteME, PorIdentificacionSocioME>();
-            CreateMap<DevuelveTipoCuentaME, PorSecuencialClienteDeUnaEmpresaProductoVistaME>();
+            CreateMap<CrearCuentaME, CreaCuentaRequest>();
+            CreateMap<CrearClienteME, CreaClienteRequest>();
+            CreateMap<BuscarClienteME, DevuelveDatosPersonaIdentificacionRequest>();
+            CreateMap<DevuelveTipoCuentaME, DevuelveConsolidadoCuentasRequest>();
             #endregion
 
             #region Pago Servicios
-            CreateMap<TipoIdentificacionMS, DistribuidoTipoIdentificacion>();
+            CreateMap<DevuelveTiposIdentificacionResponse, DistribuidoTipoIdentificacion>();
             CreateMap<ComisionOperacion, ComisionPago>();
 
             #endregion

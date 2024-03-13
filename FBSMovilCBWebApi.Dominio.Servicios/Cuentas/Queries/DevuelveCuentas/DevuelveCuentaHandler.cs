@@ -5,19 +5,19 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class DevuelveCuentaHandler : IRequestHandler<DevuelveCuentaME, ConsolidadoCuentasMSL>
+    public class DevuelveCuentaHandler : IRequestHandler<DevuelveCuentaME, DevuelveConsolidadoCuentasResponse>
     {
-        private readonly ICuentasApi _cuentaApi;
+        private readonly ICaptacionesVistaApi _cuentaApi;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
 
-        public DevuelveCuentaHandler(ICuentasApi cuentaApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public DevuelveCuentaHandler(ICaptacionesVistaApi cuentaApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
             _cuentaApi = cuentaApi;
             _mediador = mediador;
@@ -25,7 +25,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             _repositorioAgente = repositorioAgente;
         }
 
-        public async Task<ConsolidadoCuentasMSL> Handle(DevuelveCuentaME request, CancellationToken cancellationToken)
+        public async Task<DevuelveConsolidadoCuentasResponse> Handle(DevuelveCuentaME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -41,7 +41,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _cuentaApi.CuentasDevuelveConsolidadoCuentasAsync(request);
+            var respuesta = await _cuentaApi.DevuelveConsolidadoCuentasAsync(request);
             return respuesta;
         }
     }

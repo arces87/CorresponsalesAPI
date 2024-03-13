@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Org.OpenAPITools.Model;
+﻿using Corresponsales.Query.Model;
+using MediatR;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
 {
-    public class BuscarClienteME : PorIdentificacionSocioME, IRequest<InformacionPersonaMS>
+    public class BuscarClienteME : DevuelveDatosPersonaIdentificacionRequest, IRequest<DevuelveDatosPersonaIdentificacionResponse>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }

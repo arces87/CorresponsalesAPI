@@ -13,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System.IO;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 
 namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 {
@@ -27,19 +27,19 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly byte[] _llave;
-        private readonly IClientesApi _clienteApi;
+        private readonly IUsuarioApi _clienteApi;
         private readonly IApiKeyGenerator _apiKeyGenerator;
-        private readonly IMensajeriaSMSApi _envioSMSApi;
+        private readonly IGeneralesApi _envioSMSApi;
 
         public ModificarUsuarioHandler(
             IRepositorioRol repositorioRol, 
             IMediator mediador,
             UserManager<Usuario> manejadorUsuario, 
             IMapper mapper,
-            IClientesApi clienteApi,
+            IUsuarioApi clienteApi,
             IApiKeyGenerator apiKeyGenerator,
             IRepositorioUsuario repositorioUsuario,
-            IMensajeriaSMSApi envioSMSApi)
+            IGeneralesApi envioSMSApi)
         {
             _repositorioRol = repositorioRol;
             _mediador = mediador;
@@ -90,7 +90,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", request.Usuario)
                             .Replace("[:FECHA:]", fechaActual);
 
-                    var mensajeSMS = new EnvioSMSME()
+                    var mensajeSMS = new EnvioSmsRequest()
                     {
                         CodigoUsuarioCorresponsal = request.Usuario,
                         MensajeTexto = plantillaSMS,
@@ -99,7 +99,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                         NumeroCelular = request.Telefono
                     };
 
-                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                    var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
                 }
                 else 
                 {
@@ -127,7 +127,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", request.Usuario)
                             .Replace("[:FECHA:]", fechaActual);
 
-                    var mensajeSMS = new EnvioSMSME()
+                    var mensajeSMS = new EnvioSmsRequest()
                     {
                         CodigoUsuarioCorresponsal = request.Usuario,
                         MensajeTexto = plantillaSMS,
@@ -136,7 +136,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                         NumeroCelular = request.Telefono
                     };
 
-                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                    var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
                 }
 
                 if (cambioMovilUsuario)
@@ -145,7 +145,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", request.Usuario)
                             .Replace("[:FECHA:]", fechaActual);
 
-                    var mensajeSMS = new EnvioSMSME()
+                    var mensajeSMS = new EnvioSmsRequest()
                     {
                         CodigoUsuarioCorresponsal = request.Usuario,
                         MensajeTexto = plantillaSMS,
@@ -154,7 +154,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                         NumeroCelular = request.Telefono
                     };
 
-                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                    var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
                 }
             }
             catch (Exception)

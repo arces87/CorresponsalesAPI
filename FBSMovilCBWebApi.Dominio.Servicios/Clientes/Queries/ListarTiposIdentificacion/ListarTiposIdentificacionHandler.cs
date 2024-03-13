@@ -5,28 +5,28 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentificacion
 {
-    public class ListarTiposIdentificacionHandler: IRequestHandler<ListarTiposIdentificacionME, TiposIdentificacionMSL>
+    public class ListarTiposIdentificacionHandler: IRequestHandler<ListarTiposIdentificacionME, DevuelveTiposIdentificacionResponse>
     {
-        private readonly IClientesApi _clienteApi;
+        private readonly IPersonaApi _personaApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
-        public ListarTiposIdentificacionHandler(IClientesApi clienteApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public ListarTiposIdentificacionHandler(IPersonaApi personaApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
-            _clienteApi = clienteApi;
+            _personaApi = personaApi;
             _mapper = mapper;
             _mediador = mediador;
             _apiKeyGenerator = apiKeyGenerator;
             _repositorioAgente = repositorioAgente;
         }
 
-        public async Task<TiposIdentificacionMSL> Handle(ListarTiposIdentificacionME request, CancellationToken cancellationToken)
+        public async Task<DevuelveTiposIdentificacionResponse> Handle(ListarTiposIdentificacionME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -40,7 +40,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentif
             //var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            var respuesta = await _clienteApi.ClientesDevuelveTiposIdentificacionAsync();
+            var respuesta = await _personaApi.DevuelveTiposIdentificacionAsync();
             return respuesta;
         }
     }

@@ -1,11 +1,9 @@
-﻿using Org.OpenAPITools.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Corresponsales.Command.Model;
+
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito
 {
-    public class AfectacionAUnCorresponsalDepositoMS: AfectacionAUnCorresponsalMS
+    public class AfectacionAUnCorresponsalDepositoMS: AfectacionCorresponsalResponse
     {
 
         public bool NotificationError { get; set; } = false;

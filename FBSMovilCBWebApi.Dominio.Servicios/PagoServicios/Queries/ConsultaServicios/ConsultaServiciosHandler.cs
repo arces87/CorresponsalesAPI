@@ -7,21 +7,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
 using System;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
 {
-    public class ConsultaServiciosHandler : IRequestHandler<ConsultaServiciosME, ConsultaValorAPagarMS>
+    public class ConsultaServiciosHandler : IRequestHandler<ConsultaServiciosME, ConsultaValorAPagarResponse>
     {
-        private readonly IPagoServiciosFacilitoApi _pagoApi;
+        private readonly IFacilitoApi _pagoApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
 
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
 
-        public ConsultaServiciosHandler(IPagoServiciosFacilitoApi pagoApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public ConsultaServiciosHandler(IFacilitoApi pagoApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
             _pagoApi = pagoApi;
             _mapper = mapper;
@@ -30,7 +30,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
             _repositorioAgente = repositorioAgente;
         }
 
-        public async Task<ConsultaValorAPagarMS> Handle(ConsultaServiciosME request, CancellationToken cancellationToken)
+        public async Task<ConsultaValorAPagarResponse> Handle(ConsultaServiciosME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -46,7 +46,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _pagoApi.PagoServiciosFacilitoConsultaValorAPagarAsync(_mapper.Map<ConsultaValorAPagarME>(request));
+            var respuesta = await _pagoApi.ConsultaValorAPagarAsync(_mapper.Map<ConsultaValorAPagarRequest>(request));
             
             return respuesta;            
         }

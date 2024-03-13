@@ -5,20 +5,19 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using System;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
 {
-    public class ObtenerServiciosHandler : IRequestHandler<ObtenerServiciosME, ObtenerServiciosMS>
+    public class ObtenerServiciosHandler : IRequestHandler<ObtenerServiciosME, ObtenerServiciosResponse>
     {
-        private readonly IPagoServiciosFacilitoApi _pagoApi;
+        private readonly IFacilitoApi _pagoApi;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
 
-        public ObtenerServiciosHandler(IPagoServiciosFacilitoApi pagoApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public ObtenerServiciosHandler(IFacilitoApi pagoApi, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
             _pagoApi = pagoApi;
             _mediador = mediador;
@@ -26,7 +25,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
             _repositorioAgente = repositorioAgente;
         }
 
-        public async Task<ObtenerServiciosMS> Handle(ObtenerServiciosME request, CancellationToken cancellationToken)
+        public async Task<ObtenerServiciosResponse> Handle(ObtenerServiciosME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -41,7 +40,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
             //var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            var respuesta = await _pagoApi.PagoServiciosFacilitoObtenerServiciosAsync();
+            var respuesta = await _pagoApi.ObtenerServiciosAsync();
             
             return respuesta;
         }

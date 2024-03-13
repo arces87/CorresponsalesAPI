@@ -19,17 +19,18 @@ using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using Microsoft.Extensions.Configuration;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 {
-    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, PagoFacilitoMSL>
+    public class ProcesarPagoHandler : IRequestHandler<ProcesarPagoME, PagoFacilitoResponse>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IPagoServiciosFacilitoApi _pago;
-        private readonly ICuentasApi _cuentaApi;
+        private readonly IFacilitoApi _pago;
+        private readonly Corresponsales.Query.Api.ICaptacionesVistaApi _cuentaApi;
         private readonly IMapper _mapper;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAgente _repositorioAgente;
@@ -42,8 +43,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         public ProcesarPagoHandler(
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion,
-            IPagoServiciosFacilitoApi pago,
-            ICuentasApi cuentaApi,
+            IFacilitoApi pago,
+            Corresponsales.Query.Api.ICaptacionesVistaApi cuentaApi,
             IMapper mapper, 
             IRepositorioTransaccion repositorioTransaccion, 
             IRepositorioAgente repositorioAgente, 
@@ -66,7 +67,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             _configuracion = configurarion;
         }
 
-        public async Task<PagoFacilitoMSL> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
+        public async Task<PagoFacilitoResponse> Handle(ProcesarPagoME request, CancellationToken cancellationToken)
         {            
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -92,8 +93,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            DevuelveCuentaME cuentaAsociada = new Org.OpenAPITools.Model.DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
-            var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
+            DevuelveCuentaRequest cuentaAsociada = new DevuelveCuentaRequest() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _cuentaApi.DevuelveCuentaAsync(cuentaAsociada);
             var saldoCuenta = respuestaCuentaAsociada.DisponibleParaTransaccion;         
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
@@ -142,7 +143,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             PreprarTransacciones(request, IdTipoAccion, agente, cuenta, saldoActual, comision, comisiones, transaccionesNuevas);
 
-            var respuesta = new PagoFacilitoMSL()
+            var respuesta = new PagoFacilitoResponse()
             {
                 PagosFacilito = new List<PagoFacilitoMS>()
             };
@@ -159,7 +160,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             string IdTipoAccion, 
             List<ComisionFinancial> arregloComisiones, 
             List<Transaccion> transaccionesNuevas, 
-            PagoFacilitoMSL respuesta, 
+            PagoFacilitoResponse respuesta, 
             int? secuencialCuenta)
         {
             
@@ -168,7 +169,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
                 var transaccion = transaccionesNuevas[indice];
 
-                var pago = new PagoFacilitoME
+                var pago = new PagoFacilitoRequest
                 {
                     NumeroDocumento = await generarNumeroDocumentoAsync(),
                     CodigoPagarPensionesAlimenticiaEmpresa = request.CodigoPagarPensionesAlimenticiaEmpresa,
@@ -180,7 +181,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                     JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                     NumeroCuotasPensionesAlimenticiaPersona = (int)request.NumeroCuotasPensionesAlimenticiaPersona,
                     Referencia = request.Referencia,
-                    Rubros = (List<RubroME>)request.Rubros,
+                    Rubros = (List<RubroRequest>)request.Rubros,
                     SecuencialCuentaCorresponsal = (int)secuencialCuenta,
                     SecuencialResultadoTransaccion = (int)request.SecuencialResultadoTransaccion,
                     Valor = transaccion.Valor,
@@ -194,7 +195,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                 });
 
-                var respuestaHttp = await _pago.PagoServiciosFacilitoPagoFacilitoAsync(pago);
+                var respuestaHttp = await _pago.PagoFacilitoAsync(pago);
 
                 await _mediador.Send(new CrearLogME()
                 {

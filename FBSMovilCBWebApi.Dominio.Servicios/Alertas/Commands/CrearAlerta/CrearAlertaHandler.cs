@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 using FBS.DAL.Nomenclador;
 using FBS.Dominio.Servicios.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
@@ -11,8 +13,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +31,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly UserManager<Usuario> _manejadorUsuario;
-        private readonly IMensajeriaSMSApi _envioSMSApi;
+        private readonly IGeneralesApi _envioSMSApi;
         private readonly IRepositorioCatalogo _repositorioCatalogo;
 
         public CrearAlertaHandler(
@@ -42,7 +42,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
             IHttpContextAccessor httpContext,
             IMediator mediador,
             UserManager<Usuario> manejadorUsuario,
-            IMensajeriaSMSApi envioSMSApi,
+            IGeneralesApi envioSMSApi,
             IRepositorioCatalogo repositorioCatalogo)
         {
             _repositorio = repositorio;
@@ -110,7 +110,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
                         .Replace("[:TIPOALERTA:]", tipoalerta.Nombre)
                         .Replace("[:FECHA:]", fechaActual);
 
-                var mensajeSMS = new EnvioSMSME()
+                var mensajeSMS = new EnvioSmsRequest()
                 {
                     CodigoUsuarioCorresponsal = usuario,
                     MensajeTexto = plantillaSMS,
@@ -119,7 +119,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
                     NumeroCelular = _user.PhoneNumber
                 };
 
-                var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
             }
             catch
             {

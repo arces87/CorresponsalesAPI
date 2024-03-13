@@ -1,10 +1,10 @@
 ﻿using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
-using Org.OpenAPITools.Model;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class DevuelveTipoCuentaME : IRequest<TiposCuentaClienteMSL>
+    public class DevuelveTipoCuentaME : IRequest<DevuelveTiposDeCuentasDeUnClienteResponse>
     {
         public int SecuencialCliente { get; set; }
         public int SecuencialEmpresa { get; set; }

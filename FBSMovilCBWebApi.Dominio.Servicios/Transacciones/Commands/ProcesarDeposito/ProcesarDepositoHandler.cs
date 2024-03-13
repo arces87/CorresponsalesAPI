@@ -20,9 +20,9 @@ using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands.ProcesarDeposito;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
-
+using Corresponsales.Command.Api;
+using Corresponsales.Query.Model;
+using Corresponsales.Command.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
@@ -30,8 +30,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IAfectacionApi _afectacionApi;
-        private readonly ICuentasApi _cuentaApi;
+        private readonly ICaptacionesVistaApi _afectacionApi;
+        private readonly Corresponsales.Query.Api.ICaptacionesVistaApi _cuentaApi;
         private readonly IMapper _mapper;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAgente _repositorioAgente;
@@ -44,8 +44,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         public ProcesarDepositoHandler(
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion,
-            IAfectacionApi afectacionApi,
-            ICuentasApi cuentaApi,
+            ICaptacionesVistaApi afectacionApi,
+            Corresponsales.Query.Api.ICaptacionesVistaApi cuentaApi,
             IMapper mapper, 
             IRepositorioTransaccion repositorioTransaccion, 
             IRepositorioAgente repositorioAgente, 
@@ -91,8 +91,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             ValidarCuentaAsocida(cuenta);
 
-            DevuelveCuentaME cuentaAsociada = new Org.OpenAPITools.Model.DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
-            var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
+            DevuelveCuentaRequest cuentaAsociada = new DevuelveCuentaRequest() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _cuentaApi.DevuelveCuentaAsync(cuentaAsociada);
             var saldoCuenta = respuestaCuentaAsociada.DisponibleParaTransaccion;
 
             var transacciones = await _repositorioTransaccion.GetForAgente(agente.Id.ToString());
@@ -160,7 +160,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", ValorComision = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", ValorComision = comision.Cooperativa });
 
-            var modelo = new AfectacionAUnCorresponsalME()
+            var modelo = new AfectacionCorresponsalRequest()
             {
                 TipoTransaccion = "NCCliente",
                 CodigoUsuario = agente.Usuario.UserName,
@@ -181,7 +181,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
 
-            var respuesta = await _afectacionApi.AfectacionAfectacionAUnCorresponsalAsync(modelo);
+            var respuesta = await _afectacionApi.AfectacionCorresponsalAsync(modelo);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(respuesta),

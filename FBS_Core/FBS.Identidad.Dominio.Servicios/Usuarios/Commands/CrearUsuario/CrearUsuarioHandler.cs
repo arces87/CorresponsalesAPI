@@ -13,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System.IO;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 
 namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 {
@@ -25,7 +25,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioRol _repositorioRol;
         private readonly IRepositorioUsuario _repositorio;
         private readonly IConfiguration _configuracion;
-        private readonly IClientesApi _clienteApi;
+        private readonly IUsuarioApi _clienteApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly byte[] _llave;
@@ -34,7 +34,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         public CrearUsuarioHandler(
             UserManager<Usuario> manejadorUsuario, 
             IRepositorioRol repositorioRol,
-            IClientesApi clienteApi,
+            IUsuarioApi clienteApi,
             IRepositorioUsuario repositorio, 
             IMapper mapper, 
             IConfiguration configuracion, 
@@ -104,9 +104,9 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                     var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
                     var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-                    var respuesta = await _clienteApi.ClientesCreaUsuarioAsync(new PorCodigoUsuarioCorresponsalME() { CodigoUsuarioCorresponsal = _user.UserName });
+                    var respuesta = await _clienteApi.CreaUsuarioAsync(new CreaUsuarioRequest() { CodigoUsuarioCorresponsal = _user.UserName });
 
-                    if (!respuesta)
+                    if (respuesta is null)
                     {
                         throw new ExcepcionApp("No se ha podido crear el usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
                     }

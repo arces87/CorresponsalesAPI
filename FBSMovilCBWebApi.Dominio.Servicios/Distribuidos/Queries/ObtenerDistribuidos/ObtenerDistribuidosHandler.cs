@@ -13,8 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Org.OpenAPITools.Api;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
+using Corresponsales.Query.Api;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
 {
@@ -22,7 +22,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
     {
 
         private readonly IRepositorioCatalogo _repositorioCatalogo;
-        private readonly IClientesApi _clienteApi;
+        private readonly IGeneralesApi _generalesApi;
+        private readonly IPersonaApi _personaApi;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IMapper _mapper;
         private readonly IApiKeyGenerator _apiKeyGenerator;
@@ -31,9 +32,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
         private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
         private readonly IMediator _mediador;
 
-        public ObtenerDistribuidosHandler(IClientesApi clienteApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente, IRepositorioDispositivo repositorioDispositivo, IRepositorioDispositivoAgente repositorioDispositivoAgente)
+        public ObtenerDistribuidosHandler(IGeneralesApi generalesApi, IPersonaApi personaApi, IRepositorioCatalogo repositorioCatalogo, IJsonConfiguracion jsonConfiguracion, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente, IRepositorioDispositivo repositorioDispositivo, IRepositorioDispositivoAgente repositorioDispositivoAgente)
         {
-            _clienteApi = clienteApi;
+            _generalesApi = generalesApi;
+            _personaApi = personaApi;
             _repositorioCatalogo = repositorioCatalogo;
             _jsonConfiguracion = jsonConfiguracion;
             _mapper = mapper;
@@ -56,6 +58,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                 VerificarGeolocalizacion = false
             });
 
+            
+
             var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             //var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
             //var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
@@ -77,7 +81,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
         {
             try
             {
-                var respuestaPaisEstadoCivil = await _clienteApi.ClientesDevuelveDistribuidosAsync();
+                var respuestaPaisEstadoCivil = await _generalesApi.DevuelveDistribuidosAsync();
                 respuesta.Paises = _mapper.Map<IEnumerable<DistribuidoPaises>>(respuestaPaisEstadoCivil.Paises);
                 respuesta.EstadoCivil = _mapper.Map<IEnumerable<DistribuidoEstadoCivil>>(respuestaPaisEstadoCivil.EstadosCiviles);
             }
@@ -104,7 +108,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries
                     IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                 });
 
-                var respuestaTiposIdentificacion = await _clienteApi.ClientesDevuelveTiposIdentificacionAsync();
+                var respuestaTiposIdentificacion = await _personaApi.DevuelveTiposIdentificacionAsync();
                 respuesta.TiposIdentificaciones = _mapper.Map<IEnumerable<DistribuidoTipoIdentificacion>>(respuestaTiposIdentificacion.TiposIdentificacion);
             }
             catch (Exception e)

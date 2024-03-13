@@ -1,12 +1,10 @@
-﻿using MediatR;
-using Org.OpenAPITools.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Corresponsales.Query.Model;
+using MediatR;
+
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries.ListarPrestamos
 {
-    public class ListarPrestamosME: PorIdentificacionClienteActivaME, IRequest<InformacionPrestamosMSL>
+    public class ListarPrestamosME: DevuelveInformacionDePrestamosRequest, IRequest<DevuelveInformacionDePrestamosResponse>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }

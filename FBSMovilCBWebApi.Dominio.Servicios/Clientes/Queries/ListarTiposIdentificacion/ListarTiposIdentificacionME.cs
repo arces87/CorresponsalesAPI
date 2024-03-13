@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using Org.OpenAPITools.Model;
+using Corresponsales.Query.Model;
+
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentificacion
 {
-    public class ListarTiposIdentificacionME: IRequest<TiposIdentificacionMSL>
+    public class ListarTiposIdentificacionME: IRequest<DevuelveTiposIdentificacionResponse>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }

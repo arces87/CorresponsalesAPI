@@ -1,11 +1,11 @@
-﻿using FBS.Dominio.Servicios.CorreoElectronico;
+﻿using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
+using FBS.Dominio.Servicios.CorreoElectronico;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Excepciones;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using MediatR;
 using Newtonsoft.Json;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +17,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 {
     public class NotificacionHandler : INotificationHandler<NotificacionME>
     {
-        private readonly IMensajeriaSMSApi _envioSMSApi;
+        private readonly IGeneralesApi _envioSMSApi;
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        public NotificacionHandler(IMensajeriaSMSApi envioSMSApi, IMediator mediador, IJsonConfiguracion jsonConfiguracion)
+        public NotificacionHandler(IGeneralesApi envioSMSApi, IMediator mediador, IJsonConfiguracion jsonConfiguracion)
         {
             _envioSMSApi = envioSMSApi;
             _mediador = mediador;
@@ -82,7 +82,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
 
                 try
                 {
-                    var mensajeSMS = new EnvioSMSME()
+                    var mensajeSMS = new EnvioSmsRequest()
                     {
                         CodigoUsuarioCorresponsal = notification.NombreUsuarioCorresponsal,
                         MensajeTexto = notification.PlantillaSMS,
@@ -98,7 +98,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                    var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
                     await _mediador.Send(new CrearLogME()
                     {
                         JsonLog = JsonConvert.SerializeObject(respuesta),

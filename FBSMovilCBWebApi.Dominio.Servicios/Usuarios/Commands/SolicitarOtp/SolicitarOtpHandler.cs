@@ -18,9 +18,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
+using Corresponsales.Command.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
@@ -32,8 +33,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioDispositivo _repositorioDispositivo;
         private readonly IRepositorioUsuario _repositorioUsuario;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IClientesApi _clienteApi;
-        private readonly IMensajeriaSMSApi _mensajeriaApi;
+        private readonly IPersonaApi _clienteApi;
+        private readonly Corresponsales.Command.Api.IGeneralesApi _mensajeriaApi;
         private readonly byte[] _llave;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IApiKeyGenerator _apiKeyGenerator;
@@ -42,8 +43,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             IRepositorioAgente repositorioAgente,
             IRepositorioDispositivoAgente repositorioDispositivoAgente,
             IRepositorioDispositivo repositorioDispositivo,
-            IClientesApi clienteApi,
-            IMensajeriaSMSApi mensajeriaApi,
+            IPersonaApi clienteApi,
+            Corresponsales.Command.Api.IGeneralesApi mensajeriaApi,
             IRepositorioUsuario repositorioUsuario,
             IJsonConfiguracion jsonConfiguracion,
             IHttpContextAccessor httpContext,
@@ -146,7 +147,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    var porIdentificacionSocioME = new PorIdentificacionSocioME()
+                    var porIdentificacionSocioME = new DevuelveDatosPersonaIdentificacionRequest()
                     {
                         Identificacion = request.Identificacion,
                         SecuencialTipoIdentificacion = request.SecuencialTipoIdentificacion
@@ -159,7 +160,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                         IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
                     });
 
-                    var cliente = await _clienteApi.ClientesDevuelveDatosPersonaIdentificacionAsync(porIdentificacionSocioME);
+                    var cliente = await _clienteApi.DevuelveDatosPersonaIdentificacionAsync(porIdentificacionSocioME);
                   
                     await _mediador.Send(new CrearLogME()
                     {
@@ -271,7 +272,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             otp = totp.ComputeTotp();
         }
 
-        private async Task<EnvioSMSMS> EnviarSMS(
+        private async Task<EnvioSmsResponse> EnviarSMS(
             string UserName, 
             string Identificacion, 
             int TipoIdentificacion, 
@@ -284,7 +285,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             smsTemplate = smsTemplate.Replace("[:OTP:]", otp)
                 .Replace("[:TIEMPO_VIDA:]", $"{tiempoVidaMinutos.ToString()}");
 
-            var mensajeSMS = new EnvioSMSME()
+            var mensajeSMS = new EnvioSmsRequest()
             {
                 CodigoUsuarioCorresponsal = UserName,
                 MensajeTexto = smsTemplate,
@@ -300,7 +301,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });           
 
-            var respuesta = await _mensajeriaApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+            var respuesta = await _mensajeriaApi.EnvioSmsAsync(mensajeSMS);
             return respuesta;
         }
 

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
@@ -6,8 +8,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Newtonsoft.Json;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 {
     public class CrearClienteHandler : IRequestHandler<CrearClienteME, bool>
     {
-        private readonly IClientesApi _clienteApi;
+        private readonly IClienteApi _clienteApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
@@ -24,7 +24,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         public CrearClienteHandler(
-            IClientesApi clienteApi, 
+            IClienteApi clienteApi, 
             IMapper mapper,
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion,
@@ -69,9 +69,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var mapResult = _mapper.Map<CreaClienteME>(request);
+            var mapResult = _mapper.Map<CreaClienteRequest>(request);
 
-            var respuesta = await _clienteApi.ClientesCreaClienteAsync(mapResult);
+            var respuesta = await _clienteApi.CreaClienteAsync(mapResult);
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),
@@ -84,7 +84,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCliente").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return respuesta;
+            return (bool)respuesta;
         }
     }
 }

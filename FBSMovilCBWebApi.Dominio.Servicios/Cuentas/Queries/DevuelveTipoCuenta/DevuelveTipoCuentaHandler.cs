@@ -6,21 +6,21 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class DevuelveTipoCuentaHandler : IRequestHandler<DevuelveTipoCuentaME, TiposCuentaClienteMSL>
+    public class DevuelveTipoCuentaHandler : IRequestHandler<DevuelveTipoCuentaME, DevuelveTiposDeCuentasDeUnClienteResponse>
     {
-        private readonly ICuentasApi _cuentaApi;
+        private readonly ICaptacionesVistaApi _cuentaApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
 
         private readonly IApiKeyGenerator _apiKeyGenerator;
         private readonly IRepositorioAgente _repositorioAgente;
 
-        public DevuelveTipoCuentaHandler(ICuentasApi cuentaApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
+        public DevuelveTipoCuentaHandler(ICaptacionesVistaApi cuentaApi, IMapper mapper, IMediator mediador, IApiKeyGenerator apiKeyGenerator, IRepositorioAgente repositorioAgente)
         {
             _cuentaApi = cuentaApi;
             _mapper = mapper;
@@ -29,7 +29,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             _repositorioAgente = repositorioAgente;
         }
 
-        public async Task<TiposCuentaClienteMSL> Handle(DevuelveTipoCuentaME request, CancellationToken cancellationToken)
+        public async Task<DevuelveTiposDeCuentasDeUnClienteResponse> Handle(DevuelveTipoCuentaME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -45,7 +45,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _cuentaApi.CuentasDevuelveTiposDeCuentasDeUnClienteAsync(_mapper.Map<PorSecuencialClienteDeUnaEmpresaProductoVistaME>(request));
+            var respuesta = await _cuentaApi.DevuelveTiposDeCuentasDeUnClienteAsync(_mapper.Map<DevuelveTiposDeCuentasDeUnClienteRequest>(request));
             return respuesta;
         }
     }

@@ -10,14 +10,14 @@ using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using Newtonsoft.Json;
 using FBS.Identidad.DAL.Modelado;
 using System.Linq;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
 {
-    public class BuscarClienteHandler : IRequestHandler<BuscarClienteME, InformacionPersonaMS>
+    public class BuscarClienteHandler : IRequestHandler<BuscarClienteME, DevuelveDatosPersonaIdentificacionResponse>
     {
-        private readonly IClientesApi _clienteApi;
+        private readonly IPersonaApi _clienteApi;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
         private readonly IApiKeyGenerator _apiKeyGenerator;
@@ -25,7 +25,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
         public BuscarClienteHandler(
-            IClientesApi clienteApi, 
+            IPersonaApi clienteApi, 
             IMapper mapper, 
             IMediator mediador, 
             IApiKeyGenerator apiKeyGenerator, 
@@ -41,7 +41,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
 
         }
 
-        public async Task<InformacionPersonaMS> Handle(BuscarClienteME request, CancellationToken cancellationToken)
+        public async Task<DevuelveDatosPersonaIdentificacionResponse> Handle(BuscarClienteME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new VerificarAgenteME()
             {
@@ -62,14 +62,14 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
-            var porIdentificacionSocioME = _mapper.Map<PorIdentificacionSocioME>(request);
+            var porIdentificacionSocioRequest = _mapper.Map<DevuelveDatosPersonaIdentificacionRequest>(request);
             await _mediador.Send(new CrearLogME()
             {
                 //JsonLog = JsonConvert.SerializeObject(porIdentificacionSocioME),
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogSolicitado").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
-            var respuesta = await _clienteApi.ClientesDevuelveDatosPersonaIdentificacionAsync(porIdentificacionSocioME);
+            var respuesta = await _clienteApi.DevuelveDatosPersonaIdentificacionAsync(porIdentificacionSocioRequest);
             return respuesta;
         }
     }

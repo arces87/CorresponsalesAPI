@@ -15,8 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />   
-    <ProjectReference Include="..\FBSServiciosFinancial\Org.OpenAPITools.csproj" />
+    <ProjectReference Include="..\FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj" />
+    <ProjectReference Include="..\FBSServiciosFinancial\Corresponsales.Command\Corresponsales.Command.csproj" />
+    <ProjectReference Include="..\FBSServiciosFinancial\Corresponsales.Query\Corresponsales.Query.csproj" />
     <ProjectReference Include="..\FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 using FBS.DAL.Nomenclador;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
@@ -10,8 +12,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +21,11 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarAbonoPrestamoHandler : IRequestHandler<ProcesarAbonoPrestamoME, EfectivizacionPrestamoMS>
+    public class ProcesarAbonoPrestamoHandler : IRequestHandler<ProcesarAbonoPrestamoME, EfectivizacionPrestamoResponse>
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly IPrestamosApi _prestamo;
+        private readonly ICarteraApi _prestamo;
         private readonly IMapper _mapper;
         private readonly IRepositorioTransaccion _repositorioTransaccion;
         private readonly IRepositorioAgente _repositorioAgente;
@@ -36,7 +36,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         public ProcesarAbonoPrestamoHandler(
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion,
-            IPrestamosApi prestamo,
+            ICarteraApi prestamo,
             IMapper mapper, 
             IRepositorioTransaccion repositorioTransaccion, 
             IRepositorioAgente repositorioAgente, 
@@ -54,7 +54,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY");
         }
 
-        public async Task<EfectivizacionPrestamoMS> Handle(ProcesarAbonoPrestamoME request, CancellationToken cancellationToken)
+        public async Task<EfectivizacionPrestamoResponse> Handle(ProcesarAbonoPrestamoME request, CancellationToken cancellationToken)
         {
             var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo").Valor;
             await _mediador.Send(new CrearLogME()
@@ -131,7 +131,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", ValorComision = comision.AdministracionCanal });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", ValorComision = comision.Agente });
             arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", ValorComision = comision.Cooperativa });
-            var modelo = new EfectivizacionPrestamoME()
+            var modelo = new EfectivizacionPrestamoRequest()
             {                
                 CodigoUsuario = agente.Usuario.UserName,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
@@ -149,7 +149,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
 
-            var respuesta = await _prestamo.PrestamosEfectivizacionPrestamoAsync(modelo);
+            var respuesta = await _prestamo.EfectivizacionPrestamoAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
             {

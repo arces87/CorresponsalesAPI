@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Org.OpenAPITools.Model;
+﻿using Corresponsales.Command.Model;
+using MediatR;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarAbonoPrestamoME : IRequest<EfectivizacionPrestamoMS>
+    public class ProcesarAbonoPrestamoME : IRequest<EfectivizacionPrestamoResponse>
     {
         public int SecuencialCuentaCliente { get; set; }
         public string NumeroPrestamo { get; set; }    

@@ -1,4 +1,6 @@
-﻿using FBS.Identidad.DAL.Modelado;
+﻿using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Infraestructura.Excepciones;
 using FBS.Infraestructura.Interfaces;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
@@ -7,8 +9,6 @@ using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +19,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
     {
         private readonly IMediator _mediador;
         private readonly IJsonConfiguracion _jsonConfiguracion;
-        private readonly ICuentasApi _cuentaApi;
+        private readonly ICaptacionesVistaApi _cuentaApi;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IRepositorioTransaccionRetiro _repositorioTransaccionRetiro;
         private readonly IRepositorioCuenta _repositorioCuenta;
@@ -30,7 +30,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
         public SolicitarSaldoCuentaHandler(
             IMediator mediador,
             IJsonConfiguracion jsonConfiguracion,
-            ICuentasApi cuentaApi,
+            ICaptacionesVistaApi cuentaApi,
             IRepositorioAgente repositorioAgente,
             IRepositorioTransaccionRetiro repositoriotransaccionRetiro,
             IRepositorioCuenta repositorioCuenta,
@@ -76,8 +76,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Agente.SolicitarSaldoCuenta
 
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            DevuelveCuentaME cuentaAsociada = new DevuelveCuentaME() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
-            var respuestaCuentaAsociada = await _cuentaApi.CuentasDevuelveCuentaAsync(cuentaAsociada);
+            DevuelveCuentaRequest cuentaAsociada = new DevuelveCuentaRequest() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _cuentaApi.DevuelveCuentaAsync(cuentaAsociada);
             return respuestaCuentaAsociada.DisponibleParaTransaccion;
         }
     }

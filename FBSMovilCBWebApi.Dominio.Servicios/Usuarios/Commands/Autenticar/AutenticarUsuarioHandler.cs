@@ -17,8 +17,8 @@ using Microsoft.Extensions.Options;
 using FBS.Dominio.Servicios.CorreoElectronico;
 using System.Collections.Generic;
 using System.IO;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 {
@@ -33,7 +33,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IConfiguracionCanal _configuracionCanal;
         private IdentityOptions _identityOptions;
-        private readonly IMensajeriaSMSApi _envioSMSApi;
+        private readonly IGeneralesApi _envioSMSApi;
 
         public AutenticarUsuarioHandler(
             IMediator mediador,
@@ -45,7 +45,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             IRepositorioGeolocalizacion repositorioGeolocalizacion,
             IOptions<IdentityOptions> identityOptions,
             IConfiguracionCanal configuracionCanal,
-            IMensajeriaSMSApi envioSMSApi)
+            IGeneralesApi envioSMSApi)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -241,7 +241,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 plantillaSMS = plantillaSMS.Replace("[:ESTADO:]", estado)
                         .Replace("[:FECHA:]", fechaActual);
 
-                var mensajeSMS = new EnvioSMSME()
+                var mensajeSMS = new EnvioSmsRequest()
                 {
                     CodigoUsuarioCorresponsal = usuario.Usuario,
                     MensajeTexto = plantillaSMS,                 
@@ -250,7 +250,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     NumeroCelular = usuario.TelefonoCelular
                 };                
 
-                var respuesta = await _envioSMSApi.MensajeriaSMSEnvioSMSAsync(mensajeSMS);
+                var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
             }
             catch (Exception)
             {

@@ -1,10 +1,10 @@
 ﻿using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
-using Org.OpenAPITools.Model;
+using Corresponsales.Command.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {
-    public class CrearCuentaME : IRequest<CreaCuentaMSL>
+    public class CrearCuentaME : IRequest<CreaCuentaResponse>
     {
         public string CodigoTipoCuenta { get; set; }
         public int SecuencialCliente { get; set; }

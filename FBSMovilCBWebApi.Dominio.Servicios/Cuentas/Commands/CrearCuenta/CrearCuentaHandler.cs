@@ -10,14 +10,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Command.Api;
+using Corresponsales.Command.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {
-    public class CrearCuentaHandler : IRequestHandler<CrearCuentaME, CreaCuentaMSL>
+    public class CrearCuentaHandler : IRequestHandler<CrearCuentaME, CreaCuentaResponse>
     {
-        private readonly ICuentasApi _cuentaApi;
+        private readonly ICaptacionesVistaApi _cuentaApi;
         private readonly IHttpContextAccessor _httpContextAccesor;
         private readonly IMapper _mapper;
         private readonly IMediator _mediador;
@@ -26,7 +26,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
         private readonly IRepositorioAgente _repositorioAgente;
 
         public CrearCuentaHandler(
-            ICuentasApi cuentaApi, 
+            ICaptacionesVistaApi cuentaApi, 
             IMapper mapper,
             IMediator mediador, 
             IJsonConfiguracion jsonConfiguracion, 
@@ -43,7 +43,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
             _repositorioAgente = repositorioAgente;
         }
 
-        public async Task<CreaCuentaMSL> Handle(CrearCuentaME request, CancellationToken cancellationToken)
+        public async Task<CreaCuentaResponse> Handle(CrearCuentaME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new CrearLogME()
             {
@@ -71,7 +71,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
             //var agente = await _repositorioAgente.GetForUserName(request.Usuario);
             //var apiKey = _apiKeyGenerator.generateApiKey(agente.Dispositivo.Imei);
             //var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-            var respuesta = await _cuentaApi.CuentasCreaCuentaAsync(_mapper.Map<CreaCuentaME>(request));
+            var respuesta = await _cuentaApi.CreaCuentaAsync(_mapper.Map<CreaCuentaRequest>(request));
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request),

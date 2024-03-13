@@ -1,4 +1,7 @@
-﻿using FBS.Identidad.DAL.Modelado;
+﻿using Corresponsales.Command.Model;
+using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
@@ -7,8 +10,6 @@ using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,15 +19,15 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
-    public class ProcesarAbonoPrestamoPostProcessor : IRequestPostProcessor<ProcesarAbonoPrestamoME, EfectivizacionPrestamoMS>
+    public class ProcesarAbonoPrestamoPostProcessor : IRequestPostProcessor<ProcesarAbonoPrestamoME, EfectivizacionPrestamoResponse>
     {
         private readonly IMediator _mediador;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IHttpContextAccessor _httpContext;
-        private readonly IClientesApi _cliente;
+        private readonly IPersonaApi _cliente;
         private readonly IJsonConfiguracion _jsonConfiguracion;
 
-        public ProcesarAbonoPrestamoPostProcessor(IMediator mediador, IRepositorioAgente repositorioAgente, IHttpContextAccessor httpContext, IClientesApi cliente, IJsonConfiguracion jsonConfiguracion)
+        public ProcesarAbonoPrestamoPostProcessor(IMediator mediador, IRepositorioAgente repositorioAgente, IHttpContextAccessor httpContext, IPersonaApi cliente, IJsonConfiguracion jsonConfiguracion)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -34,7 +35,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _cliente = cliente;
             _jsonConfiguracion = jsonConfiguracion;
         }
-        public async Task Process(ProcesarAbonoPrestamoME request, EfectivizacionPrestamoMS response, CancellationToken cancellationToken)
+        public async Task Process(ProcesarAbonoPrestamoME request, EfectivizacionPrestamoResponse response, CancellationToken cancellationToken)
         {
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
@@ -85,7 +86,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
 
-            var informacionPersona = await _cliente.ClientesDevuelveDatosPersonaIdentificacionAsync(new PorIdentificacionSocioME()
+            var informacionPersona = await _cliente.DevuelveDatosPersonaIdentificacionAsync(new DevuelveDatosPersonaIdentificacionRequest()
             {
                 Identificacion = request.IdentificacionCliente
             });

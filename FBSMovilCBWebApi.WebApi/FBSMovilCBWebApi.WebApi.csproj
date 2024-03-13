@@ -65,7 +65,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FBSMovilCBWebApi.Dominio.Servicios\FBSMovilCBWebApi.Dominio.Servicios.csproj" />
-    <ProjectReference Include="..\FBSServiciosFinancial\Org.OpenAPITools.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Org.OpenAPITools.Model;
+using Corresponsales.Query.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +22,7 @@ namespace FBSConsolaCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("lista", Name = "Cuenta_ListarCuentaSegunIdentificacion")]
-        public async Task<ActionResult<ConsolidadoCuentasMSL>> List([FromBody] ListaCuentaME modelo)
+        public async Task<ActionResult<DevuelveConsolidadoCuentasIdentificacionResponse>> List([FromBody] ListaCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }

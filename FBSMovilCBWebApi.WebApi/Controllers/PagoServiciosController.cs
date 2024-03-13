@@ -5,7 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ObtenerProductoME = FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries.ObtenerProductoME;
-using Org.OpenAPITools.Model;
+using Corresponsales.Command.Model;
+using Corresponsales.Query.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,30 +25,30 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("pagarServicio", Name = "PagoServicios_PagarServicio")]
-        public async Task<ActionResult<PagoFacilitoMSL>> PagarServicio([FromBody] ProcesarPagoME modelo)
+        public async Task<ActionResult<PagoFacilitoResponse>> PagarServicio([FromBody] ProcesarPagoME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtenerServicios", Name = "PagoServicios_ObtenerServicios")]
-        public async Task<ActionResult<ObtenerServiciosMS>> ObtenerServicios([FromBody] ObtenerServiciosME modelo)
+        public async Task<ActionResult<ObtenerServiciosResponse>> ObtenerServicios([FromBody] ObtenerServiciosME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("obtenerProductos", Name = "PagoServicios_ObtenerProductos")]
-        public async Task<ActionResult<ObtenerProductosMS>> ObtenerProductos([FromBody] ObtenerProductoME modelo)
+        public async Task<ActionResult<ObtenerProductosResponse>> ObtenerProductos([FromBody] ObtenerProductoME modelo)
         {
             return await _mediador.Send(modelo);
         }
         [HttpPost("consultaServicio", Name = "PagoServicios_ConsultaServicio")]
-        public async Task<ActionResult<ConsultaValorAPagarMS>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
+        public async Task<ActionResult<ConsultaValorAPagarResponse>> ConsultaServicio([FromBody] ConsultaServiciosME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("reversoFacilito", Name = "PagoServicios_ReversoFacilito")]
-        public async Task<ActionResult<ReversoFacilitoMS>> ReversoFacilito([FromBody] ReversoME modelo)
+        public async Task<ActionResult<ReversoFacilitoResponse>> ReversoFacilito([FromBody] ReversoME modelo)
         {
             return await _mediador.Send(modelo);
         }

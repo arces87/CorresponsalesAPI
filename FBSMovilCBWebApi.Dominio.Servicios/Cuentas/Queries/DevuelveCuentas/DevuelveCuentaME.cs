@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Org.OpenAPITools.Model;
+using Corresponsales.Query.Model;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class DevuelveCuentaME : PorClienteDeUnaEmpresaME, IRequest<ConsolidadoCuentasMSL>
+    public class DevuelveCuentaME : DevuelveConsolidadoCuentasRequest, IRequest<DevuelveConsolidadoCuentasResponse>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }

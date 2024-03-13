@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AccesoFinancial.Request;
+using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
@@ -31,10 +32,11 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly IRepositorioCanal _repositorioCanal;
         private readonly IConfiguracionCanal _configuracionCanal;
         private readonly IMediator _mediador;
+        private readonly AuthInfo _authInfo;
 
         public LoginUsuarioHandler(UserManager<Usuario> manejadorUsuario,
             SignInManager<Usuario> manejadorAutenticacion, IRepositorioRol repositorioRol, IRepositorioUsuario repositorio, IMapper mapper,
-            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal, IMediator mediador)
+            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal, IMediator mediador, AuthInfo authinfo)
         {
             _manejadorUsuario = manejadorUsuario;
             _manejadorAutenticacion = manejadorAutenticacion;
@@ -46,6 +48,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _repositorioCanal = repositorioCanal;
             _configuracionCanal = configuracionCanal;
             _mediador = mediador;
+            _authInfo = authinfo;
         }
 
         private async Task<string> GenerateJwtToken(Usuario user)
@@ -89,7 +92,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         }
 
         public async Task<ModeloLoginUsuario> Handle(LoginUsuarioME request, CancellationToken cancellationToken)
-        {
+        {                       
             var retorno = new ModeloLoginUsuario();
             var _user = _manejadorUsuario.Users.Where(u => u.UserName == request.Usuario).FirstOrDefault();                     
 
@@ -172,8 +175,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             }
 
             try
-            {
-
+            {   
                 var token = await GenerateJwtToken(_user);
                 var roles = await _manejadorUsuario.GetRolesAsync(_user);
                 var _roles = new List<LoginUsuarioRol>();

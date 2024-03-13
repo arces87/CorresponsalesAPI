@@ -1,31 +1,24 @@
-﻿using MediatR;
-using Org.OpenAPITools.Api;
-using Org.OpenAPITools.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Corresponsales.Query.Api;
+using Corresponsales.Query.Model;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries.ListarPrestamos
 {
-    public class ListarPrestamosHandler: IRequestHandler<ListarPrestamosME, InformacionPrestamosMSL>
+    public class ListarPrestamosHandler: IRequestHandler<ListarPrestamosME, DevuelveInformacionDePrestamosResponse>
     {
-        private readonly IPrestamosApi _prestamo;
-        public ListarPrestamosHandler(IPrestamosApi prestamo)
+        private readonly ICarteraApi _prestamo;
+        public ListarPrestamosHandler(ICarteraApi prestamo)
         {
 
             _prestamo = prestamo;
 
         }
 
-        public async Task<InformacionPrestamosMSL> Handle(ListarPrestamosME request, CancellationToken cancellationToken)
+        public async Task<DevuelveInformacionDePrestamosResponse> Handle(ListarPrestamosME request, CancellationToken cancellationToken)
         {
-
-            var modelo = (PorIdentificacionClienteActivaME) request;
-
-            var prestamos = await _prestamo.PrestamosDevuelveInformacionDePrestamosAsync(modelo);
-
+            var prestamos = await _prestamo.DevuelveInformacionDePrestamosAsync(request);
             return prestamos;
         }
     }

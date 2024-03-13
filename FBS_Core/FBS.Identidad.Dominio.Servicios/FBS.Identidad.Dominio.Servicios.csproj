@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FBSServiciosFinancial\Org.OpenAPITools.csproj" />
+    <ProjectReference Include="..\..\FBSServiciosFinancial\Corresponsales.Command\Corresponsales.Command.csproj" />
     <ProjectReference Include="..\FBS.Dominio.Modelos\FBS.Dominio.Modelos.csproj" />
     <ProjectReference Include="..\FBS.Dominio.Servicios\FBS.Dominio.Servicios.csproj" />
     <ProjectReference Include="..\FBS.Identidad.DAL\FBS.Identidad.DAL.csproj" />
@@ -17,7 +17,7 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 

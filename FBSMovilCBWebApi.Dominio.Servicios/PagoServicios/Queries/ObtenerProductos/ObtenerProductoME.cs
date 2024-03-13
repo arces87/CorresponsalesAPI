@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Org.OpenAPITools.Model;
+﻿using Corresponsales.Query.Model;
+using MediatR;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
 {
-    public class ObtenerProductoME : ObtenerProductosME, IRequest<ObtenerProductosMS>
+    public class ObtenerProductoME : ObtenerProductosRequest, IRequest<ObtenerProductosResponse>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }

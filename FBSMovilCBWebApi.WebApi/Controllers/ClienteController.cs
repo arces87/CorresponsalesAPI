@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Corresponsales.Query.Model;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries.ListarTiposIdentificacion;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.OpenAPITools.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,15 +31,15 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("buscarCliente", Name = "Cliente_BuscarCliente")]
-        [Produces(typeof(InformacionPersonaMS))]
-        public async Task<ActionResult<InformacionPersonaMS>> BuscarCliente([FromBody] BuscarClienteME modelo)
+        [Produces(typeof(DevuelveDatosPersonaIdentificacionResponse))]
+        public async Task<ActionResult<DevuelveDatosPersonaIdentificacionResponse>> BuscarCliente([FromBody] BuscarClienteME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("buscarTiposIdentificaciones", Name = "Cliente_TiposIdentificaciones")]
-        [Produces(typeof(TiposIdentificacionMSL))]
-        public async Task<ActionResult<TiposIdentificacionMSL>> BuscarTiposIdentificaciones([FromBody] ListarTiposIdentificacionME modelo)
+        [Produces(typeof(DevuelveTiposIdentificacionResponse))]
+        public async Task<ActionResult<DevuelveTiposIdentificacionResponse>> BuscarTiposIdentificaciones([FromBody] ListarTiposIdentificacionME modelo)
         {
             return await _mediador.Send(modelo);
         }

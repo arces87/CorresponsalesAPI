@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using Org.OpenAPITools.Model;
 using System;
-
+using Corresponsales.Query.Model;
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Queries
 {
-    public class ConsultaServiciosME : ConsultaValorAPagarME, IRequest<ConsultaValorAPagarMS>
+    public class ConsultaServiciosME : ConsultaValorAPagarRequest, IRequest<ConsultaValorAPagarResponse>
     {
         public string Usuario { get; set; }
         public string Imei { get; set; }

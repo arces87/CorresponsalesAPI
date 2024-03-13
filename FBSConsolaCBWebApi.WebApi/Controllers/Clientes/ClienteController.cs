@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Corresponsales.Query.Model;
 using FBSConsolaCBWebApi.Dominio.Servicios.Clientes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.OpenAPITools.Model;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,8 +23,8 @@ namespace FBSConsolaCBWebApi.WebApi
         }
 
         [HttpPost("buscarTiposIdentificaciones", Name = "Cliente_BuscarTiposIdentificaciones")]
-        [Produces(typeof(TiposIdentificacionMSL))]
-        public async Task<ActionResult<TiposIdentificacionMSL>> BuscarTiposIdentificaciones([FromBody] ListarTiposIdentificacionME modelo)
+        [Produces(typeof(DevuelveTiposIdentificacionResponse))]
+        public async Task<ActionResult<DevuelveTiposIdentificacionResponse>> BuscarTiposIdentificaciones([FromBody] ListarTiposIdentificacionME modelo)
         {
             return await _mediador.Send(modelo);
         }

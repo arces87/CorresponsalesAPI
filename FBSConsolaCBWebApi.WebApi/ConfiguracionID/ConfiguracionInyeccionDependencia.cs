@@ -1,4 +1,6 @@
-﻿using FBS.Identidad.DAL.Modelado;
+﻿using Corresponsales.Command.Api;
+using Corresponsales.Query.Api;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
 using FBS.Identidad.Infraestructura.Interfaces;
 using FBS.Identidad.Infraestructura.Repositorio;
@@ -15,7 +17,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Org.OpenAPITools.Api;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -82,18 +83,36 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             var certificado = new X509Certificate2(certificadoByte, "Lc1234*");
 
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            var conf =
-                new Org.OpenAPITools.Client.Configuration
+            var confCommand =
+                new Corresponsales.Command.Client.Configuration
                 {
                     BasePath = urlCoreFinanciero,
-                    ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
+                    //ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
                 };
 
-            services.AddSingleton<IClientesApi>(new ClientesApi(conf));
-            services.AddSingleton<IAfectacionApi>(new AfectacionApi(conf));
-            services.AddSingleton<ICuentasApi>(new CuentasApi(conf));
-            services.AddSingleton<IMensajeriaSMSApi>(new MensajeriaSMSApi(conf));
-            services.AddSingleton<IPrestamosApi>(new PrestamosApi(conf));
+            var confQuery =
+                new Corresponsales.Query.Client.Configuration
+                {
+                    BasePath = urlCoreFinanciero,
+                    //ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
+                };
+
+            services.AddSingleton<Corresponsales.Command.Api.ICaptacionesVistaApi>(new Corresponsales.Command.Api.CaptacionesVistaApi(confCommand));
+            services.AddSingleton<Corresponsales.Command.Api.ICarteraApi>(new Corresponsales.Command.Api.CarteraApi(confCommand));
+            services.AddSingleton<IClienteApi>(new ClienteApi(confCommand));
+            services.AddSingleton<Corresponsales.Command.Api.IGeneralesApi>(new Corresponsales.Command.Api.GeneralesApi(confCommand));
+            services.AddSingleton<IUsuarioApi>(new UsuarioApi(confCommand));
+
+            services.AddSingleton<Corresponsales.Query.Api.ICaptacionesVistaApi>(new Corresponsales.Query.Api.CaptacionesVistaApi(confQuery));
+            services.AddSingleton<Corresponsales.Query.Api.ICarteraApi>(new Corresponsales.Query.Api.CarteraApi(confQuery));
+            services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));
+            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));
+
+            //services.AddSingleton<IClientesApi>(new ClientesApi(conf));
+            //services.AddSingleton<IAfectacionApi>(new AfectacionApi(conf));
+            //services.AddSingleton<ICuentasApi>(new CuentasApi(conf));
+            //services.AddSingleton<IMensajeriaSMSApi>(new MensajeriaSMSApi(conf));
+            //services.AddSingleton<IPrestamosApi>(new PrestamosApi(conf));
         }
 
         public static byte[] GetResourceAsBytes(string resourceName)

@@ -3,28 +3,28 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FBS.Infraestructura.Interfaces;
-using Org.OpenAPITools.Model;
-using Org.OpenAPITools.Api;
+using Corresponsales.Query.Model;
+using Corresponsales.Query.Api;
 
 namespace FBSConsolaCBWebApi.Dominio.Servicios.Cuentas.Queries
 {
-    public class ListarCuentasHandler : IRequestHandler<ListaCuentaME, ConsolidadoCuentasMSL>
+    public class ListarCuentasHandler : IRequestHandler<ListaCuentaME, DevuelveConsolidadoCuentasIdentificacionResponse>
     {
-        private readonly ICuentasApi _cuentaApi;
+        private readonly ICaptacionesVistaApi _cuentaApi;
         private readonly IApiKeyGenerator _apiKeyGenerator;
-        public ListarCuentasHandler(ICuentasApi cuentaApi, IApiKeyGenerator apiKeyGenerator)
+        public ListarCuentasHandler(ICaptacionesVistaApi cuentaApi, IApiKeyGenerator apiKeyGenerator)
         {
             _cuentaApi = cuentaApi;
             _apiKeyGenerator = apiKeyGenerator;
         }
 
-        public async Task<ConsolidadoCuentasMSL> Handle(ListaCuentaME request, CancellationToken cancellationToken)
+        public async Task<DevuelveConsolidadoCuentasIdentificacionResponse> Handle(ListaCuentaME request, CancellationToken cancellationToken)
         {
            
             var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
             var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
 
-            var respuesta = await _cuentaApi.CuentasDevuelveConsolidadoCuentasIdentificacionAsync(new PorIdentificacionClienteDeUnaEmpresaME()
+            var respuesta = await _cuentaApi.DevuelveConsolidadoCuentasIdentificacionAsync(new DevuelveConsolidadoCuentasIdentificacionRequest()
             {
                 Identificacion = request.Identificacion,
                 SecuencialTipoIdentificacion = request.TipoIdentificacion,

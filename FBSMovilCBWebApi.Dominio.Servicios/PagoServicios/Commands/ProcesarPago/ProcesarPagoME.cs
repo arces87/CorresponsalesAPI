@@ -1,11 +1,11 @@
-﻿using MediatR;
-using Org.OpenAPITools.Model;
+﻿using Corresponsales.Command.Model;
+using MediatR;
 using System;
 using System.Collections.Generic;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 {
-    public class ProcesarPagoME : IRequest<PagoFacilitoMSL>
+    public class ProcesarPagoME : IRequest<PagoFacilitoResponse>
     {
         public double? Comision { get; set; }
         public string NombreCliente { get; set; }
@@ -20,7 +20,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
         public string CodigoPagarPensionesAlimenticiaEmpresa { get; set; }
         public int? SecuencialResultadoTransaccion { get; set; }
         public bool? ComisionRubro { get; set; }
-        public IList<RubroME> Rubros { get; set; }
+        public IList<RubroRequest> Rubros { get; set; }
         
         public string Usuario { get; set; }
         public string Imei { get; set; }

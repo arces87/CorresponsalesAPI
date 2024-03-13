@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Corresponsales.Command.Model;
+using Corresponsales.Query.Model;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries.ListarPrestamos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.OpenAPITools.Model;
 
 namespace FBSMovilCBWebApi.WebApi.Controllers
 {
@@ -24,15 +25,15 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("listarPrestamos", Name = "Prestamos_Listar")]
-        [Produces(typeof(InformacionPrestamosMSL))]
-        public async Task<ActionResult<InformacionPrestamosMSL>> ListarPrestamos([FromBody] ListarPrestamosME modelo)
+        [Produces(typeof(DevuelveInformacionDePrestamosResponse))]
+        public async Task<ActionResult<DevuelveInformacionDePrestamosResponse>> ListarPrestamos([FromBody] ListarPrestamosME modelo)
         {
             return await _mediador.Send(modelo);
         }
 
         [HttpPost("efectivizarPrestamos", Name = "Prestamos_Efectivizar")]
-        [Produces(typeof(EfectivizacionPrestamoMS))]
-        public async Task<ActionResult<EfectivizacionPrestamoMS>> EfectivizarPrestamos([FromBody] ProcesarAbonoPrestamoME modelo)
+        [Produces(typeof(EfectivizacionPrestamoResponse))]
+        public async Task<ActionResult<EfectivizacionPrestamoResponse>> EfectivizarPrestamos([FromBody] ProcesarAbonoPrestamoME modelo)
         {
             return await _mediador.Send(modelo);
         }
