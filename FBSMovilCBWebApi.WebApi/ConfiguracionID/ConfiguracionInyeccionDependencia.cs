@@ -1,4 +1,4 @@
-﻿using AccesoFinancial.Request;
+﻿using Corresponsales.AccesoFinancial.Api;
 using Corresponsales.Command.Api;
 using Corresponsales.Query.Api;
 using FBS.Identidad.DAL.Modelado;
@@ -107,7 +107,9 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddSingleton<Corresponsales.Query.Api.ICarteraApi>(new Corresponsales.Query.Api.CarteraApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IFacilitoApi>(new Corresponsales.Query.Api.FacilitoApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));            
-            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));          
+            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));
+
+            services.AddSingleton<IAutorizacionApi>(new AutorizacionApi());
             
         }
 

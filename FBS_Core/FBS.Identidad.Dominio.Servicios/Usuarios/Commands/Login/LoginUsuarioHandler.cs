@@ -1,5 +1,4 @@
-﻿using AccesoFinancial.Request;
-using AutoMapper;
+﻿using AutoMapper;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
@@ -31,12 +30,11 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly byte[] _llave;
         private readonly IRepositorioCanal _repositorioCanal;
         private readonly IConfiguracionCanal _configuracionCanal;
-        private readonly IMediator _mediador;
-        private readonly AuthInfo _authInfo;
+        private readonly IMediator _mediador;        
 
         public LoginUsuarioHandler(UserManager<Usuario> manejadorUsuario,
             SignInManager<Usuario> manejadorAutenticacion, IRepositorioRol repositorioRol, IRepositorioUsuario repositorio, IMapper mapper,
-            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal, IMediator mediador, AuthInfo authinfo)
+            IConfiguration configuracion, IRepositorioCanal repositorioCanal, IConfiguracionCanal configuracionCanal, IMediator mediador)
         {
             _manejadorUsuario = manejadorUsuario;
             _manejadorAutenticacion = manejadorAutenticacion;
@@ -47,8 +45,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _llave = Encoding.UTF8.GetBytes("!A%D*G-KaPdSgVkY-+2He.");
             _repositorioCanal = repositorioCanal;
             _configuracionCanal = configuracionCanal;
-            _mediador = mediador;
-            _authInfo = authinfo;
+            _mediador = mediador;            
         }
 
         private async Task<string> GenerateJwtToken(Usuario user)
