@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 using RestSharp.Authenticators;
 using System.Threading.Tasks;
 using System.Threading;
+using NETCore.Encrypt;
+using Corresponsales.AccesoFinancial.Client;
+using Microsoft.Extensions.Configuration;
 
 namespace Corresponsales.AccesoFinancial.Api
 {
@@ -15,11 +18,13 @@ namespace Corresponsales.AccesoFinancial.Api
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthInfo _authInfo;
+        private readonly IConfiguration _configuracion;
 
-        public FinancialRequestInfo(IHttpContextAccessor httpContextAccessor, AuthInfo authInfo)
+        public FinancialRequestInfo(IHttpContextAccessor httpContextAccessor, AuthInfo authInfo, IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
             _authInfo = authInfo;
+            _configuracion = configuration;
         }
 
         private string GetUserClient()
@@ -33,19 +38,22 @@ namespace Corresponsales.AccesoFinancial.Api
 
         private User GetTokenData()
         {
-            var userAgent = GetUserClient();
+            //var userAgent = GetUserClient();
 
-            if (userAgent == ClienteConstants.Web)
-                return _authInfo.Users[_authInfo.UsuarioAdmin];
+            //if (userAgent == ClienteConstants.Web)
+            //    return _authInfo.Users[_authInfo.UsuarioAdmin];                      
 
-            var codigoUsuario = GetCodigoUsuario();
+            //var codigoUsuario = EncryptProvider.AESDecrypt(GetCodigoUsuario(), "corresponsaleskeyencryptdecrypts");
 
-            var result = _authInfo.Users.TryGetValue(codigoUsuario, out User user);
+            var datosLogin = _configuracion.GetSection("FinancialOptions");
+                      
+            var result = _authInfo.Users.TryGetValue(datosLogin["UsuarioAdmin"], out User user);
 
             if(!result)
             {
-                user = new User { Usuario = codigoUsuario, Password = GetClave() };
-                _authInfo.Users.Add(codigoUsuario, user);
+                //user = new User { Usuario = codigoUsuario, Password = EncryptProvider.AESDecrypt(GetClave(), "corresponsaleskeyencryptdecrypts") };
+                user = new User { Usuario = datosLogin["UsuarioAdmin"], Password = datosLogin["ClaveAdmin"] };
+                _authInfo.Users.Add(datosLogin["UsuarioAdmin"], user);
             }
             return user;
         }
@@ -73,11 +81,11 @@ namespace Corresponsales.AccesoFinancial.Api
                         request.AddJsonBody(new
                         {
                             usuario = usuario.Usuario,
-                            password = usuario.Password,
+                            password = usuario.Password,                            
                             numeroDeIntento = 1,
-                            usaHuellaDigital = false,
-                            maquina = "BANCA-VIRTUAL",
-                            ipMaquinaIngreso = "fe80::7cea:e2a4:d0f7:6adb%5"
+                            usaHuellaDigital = true,
+                            maquina = "0E:00:12:BE:B5:14",
+                            ipMaquinaIngreso = "10.0.2.16"
                         });
                         return await CreateCliente(usuario.Token).ExecuteAsync<TokenData>(request);
                     });
@@ -121,12 +129,14 @@ namespace Corresponsales.AccesoFinancial.Api
                                     var request = new RestRequest(_authInfo.LoginEndpoint, Method.Post);
                                     request.AddJsonBody(new
                                     {
-                                        usuario = usuario.Usuario,
-                                        password = usuario.Password,
+                                        //usuario = usuario.Usuario,
+                                        //password = usuario.Password,
+                                        usuario = "ADMIN",                                        
+                                        password = "123456",
                                         numeroDeIntento = 1,
-                                        usaHuellaDigital = false,
-                                        maquina = "BANCA-VIRTUAL",
-                                        ipMaquinaIngreso = "fe80::7cea:e2a4:d0f7:6adb%5"
+                                        usaHuellaDigital = true,
+                                        maquina = "0E:00:12:BE:B5:14",
+                                        ipMaquinaIngreso = "10.0.2.16"
                                     });
                                     return await CreateCliente(usuario.Token).ExecuteAsync<TokenData>(request);
                                 });

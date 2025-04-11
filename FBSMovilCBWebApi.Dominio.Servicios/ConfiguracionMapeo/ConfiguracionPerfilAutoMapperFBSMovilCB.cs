@@ -60,6 +60,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<PaisResponse, DistribuidoPaises>();
             CreateMap<EstadoCivilResponse, DistribuidoEstadoCivil>();
             CreateMap<CreaClienteRequest, CrearClienteME> ();
+            CreateMap<TipoIdentificacionResponse, DistribuidoTipoIdentificacion>();
             #endregion
 
             #region Transacciones
@@ -75,6 +76,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
             CreateMap<CrearClienteME, CreaClienteRequest>();
             CreateMap<BuscarClienteME, DevuelveDatosPersonaIdentificacionRequest>();
             CreateMap<DevuelveTipoCuentaME, DevuelveConsolidadoCuentasRequest>();
+            CreateMap<DevuelveTipoCuentaME, DevuelveTiposDeCuentasDeUnClienteRequest>();
             #endregion
 
             #region Pago Servicios

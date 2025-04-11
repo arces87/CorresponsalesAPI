@@ -94,18 +94,18 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                         mensajeSalida = "Ha ocurrido un error, contacte al administrador.";
                         var mensajeError = error.Message;
                         int primerEspacio = mensajeError.IndexOf(":");
-                        mensajeError = mensajeError.Remove(0, primerEspacio + 1);   
-                        var mensajeErrorConvertido = JsonConvert.DeserializeObject<ExcepcionFinancial>(mensajeError);
-                        var mensajeFinancial = mensajeErrorConvertido.InnerException.ExceptionMessage;
-                        if (mensajeFinancial != null)
-                        {
-                           if (mensajeFinancial.Substring(0, 4) == "CNB-")
-                           {
-                                    int length = mensajeFinancial.Length - 4;
-                                    mensajeSalida = mensajeFinancial.Substring(4, length);
-                                    notificar = true;
-                           }
-                        }         
+                        mensajeSalida = mensajeError.Remove(0, primerEspacio + 1);   
+                        //var mensajeErrorConvertido = JsonConvert.DeserializeObject<ExcepcionFinancial>(mensajeError);
+                        //var mensajeFinancial = mensajeErrorConvertido.InnerException.ExceptionMessage;
+                        //if (mensajeFinancial != null)
+                        //{
+                        //   if (mensajeFinancial.Substring(0, 4) == "CNB-")
+                        //   {
+                        //            int length = mensajeFinancial.Length - 4;
+                        //            mensajeSalida = mensajeFinancial.Substring(4, length);
+                        //            notificar = true;
+                        //   }
+                        //}         
                        
                         break;
                 }

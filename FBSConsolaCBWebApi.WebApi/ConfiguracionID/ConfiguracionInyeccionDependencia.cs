@@ -1,4 +1,5 @@
-﻿using Corresponsales.Command.Api;
+﻿using Corresponsales.AccesoFinancial.Api;
+using Corresponsales.Command.Api;
 using Corresponsales.Query.Api;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
@@ -86,14 +87,18 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             var confCommand =
                 new Corresponsales.Command.Client.Configuration
                 {
-                    BasePath = urlCoreFinanciero,
+                    BasePath = urlCoreFinanciero + "Corresponsales.Command",                
+                    //BasePath = "http://186.5.29.68:9503/Corresponsales.Command"
+                    //BasePath = "https://localhost:62796",
                     //ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
                 };
 
             var confQuery =
                 new Corresponsales.Query.Client.Configuration
                 {
-                    BasePath = urlCoreFinanciero,
+                    BasePath = urlCoreFinanciero + "Corresponsales.Query",                    
+                    //BasePath = "http://186.5.29.68:9503/Corresponsales.Query",
+                    //BasePath = "https://localhost:62798",     
                     //ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
                 };
 
@@ -108,11 +113,26 @@ namespace FBSConsolaCBWebApi.WebApi.AutofacConfiguration
             services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));
             services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));
 
-            //services.AddSingleton<IClientesApi>(new ClientesApi(conf));
-            //services.AddSingleton<IAfectacionApi>(new AfectacionApi(conf));
-            //services.AddSingleton<ICuentasApi>(new CuentasApi(conf));
-            //services.AddSingleton<IMensajeriaSMSApi>(new MensajeriaSMSApi(conf));
-            //services.AddSingleton<IPrestamosApi>(new PrestamosApi(conf));
+            services.AddTransient<FinancialRequestInfo>();
+            services.AddSingleton(x =>
+            {
+                var opts = x.GetRequiredService<IConfiguration>();
+
+                var token = new AuthInfo
+                {
+                    BaseUrl = opts["FinancialOptions:ServiceUrl"],
+                    LoginEndpoint = opts["FinancialOptions:LoginEndpoint"],
+                    RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"],
+                    UsuarioAdmin = opts["FinancialOptions:UsuarioAdmin"],
+                };
+
+                token.Users.Add(opts["FinancialOptions:UsuarioAdmin"],
+                    new User { Usuario = opts["FinancialOptions:UsuarioAdmin"], Password = opts["FinancialOptions:ClaveAdmin"] });
+
+                return token;
+            });
+
+            ServiceProviderFactory.SetServiceProvider(services.BuildServiceProvider());
         }
 
         public static byte[] GetResourceAsBytes(string resourceName)

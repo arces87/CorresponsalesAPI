@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo><!-- setting GenerateAssemblyInfo to false causes this bug https://github.com/dotnet/project-system/issues/3934 -->
@@ -29,6 +29,10 @@
 
   <ItemGroup>
     <None Remove="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Corresponsales.AccesoFinancial\Corresponsales.AccesoFinancial.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />

@@ -29,6 +29,7 @@ using RestSharp;
 using RestSharp.Serializers;
 using RestSharpMethod = RestSharp.Method;
 using Polly;
+using Corresponsales.AccesoFinancial.Api;
 
 namespace Corresponsales.Query.Client
 {
@@ -539,89 +540,144 @@ namespace Corresponsales.Query.Client
 
         private async Task<ApiResponse<T>> ExecAsync<T>(RestRequest request, RequestOptions options, IReadableConfiguration configuration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var baseUrl = configuration.GetOperationServerUrl(options.Operation, options.OperationIndex) ?? _baseUrl;
+            var requestInfo = ServiceProviderFactory.GetService<FinancialRequestInfo>();
 
-            var clientOptions = new RestClientOptions(baseUrl)
+            request.Resource = "/Corresponsales.Query"+request.Resource;
+            InterceptRequest(request);
+            RestResponse<T> response = await requestInfo.ExecAsync<T>(request, cancellationToken);
+
+            // if the response type is oneOf/anyOf, call FromJSON to deserialize the data
+            if (typeof(Corresponsales.Query.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
             {
-                ClientCertificates = configuration.ClientCertificates,
-                MaxTimeout = configuration.Timeout,
-                Proxy = configuration.Proxy,
-                UserAgent = configuration.UserAgent,
-                UseDefaultCredentials = configuration.UseDefaultCredentials,
-                RemoteCertificateValidationCallback = configuration.RemoteCertificateValidationCallback
-            };
-
-            using (RestClient client = new RestClient(clientOptions,
-                configureSerialization: serializerConfig => serializerConfig.UseSerializer(() => new CustomJsonCodec(SerializerSettings, configuration))))
-            {
-                InterceptRequest(request);
-
-                RestResponse<T> response;
-                if (RetryConfiguration.AsyncRetryPolicy != null)
-                {
-                    var policy = RetryConfiguration.AsyncRetryPolicy;
-                    var policyResult = await policy.ExecuteAndCaptureAsync((ct) => client.ExecuteAsync(request, ct), cancellationToken).ConfigureAwait(false);
-                    response = (policyResult.Outcome == OutcomeType.Successful) ? client.Deserialize<T>(policyResult.Result) : new RestResponse<T>(request)
-                    {
-                        ErrorException = policyResult.FinalException
-                    };
-                }
-                else
-                {
-                    response = await client.ExecuteAsync<T>(request, cancellationToken).ConfigureAwait(false);
-                }
-
-                // if the response type is oneOf/anyOf, call FromJSON to deserialize the data
-                if (typeof(Corresponsales.Query.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
-                {
-                    response.Data = (T) typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
-                }
-                else if (typeof(T).Name == "Stream") // for binary response
-                {
-                    response.Data = (T)(object)new MemoryStream(response.RawBytes);
-                }
-                else if (typeof(T).Name == "Byte[]") // for byte response
-                {
-                    response.Data = (T)(object)response.RawBytes;
-                }
-
-                InterceptResponse(request, response);
-
-                var result = ToApiResponse(response);
-                if (response.ErrorMessage != null)
-                {
-                    result.ErrorText = response.ErrorMessage;
-                }
-
-                if (response.Cookies != null && response.Cookies.Count > 0)
-                {
-                    if (result.Cookies == null) result.Cookies = new List<Cookie>();
-                    foreach (var restResponseCookie in response.Cookies.Cast<Cookie>())
-                    {
-                        var cookie = new Cookie(
-                            restResponseCookie.Name,
-                            restResponseCookie.Value,
-                            restResponseCookie.Path,
-                            restResponseCookie.Domain
-                        )
-                        {
-                            Comment = restResponseCookie.Comment,
-                            CommentUri = restResponseCookie.CommentUri,
-                            Discard = restResponseCookie.Discard,
-                            Expired = restResponseCookie.Expired,
-                            Expires = restResponseCookie.Expires,
-                            HttpOnly = restResponseCookie.HttpOnly,
-                            Port = restResponseCookie.Port,
-                            Secure = restResponseCookie.Secure,
-                            Version = restResponseCookie.Version
-                        };
-
-                        result.Cookies.Add(cookie);
-                    }
-                }
-                return result;
+                response.Data = (T)typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
             }
+            else if (typeof(T).Name == "Stream") // for binary response
+            {
+                response.Data = (T)(object)new MemoryStream(response.RawBytes);
+            }
+            else if (typeof(T).Name == "Byte[]") // for byte response
+            {
+                response.Data = (T)(object)response.RawBytes;
+            }
+            InterceptResponse(request, response);
+            var result = ToApiResponse(response);
+            if (response.ErrorMessage != null)
+            {
+                result.ErrorText = response.ErrorMessage;
+            }
+            if (response.Cookies != null && response.Cookies.Count > 0)
+            {
+                if (result.Cookies == null) result.Cookies = new List<Cookie>();
+                foreach (var restResponseCookie in response.Cookies.Cast<Cookie>())
+                {
+                    var cookie = new Cookie(
+                        restResponseCookie.Name,
+                        restResponseCookie.Value,
+                        restResponseCookie.Path,
+                        restResponseCookie.Domain
+                    )
+                    {
+                        Comment = restResponseCookie.Comment,
+                        CommentUri = restResponseCookie.CommentUri,
+                        Discard = restResponseCookie.Discard,
+                        Expired = restResponseCookie.Expired,
+                        Expires = restResponseCookie.Expires,
+                        HttpOnly = restResponseCookie.HttpOnly,
+                        Port = restResponseCookie.Port,
+                        Secure = restResponseCookie.Secure,
+                        Version = restResponseCookie.Version
+                    };
+                    result.Cookies.Add(cookie);
+                }
+            }
+            return result;
         }
+
+        //private async Task<ApiResponse<T>> ExecAsync<T>(RestRequest request, RequestOptions options, IReadableConfiguration configuration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        //{
+        //    var baseUrl = configuration.GetOperationServerUrl(options.Operation, options.OperationIndex) ?? _baseUrl;
+
+        //    var clientOptions = new RestClientOptions(baseUrl)
+        //    {
+        //        ClientCertificates = configuration.ClientCertificates,
+        //        MaxTimeout = configuration.Timeout,
+        //        Proxy = configuration.Proxy,
+        //        UserAgent = configuration.UserAgent,
+        //        UseDefaultCredentials = configuration.UseDefaultCredentials,
+        //        RemoteCertificateValidationCallback = configuration.RemoteCertificateValidationCallback
+        //    };
+
+        //    using (RestClient client = new RestClient(clientOptions,
+        //        configureSerialization: serializerConfig => serializerConfig.UseSerializer(() => new CustomJsonCodec(SerializerSettings, configuration))))
+        //    {
+        //        InterceptRequest(request);
+
+        //        RestResponse<T> response;
+        //        if (RetryConfiguration.AsyncRetryPolicy != null)
+        //        {
+        //            var policy = RetryConfiguration.AsyncRetryPolicy;
+        //            var policyResult = await policy.ExecuteAndCaptureAsync((ct) => client.ExecuteAsync(request, ct), cancellationToken).ConfigureAwait(false);
+        //            response = (policyResult.Outcome == OutcomeType.Successful) ? client.Deserialize<T>(policyResult.Result) : new RestResponse<T>(request)
+        //            {
+        //                ErrorException = policyResult.FinalException
+        //            };
+        //        }
+        //        else
+        //        {
+        //            response = await client.ExecuteAsync<T>(request, cancellationToken).ConfigureAwait(false);
+        //        }
+
+        //        // if the response type is oneOf/anyOf, call FromJSON to deserialize the data
+        //        if (typeof(Corresponsales.Query.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
+        //        {
+        //            response.Data = (T) typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
+        //        }
+        //        else if (typeof(T).Name == "Stream") // for binary response
+        //        {
+        //            response.Data = (T)(object)new MemoryStream(response.RawBytes);
+        //        }
+        //        else if (typeof(T).Name == "Byte[]") // for byte response
+        //        {
+        //            response.Data = (T)(object)response.RawBytes;
+        //        }
+
+        //        InterceptResponse(request, response);
+
+        //        var result = ToApiResponse(response);
+        //        if (response.ErrorMessage != null)
+        //        {
+        //            result.ErrorText = response.ErrorMessage;
+        //        }
+
+        //        if (response.Cookies != null && response.Cookies.Count > 0)
+        //        {
+        //            if (result.Cookies == null) result.Cookies = new List<Cookie>();
+        //            foreach (var restResponseCookie in response.Cookies.Cast<Cookie>())
+        //            {
+        //                var cookie = new Cookie(
+        //                    restResponseCookie.Name,
+        //                    restResponseCookie.Value,
+        //                    restResponseCookie.Path,
+        //                    restResponseCookie.Domain
+        //                )
+        //                {
+        //                    Comment = restResponseCookie.Comment,
+        //                    CommentUri = restResponseCookie.CommentUri,
+        //                    Discard = restResponseCookie.Discard,
+        //                    Expired = restResponseCookie.Expired,
+        //                    Expires = restResponseCookie.Expires,
+        //                    HttpOnly = restResponseCookie.HttpOnly,
+        //                    Port = restResponseCookie.Port,
+        //                    Secure = restResponseCookie.Secure,
+        //                    Version = restResponseCookie.Version
+        //                };
+
+        //                result.Cookies.Add(cookie);
+        //            }
+        //        }
+        //        return result;
+        //    }
+        //}
 
         #region IAsynchronousClient
         /// <summary>

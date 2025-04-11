@@ -542,6 +542,7 @@ namespace Corresponsales.Command.Client
         {
             var requestInfo = ServiceProviderFactory.GetService<FinancialRequestInfo>();
 
+            request.Resource = "/Corresponsales.Command" + request.Resource;
             InterceptRequest(request);
             RestResponse<T> response = await requestInfo.ExecAsync<T>(request, cancellationToken);
 

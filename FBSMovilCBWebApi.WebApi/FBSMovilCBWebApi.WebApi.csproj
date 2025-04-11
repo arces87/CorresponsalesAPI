@@ -5,9 +5,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="ConfiguracionID\certinfrahttps.pfx" />
-    <None Remove="ConfiguracionID\SRVINFRA.luchacampesina.crt" />
+  <ItemGroup>    
     <None Remove="Resources\EmailTemplate\index_otp.html" />
     <None Remove="Resources\EmailTemplate\index_retiro.html" />
     <None Remove="Resources\EmailTemplate\index_deposito.html" />

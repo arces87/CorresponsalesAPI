@@ -75,26 +75,22 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
 
         private static void ConfigurarApiCoreFinanciero(IServiceCollection services, JsonConfiguracion jsonConfiguracion)
         {
-            var urlCoreFinanciero = jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor;
-            
-            //var urlCoreFinanciero = "https://SRVINFRA.luchacampesina.local:9004";
-
-            var certificadoByte = GetResourceAsBytes("FBSMovilCBWebApi.WebApi.ConfiguracionID.certinfrahttps.pfx");
-            var certificado = new X509Certificate2(certificadoByte, "Lc1234*");
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            
+            var urlCoreFinanciero = jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "UrlFinancial").Valor;  
+                       
             var confCommand =
                 new Corresponsales.Command.Client.Configuration
                 {
-                    BasePath = urlCoreFinanciero,                    
-                    //ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
+                    BasePath = urlCoreFinanciero + "Corresponsales.Command",                
+                    //BasePath = "http://186.5.29.68:9503/Corresponsales.Command"
+                    //BasePath = "https://localhost:62796",
                 };
             
             var confQuery =
                 new Corresponsales.Query.Client.Configuration
                 {
-                    BasePath = urlCoreFinanciero,                    
-                    //ClientCertificates = new X509CertificateCollection(new X509Certificate[] { certificado })
+                    BasePath = urlCoreFinanciero + "Corresponsales.Query",                    
+                    //BasePath = "http://186.5.29.68:9503/Corresponsales.Query",                    
+                    //BasePath = "https://localhost:62798",                    
                 };
 
             services.AddSingleton<Corresponsales.Command.Api.ICaptacionesVistaApi>(new Corresponsales.Command.Api.CaptacionesVistaApi(confCommand));
@@ -108,9 +104,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddSingleton<Corresponsales.Query.Api.ICarteraApi>(new Corresponsales.Query.Api.CarteraApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IFacilitoApi>(new Corresponsales.Query.Api.FacilitoApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));            
-            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));
-
-            services.AddSingleton<IAutorizacionApi>(new AutorizacionApi());
+            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));           
 
             services.AddTransient<FinancialRequestInfo>();
             services.AddSingleton(x =>
@@ -121,12 +115,8 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
                 {
                     BaseUrl = opts["FinancialOptions:ServiceUrl"],
                     LoginEndpoint = opts["FinancialOptions:LoginEndpoint"],
-                    RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"],
-                    UsuarioAdmin = opts["FinancialOptions:UsuarioAdmin"],
-                };
-
-                token.Users.Add(opts["FinancialOptions:UsuarioAdmin"],
-                    new User { Usuario = opts["FinancialOptions:UsuarioAdmin"], Password = opts["FinancialOptions:ClaveAdmin"] });
+                    RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"]                    
+                };               
 
                 return token;
             });
