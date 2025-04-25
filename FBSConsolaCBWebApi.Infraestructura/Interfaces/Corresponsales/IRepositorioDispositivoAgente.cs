@@ -14,6 +14,7 @@ namespace FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales
         Task<DispositivoAgente> Get(Guid id);       
         Task<IEnumerable<Dispositivo>> GetDispositivosDisponibles();       
         Task<DispositivoAgente> GetForAgente(string Id);
-        Task<DispositivoAgente> GetForDispositivo(string Id);       
+        Task<DispositivoAgente> GetForDispositivo(string Id);
+        Task<bool> DesactivarAgenteDispositivo(string IdAgente);
     }
 }

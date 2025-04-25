@@ -52,7 +52,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                 var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
                 var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
                 var idEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoUbicado").Valor;
-                var idEstadoInactivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoEliminado").Valor;
+                var idEstadoInactivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoInactivo").Valor;
 
                 if (agente != null) //Comprobacion de existencia del Agente
                 {

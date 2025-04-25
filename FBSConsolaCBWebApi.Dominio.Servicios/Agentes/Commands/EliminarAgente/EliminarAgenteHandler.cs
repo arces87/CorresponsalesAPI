@@ -10,11 +10,13 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
     public class EliminarAgenteHandler : IRequestHandler<EliminarAgenteME, bool>
     {
         private readonly IRepositorioAgente _repositorio;
+        private readonly IRepositorioDispositivoAgente _repositorioDispositivoAgente;
         private readonly IMapper _mapper;
 
-        public EliminarAgenteHandler(IRepositorioAgente repositorio, IMapper mapper)
+        public EliminarAgenteHandler(IRepositorioAgente repositorio, IMapper mapper, IRepositorioDispositivoAgente repositorioDispositivoAgente)
         {
             _repositorio = repositorio;
+            _repositorioDispositivoAgente = repositorioDispositivoAgente;
             _mapper = mapper;
         }
 
@@ -24,6 +26,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Agentes.Commands
             {
                 var _model = _mapper.Map<Agente>(request);
                 await _repositorio.Remove(_model);
+                await _repositorioDispositivoAgente.DesactivarAgenteDispositivo(_model.Id.ToString());
             }
             else
             {

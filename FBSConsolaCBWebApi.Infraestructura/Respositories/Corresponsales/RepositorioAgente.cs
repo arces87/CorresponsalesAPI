@@ -338,12 +338,12 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         public async Task Desactivar(Agente agente)
         {
             var IdEstadoActivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoActivo").Valor;
-            var IdEstadoEliminado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoEliminado").Valor;
+            var IdEstadoInactivo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "AgenteIdEstadoInactivo").Valor;
             var entidad = Context.Agentes.Include(a => a.Estado).FirstOrDefault(o => o.Id == agente.Id);
-            if (entidad.Id.ToString() == IdEstadoEliminado)
+            if (entidad.Id.ToString() == IdEstadoInactivo)
                 entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id.ToString() == IdEstadoActivo);
             else
-                entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id.ToString() == IdEstadoEliminado);
+                entidad.Estado = Context.Catalogos.FirstOrDefault(c => c.Id.ToString() == IdEstadoInactivo);
             _contexto.Entry(entidad).State = EntityState.Modified;
             await _contexto.SaveChangesAsync();
         }
@@ -354,7 +354,8 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
             {
                 var idAgente = agente.Id;
                 conexion.Open();
-                var usuarios = await conexion.QueryAsync<Agente>(@"DELETE FROM Corresponsales.Agente "+
+                var usuarios = await conexion.QueryAsync<Agente>(@"UPDATE Corresponsales.Agente " +
+                    "SET Corresponsales.Agente.EstaActivo = 0 " +
                     "where Corresponsales.Agente.Id = @IdAgente",
                     param: new { IdAgente = idAgente });
             }

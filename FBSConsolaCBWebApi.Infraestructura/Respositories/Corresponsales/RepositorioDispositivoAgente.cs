@@ -67,8 +67,21 @@ namespace FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales
         public async Task<DispositivoAgente> GetForDispositivo(string dispositivoId)
         {
             return await Context.DispositivoAgente.FirstOrDefaultAsync(d => d.DispositivoId == Guid.Parse(dispositivoId));
-        }        
-              
+        }
+
+        public async Task<bool> DesactivarAgenteDispositivo(string agenteId)
+        {
+            using (var conexion = Conexion)
+            {
+                var idAgente = agenteId;
+                conexion.Open();
+                var dispositivos = await conexion.QueryAsync<Agente>(@"DELETE FROM Corresponsales.DispositivoAgente " +
+                    "where Corresponsales.DispositivoAgente.AgenteId = @IdAgente",
+                    param: new { IdAgente = idAgente });
+            }
+            return false;
+        }
+
         public ContextoFBSConsolaCB Context => _contexto as ContextoFBSConsolaCB;
 
         public IDbConnection Conexion => new SqlConnection(_configuracion.GetConnectionString("DapperConnection"));
