@@ -60,6 +60,19 @@ namespace FBS.Identidad.Infraestructura.Repositorio
             await GetContext.SaveChangesAsync();
         }
 
+        public async Task SalvarRefreshToken(string idUsuario, string token)
+        {
+            await EliminarRefreshToken(idUsuario);
+            GetContext.UserTokens.Add(new IdentityUserToken<string>()
+            {
+                Name = "TkRefresh",
+                LoginProvider = "TkRefresh_Net",
+                UserId = idUsuario,
+                Value = token
+            });
+            await GetContext.SaveChangesAsync();
+        }
+
         public async Task<string> ComprobarTokenRecuperarContrasenia(string tokenComprobar)
         {
             var token = await GetContext.UserTokens.FirstOrDefaultAsync(u => u.Value == tokenComprobar && u.Name == "TkRC");
@@ -68,9 +81,27 @@ namespace FBS.Identidad.Infraestructura.Repositorio
             return null;
         }
 
+        public async Task<string> ComprobarRefreshToken(string tokenRefresh)
+        {
+            var token = await GetContext.UserTokens.FirstOrDefaultAsync(u => u.Value == tokenRefresh && u.Name == "TkRefresh");
+            if (token != null)
+                return token.UserId;
+            return null;
+        }
+
         public async Task EliminarTokenRecuperarContrasenia(string Usuario)
         {
             var otp = GetContext.UserTokens.FirstOrDefault(u => u.UserId == Usuario && u.Name == "TkRC");
+            if (otp != null)
+            {
+                GetContext.UserTokens.Remove(otp);
+            }
+            await GetContext.SaveChangesAsync();
+        }
+
+        public async Task EliminarRefreshToken(string Usuario)
+        {
+            var otp = GetContext.UserTokens.FirstOrDefault(u => u.UserId == Usuario && u.Name == "TkRefresh");
             if (otp != null)
             {
                 GetContext.UserTokens.Remove(otp);
@@ -118,7 +149,7 @@ namespace FBS.Identidad.Infraestructura.Repositorio
             var otp = GetContext.UserTokens.Where(u => u.UserId == usuario.Id && u.Name == identificacion).FirstOrDefault();
 
             return otp?.Value;
-            
+
         }
 
         public override async Task Update(Usuario entidad)

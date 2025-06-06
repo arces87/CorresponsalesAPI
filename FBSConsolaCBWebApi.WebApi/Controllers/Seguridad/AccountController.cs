@@ -41,6 +41,12 @@ namespace FBSConsolaCBWebApi.WebApi
             return await _mediador.Send(modelo);
         }
 
+        [HttpPost("refrescarToken", Name = "Usuario_RefrescarToken")]
+        public async Task<ActionResult<string>> Refresh([FromBody] RefrescarTokenME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
         [HttpPost("SolicitarCambioContrasenia", Name = "Usuario_SolicitarCambioContrasenia")]
         public async Task<ActionResult<bool>> SolicitarCambioContrasenia([FromBody] SolicitarCambioContraseniaME modelo)
         {

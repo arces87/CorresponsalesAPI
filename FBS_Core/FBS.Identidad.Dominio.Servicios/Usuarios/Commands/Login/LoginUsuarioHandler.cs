@@ -174,6 +174,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             try
             {   
                 var token = await GenerateJwtToken(_user);
+                var refreshToken = Guid.NewGuid().ToString();
                 var roles = await _manejadorUsuario.GetRolesAsync(_user);
                 var _roles = new List<LoginUsuarioRol>();
                 foreach (var item in roles)
@@ -188,7 +189,10 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                 retorno.NombreMostrar = _user.NombreMostrar;
                 retorno.Roles = _roles;
                 retorno.Token = (string)token;
+                retorno.RefreshToken = refreshToken;
                 retorno.TelefonoCelular = _user.PhoneNumber;
+
+                await _repositorio.SalvarRefreshToken(_user.Id, refreshToken);
             }
             catch (Exception e)
             {

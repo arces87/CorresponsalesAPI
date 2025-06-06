@@ -12,6 +12,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         public string CorreoElectronico { get; set; }
         public string Errores { get; set; }
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
         public IEnumerable<LoginUsuarioRol> Roles { get; set; }        
         public string TelefonoCelular { get; set; }
     }

@@ -12,6 +12,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Usuarios.Commands
         public bool CambioContrasenia { get; set; }
         public string Errores { get; set; }
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
         public IEnumerable<AutenticarUsuarioRol> Roles { get; set; }
         public string IdAgente { get; set; }
     }

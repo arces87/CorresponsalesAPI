@@ -14,8 +14,11 @@ namespace FBS.Identidad.Infraestructura.Interfaces
         Task SalvarOtp(string Usuario, string identificacion, string otp);
         Task EliminarOtp(string identificacion);
         Task SalvarTokenRecuperarContrasenia(string idUsuario, string token);
+        Task SalvarRefreshToken(string idUsuario, string token);
         Task<string> ComprobarTokenRecuperarContrasenia(string token);
+        Task<string> ComprobarRefreshToken(string token);
         Task EliminarTokenRecuperarContrasenia(string Usuario);
+        Task EliminarRefreshToken(string Usuario);
         Task AsignarCanal(CanalUsuario entidad);
         Task<bool> VerificarCorreoElectronico(string email);
         Task<bool> VerificarCorreoElectronico(string email, string IdUsuario);
