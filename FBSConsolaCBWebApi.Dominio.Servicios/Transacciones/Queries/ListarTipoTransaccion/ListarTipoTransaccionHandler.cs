@@ -33,6 +33,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var idDeposito = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito")?.Valor;
             var idRetiro = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdRetiro")?.Valor;
             var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
+            var idAbonoPrestamo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo")?.Valor;
 
             var valorDeposito = 0.0;
             var comisionDeposito = 0.0;
@@ -40,7 +41,9 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var comisionRetiro = 0.0;
             var valorCobroServicio = 0.0;
             var comisionCobroServicio = 0.0;
-            
+            var valorAbonoPrestamo = 0.0;
+            var comisionAbonoPrestamo = 0.0;
+
             var saldo = await _repositorio.GetSaldoActual(request.IdAgente);
             var _retorno = new ListarTipoTransaccionMS() { SaldoCaja = saldo };
 
@@ -62,9 +65,21 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
                 valorCobroServicio = _modelCobroServicios.Sum(m => m.Valor);
                 comisionCobroServicio = _modelCobroServicios.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
-           
+            if (idAbonoPrestamo != null)
+            {
+                var _modelAbonoPrestamo = await _repositorio.GetForTipo(idAbonoPrestamo, request.IdAgente);
+                valorAbonoPrestamo = _modelAbonoPrestamo.Sum(m => m.Valor);
+                comisionAbonoPrestamo = _modelAbonoPrestamo.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
+            }
+
             _retorno.TiposTransacciones = new List<ModeloListaTipoTransaccion>() {
-                    new ModeloListaTipoTransaccion(){
+                new ModeloListaTipoTransaccion(){
+                        Id = idAbonoPrestamo,
+                        Nombre = "Abono de Préstamos",
+                        Comisiones = comisionAbonoPrestamo,
+                        Valor = valorAbonoPrestamo
+                    },
+                new ModeloListaTipoTransaccion(){
                         Id = idCobroServicio,
                         Nombre = "Cobro de Servicios",
                         Comisiones = comisionCobroServicio,
