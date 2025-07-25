@@ -51,5 +51,11 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
             await _mediador.Send(modelo);
             return Ok(true);
         }
+
+        [HttpPost("refrescarToken", Name = "Usuario_RefrescarToken")]
+        public async Task<ActionResult<string>> Refresh([FromBody] RefrescarTokenME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
     }
 }
