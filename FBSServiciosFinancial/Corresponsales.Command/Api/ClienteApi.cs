@@ -261,7 +261,7 @@ namespace Corresponsales.Command.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/Cliente/CreaCliente", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/Clientes/CreaCliente", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("CreaCliente", localVarResponse);
@@ -338,7 +338,7 @@ namespace Corresponsales.Command.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/Cliente/CreaCliente", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/Clientes/CreaCliente", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

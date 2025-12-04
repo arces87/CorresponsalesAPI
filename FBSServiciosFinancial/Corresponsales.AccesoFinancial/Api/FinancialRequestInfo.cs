@@ -81,11 +81,13 @@ namespace Corresponsales.AccesoFinancial.Api
                         request.AddJsonBody(new
                         {
                             usuario = usuario.Usuario,
-                            password = usuario.Password,                            
+                            password = usuario.Password,
+                            //usuario = "ADMIN",
+                            //password = "123456",
                             numeroDeIntento = 1,
-                            usaHuellaDigital = true,
-                            maquina = "0E:00:12:BE:B5:14",
-                            ipMaquinaIngreso = "10.0.2.16"
+                            usaHuellaDigital = false,
+                            maquina = "AMB-CM",
+                            ipMaquinaIngreso = "fe80::7cea:e2a4:d0f7:6adb%5"
                         });
                         return await CreateCliente(usuario.Token).ExecuteAsync<TokenData>(request);
                     });
@@ -134,9 +136,9 @@ namespace Corresponsales.AccesoFinancial.Api
                                         usuario = "ADMIN",                                        
                                         password = "123456",
                                         numeroDeIntento = 1,
-                                        usaHuellaDigital = true,
-                                        maquina = "0E:00:12:BE:B5:14",
-                                        ipMaquinaIngreso = "10.0.2.16"
+                                        usaHuellaDigital = false,
+                                        maquina = "AMB-CM",
+                                        ipMaquinaIngreso = "fe80::7cea:e2a4:d0f7:6adb%5"
                                     });
                                     return await CreateCliente(usuario.Token).ExecuteAsync<TokenData>(request);
                                 });

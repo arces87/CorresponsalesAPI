@@ -322,7 +322,7 @@ namespace Corresponsales.Query.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<DevuelveDistribuidosResponse>("/Generales/DevuelveDistribuidos", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<DevuelveDistribuidosResponse>("/Distribuidos/DevuelveDistribuidos", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
