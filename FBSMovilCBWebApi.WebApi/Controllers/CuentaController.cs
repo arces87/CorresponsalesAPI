@@ -38,6 +38,7 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         {
             return await _mediador.Send(modelo);
         }
+
         [HttpPost("buscarCuentas", Name = "Cuenta_DevuelveCuentas")]
         [Produces(typeof(DevuelveConsolidadoCuentasResponse))]
         public async Task<ActionResult<DevuelveConsolidadoCuentasResponse>> BuscarCuenta([FromBody] FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries.DevuelveCuentaME modelo)
@@ -47,6 +48,20 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
 
         [HttpPost("solicitudSaldoCuenta", Name = "Cuenta_SolicitarSaldoCuenta")]
         public async Task<ActionResult<double>> SolicitarSaldoCuenta([FromBody] SolicitarSaldoCuentaME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("cuentasPorCobrar", Name = "Cuenta_CuentasPorCobrar")]
+        [Produces(typeof(DevuelveCuentasPorCobrarDeUnClienteResponse))]
+        public async Task<ActionResult<DevuelveCuentasPorCobrarDeUnClienteResponse>> DevuelveCuentasPorCobrar([FromBody] DevuelveCuentasPorCobrarME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("procesaCuentasPorCobrar", Name = "Cuenta_ProcesaCuentasPorCobrar")]
+        [Produces(typeof(ProcesaPagoCuentasPorCobrarResponse))]
+        public async Task<ActionResult<ProcesaPagoCuentasPorCobrarResponse>> ProcesaPagoCuenta([FromBody] ProcesaPagoCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }

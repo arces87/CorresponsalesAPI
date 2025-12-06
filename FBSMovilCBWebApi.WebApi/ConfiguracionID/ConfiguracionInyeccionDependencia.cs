@@ -98,12 +98,14 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddSingleton<IClienteApi>(new ClienteApi(confCommand));            
             services.AddSingleton<Corresponsales.Command.Api.IFacilitoApi>(new Corresponsales.Command.Api.FacilitoApi(confCommand));            
             services.AddSingleton<Corresponsales.Command.Api.IGeneralesApi>(new Corresponsales.Command.Api.GeneralesApi(confCommand));
+            services.AddSingleton<Corresponsales.Command.Api.ICuentasPorCobrarApi>(new Corresponsales.Command.Api.CuentasPorCobrarApi(confCommand));
             services.AddSingleton<IUsuarioApi>(new UsuarioApi(confCommand));
 
             services.AddSingleton<Corresponsales.Query.Api.ICaptacionesVistaApi>(new Corresponsales.Query.Api.CaptacionesVistaApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.ICarteraApi>(new Corresponsales.Query.Api.CarteraApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IFacilitoApi>(new Corresponsales.Query.Api.FacilitoApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));            
+            services.AddSingleton<Corresponsales.Query.Api.ICuentasPorCobrarApi>(new Corresponsales.Query.Api.CuentasPorCobrarApi(confQuery));
             services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));           
 
             services.AddTransient<FinancialRequestInfo>();
