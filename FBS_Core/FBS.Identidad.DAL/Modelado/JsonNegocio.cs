@@ -17,6 +17,9 @@ namespace FBS.Identidad.DAL.Modelado
         [JsonProperty("abonoPrestamos")]
         public Operacion AbonoPrestamos { get; set; }
 
+        [JsonProperty("obligaciones")]
+        public Operacion Obligaciones { get; set; }
+
         [JsonProperty("verificarGeolocalizacion")]
         public bool VerificarGeolocalizacion { get; set; }
 
