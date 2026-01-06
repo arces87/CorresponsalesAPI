@@ -4,8 +4,7 @@ using MediatR;
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
     public class ProcesarAbonoPrestamoME : IRequest<EfectivizacionPrestamoResponse>
-    {
-        public int SecuencialCuentaCliente { get; set; }
+    {        
         public string NumeroPrestamo { get; set; }    
         public double Valor { get; set; }
         public string NombreCliente { get; set; }
