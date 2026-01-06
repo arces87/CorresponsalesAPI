@@ -2,6 +2,7 @@
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.DAL.Seguridad;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBS.Identidad.Dominio.Servicios.Utilidad;
 using FBS.Identidad.Infraestructura.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -48,7 +49,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             _mediador = mediador;            
         }
 
-        private async Task<string> GenerateJwtToken(Usuario user)
+        private async Task<string> GenerateJwtToken(Usuario user, string password = null)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
@@ -58,6 +59,25 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             {
                 claims.Add(new Claim(ClaimTypes.Role, item));
             }
+
+            // Agregar contraseña encriptada al claim solo para API Móvil
+            if (!string.IsNullOrEmpty(password) && user.UserName != null)
+            {
+                try
+                {
+                    var encryptionKey = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
+                    var encryptedPassword = Criptografia.EncryptStringToBytes_Aes(password, encryptionKey, encryptionKey);
+                    var encryptedPasswordBase64 = Convert.ToBase64String(encryptedPassword);
+                    claims.Add(new Claim("financial_password", encryptedPasswordBase64));
+                    claims.Add(new Claim("financial_username", user.UserName));
+                }
+                catch
+                {
+                    // Si falla la encriptación, no agregar el claim
+                    // El sistema usará credenciales preconfiguradas como fallback
+                }
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims.ToArray<Claim>()),
@@ -173,7 +193,14 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
 
             try
             {   
-                var token = await GenerateJwtToken(_user);
+                // Pasar la contraseña solo para API Móvil para almacenarla encriptada en el JWT
+                string passwordForToken = null;
+                if (request.Dispositivo == "Movil")
+                {
+                    passwordForToken = request.Contrasenna;
+                }
+
+                var token = await GenerateJwtToken(_user, passwordForToken);
                 var refreshToken = Guid.NewGuid().ToString();
                 var roles = await _manejadorUsuario.GetRolesAsync(_user);
                 var _roles = new List<LoginUsuarioRol>();

@@ -14,5 +14,6 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         public string Imagen { get; set; }
         public string IdOperadora { get; set; }
         public IEnumerable<CrearUsuarioRol> Roles { get; set; }
+        public int Cuenta { get; set; }
     }
 }

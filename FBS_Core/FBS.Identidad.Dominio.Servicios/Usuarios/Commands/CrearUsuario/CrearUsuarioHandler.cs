@@ -101,10 +101,15 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             {
                 try
                 {
-                    var apiKey = _apiKeyGenerator.generateApiKey("000000000000000");
-                    var customHeaders = _apiKeyGenerator.generateCustomHeaders(apiKey);
-
-                    var respuesta = await _clienteApi.CreaUsuarioAsync(new CreaUsuarioRequest() { CodigoUsuarioCorresponsal = _user.UserName });
+                    var respuesta = await _clienteApi.CreaUsuarioAsync(
+                        new CreaUsuarioRequest() 
+                        { 
+                            CodigoUsuarioCorresponsal = _user.UserName,
+                            NombreUsuarioCorresponsal = request.NombreMostrar,
+                            Contrasenia = request.Contrasenna,
+                            Correo = request.CorreoElectronico,
+                            SecuencialCuenta = request.Cuenta
+                        });
 
                     if (respuesta is null)
                     {

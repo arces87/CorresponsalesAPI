@@ -14,6 +14,7 @@ using FBSConsolaCBWebApi.Infraestructure.Interfaces.Nomenclador;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Repositories.Nomenclador;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,25 +100,34 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
             services.AddSingleton<Corresponsales.Command.Api.IFacilitoApi>(new Corresponsales.Command.Api.FacilitoApi(confCommand));            
             services.AddSingleton<Corresponsales.Command.Api.IGeneralesApi>(new Corresponsales.Command.Api.GeneralesApi(confCommand));
             services.AddSingleton<Corresponsales.Command.Api.ICuentasPorCobrarApi>(new Corresponsales.Command.Api.CuentasPorCobrarApi(confCommand));
+            services.AddSingleton<Corresponsales.Command.Api.IPagoApi>(new Corresponsales.Command.Api.PagoApi(confCommand));
             services.AddSingleton<IUsuarioApi>(new UsuarioApi(confCommand));
 
             services.AddSingleton<Corresponsales.Query.Api.ICaptacionesVistaApi>(new Corresponsales.Query.Api.CaptacionesVistaApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.ICarteraApi>(new Corresponsales.Query.Api.CarteraApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.IFacilitoApi>(new Corresponsales.Query.Api.FacilitoApi(confQuery));
-            services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));            
+            services.AddSingleton<Corresponsales.Query.Api.IGeneralesApi>(new Corresponsales.Query.Api.GeneralesApi(confQuery));
             services.AddSingleton<Corresponsales.Query.Api.ICuentasPorCobrarApi>(new Corresponsales.Query.Api.CuentasPorCobrarApi(confQuery));
-            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));           
+            services.AddSingleton<Corresponsales.Query.Api.IPagoApi>(new Corresponsales.Query.Api.PagoApi(confQuery));
+            services.AddSingleton<IPersonaApi>(new PersonaApi(confQuery));
 
-            services.AddTransient<FinancialRequestInfo>();
+            services.AddTransient<Corresponsales.AccesoFinancial.Api.FinancialRequestInfo>(x =>
+            {
+                var httpContextAccessor = x.GetRequiredService<IHttpContextAccessor>();
+                var authInfo = x.GetRequiredService<Corresponsales.AccesoFinancial.Api.AuthInfo>();
+                var configuration = x.GetRequiredService<IConfiguration>();
+                return new Corresponsales.AccesoFinancial.Api.FinancialRequestInfo(httpContextAccessor, authInfo, configuration);
+            });
             services.AddSingleton(x =>
             {
                 var opts = x.GetRequiredService<IConfiguration>();
 
-                var token = new AuthInfo
+                var token = new Corresponsales.AccesoFinancial.Api.AuthInfo
                 {
                     BaseUrl = opts["FinancialOptions:ServiceUrl"],
                     LoginEndpoint = opts["FinancialOptions:LoginEndpoint"],
-                    RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"]                    
+                    RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"],
+                    Users = new System.Collections.Generic.Dictionary<string, Corresponsales.AccesoFinancial.Api.User>()
                 };               
 
                 return token;

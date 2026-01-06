@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Polly.Retry;
-using Polly;
-using RestSharp;
-using System.Net;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using RestSharp.Authenticators;
-using System.Threading.Tasks;
-using System.Threading;
-using NETCore.Encrypt;
-using Corresponsales.AccesoFinancial.Client;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Polly;
+using Polly.Retry;
+using RestSharp;
+using RestSharp.Authenticators;
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Corresponsales.AccesoFinancial.Api
 {
@@ -20,42 +24,145 @@ namespace Corresponsales.AccesoFinancial.Api
         private readonly AuthInfo _authInfo;
         private readonly IConfiguration _configuracion;
 
-        public FinancialRequestInfo(IHttpContextAccessor httpContextAccessor, AuthInfo authInfo, IConfiguration configuration)
+        public FinancialRequestInfo(IHttpContextAccessor httpContextAccessor, AuthInfo authInfo, IConfiguration configuration = null)
         {
             _httpContextAccessor = httpContextAccessor;
             _authInfo = authInfo;
             _configuracion = configuration;
         }
 
-        private string GetUserClient()
-            => _httpContextAccessor.HttpContext?.Request.Headers["X-User-Client"].ToString();
+        private string GetUserAgent()
+            => _httpContextAccessor.HttpContext?.Request.Headers["X-User-Agent"].ToString();
 
-        private string GetCodigoUsuario()
-             => _httpContextAccessor.HttpContext?.Request.Headers["X-CodigoUsuario"].ToString();
+        private string GetAuthenticatedUsername()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user?.Identity?.IsAuthenticated == true)
+            {
+                // Intentar obtener desde el claim específico
+                var username = user.FindFirst("financial_username")?.Value;
+                if (!string.IsNullOrEmpty(username))
+                    return username;
 
-        private string GetClave()
-             => _httpContextAccessor.HttpContext?.Request.Headers["X-Clave"].ToString();
+                // Fallback al username del claim Name
+                return user.Identity.Name ?? user.FindFirst(ClaimTypes.Name)?.Value;
+            }
+            return null;
+        }
+
+        private string GetAuthenticatedPassword()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user?.Identity?.IsAuthenticated == true)
+            {
+                var encryptedPassword = user.FindFirst("financial_password")?.Value;
+                if (!string.IsNullOrEmpty(encryptedPassword) && _configuracion != null)
+                {
+                    try
+                    {
+                        var encryptionKey = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
+                        var cipherText = Convert.FromBase64String(encryptedPassword);
+                        var decryptedPassword = DecryptStringFromBytes_Aes(cipherText, encryptionKey, encryptionKey);
+                        return decryptedPassword;
+                    }
+                    catch
+                    {
+                        // Si falla la desencriptación, retornar null para usar fallback
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private string DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
+        {
+            // Check arguments.
+            if (cipherText == null || cipherText.Length <= 0)
+                throw new ArgumentNullException("cipherText");
+            if (Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Key");
+            if (IV == null || IV.Length <= 0)
+                throw new ArgumentNullException("IV");
+
+            // Declare the string used to hold the decrypted text.
+            string plaintext = null;
+
+            // Create an Aes object with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decryptor to perform the stream transform.
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for decryption.
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            // Read the decrypted bytes from the decrypting stream
+                            // and place them in a string.
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+
+            return plaintext;
+        }
 
         private User GetTokenData()
         {
-            //var userAgent = GetUserClient();
+            // Asegurar que Users esté inicializado
+            if (_authInfo.Users == null)
+                _authInfo.Users = new System.Collections.Generic.Dictionary<string, User>();
 
-            //if (userAgent == ClienteConstants.Web)
-            //    return _authInfo.Users[_authInfo.UsuarioAdmin];                      
+            // Prioridad 1: Usar credenciales del usuario autenticado (solo para API Móvil)
+            var authenticatedUsername = GetAuthenticatedUsername();
+            var authenticatedPassword = GetAuthenticatedPassword();
 
-            //var codigoUsuario = EncryptProvider.AESDecrypt(GetCodigoUsuario(), "corresponsaleskeyencryptdecrypts");
-
-            var datosLogin = _configuracion.GetSection("FinancialOptions");
-                      
-            var result = _authInfo.Users.TryGetValue(datosLogin["UsuarioAdmin"], out User user);
-
-            if(!result)
+            if (!string.IsNullOrEmpty(authenticatedUsername) && !string.IsNullOrEmpty(authenticatedPassword))
             {
-                //user = new User { Usuario = codigoUsuario, Password = EncryptProvider.AESDecrypt(GetClave(), "corresponsaleskeyencryptdecrypts") };
-                user = new User { Usuario = datosLogin["UsuarioAdmin"], Password = datosLogin["ClaveAdmin"] };
-                _authInfo.Users.Add(datosLogin["UsuarioAdmin"], user);
+                var userKey = $"authenticated_{authenticatedUsername}";
+
+                if (!_authInfo.Users.TryGetValue(userKey, out User user))
+                {
+                    user = new User
+                    {
+                        Usuario = authenticatedUsername,
+                        Password = authenticatedPassword
+                    };
+                    _authInfo.Users[userKey] = user;
+                }
+                else
+                {
+                    // Actualizar credenciales si han cambiado
+                    user.Usuario = authenticatedUsername;
+                    user.Password = authenticatedPassword;
+                }
+
+                return user;
             }
-            return user;
+
+            // Prioridad 2: Usar credenciales preconfiguradas (fallback para Consola o si no hay credenciales en JWT)
+            // Intentar usar UsuarioAdmin si está configurado
+            if (!string.IsNullOrEmpty(_authInfo.UsuarioAdmin) && _authInfo.Users.TryGetValue(_authInfo.UsuarioAdmin, out User adminUser))
+                return adminUser;
+
+            // Si hay usuarios pero no hay UsuarioAdmin configurado, usar el primero disponible
+            if (_authInfo.Users.Count > 0)
+                return _authInfo.Users.First().Value;
+
+            var userAgent = GetUserAgent();
+
+            if (string.IsNullOrEmpty(userAgent) || !_authInfo.Users.TryGetValue(userAgent, out User configuredUser))
+                throw new Exception($"No se ha configurado el usuario para el User-Agent {userAgent}");
+
+            return configuredUser;
         }
 
         public async Task<RestResponse<T>> ExecAsync<T>(RestRequest req, CancellationToken cancellationToken = default)
@@ -82,11 +189,9 @@ namespace Corresponsales.AccesoFinancial.Api
                         {
                             usuario = usuario.Usuario,
                             password = usuario.Password,
-                            //usuario = "ADMIN",
-                            //password = "123456",
                             numeroDeIntento = 1,
                             usaHuellaDigital = false,
-                            maquina = "AMB-CM",
+                            maquina = "AMB-CS",
                             ipMaquinaIngreso = "fe80::7cea:e2a4:d0f7:6adb%5"
                         });
                         return await CreateCliente(usuario.Token).ExecuteAsync<TokenData>(request);
@@ -131,13 +236,11 @@ namespace Corresponsales.AccesoFinancial.Api
                                     var request = new RestRequest(_authInfo.LoginEndpoint, Method.Post);
                                     request.AddJsonBody(new
                                     {
-                                        //usuario = usuario.Usuario,
-                                        //password = usuario.Password,
-                                        usuario = "ADMIN",                                        
-                                        password = "123456",
+                                        usuario = usuario.Usuario,
+                                        password = usuario.Password,
                                         numeroDeIntento = 1,
                                         usaHuellaDigital = false,
-                                        maquina = "AMB-CM",
+                                        maquina = "AMB-CS",
                                         ipMaquinaIngreso = "fe80::7cea:e2a4:d0f7:6adb%5"
                                     });
                                     return await CreateCliente(usuario.Token).ExecuteAsync<TokenData>(request);
