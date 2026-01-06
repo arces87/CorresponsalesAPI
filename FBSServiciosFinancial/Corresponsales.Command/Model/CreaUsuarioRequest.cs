@@ -35,9 +35,22 @@ namespace Corresponsales.Command.Model
         /// Initializes a new instance of the <see cref="CreaUsuarioRequest" /> class.
         /// </summary>
         /// <param name="codigoUsuarioCorresponsal">codigoUsuarioCorresponsal.</param>
-        public CreaUsuarioRequest(string codigoUsuarioCorresponsal = default(string))
+        /// <param name="nombreUsuarioCorresponsal">nombreUsuarioCorresponsal.</param>
+        /// <param name="contrasenia">contrasenia.</param>
+        /// <param name="correo">correo.</param>
+        /// <param name="secuencialCuenta">secuencialCuenta.</param>
+        public CreaUsuarioRequest(
+            string codigoUsuarioCorresponsal = default(string),
+            string nombreUsuarioCorresponsal = default(string),
+            string contrasenia = default(string),
+            string correo = default(string),
+            int secuencialCuenta = default(int))
         {
             this.CodigoUsuarioCorresponsal = codigoUsuarioCorresponsal;
+            this.NombreUsuarioCorresponsal = nombreUsuarioCorresponsal;
+            this.Contrasenia = contrasenia;
+            this.Correo = correo;
+            this.SecuencialCuenta = secuencialCuenta;
         }
 
         /// <summary>
@@ -45,6 +58,30 @@ namespace Corresponsales.Command.Model
         /// </summary>
         [DataMember(Name = "codigoUsuarioCorresponsal", EmitDefaultValue = true)]
         public string CodigoUsuarioCorresponsal { get; set; }
+
+        /// <summary>
+        /// Gets or Sets NombreUsuarioCorresponsal
+        /// </summary>
+        [DataMember(Name = "nombreUsuarioCorresponsal", EmitDefaultValue = true)]
+        public string NombreUsuarioCorresponsal { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Contrasenia
+        /// </summary>
+        [DataMember(Name = "contrasenia", EmitDefaultValue = true)]
+        public string Contrasenia { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Correo
+        /// </summary>
+        [DataMember(Name = "correo", EmitDefaultValue = true)]
+        public string Correo { get; set; }
+
+        /// <summary>
+        /// Gets or Sets SecuencialCuenta
+        /// </summary>
+        [DataMember(Name = "secuencialCuenta", EmitDefaultValue = true)]
+        public int SecuencialCuenta { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -55,6 +92,10 @@ namespace Corresponsales.Command.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class CreaUsuarioRequest {\n");
             sb.Append("  CodigoUsuarioCorresponsal: ").Append(CodigoUsuarioCorresponsal).Append("\n");
+            sb.Append("  NombreUsuarioCorresponsal: ").Append(NombreUsuarioCorresponsal).Append("\n");
+            sb.Append("  Contrasenia: ").Append(Contrasenia).Append("\n");
+            sb.Append("  Correo: ").Append(Correo).Append("\n");
+            sb.Append("  SecuencialCuenta: ").Append(SecuencialCuenta).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
