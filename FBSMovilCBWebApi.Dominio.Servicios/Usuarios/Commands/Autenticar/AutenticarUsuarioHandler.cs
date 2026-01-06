@@ -147,6 +147,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                         usuario.Comisiones.Deposito = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Deposito.Comisiones);
                                     if (jsonNegocio.Retiro != null)
                                         usuario.Comisiones.Retiro = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Retiro.Comisiones);
+                                    if (jsonNegocio.AbonoPrestamos != null)
+                                        usuario.Comisiones.AbonoPrestamos = _mapper.Map<ComisionOperacionMS>(jsonNegocio.AbonoPrestamos.Comisiones);
+                                    if (jsonNegocio.Obligaciones != null)
+                                        usuario.Comisiones.Obligaciones = _mapper.Map<ComisionOperacionMS>(jsonNegocio.Obligaciones.Comisiones);
                                 }
 
                                 if (jsonNegocio.VerificarGeolocalizacion)
