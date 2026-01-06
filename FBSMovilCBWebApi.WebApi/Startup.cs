@@ -56,6 +56,7 @@ namespace FBSMovilCBWebApi.WebApi
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "AutorizacionFBS.Api", Version = "v1" });
+                swagger.CustomSchemaIds(type => type.FullName);
 
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

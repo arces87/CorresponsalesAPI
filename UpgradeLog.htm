@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+ <html xmlns:msxsl="urn:schemas-microsoft-com:xslt"><head><meta content="en-us" http-equiv="Content-Language" /><meta content="text/html; charset=utf-16" http-equiv="Content-Type" /><title _locID="ConversionReport0">
+          Informe de migración
+        </title><style> 
+                    /* Body style, for the entire document */
+                    body
+                    {
+                        background: #F3F3F4;
+                        color: #1E1E1F;
+                        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    /* Header1 style, used for the main title */
+                    h1
+                    {
+                        padding: 10px 0px 10px 10px;
+                        font-size: 21pt;
+                        background-color: #E2E2E2;
+                        border-bottom: 1px #C1C1C2 solid; 
+                        color: #201F20;
+                        margin: 0;
+                        font-weight: normal;
+                    }
+
+                    /* Header2 style, used for "Overview" and other sections */
+                    h2
+                    {
+                        font-size: 18pt;
+                        font-weight: normal;
+                        padding: 15px 0 5px 0;
+                        margin: 0;
+                    }
+
+                    /* Header3 style, used for sub-sections, such as project name */
+                    h3
+                    {
+                        font-weight: normal;
+                        font-size: 15pt;
+                        margin: 0;
+                        padding: 15px 0 5px 0;
+                        background-color: transparent;
+                    }
+
+                    /* Color all hyperlinks one color */
+                    a
+                    {
+                        color: #1382CE;
+                    }
+
+                    /* Table styles */ 
+                    table
+                    {
+                        border-spacing: 0 0;
+                        border-collapse: collapse;
+                        font-size: 10pt;
+                    }
+
+                    table th
+                    {
+                        background: #E7E7E8;
+                        text-align: left;
+                        text-decoration: none;
+                        font-weight: normal;
+                        padding: 3px 6px 3px 6px;
+                    }
+
+                    table td
+                    {
+                        vertical-align: top;
+                        padding: 3px 6px 5px 5px;
+                        margin: 0px;
+                        border: 1px solid #E7E7E8;
+                        background: #F7F7F8;
+                    }
+
+                    /* Local link is a style for hyperlinks that link to file:/// content, there are lots so color them as 'normal' text until the user mouse overs */
+                    .localLink
+                    {
+                        color: #1E1E1F;
+                        background: #EEEEED;
+                        text-decoration: none;
+                    }
+
+                    .localLink:hover
+                    {
+                        color: #1382CE;
+                        background: #FFFF99;
+                        text-decoration: none;
+                    }
+
+                    /* Center text, used in the over views cells that contain message level counts */ 
+                    .textCentered
+                    {
+                        text-align: center;
+                    }
+
+                    /* The message cells in message tables should take up all avaliable space */
+                    .messageCell
+                    {
+                        width: 100%;
+                    }
+
+                    /* Padding around the content after the h1 */ 
+                    #content 
+                    {
+	                    padding: 0px 12px 12px 12px; 
+                    }
+
+                    /* The overview table expands to width, with a max width of 97% */ 
+                    #overview table
+                    {
+                        width: auto;
+                        max-width: 75%; 
+                    }
+
+                    /* The messages tables are always 97% width */
+                    #messages table
+                    {
+                        width: 97%;
+                    }
+
+                    /* All Icons */
+                    .IconSuccessEncoded, .IconInfoEncoded, .IconWarningEncoded, .IconErrorEncoded
+                    {
+                        min-width:18px;
+                        min-height:18px; 
+                        background-repeat:no-repeat;
+                        background-position:center;
+                    }
+
+                    /* Success icon encoded */
+                    .IconSuccessEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconSuccess#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABcElEQVR4Xq2TsUsCURzHv15g8ZJcBWlyiYYgCIWcb9DFRRwMW5TA2c0/QEFwFkxxUQdxVlBwCYWOi6IhWgQhBLHJUCkhLr/BW8S7gvrAg+N+v8/v+x68Z8MGy+XSCyABQAXgBgHGALoASkIIDWSLeLBetdHryMjd5IxQPWT4rn1c/P7+xxp72Cs9m5SZ0Bq2vPnbPFafK2zDvmNHypdC0BPkLlQhxJsCAhQoZwdZU5mwxh720qGo8MzTxTTKZDPCx2HoVzp6lz0Q9tKhyx0kGs8Ny+TkWRKk8lCROwEduhyg9l/6lunOPSfmH3NUH6uQ0KHLAe7JYvJjevm+DAMGJHToKtigE+vwvIidxLamb8IBY9e+C5LiXREkfho3TSd06HJA13/oh6T51MTsfQbHrsMynQ5dDihFjiK8JJAU9AKIWTp76dCVN7HWHrajmUEGvyF9nkbAE6gLIS7kTUyuf2gscLoJrElZo/Mvj+nPz/kLTmfnEwP3tB0AAAAASUVORK5CYII=);
+                    }
+
+                    /* Information icon encoded */
+                    .IconInfoEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconInformation#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4Xs2TsUoDQRRF7wwoziokjZUKadInhdhukR9YP8DMX1hYW+QvdsXa/QHBbcXC7W0CamWTQnclFutceIQJwwaWNLlwm5k5d94M76mmaeCrrmsLYOocY12FcxZFUeozCqKqqgYA8uevv1H6VuPxcwlfk5N92KHBxfFeCSAxxswlYAW/Xr989x/mv9gkhtyMDhcAxgzRsp7flj8B/HF1RsMXq+NZMkopaHe7lbKxQUEIGbKsYNoGn969060hZBkQex/W8oRQwsQaW2o3Ago2SVcJUzAgY3N0lTCZZm+zPS8HB51gMmS1DEYyOz9acKO1D8JWTlafKIMxdhvlfdyT94Vv5h7P8Ky7nQzACmhvKq3zk3PjW9asz9D/1oigecsioooAAAAASUVORK5CYII=);
+                    }
+
+                    /* Warning icon encoded */
+                    .IconWarningEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconWarning#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAx0lEQVR4XpWSMQ7CMAxFf4xAyBMLCxMrO8dhaBcuwdCJS3RJBw7SA/QGTCxdWJgiQYWKXJWKIXHIlyw5lqr34tQgEOdcBsCOx5yZK3hCCKdYXneQkh4pEfqzLfu+wVDSyyzFoJjfz9NB+pAF+eizx2Vruts0k15mPgvS6GYvpVtQhB61IB/dk6AF6fS4Ben0uIX5odtFe8Q/eW1KvFeH4e8khT6+gm5B+t3juyDt7n0jpe+CANTd+oTUjN/U3yVaABnSUjFz/gFq44JaVSCXeQAAAABJRU5ErkJggg==);
+                    }
+
+                    /* Error icon encoded */
+                    .IconErrorEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconError#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR4XqWTvUoEQRCE6wYPZUA80AfwAQz23uCMjA7MDRQEIzPBVEyNTQUFIw00vcQTTMzuAh/AxEQQT8HF/3G/oGGnEUGuoNnd6qoZuqltyKEsyzVJq5I6rnUp6SjGeGhESikzzlc1eL7opfuVbrqbU1Zw9NCgtQMaZpY0eNnaaL2fHusvTK5vKu7sjSS1Y4y3QUA6K3e3Mau5UFDyMP7tYF9o8cAHZv68vipoIJg971PZIZ5HiwdvYGGvFVFHmGmZ2MxwmQYPXubPl9Up0tfoMQGetXd6mRbvhBw+boZ6WF7Mbv1+GsHRk0fQmPAH1GfmZirbCfDJ61tw3Px8/8pZsPAG4jlVhcPgZ7adwNWBB68lkRQWFiTgFlbnLY3DGGM7izIJIyT/jjIvEJw6fdJTc6krDzh6aMwMP9bvDH4ADSsa9uSWVJkAAAAASUVORK5CYII=);
+                    }
+                 </style><script type="text/javascript" language="javascript"> 
+          
+            // Startup 
+            // Hook up the the loaded event for the document/window, to linkify the document content
+            var startupFunction = function() { linkifyElement("messages"); };
+            
+            if(window.attachEvent)
+            {
+              window.attachEvent('onload', startupFunction);
+            }
+            else if (window.addEventListener) 
+            {
+              window.addEventListener('load', startupFunction, false);
+            }
+            else 
+            {
+              document.addEventListener('load', startupFunction, false);
+            } 
+            
+            // Toggles the visibility of table rows with the specified name 
+            function toggleTableRowsByName(name)
+            {
+               var allRows = document.getElementsByTagName('tr');
+               for (i=0; i < allRows.length; i++)
+               {
+                  var currentName = allRows[i].getAttribute('name');
+                  if(!!currentName && currentName.indexOf(name) == 0)
+                  {
+                      var isVisible = allRows[i].style.display == ''; 
+                      isVisible ? allRows[i].style.display = 'none' : allRows[i].style.display = '';
+                  }
+               }
+            }
+            
+            function scrollToFirstVisibleRow(name) 
+            {
+               var allRows = document.getElementsByTagName('tr');
+               for (i=0; i < allRows.length; i++)
+               {
+                  var currentName = allRows[i].getAttribute('name');
+                  var isVisible = allRows[i].style.display == ''; 
+                  if(!!currentName && currentName.indexOf(name) == 0 && isVisible)
+                  {
+                     allRows[i].scrollIntoView(true); 
+                     return true; 
+                  }
+               }
+               
+               return false;
+            }
+            
+            // Linkifies the specified text content, replaces candidate links with html links 
+            function linkify(text)
+            {
+                 if(!text || 0 === text.length)
+                 {
+                     return text; 
+                 }
+
+                 // Find http, https and ftp links and replace them with hyper links 
+                 var urlLink = /(http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9\-\._\?\,\/\\\+&%\$#\=~;\{\}])*/gi;
+                 
+                 return text.replace(urlLink, '<a href="$&">$&</a>') ;
+            }
+            
+            // Linkifies the specified element by ID
+            function linkifyElement(id)
+            {
+                var element = document.getElementById(id);
+                if(!!element)
+                {
+                  element.innerHTML = linkify(element.innerHTML); 
+                }
+            }
+            
+            function ToggleMessageVisibility(projectName)
+            {
+              if(!projectName || 0 === projectName.length)
+              {
+                return; 
+              }
+              
+              toggleTableRowsByName("MessageRowClass" + projectName);
+              toggleTableRowsByName('MessageRowHeaderShow' + projectName);
+              toggleTableRowsByName('MessageRowHeaderHide' + projectName); 
+            }
+            
+            function ScrollToFirstVisibleMessage(projectName)
+            {
+              if(!projectName || 0 === projectName.length)
+              {
+                return; 
+              }
+              
+              // First try the 'Show messages' row
+              if(!scrollToFirstVisibleRow('MessageRowHeaderShow' + projectName))
+              {
+                // Failed to find a visible row for 'Show messages', try an actual message row 
+                scrollToFirstVisibleRow('MessageRowClass' + projectName); 
+              }
+            }
+           </script></head><body><h1 _locID="ConversionReport">
+          Informe de migración - </h1><div id="content"><h2 _locID="OverviewTitle">Información general</h2><div id="overview"><table><tr><th></th><th _locID="ProjectTableHeader">Proyecto</th><th _locID="PathTableHeader">Ruta de acceso</th><th _locID="ErrorsTableHeader">Errores</th><th _locID="WarningsTableHeader">Advertencias</th><th _locID="MessagesTableHeader">Mensajes</th></tr><tr><td class="IconErrorEncoded" /><td><strong><a href="#WebApiReportes">WebApiReportes</a></strong></td><td>WebApiReportes\WebApiReportes.rptproj</td><td class="textCentered"><a href="#WebApiReportesError">1</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#Corresponsales.AccesoFinancial">Corresponsales.AccesoFinancial</a></strong></td><td>FBSServiciosFinancial\Corresponsales.AccesoFinancial\Corresponsales.AccesoFinancial.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#Corresponsales.Command">Corresponsales.Command</a></strong></td><td>FBSServiciosFinancial\Corresponsales.Command\Corresponsales.Command.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#Corresponsales.Query">Corresponsales.Query</a></strong></td><td>FBSServiciosFinancial\Corresponsales.Query\Corresponsales.Query.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.DAL">FBS.DAL</a></strong></td><td>FBS_Core\FBS.DAL\FBS.DAL.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.Dominio.Modelos">FBS.Dominio.Modelos</a></strong></td><td>FBS_Core\FBS.Dominio.Modelos\FBS.Dominio.Modelos.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.Dominio.Servicios">FBS.Dominio.Servicios</a></strong></td><td>FBS_Core\FBS.Dominio.Servicios\FBS.Dominio.Servicios.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.Identidad.DAL">FBS.Identidad.DAL</a></strong></td><td>FBS_Core\FBS.Identidad.DAL\FBS.Identidad.DAL.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.Identidad.Dominio.Servicios">FBS.Identidad.Dominio.Servicios</a></strong></td><td>FBS_Core\FBS.Identidad.Dominio.Servicios\FBS.Identidad.Dominio.Servicios.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.Identidad.Infraestructura">FBS.Identidad.Infraestructura</a></strong></td><td>FBS_Core\FBS.Identidad.Infraestructura\FBS.Identidad.Infraestructura.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBS.Infraestructura">FBS.Infraestructura</a></strong></td><td>FBS_Core\FBS.Infraestructura\FBS.Infraestructura.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSConsolaCBBaseDatos">FBSConsolaCBBaseDatos</a></strong></td><td>FBSConsolaCBBaseDatos\FBSConsolaCBBaseDatos.sqlproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSConsolaCBWebApi.DAL">FBSConsolaCBWebApi.DAL</a></strong></td><td>FBSConsolaCBWebApi.DAL\FBSConsolaCBWebApi.DAL.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSConsolaCBWebApi.Dominio.Servicios">FBSConsolaCBWebApi.Dominio.Servicios</a></strong></td><td>FBSConsolaCBWebApi.Dominio.Servicios\FBSConsolaCBWebApi.Dominio.Servicios.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSConsolaCBWebApi.Infraestructura">FBSConsolaCBWebApi.Infraestructura</a></strong></td><td>FBSConsolaCBWebApi.Infraestructura\FBSConsolaCBWebApi.Infraestructura.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSConsolaCBWebApi.WebApi">FBSConsolaCBWebApi.WebApi</a></strong></td><td>FBSConsolaCBWebApi.WebApi\FBSConsolaCBWebApi.WebApi.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSCore">FBSCore</a></strong></td><td>FBSCore</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSCoreBase">FBSCoreBase</a></strong></td><td>FBSCoreBase</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSCoreIdentidad">FBSCoreIdentidad</a></strong></td><td>FBSCoreIdentidad</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSMovilCBWebApi.Dominio.Servicios">FBSMovilCBWebApi.Dominio.Servicios</a></strong></td><td>FBSMovilCBWebApi.Dominio.Servicios\FBSMovilCBWebApi.Dominio.Servicios.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSMovilCBWebApi.Infraestructura">FBSMovilCBWebApi.Infraestructura</a></strong></td><td>FBSMovilCBWebApi.Infraestructura\FBSMovilCBWebApi.Infraestructura.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#FBSMovilCBWebApi.WebApi">FBSMovilCBWebApi.WebApi</a></strong></td><td>FBSMovilCBWebApi.WebApi\FBSMovilCBWebApi.WebApi.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#Solution Items">Solution Items</a></strong></td><td>Solution Items</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#WebApi Aplicativo Movil">WebApi Aplicativo Movil</a></strong></td><td>WebApi Aplicativo Movil</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#WebApi Aplicativo Web">WebApi Aplicativo Web</a></strong></td><td>WebApi Aplicativo Web</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#Solution"><span _locID="OverviewSolutionSpan">Solución</span></a></strong></td><td>FBSConsolaCBWebApi.sln</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#" onclick="ScrollToFirstVisibleMessage('Solution'); return false;">1</a></td></tr></table></div><h2 _locID="SolutionAndProjectsTitle">Solución y proyectos</h2><div id="messages"><a name="WebApiReportes" /><h3>WebApiReportes</h3><table><tr id="WebApiReportesHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr name="ErrorRowClassWebApiReportes"><td class="IconErrorEncoded"><a name="WebApiReportesError" /></td><td class="messageCell"><strong>WebApiReportes\WebApiReportes.rptproj:
+        </strong><span>No se encontró la aplicación en la que se basa este tipo de proyecto. Siga este vínculo para obtener más información: f14b399a-7131-4c87-9e4b-1186c45ef12d</span></td></tr></table><a name="Corresponsales.AccesoFinancial" /><h3>Corresponsales.AccesoFinancial</h3><table><tr id="Corresponsales.AccesoFinancialHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">Corresponsales.AccesoFinancial no registró mensajes.
+                  </td></tr></table><a name="Corresponsales.Command" /><h3>Corresponsales.Command</h3><table><tr id="Corresponsales.CommandHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">Corresponsales.Command no registró mensajes.
+                  </td></tr></table><a name="Corresponsales.Query" /><h3>Corresponsales.Query</h3><table><tr id="Corresponsales.QueryHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">Corresponsales.Query no registró mensajes.
+                  </td></tr></table><a name="FBS.DAL" /><h3>FBS.DAL</h3><table><tr id="FBS.DALHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.DAL no registró mensajes.
+                  </td></tr></table><a name="FBS.Dominio.Modelos" /><h3>FBS.Dominio.Modelos</h3><table><tr id="FBS.Dominio.ModelosHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.Dominio.Modelos no registró mensajes.
+                  </td></tr></table><a name="FBS.Dominio.Servicios" /><h3>FBS.Dominio.Servicios</h3><table><tr id="FBS.Dominio.ServiciosHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.Dominio.Servicios no registró mensajes.
+                  </td></tr></table><a name="FBS.Identidad.DAL" /><h3>FBS.Identidad.DAL</h3><table><tr id="FBS.Identidad.DALHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.Identidad.DAL no registró mensajes.
+                  </td></tr></table><a name="FBS.Identidad.Dominio.Servicios" /><h3>FBS.Identidad.Dominio.Servicios</h3><table><tr id="FBS.Identidad.Dominio.ServiciosHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.Identidad.Dominio.Servicios no registró mensajes.
+                  </td></tr></table><a name="FBS.Identidad.Infraestructura" /><h3>FBS.Identidad.Infraestructura</h3><table><tr id="FBS.Identidad.InfraestructuraHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.Identidad.Infraestructura no registró mensajes.
+                  </td></tr></table><a name="FBS.Infraestructura" /><h3>FBS.Infraestructura</h3><table><tr id="FBS.InfraestructuraHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBS.Infraestructura no registró mensajes.
+                  </td></tr></table><a name="FBSConsolaCBBaseDatos" /><h3>FBSConsolaCBBaseDatos</h3><table><tr id="FBSConsolaCBBaseDatosHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSConsolaCBBaseDatos no registró mensajes.
+                  </td></tr></table><a name="FBSConsolaCBWebApi.DAL" /><h3>FBSConsolaCBWebApi.DAL</h3><table><tr id="FBSConsolaCBWebApi.DALHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSConsolaCBWebApi.DAL no registró mensajes.
+                  </td></tr></table><a name="FBSConsolaCBWebApi.Dominio.Servicios" /><h3>FBSConsolaCBWebApi.Dominio.Servicios</h3><table><tr id="FBSConsolaCBWebApi.Dominio.ServiciosHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSConsolaCBWebApi.Dominio.Servicios no registró mensajes.
+                  </td></tr></table><a name="FBSConsolaCBWebApi.Infraestructura" /><h3>FBSConsolaCBWebApi.Infraestructura</h3><table><tr id="FBSConsolaCBWebApi.InfraestructuraHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSConsolaCBWebApi.Infraestructura no registró mensajes.
+                  </td></tr></table><a name="FBSConsolaCBWebApi.WebApi" /><h3>FBSConsolaCBWebApi.WebApi</h3><table><tr id="FBSConsolaCBWebApi.WebApiHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSConsolaCBWebApi.WebApi no registró mensajes.
+                  </td></tr></table><a name="FBSCore" /><h3>FBSCore</h3><table><tr id="FBSCoreHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSCore no registró mensajes.
+                  </td></tr></table><a name="FBSCoreBase" /><h3>FBSCoreBase</h3><table><tr id="FBSCoreBaseHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSCoreBase no registró mensajes.
+                  </td></tr></table><a name="FBSCoreIdentidad" /><h3>FBSCoreIdentidad</h3><table><tr id="FBSCoreIdentidadHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSCoreIdentidad no registró mensajes.
+                  </td></tr></table><a name="FBSMovilCBWebApi.Dominio.Servicios" /><h3>FBSMovilCBWebApi.Dominio.Servicios</h3><table><tr id="FBSMovilCBWebApi.Dominio.ServiciosHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSMovilCBWebApi.Dominio.Servicios no registró mensajes.
+                  </td></tr></table><a name="FBSMovilCBWebApi.Infraestructura" /><h3>FBSMovilCBWebApi.Infraestructura</h3><table><tr id="FBSMovilCBWebApi.InfraestructuraHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSMovilCBWebApi.Infraestructura no registró mensajes.
+                  </td></tr></table><a name="FBSMovilCBWebApi.WebApi" /><h3>FBSMovilCBWebApi.WebApi</h3><table><tr id="FBSMovilCBWebApi.WebApiHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">FBSMovilCBWebApi.WebApi no registró mensajes.
+                  </td></tr></table><a name="Solution Items" /><h3>Solution Items</h3><table><tr id="Solution ItemsHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">Solution Items no registró mensajes.
+                  </td></tr></table><a name="WebApi Aplicativo Movil" /><h3>WebApi Aplicativo Movil</h3><table><tr id="WebApi Aplicativo MovilHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">WebApi Aplicativo Movil no registró mensajes.
+                  </td></tr></table><a name="WebApi Aplicativo Web" /><h3>WebApi Aplicativo Web</h3><table><tr id="WebApi Aplicativo WebHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">WebApi Aplicativo Web no registró mensajes.
+                  </td></tr></table><a name="Solution" /><h3 _locID="ProjectDisplayNameHeader">Solución</h3><table><tr id="SolutionHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Mensaje</th></tr><tr name="MessageRowHeaderShowSolution"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="ShowAdditionalMessages" href="#" name="SolutionMessage" onclick="ToggleMessageVisibility('Solution'); return false;">
+          Mostrar 1 mensajes adicionales
+        </a></td></tr><tr name="MessageRowClassSolution" style="display: none"><td class="IconInfoEncoded"><a name="SolutionMessage" /></td><td class="messageCell"><strong>FBSConsolaCBWebApi.sln:
+        </strong><span>El archivo de soluciones no requiere migración.</span></td></tr><tr style="display: none" name="MessageRowHeaderHideSolution"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="HideAdditionalMessages" href="#" name="SolutionMessage" onclick="ToggleMessageVisibility('Solution'); return false;">
+          Ocultar 1 mensajes adicionales
+        </a></td></tr></table></div></div></body></html>
