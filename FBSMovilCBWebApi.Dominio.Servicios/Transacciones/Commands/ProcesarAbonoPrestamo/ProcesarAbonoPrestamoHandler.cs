@@ -203,22 +203,22 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             if (Valor > jsonNegocio.AbonoPrestamos.Limites.MontoMaximoPorTransaccion)
             {
-                throw new Exception($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.AbonoPrestamos.Limites.MontoMaximoPorTransaccion} USD.");
+                throw new Exception($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.AbonoPrestamos.Limites.MontoMaximoPorTransaccion} PEN.");
             }
 
             if (Valor < jsonNegocio.AbonoPrestamos.Limites.MontoMinimoPorTransaccion) 
             {
-                throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.AbonoPrestamos.Limites.MontoMinimoPorTransaccion} USD.");
+                throw new Exception($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.AbonoPrestamos.Limites.MontoMinimoPorTransaccion} PEN.");
             }
 
             if (montoTransaccionesDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
             }
 
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.AbonoPrestamos.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.AbonoPrestamos.Limites.MontoMaximoDiarioDeTransacciones} USD.");
+                throw new Exception($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.Retiro.Limites.MontoMaximoDiarioDeTransacciones - (saldoActual + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.AbonoPrestamos.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
             }
 
             if (cuentaAsociada && saldoCuenta - Valor <= 0)
