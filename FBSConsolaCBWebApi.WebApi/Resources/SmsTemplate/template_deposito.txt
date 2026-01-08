@@ -1,1 +1,1 @@
-﻿LUCHA CAMPESINA, deposito exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por $[:VALOROPERACION:] en corresponsal '[:NOMBRECORRESPONSAL:]'
+﻿COAC. deposito exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por $[:VALOROPERACION:] en corresponsal '[:NOMBRECORRESPONSAL:]'

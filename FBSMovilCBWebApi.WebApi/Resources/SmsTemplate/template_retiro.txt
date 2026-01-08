@@ -1,1 +1,1 @@
-﻿LUCHA CAMPESINA, retiro exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por $[:VALOROPERACION:] en corresponsal '[:NOMBRECORRESPONSAL:]'
+﻿COAC. retiro exitoso [:FECHAACTUAL:] [:HORAACTUAL:] de cta. ahorros [:CUENTA:] por $[:VALOROPERACION:] en corresponsal '[:NOMBRECORRESPONSAL:]'

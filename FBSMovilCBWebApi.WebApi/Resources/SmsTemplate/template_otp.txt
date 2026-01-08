@@ -1,1 +1,1 @@
-﻿LUCHA CAMPESINA informa: Por su seguridad no comparta esta informacion con NADIE. Su codigo de seguridad es: [:OTP:]. Valido por [:TIEMPO_VIDA:] min.
+﻿COAC. informa: Por su seguridad no comparta esta informacion con NADIE. Su codigo de seguridad es: [:OTP:]. Valido por [:TIEMPO_VIDA:] min.
