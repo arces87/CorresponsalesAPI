@@ -60,10 +60,20 @@ namespace Corresponsales.AccesoFinancial.Api
                 {
                     try
                     {
-                        var encryptionKey = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
-                        var cipherText = Convert.FromBase64String(encryptedPassword);
-                        var decryptedPassword = DecryptStringFromBytes_Aes(cipherText, encryptionKey, encryptionKey);
-                        return decryptedPassword;
+                        // Derivar la clave usando SHA256 (mismo método que en el login)
+                        using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                        {
+                            var keyBytes = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
+                            var encryptionKey = sha256.ComputeHash(keyBytes); // Siempre 32 bytes
+                            
+                            // Para el IV, derivarlo desde la clave usando los primeros 16 bytes
+                            var iv = new byte[16];
+                            Array.Copy(encryptionKey, iv, 16);
+                            
+                            var cipherText = Convert.FromBase64String(encryptedPassword);
+                            var decryptedPassword = DecryptStringFromBytes_Aes(cipherText, encryptionKey, iv);
+                            return decryptedPassword;
+                        }
                     }
                     catch
                     {

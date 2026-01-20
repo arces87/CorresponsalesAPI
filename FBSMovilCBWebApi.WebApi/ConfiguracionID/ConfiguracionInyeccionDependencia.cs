@@ -118,7 +118,7 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
                 var configuration = x.GetRequiredService<IConfiguration>();
                 return new Corresponsales.AccesoFinancial.Api.FinancialRequestInfo(httpContextAccessor, authInfo, configuration);
             });
-            services.AddSingleton(x =>
+             services.AddSingleton(x =>
             {
                 var opts = x.GetRequiredService<IConfiguration>();
 
@@ -127,8 +127,12 @@ namespace FFBSMovilCBWebApi.WebApi.AutofacConfiguration
                     BaseUrl = opts["FinancialOptions:ServiceUrl"],
                     LoginEndpoint = opts["FinancialOptions:LoginEndpoint"],
                     RefreshEndpoint = opts["FinancialOptions:RefreshEndpoint"],
+                    UsuarioAdmin = opts["FinancialOptions:UsuarioAdmin"],
                     Users = new System.Collections.Generic.Dictionary<string, Corresponsales.AccesoFinancial.Api.User>()
-                };               
+                };
+
+                token.Users.Add(opts["FinancialOptions:UsuarioAdmin"],
+                    new Corresponsales.AccesoFinancial.Api.User { Usuario = opts["FinancialOptions:UsuarioAdmin"], Password = opts["FinancialOptions:ClaveAdmin"] });
 
                 return token;
             });
