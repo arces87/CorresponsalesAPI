@@ -32,12 +32,12 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private readonly IApiKeyGenerator _apiKeyGenerator;
 
         public CrearUsuarioHandler(
-            UserManager<Usuario> manejadorUsuario, 
+            UserManager<Usuario> manejadorUsuario,
             IRepositorioRol repositorioRol,
             IUsuarioApi clienteApi,
-            IRepositorioUsuario repositorio, 
-            IMapper mapper, 
-            IConfiguration configuracion, 
+            IRepositorioUsuario repositorio,
+            IMapper mapper,
+            IConfiguration configuracion,
             IMediator mediador,
             IApiKeyGenerator apiKeyGenerator)
         {
@@ -102,8 +102,8 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                 try
                 {
                     var respuesta = await _clienteApi.CreaUsuarioAsync(
-                        new CreaUsuarioRequest() 
-                        { 
+                        new CreaUsuarioRequest()
+                        {
                             CodigoUsuarioCorresponsal = _user.UserName,
                             NombreUsuarioCorresponsal = request.NombreMostrar,
                             Contrasenia = request.Contrasenna,
@@ -111,7 +111,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                             SecuencialCuenta = request.Cuenta
                         });
 
-                    if (respuesta is null)
+                    if (respuesta == null || (respuesta is System.Text.Json.JsonElement jsonElement && jsonElement.ValueKind == System.Text.Json.JsonValueKind.False))
                     {
                         throw new ExcepcionApp("No se ha podido crear el usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
                     }
@@ -127,12 +127,12 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         {
             try
             {
-                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/creacion_usuario.html");                
+                var emailTemplate = File.ReadAllText("Resources/EmailTemplate/creacion_usuario.html");
 
-                 emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", request.Usuario)
-                        .Replace("[:CONTRASENIA:]", request.Contrasenna)
-                        .Replace("[:NOMBRE:]", request.NombreMostrar)
-                        .Replace("[:TELEFONO:]", request.Telefono);
+                emailTemplate = emailTemplate.Replace("[:NOMBREUSUARIO:]", request.Usuario)
+                       .Replace("[:CONTRASENIA:]", request.Contrasenna)
+                       .Replace("[:NOMBRE:]", request.NombreMostrar)
+                       .Replace("[:TELEFONO:]", request.Telefono);
 
                 await _mediador.Publish(new EnviarCorreoElectronicoME
                 {

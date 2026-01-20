@@ -66,6 +66,26 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> CreaUsuarioWithHttpInfo(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>CambiaClaveCorresponsalesResponse</returns>
+        CambiaClaveCorresponsalesResponse CambiaClaveCorresponsales(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of CambiaClaveCorresponsalesResponse</returns>
+        ApiResponse<CambiaClaveCorresponsalesResponse> CambiaClaveCorresponsalesWithHttpInfo(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
@@ -125,6 +145,31 @@ namespace Corresponsales.Command.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> CreaUsuarioWithHttpInfoAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of CambiaClaveCorresponsalesResponse</returns>
+        System.Threading.Tasks.Task<CambiaClaveCorresponsalesResponse> CambiaClaveCorresponsalesAsync(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (CambiaClaveCorresponsalesResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<CambiaClaveCorresponsalesResponse>> CambiaClaveCorresponsalesWithHttpInfoAsync(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -475,6 +520,80 @@ namespace Corresponsales.Command.Api
         ///  
         /// </summary>
         /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>CambiaClaveCorresponsalesResponse</returns>
+        public CambiaClaveCorresponsalesResponse CambiaClaveCorresponsales(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Command.Client.ApiResponse<CambiaClaveCorresponsalesResponse> localVarResponse = CambiaClaveCorresponsalesWithHttpInfo(cambiaClaveCorresponsalesRequest, operationIndex);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of CambiaClaveCorresponsalesResponse</returns>
+        public Corresponsales.Command.Client.ApiResponse<CambiaClaveCorresponsalesResponse> CambiaClaveCorresponsalesWithHttpInfo(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Command.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Command.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = cambiaClaveCorresponsalesRequest;
+
+            localVarRequestOptions.Operation = "UsuarioApi.CambiaClaveCorresponsales";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (Bearer) required
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<CambiaClaveCorresponsalesResponse>("/Usuario/CambiaClaveCorresponsales", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("CambiaClaveCorresponsales", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="creaUsuarioRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -540,6 +659,83 @@ namespace Corresponsales.Command.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("CreaUsuario", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of CambiaClaveCorresponsalesResponse</returns>
+        public async System.Threading.Tasks.Task<CambiaClaveCorresponsalesResponse> CambiaClaveCorresponsalesAsync(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Command.Client.ApiResponse<CambiaClaveCorresponsalesResponse> localVarResponse = await CambiaClaveCorresponsalesWithHttpInfoAsync(cambiaClaveCorresponsalesRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cambiaClaveCorresponsalesRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (CambiaClaveCorresponsalesResponse)</returns>
+        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<CambiaClaveCorresponsalesResponse>> CambiaClaveCorresponsalesWithHttpInfoAsync(CambiaClaveCorresponsalesRequest? cambiaClaveCorresponsalesRequest = default(CambiaClaveCorresponsalesRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json", 
+                "text/json", 
+                "application/*+json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Command.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Command.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = cambiaClaveCorresponsalesRequest;
+
+            localVarRequestOptions.Operation = "UsuarioApi.CambiaClaveCorresponsales";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (Bearer) required
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<CambiaClaveCorresponsalesResponse>("/Usuario/CambiaClaveCorresponsales", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("CambiaClaveCorresponsales", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

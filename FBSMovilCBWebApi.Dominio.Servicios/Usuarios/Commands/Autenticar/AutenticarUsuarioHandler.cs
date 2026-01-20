@@ -35,6 +35,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
         private IdentityOptions _identityOptions;
         private readonly IGeneralesApi _envioSMSApi;
 
+
         public AutenticarUsuarioHandler(
             IMediator mediador,
             IRepositorioAgente repositorioAgente,
@@ -129,7 +130,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                                     NombreMostrar = usuarioAutenticado.NombreMostrar,
                                     TelefonoCelular = usuarioAutenticado.TelefonoCelular,
                                     ReferenciaUbicacion = agente.Ubicacion,
-                                    SecuencialTipoIdentificacion = agente.TipoIdentificacion
+                                    SecuencialTipoIdentificacion = agente.TipoIdentificacion,
+                                    TiempoOtp = _configuracionCanal.Configuracion.TiempoVidaOtp
                                 };
 
                                 await _mediador.Send(new CrearLogME()

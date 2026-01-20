@@ -6,6 +6,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
     {
         public string Token { get; set; }
         public string Contrasenia { get; set; }
+        public string ContraseniaAnterior { get; set; }
 
     }
 }

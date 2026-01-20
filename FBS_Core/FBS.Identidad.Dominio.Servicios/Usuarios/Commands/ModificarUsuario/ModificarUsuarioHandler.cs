@@ -65,7 +65,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             MapeaDatosUsuarios(request, usuario);
             await _manejadorUsuario.UpdateAsync(usuario);
             var _nuevosRoles = await AsignarRoles(request.Roles, usuario);
-            await EliminarRoles(usuario, _nuevosRoles);
+            //await EliminarRoles(usuario, _nuevosRoles);
             usuario.Operadora = usuarioMapeado.Operadora;
             await _repositorioUsuario.Update(usuario);
             await NotificarCambioDatosUsuario(request, emailActual, cambioEmailUsuario, cambioContrasenia, cambioMovilUsuario);
@@ -164,11 +164,15 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             
         }
 
-        private void ManejaCambioContrasenia(ModificarUsuarioME request, Usuario usuario, bool cambioContrasenia)
+        private async void ManejaCambioContrasenia(ModificarUsuarioME request, Usuario usuario, bool cambioContrasenia)
         {
             if (cambioContrasenia)
             {                
                 var _password = request.Contrasenna;
+
+                // Llamar al servicio de cambio de clave del core financiero si el usuario es Agente
+                await CambiarClaveCoreFinanciero(usuario, _password, _password);
+
                 usuario.PasswordHash = _manejadorUsuario.PasswordHasher.HashPassword(usuario, _password);
                 usuario.FechaUltimoCambioContrasenia = DateTime.Now;
                 usuario.CambioContrasenia = false;
@@ -241,6 +245,42 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
         private static bool CambioMovilUsuario(ModificarUsuarioME request, Usuario _user)
         {
             return _user.PhoneNumber != request.Telefono;
+        }
+
+        private async Task CambiarClaveCoreFinanciero(Usuario usuario, string claveAnterior, string nuevaClave)
+        {
+            var roles = await _manejadorUsuario.GetRolesAsync(usuario);
+            if (roles != null && roles.Any())
+            {
+                foreach (var rolNombre in roles)
+                {
+                    var rol = await _repositorioRol.GetForName(rolNombre);
+                    if (rol != null && rol.Id == "e0aee3b1-57c9-4d4e-8f35-4bf3bc38236e") // Rol Agente
+                    {
+                        try
+                        {
+                            var respuesta = await _clienteApi.CambiaClaveCorresponsalesAsync(
+                                new CambiaClaveCorresponsalesRequest()
+                                {
+                                    CodigoUsuario = usuario.UserName,
+                                    AnteriorClave = claveAnterior,
+                                    NuevaClave = nuevaClave,
+                                    NumeroIntento = 1
+                                });
+
+                            if (respuesta != null && !respuesta.Estado)
+                            {
+                                throw new ExcepcionApp(respuesta.MensajeError ?? "No se ha podido cambiar la clave en core financiero, por favor inténtelo más tarde.", TipoError.Error);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            throw new ExcepcionApp("No se ha podido cambiar la clave en core financiero, por favor inténtelo más tarde.", TipoError.Error);
+                        }
+                        break; // Solo llamar una vez
+                    }
+                }
+            }
         }
     }
 }

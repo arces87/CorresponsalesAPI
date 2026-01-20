@@ -65,11 +65,21 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             {
                 try
                 {
-                    var encryptionKey = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
-                    var encryptedPassword = Criptografia.EncryptStringToBytes_Aes(password, encryptionKey, encryptionKey);
-                    var encryptedPasswordBase64 = Convert.ToBase64String(encryptedPassword);
-                    claims.Add(new Claim("financial_password", encryptedPasswordBase64));
-                    claims.Add(new Claim("financial_username", user.UserName));
+                    // Derivar una clave de 32 bytes usando SHA256 desde JwtKey
+                    using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                    {
+                        var keyBytes = Encoding.UTF8.GetBytes(_configuracion["JwtKey"]);
+                        var encryptionKey = sha256.ComputeHash(keyBytes); // Siempre 32 bytes para AES-256
+                        
+                        // Para el IV, también derivarlo desde la clave usando los primeros 16 bytes
+                        var iv = new byte[16];
+                        Array.Copy(encryptionKey, iv, 16);
+                        
+                        var encryptedPassword = Criptografia.EncryptStringToBytes_Aes(password, encryptionKey, iv);
+                        var encryptedPasswordBase64 = Convert.ToBase64String(encryptedPassword);
+                        claims.Add(new Claim("financial_password", encryptedPasswordBase64));
+                        claims.Add(new Claim("financial_username", user.UserName));
+                    }
                 }
                 catch
                 {
