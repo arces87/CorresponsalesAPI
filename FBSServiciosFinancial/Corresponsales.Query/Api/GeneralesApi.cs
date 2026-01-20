@@ -44,6 +44,27 @@ namespace Corresponsales.Query.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of DevuelveDistribuidosResponse</returns>
         ApiResponse<DevuelveDistribuidosResponse> DevuelveDistribuidosWithHttpInfo(int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>DevuelveNombreEmpresaResponse</returns>
+        DevuelveNombreEmpresaResponse DevuelveNombreEmpresa(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of DevuelveNombreEmpresaResponse</returns>
+        ApiResponse<DevuelveNombreEmpresaResponse> DevuelveNombreEmpresaWithHttpInfo(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
@@ -76,6 +97,32 @@ namespace Corresponsales.Query.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (DevuelveDistribuidosResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<DevuelveDistribuidosResponse>> DevuelveDistribuidosWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of DevuelveNombreEmpresaResponse</returns>
+        System.Threading.Tasks.Task<DevuelveNombreEmpresaResponse> DevuelveNombreEmpresaAsync(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (DevuelveNombreEmpresaResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<DevuelveNombreEmpresaResponse>> DevuelveNombreEmpresaWithHttpInfoAsync(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -327,6 +374,157 @@ namespace Corresponsales.Query.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("DevuelveDistribuidos", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>DevuelveNombreEmpresaResponse</returns>
+        public DevuelveNombreEmpresaResponse DevuelveNombreEmpresa(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Query.Client.ApiResponse<DevuelveNombreEmpresaResponse> localVarResponse = DevuelveNombreEmpresaWithHttpInfo(devuelveNombreEmpresaRequest);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of DevuelveNombreEmpresaResponse</returns>
+        public Corresponsales.Query.Client.ApiResponse<DevuelveNombreEmpresaResponse> DevuelveNombreEmpresaWithHttpInfo(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Query.Client.RequestOptions localVarRequestOptions = new Corresponsales.Query.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Query.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Query.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = devuelveNombreEmpresaRequest;
+
+            localVarRequestOptions.Operation = "GeneralesApi.DevuelveNombreEmpresa";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (Bearer) required
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<DevuelveNombreEmpresaResponse>("/Generales/DevuelveNombreEmpresa", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("DevuelveNombreEmpresa", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of DevuelveNombreEmpresaResponse</returns>
+        public async System.Threading.Tasks.Task<DevuelveNombreEmpresaResponse> DevuelveNombreEmpresaAsync(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Query.Client.ApiResponse<DevuelveNombreEmpresaResponse> localVarResponse = await DevuelveNombreEmpresaWithHttpInfoAsync(devuelveNombreEmpresaRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveNombreEmpresaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (DevuelveNombreEmpresaResponse)</returns>
+        public async System.Threading.Tasks.Task<Corresponsales.Query.Client.ApiResponse<DevuelveNombreEmpresaResponse>> DevuelveNombreEmpresaWithHttpInfoAsync(DevuelveNombreEmpresaRequest? devuelveNombreEmpresaRequest = default(DevuelveNombreEmpresaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Query.Client.RequestOptions localVarRequestOptions = new Corresponsales.Query.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Query.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Query.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = devuelveNombreEmpresaRequest;
+
+            localVarRequestOptions.Operation = "GeneralesApi.DevuelveNombreEmpresa";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (Bearer) required
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<DevuelveNombreEmpresaResponse>("/Distribuidos/DevuelveNombreEmpresa", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("DevuelveNombreEmpresa", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
