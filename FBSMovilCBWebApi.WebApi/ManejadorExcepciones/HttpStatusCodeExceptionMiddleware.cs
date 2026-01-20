@@ -72,6 +72,12 @@ namespace FBSMovilCBWebApi.WebApi.ManejadorExcepciones
                                 mensajeSalida = mensaje.InnerException.ExceptionMessage.Substring(4, length);
                                 notificar = true;
                             }
+
+                            if (mensaje.InnerException.ExceptionMessage.Substring(0, 4) == "CNBS")
+                            {                                
+                                mensajeSalida = "Servicios externos no disponibles";
+                                notificar = true;
+                            }
                         }                        
                         break;
                     case SqlException e:
