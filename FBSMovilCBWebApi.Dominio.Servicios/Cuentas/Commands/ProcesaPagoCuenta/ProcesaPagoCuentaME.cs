@@ -5,11 +5,13 @@ using System.Collections.Generic;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {
-    public class ProcesaPagoCuentaME : IRequest<ProcesaPagoCuentasPorCobrarResponse>
+    public class ProcesaPagoCuentaME : IRequest<ProcesaPagoCuentaMS>
     {
         public string IdentificacionCliente { get; set; }            
         public IList<RubroPorCobrarRequest> CuentasPorCobrar { get; set; }       
         public double ValorAfectado {  get; set; }
+        public int SecuencialCuenta { get; set; }
+        public string NombreCliente { get; set; }
         public string Usuario { get; set; }
         public string Imei { get; set; }
         public double Latitud { get; set; }

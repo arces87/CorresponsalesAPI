@@ -26,41 +26,33 @@ using OpenAPIDateConverter = Corresponsales.Command.Client.OpenAPIDateConverter;
 namespace Corresponsales.Command.Model
 {
     /// <summary>
-    /// ProcesaPagoCuentasPorCobrarResponse
+    /// AperturaCuentaResponse
     /// </summary>
-    [DataContract(Name = "ProcesaPagoCuentasPorCobrarResponse")]
-    public partial class ProcesaPagoCuentasPorCobrarResponse : IValidatableObject
+    [DataContract(Name = "AperturaCuentaResponse")]
+    public partial class AperturaCuentaResponse : IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProcesaPagoCuentasPorCobrarResponse" /> class.
+        /// Initializes a new instance of the <see cref="AperturaCuentaResponse" /> class.
         /// </summary>
-        /// <param name="pagoCuentaResponse">pagoCuentaResponse</param>
-        /// <param name="fecha">fecha</param>
-        /// <param name="saldoCuentaCorresponsal">saldoCuentaCorresponsal</param>
-        public ProcesaPagoCuentasPorCobrarResponse(List<PagoCuentaResponse> pagoCuentaResponse = default(List<PagoCuentaResponse>), string fecha = default(string), double? saldoCuentaCorresponsal = default(double?))
+        /// <param name="documento">documento.</param>
+        /// <param name="cuentaAperturada">cuentaAperturada.</param>
+        public AperturaCuentaResponse(string documento = default(string), bool cuentaAperturada = default(bool))
         {
-            this.PagoCuentaResponse = pagoCuentaResponse;
-            this.Fecha = fecha;
-            this.SaldoCuentaCorresponsal = saldoCuentaCorresponsal;
+            this.Documento = documento;
+            this.CuentaAperturada = cuentaAperturada;
         }
 
         /// <summary>
-        /// Gets or Sets PagoCuentaResponse
+        /// Gets or Sets Documento
         /// </summary>
-        [DataMember(Name = "pagoCuentaResponse", EmitDefaultValue = true)]
-        public List<PagoCuentaResponse> PagoCuentaResponse { get; set; }
+        [DataMember(Name = "documento", EmitDefaultValue = true)]
+        public string Documento { get; set; }
 
         /// <summary>
-        /// Gets or Sets Fecha
+        /// Gets or Sets CuentaAperturada
         /// </summary>
-        [DataMember(Name = "fecha", EmitDefaultValue = true)]
-        public string Fecha { get; set; }
-
-        /// <summary>
-        /// Gets or Sets SaldoCuentaCorresponsal
-        /// </summary>
-        [DataMember(Name = "saldoCuentaCorresponsal", EmitDefaultValue = true)]
-        public double? SaldoCuentaCorresponsal { get; set; }
+        [DataMember(Name = "cuentaAperturada", EmitDefaultValue = true)]
+        public bool CuentaAperturada { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -69,10 +61,9 @@ namespace Corresponsales.Command.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class ProcesaPagoCuentasPorCobrarResponse {\n");
-            sb.Append("  PagoCuentaResponse: ").Append(PagoCuentaResponse).Append("\n");
-            sb.Append("  Fecha: ").Append(Fecha).Append("\n");
-            sb.Append("  SaldoCuentaCorresponsal: ").Append(SaldoCuentaCorresponsal).Append("\n");
+            sb.Append("class AperturaCuentaResponse {\n");
+            sb.Append("  Documento: ").Append(Documento).Append("\n");
+            sb.Append("  CuentaAperturada: ").Append(CuentaAperturada).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

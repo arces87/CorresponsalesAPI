@@ -9,6 +9,7 @@ using FBSMovilCBWebApi.Dominio.Servicios.Alertas.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands.AperturaCuenta;
 using FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Distribuidos.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands;
@@ -73,6 +74,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.ConfiguracionMapeo
 
             #region Servicios Financial
             CreateMap<CrearCuentaME, CreaCuentaRequest>();
+            CreateMap<AperturaCuentaME, AperturaCuentaRequest>();
             CreateMap<CrearClienteME, CreaClienteRequest>();
             CreateMap<BuscarClienteME, DevuelveDatosPersonaIdentificacionRequest>();
             CreateMap<DevuelveTipoCuentaME, DevuelveConsolidadoCuentasRequest>();

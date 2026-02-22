@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FBS.DAL.Nomenclador;
 using FBS.Dominio.Servicios.CorreoElectronico;
 using FBS.Identidad.DAL.Seguridad;
@@ -60,7 +60,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             var cambioContrasenia = CambioContrasenia(request);
             var cambioMovilUsuario = CambioMovilUsuario(request, usuario);
 
-            ManejaCambioContrasenia(request, usuario, cambioContrasenia);
+            await ManejaCambioContrasenia(request, usuario, cambioContrasenia);
             var usuarioMapeado = _mapper.Map<Usuario>(request);
             MapeaDatosUsuarios(request, usuario);
             await _manejadorUsuario.UpdateAsync(usuario);
@@ -164,7 +164,7 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
             
         }
 
-        private async void ManejaCambioContrasenia(ModificarUsuarioME request, Usuario usuario, bool cambioContrasenia)
+        private async Task ManejaCambioContrasenia(ModificarUsuarioME request, Usuario usuario, bool cambioContrasenia)
         {
             if (cambioContrasenia)
             {                

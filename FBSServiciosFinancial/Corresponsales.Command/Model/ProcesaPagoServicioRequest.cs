@@ -40,14 +40,15 @@ namespace Corresponsales.Command.Model
         /// <param name="proveedorServicio">proveedorServicio.</param>
         /// <param name="titularCuenta">titularCuenta.</param>
         /// <param name="identificacionTitular">identificacionTitular.</param>
-        /// <param name="secuencialCuentaCorresponsal">secuencialCuentaCorresponsal.</param>
+        /// <param name="emailTitular">identificacionTitular.</param>
+        /// <param name="secuencialCuentaDebito">secuencialCuentaDebito.</param>
         /// <param name="jsonComision">jsonComision.</param>
         /// <param name="codigoUsuario">codigoUsuario.</param>
         /// <param name="concepto">concepto.</param>
         /// <param name="valorAfectado">valorAfectado.</param>
         /// <param name="referencia">referencia.</param>
         /// <param name="idTransaccion">idTransaccion.</param>
-        public ProcesaPagoServicioRequest(ServicioPagos servicio = default(ServicioPagos), List<ReciboPagos> recibos = default(List<ReciboPagos>), List<CampoAdicionalPagos> camposAdicionales = default(List<CampoAdicionalPagos>), string idUnidad = default(string), string proveedorServicio = default(string), string titularCuenta = default(string), string identificacionTitular = default(string), int secuencialCuentaCorresponsal = default(int), string jsonComision = default(string), string codigoUsuario = default(string), string concepto = default(string), double valorAfectado = default(double), string referencia = default(string), string idTransaccion = default(string))
+        public ProcesaPagoServicioRequest(ServicioPagos servicio = default(ServicioPagos), List<ReciboPagos> recibos = default(List<ReciboPagos>), List<CampoAdicionalPagos> camposAdicionales = default(List<CampoAdicionalPagos>), string idUnidad = default(string), string proveedorServicio = default(string), string titularCuenta = default(string), string identificacionTitular = default(string), string emailTitular = default(string), int secuencialCuentaDebito = default(int), string jsonComision = default(string), string codigoUsuario = default(string), string concepto = default(string), double valorAfectado = default(double), string referencia = default(string), string idTransaccion = default(string))
         {
             this.Servicio = servicio;
             this.Recibos = recibos;
@@ -56,7 +57,8 @@ namespace Corresponsales.Command.Model
             this.ProveedorServicio = proveedorServicio;
             this.TitularCuenta = titularCuenta;
             this.IdentificacionTitular = identificacionTitular;
-            this.SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
+            this.EmailTitular = emailTitular;
+            this.SecuencialCuentaDebito = secuencialCuentaDebito;
             this.JsonComision = jsonComision;
             this.CodigoUsuario = codigoUsuario;
             this.Concepto = concepto;
@@ -108,10 +110,16 @@ namespace Corresponsales.Command.Model
         public string IdentificacionTitular { get; set; }
 
         /// <summary>
-        /// Gets or Sets SecuencialCuentaCorresponsal
+        /// Gets or Sets EmailTitular
         /// </summary>
-        [DataMember(Name = "secuencialCuentaCorresponsal", EmitDefaultValue = false)]
-        public int SecuencialCuentaCorresponsal { get; set; }
+        [DataMember(Name = "emailTitular", EmitDefaultValue = true)]
+        public string EmailTitular { get; set; }
+
+        /// <summary>
+        /// Gets or Sets secuencialCuentaDebito
+        /// </summary>
+        [DataMember(Name = "secuencialCuentaDebito", EmitDefaultValue = false)]
+        public int SecuencialCuentaDebito { get; set; }
 
         /// <summary>
         /// Gets or Sets JsonComision
@@ -164,7 +172,8 @@ namespace Corresponsales.Command.Model
             sb.Append("  ProveedorServicio: ").Append(ProveedorServicio).Append("\n");
             sb.Append("  TitularCuenta: ").Append(TitularCuenta).Append("\n");
             sb.Append("  IdentificacionTitular: ").Append(IdentificacionTitular).Append("\n");
-            sb.Append("  SecuencialCuentaCorresponsal: ").Append(SecuencialCuentaCorresponsal).Append("\n");
+            sb.Append("  EmailTitular: ").Append(EmailTitular).Append("\n");
+            sb.Append("  secuencialCuentaDebito: ").Append(SecuencialCuentaDebito).Append("\n");
             sb.Append("  JsonComision: ").Append(JsonComision).Append("\n");
             sb.Append("  CodigoUsuario: ").Append(CodigoUsuario).Append("\n");
             sb.Append("  Concepto: ").Append(Concepto).Append("\n");

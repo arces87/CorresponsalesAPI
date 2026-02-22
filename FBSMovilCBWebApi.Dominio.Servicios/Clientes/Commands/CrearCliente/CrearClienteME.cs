@@ -1,9 +1,10 @@
-﻿using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
+﻿using Corresponsales.Command.Model;
+using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 {
-    public class CrearClienteME : IRequest<bool>
+    public class CrearClienteME : IRequest<CreaClienteResponse>
     {
         public int? SecuencialTipoIdentificacion { get; set; }
         public string Identificacion { get; set; }

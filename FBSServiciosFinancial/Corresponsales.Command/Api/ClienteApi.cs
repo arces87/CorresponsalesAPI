@@ -32,8 +32,8 @@ namespace Corresponsales.Command.Api
         /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>Object</returns>
-        Object CreaCliente(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0);
+        /// <returns>CreaClienteResponse</returns>
+        CreaClienteResponse CreaCliente(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0);
 
         /// <summary>
         /// 
@@ -44,8 +44,8 @@ namespace Corresponsales.Command.Api
         /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object</returns>
-        ApiResponse<Object> CreaClienteWithHttpInfo(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0);
+        /// <returns>ApiResponse of CreaClienteResponse</returns>
+        ApiResponse<CreaClienteResponse> CreaClienteWithHttpInfo(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
@@ -65,8 +65,8 @@ namespace Corresponsales.Command.Api
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of Object</returns>
-        System.Threading.Tasks.Task<Object> CreaClienteAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of CreaClienteResponse</returns>
+        System.Threading.Tasks.Task<CreaClienteResponse> CreaClienteAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// 
@@ -78,8 +78,8 @@ namespace Corresponsales.Command.Api
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> CreaClienteWithHttpInfoAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (CreaClienteResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<CreaClienteResponse>> CreaClienteWithHttpInfoAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -206,10 +206,10 @@ namespace Corresponsales.Command.Api
         /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>Object</returns>
-        public Object CreaCliente(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0)
+        /// <returns>CreaClienteResponse</returns>
+        public CreaClienteResponse CreaCliente(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0)
         {
-            Corresponsales.Command.Client.ApiResponse<Object> localVarResponse = CreaClienteWithHttpInfo(creaClienteRequest);
+            Corresponsales.Command.Client.ApiResponse<CreaClienteResponse> localVarResponse = CreaClienteWithHttpInfo(creaClienteRequest);
             return localVarResponse.Data;
         }
 
@@ -219,8 +219,8 @@ namespace Corresponsales.Command.Api
         /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object</returns>
-        public Corresponsales.Command.Client.ApiResponse<Object> CreaClienteWithHttpInfo(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0)
+        /// <returns>ApiResponse of CreaClienteResponse</returns>
+        public Corresponsales.Command.Client.ApiResponse<CreaClienteResponse> CreaClienteWithHttpInfo(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0)
         {
             Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
 
@@ -261,7 +261,7 @@ namespace Corresponsales.Command.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/Clientes/CreaCliente", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<CreaClienteResponse>("/Clientes/CreaCliente", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("CreaCliente", localVarResponse);
@@ -281,10 +281,10 @@ namespace Corresponsales.Command.Api
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of Object</returns>
-        public async System.Threading.Tasks.Task<Object> CreaClienteAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of CreaClienteResponse</returns>
+        public async System.Threading.Tasks.Task<CreaClienteResponse> CreaClienteAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            Corresponsales.Command.Client.ApiResponse<Object> localVarResponse = await CreaClienteWithHttpInfoAsync(creaClienteRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            Corresponsales.Command.Client.ApiResponse<CreaClienteResponse> localVarResponse = await CreaClienteWithHttpInfoAsync(creaClienteRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -295,8 +295,8 @@ namespace Corresponsales.Command.Api
         /// <param name="creaClienteRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<Object>> CreaClienteWithHttpInfoAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (CreaClienteResponse)</returns>
+        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<CreaClienteResponse>> CreaClienteWithHttpInfoAsync(CreaClienteRequest? creaClienteRequest = default(CreaClienteRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
@@ -338,7 +338,7 @@ namespace Corresponsales.Command.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/Clientes/CreaCliente", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<CreaClienteResponse>("/Clientes/CreaCliente", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

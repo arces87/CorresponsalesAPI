@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Corresponsales.Command.Api;
 using Corresponsales.Command.Model;
 using FBS.DAL.Nomenclador;
@@ -136,7 +136,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 CodigoUsuario = agente.Usuario.UserName,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,                
-                ValorAfectado = request.Valor,
+                ValorAfectado = Math.Round(request.Valor, 2, MidpointRounding.AwayFromZero),
                 EsUnSoloCobroComision = true,
                 Concepto = request.Concepto,
                 NumeroPrestamo = request.NumeroPrestamo
@@ -213,7 +213,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
             if (montoTransaccionesDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
             {
-                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} dolares para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
+                throw new Exception($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} soles para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
             }
 
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.AbonoPrestamos.Limites.MontoMaximoDiarioDeTransacciones)

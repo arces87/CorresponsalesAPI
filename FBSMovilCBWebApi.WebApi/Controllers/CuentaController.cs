@@ -60,8 +60,15 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("procesaCuentasPorCobrar", Name = "Cuenta_ProcesaCuentasPorCobrar")]
-        [Produces(typeof(ProcesaPagoCuentasPorCobrarResponse))]
-        public async Task<ActionResult<ProcesaPagoCuentasPorCobrarResponse>> ProcesaPagoCuenta([FromBody] ProcesaPagoCuentaME modelo)
+        [Produces(typeof(ProcesaPagoCuentaMS))]
+        public async Task<ActionResult<ProcesaPagoCuentaMS>> ProcesaPagoCuenta([FromBody] ProcesaPagoCuentaME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("aperturaCuenta", Name = "Cuenta_AperturaCuenta")]
+        [Produces(typeof(AperturaCuentaResponse))]
+        public async Task<ActionResult<AperturaCuentaResponse>> AperturaCuenta([FromBody] FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands.AperturaCuenta.AperturaCuentaME modelo)
         {
             return await _mediador.Send(modelo);
         }

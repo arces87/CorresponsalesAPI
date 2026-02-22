@@ -35,6 +35,7 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var idCobroServicio = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio")?.Valor;
             var idAbonoPrestamo = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAbonoPrestamo")?.Valor;
             var idObligaciones = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdObligacion")?.Valor;
+            var idAperturaCuenta = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdAperturaCuenta")?.Valor;
 
             var valorDeposito = 0.0;
             var comisionDeposito = 0.0;
@@ -46,6 +47,8 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             var comisionAbonoPrestamo = 0.0;
             var valorObligaciones = 0.0;
             var comisionObligaciones = 0.0;
+            var valorAperturaCuenta = 0.0;
+            var comisionAperturaCuenta = 0.0;
 
             var saldo = await _repositorio.GetSaldoActual(request.IdAgente);
             var _retorno = new ListarTipoTransaccionMS() { SaldoCaja = saldo };
@@ -77,11 +80,23 @@ namespace FBSConsolaCBWebApi.Dominio.Servicios.Transacciones.Queries
             if (idObligaciones != null)
             {
                 var _modelObligaciones= await _repositorio.GetForTipo(idObligaciones, request.IdAgente);
-                valorAbonoPrestamo = _modelObligaciones.Sum(m => m.Valor);
-                comisionAbonoPrestamo = _modelObligaciones.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
+                valorObligaciones = _modelObligaciones.Sum(m => m.Valor);
+                comisionObligaciones = _modelObligaciones.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
+            }
+            if (idAperturaCuenta != null)
+            {
+                var _modelAperturaCuenta = await _repositorio.GetForTipo(idAperturaCuenta, request.IdAgente);
+                valorAperturaCuenta = _modelAperturaCuenta.Sum(m => m.Valor);
+                comisionAperturaCuenta = _modelAperturaCuenta.Sum(m => ContabilizarComisiones(JsonConvert.DeserializeObject<ComisionPorTipoTransaccion>(m.Comisiones)));
             }
 
             _retorno.TiposTransacciones = new List<ModeloListaTipoTransaccion>() {
+                new ModeloListaTipoTransaccion(){
+                    Id = idAperturaCuenta,
+                    Nombre = "Apertura de Cuentas",
+                    Comisiones = comisionAperturaCuenta,
+                    Valor = valorAperturaCuenta
+                },
                 new ModeloListaTipoTransaccion(){
                         Id = idObligaciones,
                         Nombre = "Obligaciones",

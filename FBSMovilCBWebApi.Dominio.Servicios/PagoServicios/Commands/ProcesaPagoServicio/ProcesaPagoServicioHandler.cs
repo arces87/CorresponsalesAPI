@@ -1,22 +1,24 @@
 using Corresponsales.Command.Api;
 using Corresponsales.Command.Model;
+using Corresponsales.Query.Api;
 using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
+using FBS.Infraestructura.Excepciones;
 using FBSConsolaCBWebApi.DAL.Corresponsales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using FBS.Infraestructura.Excepciones;
-using Microsoft.Extensions.Configuration;
-using Corresponsales.Query.Api;
+using System.Xml.Linq;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 {
@@ -67,7 +69,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 Latitud = request.Latitud
             });
 
-            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdPagoServicio").Valor;
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCobroServicio").Valor;
             await _mediador.Send(new CrearLogME()
             {
                 JsonLog = JsonConvert.SerializeObject(request.Request),
@@ -137,13 +139,44 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 EstaActivo = true,
                 Criptografia = Encoding.UTF8.GetString(FBS.Identidad.Dominio.Servicios.Utilidad.Criptografia.EncryptStringToBytes_Aes(JsonConvert.SerializeObject(request.Request), _llave, _llave))
             };
+            var idTransaccion = await _repositorioTransaccion.Add(transaccion);
+            await _mediador.Send(new CrearLogME()
+            {
+                JsonLog = JsonConvert.SerializeObject(request),
+                IdTipoAccion = IdTipoAccion,
+                IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
+            });
+            var comision = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones;
+            var arregloComisiones = new List<ComisionFinancial>();
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Canal", ValorComision = comision.AdministracionCanal });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Agente", ValorComision = comision.Agente });
+            arregloComisiones.Add(new ComisionFinancial() { NombreComision = "Cooperativa", ValorComision = comision.Cooperativa });
 
-            // Llamar al API
-            var response = await _pagoApi.ProcesaPagoServicioAsync(request.Request);
+            var modelo = new ProcesaPagoServicioRequest()
+            {
+                Servicio = request.Request.Servicio,
+                Recibos = request.Request.Recibos,
+                CamposAdicionales = request.Request.CamposAdicionales,
+                IdUnidad = request.Request.IdUnidad,
+                ProveedorServicio = request.Request.ProveedorServicio,
+                TitularCuenta = request.Request.TitularCuenta,
+                IdentificacionTitular = request.Request.IdentificacionTitular,   
+                EmailTitular = request.Request.EmailTitular,
+                SecuencialCuentaDebito = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
+                JsonComision = JsonConvert.SerializeObject(arregloComisiones),
+                CodigoUsuario = agente.Usuario.UserName,                
+                Concepto = request.Request.Concepto,                                
+                ValorAfectado = request.Request.ValorAfectado,                
+                Referencia = request.Request.Referencia,
+                IdTransaccion = await generarNumeroDocumentoAsync(),
+            };
+            var JsonModelo = JsonConvert.SerializeObject(modelo);
+           // Llamar al API
+           var response = await _pagoApi.ProcesaPagoServicioAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
             {
-                JsonLog = JsonConvert.SerializeObject(response),
+                JsonLog = JsonConvert.SerializeObject(modelo),
                 IdTipoAccion = IdTipoAccion,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogRecibido").Valor,
             });
@@ -185,21 +218,63 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
            double montoTransaccionesDiarias,
            JsonNegocioMS jsonNegocio)
         {
-            // Ajustar validaciones según límites de pago de servicios
-            if (cantidadTransaccionesDiariasTipo + 1 > 100) // Ejemplo, ajustar
+            if (!jsonNegocio.CobroServicios.Activo.Value)
             {
-                throw new ExcepcionApp("Límite de transacciones diarias alcanzado.");
+                throw new ExcepcionApp("Usted no posee acceso para ejecutar esta operación. En caso de requerir acceso a esta funcionalidad comunicarse con su supervisor.");
             }
 
-            if (Valor > 1000) // Ejemplo
+            if (cantidadTransaccionesDiarias + 1 > jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones)
             {
-                throw new ExcepcionApp("Monto máximo excedido.");
+                throw new ExcepcionApp($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para su corresponsal solidario que es: {jsonNegocio.Limites.NumeroMaximoDiarioDeTransacciones}.");
+            }
+
+            if (cantidadTransaccionesDiariasTipo + 1 > jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones)
+            {
+                throw new ExcepcionApp($"No puede realizar la operación porque ha alcanzado el número máximo de transacciones diarias para este tipo de transacción que es: {jsonNegocio.CobroServicios.Limites.NumeroMaximoDiarioDeTransacciones}.");
+            }
+
+            if (Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoPorTransaccion)
+            {
+                throw new ExcepcionApp($"No puede realizar la operación porque el valor excede el monto máximo permitido para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es: {jsonNegocio.CobroServicios.Limites.MontoMaximoPorTransaccion} PEN.");
+            }
+
+            if (Valor < jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion)
+            {
+                throw new ExcepcionApp($"No puede realizar la operación porque el valor no alcanza el monto el mínimo definido para este tipo de transacción. Su monto mínimo permitido para este tipo de transacción es de: {jsonNegocio.CobroServicios.Limites.MontoMinimoPorTransaccion} PEN.");
+            }
+
+            if (montoTransaccionesDiarias + Valor > jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones)
+            {
+                throw new ExcepcionApp($"No puede realizar la transacción porque excedería el monto máximo diario permitido para todas las operaciones en {(jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones - (montoTransaccionesDiarias + Valor)) * -1} soles para su corresponsal solidario. Su monto máximo diario para todas las transacciones es de {jsonNegocio.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
+            }
+
+            if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
+            {
+                throw new ExcepcionApp($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones - (montoTransaccionesTipoDiarias + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
+            }
+
+            if (cuentaAsociada && saldoActual + Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
+            {
+                throw new ExcepcionApp($"No puede realizar la operación porque excedería el saldo máximo de la caja en: {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} . Su saldo máximo en caja permitido es {jsonNegocio.Limites.SaldoMaximoAgente.Value} PEN");
             }
 
             if (cuentaAsociada && saldoCuenta - Valor <= 0)
             {
-                throw new ExcepcionApp("Saldo insuficiente en la cuenta.");
+                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta");
             }
         }
+
+        private async Task<string> generarNumeroDocumentoAsync()
+        {
+            //string documento = "0000000000";
+            //var cantidadTransaccionesPago = await _repositorioTransaccion.GetCountTipoPago();
+            //var secuencial = cantidadTransaccionesPago + 1;
+            //var longSecuencial = secuencial >= 1000000 ? 7 : 6;
+            //var secuencialFormateado = secuencial.ToString().PadLeft(longSecuencial, '0');
+            //documento = DateTime.UtcNow.ToString("yyyy") + secuencialFormateado;
+            var documento = Guid.NewGuid().ToString();
+            return documento;
+        }
+
     }
 }

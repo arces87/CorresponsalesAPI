@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
 {
-    public class CrearClienteHandler : IRequestHandler<CrearClienteME, bool>
+    public class CrearClienteHandler : IRequestHandler<CrearClienteME, CreaClienteResponse>
     {
         private readonly IClienteApi _clienteApi;
         private readonly IMapper _mapper;
@@ -39,7 +39,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
             _apiKeyGenerator = apiKeyGenerator;
         }
 
-        public async Task<bool> Handle(CrearClienteME request, CancellationToken cancellationToken)
+        public async Task<CreaClienteResponse> Handle(CrearClienteME request, CancellationToken cancellationToken)
         {
             await _mediador.Send(new CrearLogME()
             {
@@ -84,7 +84,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
                 IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdCrearCliente").Valor,
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
             });
-            return (bool)respuesta;
+            return respuesta;
         }
     }
 }

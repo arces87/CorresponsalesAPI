@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Corresponsales.Command.Model;
 using Corresponsales.Query.Model;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
@@ -24,8 +25,8 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         }
 
         [HttpPost("crearCliente", Name = "Cliente_CrearCliente")]
-        [Produces(typeof(bool))]
-        public async Task<ActionResult<bool>> CrearCliente([FromBody] CrearClienteME modelo)
+        [Produces(typeof(CreaClienteResponse))]
+        public async Task<ActionResult<CreaClienteResponse>> CrearCliente([FromBody] CrearClienteME modelo)
         {
             return await _mediador.Send(modelo);
         }

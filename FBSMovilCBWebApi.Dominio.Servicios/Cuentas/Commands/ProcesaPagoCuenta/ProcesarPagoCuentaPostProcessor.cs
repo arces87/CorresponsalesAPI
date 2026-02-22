@@ -19,16 +19,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
+namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
 {
-    public class ProcesarDepositoPostProcessor : IRequestPostProcessor<ProcesarDepositoME, AfectacionAUnCorresponsalDepositoMS>
+    public class ProcesaPagoCuentaPostProcessor : IRequestPostProcessor<ProcesaPagoCuentaME, ProcesaPagoCuentaMS>
     {
         private readonly IMediator _mediador;
         private readonly IRepositorioAgente _repositorioAgente;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IApiKeyGenerator _apiKeyGenerator;
-        public ProcesarDepositoPostProcessor(
+        public ProcesaPagoCuentaPostProcessor(
             IMediator mediador, 
             IRepositorioAgente repositorioAgente, 
             IHttpContextAccessor httpContext,
@@ -41,58 +41,57 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _jsonConfiguracion = jsonConfiguracion;
             _apiKeyGenerator = apiKeyGenerator;
         }
-        public async Task Process(ProcesarDepositoME request, AfectacionAUnCorresponsalDepositoMS response, CancellationToken cancellationToken)
+        public async Task Process(ProcesaPagoCuentaME request, ProcesaPagoCuentaMS response, CancellationToken cancellationToken)
         {
 
-            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdDeposito").Valor;
+            var IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdObligacion").Valor;
 
             var agente = await _repositorioAgente.GetForId(_httpContext.HttpContext.User.Identity.Name);    
             var jsonNegocio = JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente);
             var valores = new Dictionary<string, string>();
-            var comision = jsonNegocio.Deposito.Comisiones.AdministracionCanal + jsonNegocio.Deposito.Comisiones.Agente + jsonNegocio.Deposito.Comisiones.Cooperativa;
+            var comision = jsonNegocio.Obligaciones.Comisiones.AdministracionCanal + jsonNegocio.Obligaciones.Comisiones.Agente + jsonNegocio.Obligaciones.Comisiones.Cooperativa;
+            
+            var fechaActualEmail = response.Fecha;
+            var fechaActual = response.Fecha;
+            var horaActual = response.Fecha;
 
-            var fechaActualEmail = response.FechaTransaccion.ToString("dd/MM/yyyy/ H:mm");
-            var fechaActual = response.FechaTransaccion.ToString("yyyy/MM/dd");
-            var horaActual = response.FechaTransaccion.ToString("H:mm:ss");
-
-            if (jsonNegocio.Deposito.NotificarCorreoElectronico)
+            if (jsonNegocio.Obligaciones.NotificarCorreoElectronico)
             {
-                if(string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaCorreoElectronico)) {
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_deposito.html");
+                if(string.IsNullOrEmpty(jsonNegocio.Obligaciones.PlantillaCorreoElectronico)) {
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "EmailTemplate", "index_obligaciones.html");
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
-                        jsonNegocio.Deposito.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
+                        jsonNegocio.Obligaciones.PlantillaCorreoElectronico = SourceReader.ReadToEnd();
                     }
                 }
-
-                var cuenta = response.NumeroCuenta.ToString();
-                cuenta = cuenta.Substring(0, 4) + "XXXXXXXX";
+                
+                var cuenta = response.PagoCuentaResponse[0].Detalle;
 
                 valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
                 valores.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valores.Add("[:FECHAACTUAL:]", fechaActualEmail);
                 valores.Add("[:CUENTA:]", cuenta);
-                valores.Add("[:VALOR:]", response.Valor.ToString());
-            }
+                valores.Add("[:VALOR:]", request.ValorAfectado.ToString());
+                
+        }
 
-            var valoresSMS = new Dictionary<string, string>();
+        var valoresSMS = new Dictionary<string, string>();
 
-            if (jsonNegocio.Deposito.NotificarSMS)
+            if (jsonNegocio.Obligaciones.NotificarSMS)
             {
-                if(string.IsNullOrEmpty(jsonNegocio.Deposito.PlantillaSMS)){
-                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_deposito.txt");
+                if(string.IsNullOrEmpty(jsonNegocio.Obligaciones.PlantillaSMS)){
+                    var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "SmsTemplate", "template_obligaciones.txt");
 
                     using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
                     {
-                        jsonNegocio.Deposito.PlantillaSMS = SourceReader.ReadToEnd();
+                        jsonNegocio.Obligaciones.PlantillaSMS = SourceReader.ReadToEnd();
                     }                    
                 }
 
-                var cuenta = response.NumeroCuenta.ToString();
-                cuenta = cuenta.Substring(0, 4)+"XXXXXXXX";
+                var cuenta = response.PagoCuentaResponse[0].Detalle;
 
-                valoresSMS.Add("[:VALOROPERACION:]", response.Valor.ToString());
+                valoresSMS.Add("[:VALOROPERACION:]", request.ValorAfectado.ToString());
                 valoresSMS.Add("[:CUENTA:]", cuenta);
                 valoresSMS.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valoresSMS.Add("[:FECHAACTUAL:]", fechaActual);
@@ -103,7 +102,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 var buscarClienteME = new BuscarClienteME
                 {
-                    SecuencialTipoIdentificacion = request.TipoIdentificacionCliente,
+                    SecuencialTipoIdentificacion = 1,
                     Identificacion = request.IdentificacionCliente,
                     Imei = request.Imei,
                     Mac = request.Mac,
@@ -119,20 +118,20 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 
                 var notificacion = new NotificacionME
                 {
-                    PlantillaCorreoElectronico = jsonNegocio.Deposito.NotificarCorreoElectronico ? jsonNegocio.Deposito.PlantillaCorreoElectronico : null,
-                    PlantillaSMS = jsonNegocio.Deposito.NotificarSMS ? jsonNegocio.Deposito.PlantillaSMS : null,
+                    PlantillaCorreoElectronico = jsonNegocio.Obligaciones.NotificarCorreoElectronico ? jsonNegocio.Obligaciones.PlantillaCorreoElectronico : null,
+                    PlantillaSMS = jsonNegocio.Obligaciones.NotificarSMS ? jsonNegocio.Obligaciones.PlantillaSMS : null,
                     CorreoElectronicoDestinatario = datosCliente.CorreoElectronico,
                     NombreDestinatario = request.NombreCliente,
-                    AsuntoCorreoElectronico = "Operación Déposito realizada con éxito",
-                    NombreUsuarioCorresponsal = agente.Usuario.UserName,
+                    AsuntoCorreoElectronico = "Operación Cuenta por Pagar realizada con éxito",
+                    NombreUsuarioCorresponsal= agente.Usuario.UserName,
                     NumeroCliente = 1,
                     SecuencialEmpresa = 1,
                     ValoresEmail = valores,
                     ValoresSms = valoresSMS,
-                    TipoIdentificacion = request.TipoIdentificacionCliente,
+                    TipoIdentificacion = 1,
                     Identificacion = request.IdentificacionCliente,
                     //Encabezado = customHeaders
-                }; 
+                };
 
                 await _mediador.Send(new CrearLogME()
                 {

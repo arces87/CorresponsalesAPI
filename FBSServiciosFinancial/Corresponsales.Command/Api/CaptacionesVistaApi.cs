@@ -66,6 +66,26 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of CreaCuentaResponse</returns>
         ApiResponse<CreaCuentaResponse> CreaCuentaWithHttpInfo(CreaCuentaRequest? creaCuentaRequest = default(CreaCuentaRequest?), int operationIndex = 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>AperturaCuentaResponse</returns>
+        AperturaCuentaResponse AperturaCuenta(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of AperturaCuentaResponse</returns>
+        ApiResponse<AperturaCuentaResponse> AperturaCuentaWithHttpInfo(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
@@ -125,6 +145,31 @@ namespace Corresponsales.Command.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (CreaCuentaResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<CreaCuentaResponse>> CreaCuentaWithHttpInfoAsync(CreaCuentaRequest? creaCuentaRequest = default(CreaCuentaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of AperturaCuentaResponse</returns>
+        System.Threading.Tasks.Task<AperturaCuentaResponse> AperturaCuentaAsync(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (AperturaCuentaResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<AperturaCuentaResponse>> AperturaCuentaWithHttpInfoAsync(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -540,6 +585,158 @@ namespace Corresponsales.Command.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("CreaCuenta", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>AperturaCuentaResponse</returns>
+        public AperturaCuentaResponse AperturaCuenta(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Command.Client.ApiResponse<AperturaCuentaResponse> localVarResponse = AperturaCuentaWithHttpInfo(aperturaCuentaRequest);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of AperturaCuentaResponse</returns>
+        public Corresponsales.Command.Client.ApiResponse<AperturaCuentaResponse> AperturaCuentaWithHttpInfo(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Command.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Command.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = aperturaCuentaRequest;
+
+            localVarRequestOptions.Operation = "CaptacionesVistaApi.AperturaCuenta";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (Bearer) required
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<AperturaCuentaResponse>("/CaptacionesVista/AperturaCuenta", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("AperturaCuenta", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of AperturaCuentaResponse</returns>
+        public async System.Threading.Tasks.Task<AperturaCuentaResponse> AperturaCuentaAsync(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Command.Client.ApiResponse<AperturaCuentaResponse> localVarResponse = await AperturaCuentaWithHttpInfoAsync(aperturaCuentaRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="aperturaCuentaRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (AperturaCuentaResponse)</returns>
+        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<AperturaCuentaResponse>> AperturaCuentaWithHttpInfoAsync(AperturaCuentaRequest? aperturaCuentaRequest = default(AperturaCuentaRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+
+            Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json", 
+                "text/json", 
+                "application/*+json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Command.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Command.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = aperturaCuentaRequest;
+
+            localVarRequestOptions.Operation = "CaptacionesVistaApi.AperturaCuenta";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (Bearer) required
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<AperturaCuentaResponse>("/CaptacionesVista/AperturaCuenta", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("AperturaCuenta", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

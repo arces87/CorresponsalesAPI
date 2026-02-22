@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Cuentas\Commands\AperturaCuenta\" />
     <Folder Include="Transacciones\Commands\ProcesarPagoServicio\" />
   </ItemGroup>
 

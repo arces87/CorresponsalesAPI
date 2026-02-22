@@ -102,8 +102,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             {
                 PlantillaCorreoElectronico = jsonNegocio.AbonoPrestamos.NotificarCorreoElectronico ? jsonNegocio.AbonoPrestamos.PlantillaCorreoElectronico : null,
                 PlantillaSMS = jsonNegocio.AbonoPrestamos.NotificarSMS ? jsonNegocio.AbonoPrestamos.PlantillaSMS : null,
-                CorreoElectronicoDestinatario = agente.Usuario.Email,
-                NombreDestinatario = agente.NombreAgente,
+                CorreoElectronicoDestinatario = informacionPersona.CorreoElectronico,
+                NombreDestinatario = informacionPersona.Nombres,
                 AsuntoCorreoElectronico = "Operación Abono de Préstamo realizada con éxito",
                 NumeroCliente = 1,
                 SecuencialEmpresa = 1,
