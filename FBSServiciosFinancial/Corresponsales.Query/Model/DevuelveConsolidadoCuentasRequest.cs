@@ -38,12 +38,14 @@ namespace Corresponsales.Query.Model
         /// <param name="secuencialEmpresa">secuencialEmpresa.</param>
         /// <param name="secuencialTipoIdentificacion">secuencialTipoIdentificacion.</param>
         /// <param name="identificacion">identificacion.</param>
-        public DevuelveConsolidadoCuentasRequest(int numeroCliente = default(int), int secuencialEmpresa = default(int), int secuencialTipoIdentificacion = default(int), string identificacion = default(string))
+        /// <param name="esParaDeposito">esParaDeposito.</param>
+        public DevuelveConsolidadoCuentasRequest(int numeroCliente = default(int), int secuencialEmpresa = default(int), int secuencialTipoIdentificacion = default(int), string identificacion = default(string), bool esParaDeposito = default(bool))
         {
             this.NumeroCliente = numeroCliente;
             this.SecuencialEmpresa = secuencialEmpresa;
             this.SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
             this.Identificacion = identificacion;
+            this.EsParaDeposito = esParaDeposito;
         }
 
         /// <summary>
@@ -71,6 +73,12 @@ namespace Corresponsales.Query.Model
         public string Identificacion { get; set; }
 
         /// <summary>
+        /// Gets or Sets EsParaDeposito
+        /// </summary>
+        [DataMember(Name = "esParaDeposito", EmitDefaultValue = false)]
+        public bool EsParaDeposito { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -82,6 +90,7 @@ namespace Corresponsales.Query.Model
             sb.Append("  SecuencialEmpresa: ").Append(SecuencialEmpresa).Append("\n");
             sb.Append("  SecuencialTipoIdentificacion: ").Append(SecuencialTipoIdentificacion).Append("\n");
             sb.Append("  Identificacion: ").Append(Identificacion).Append("\n");
+            sb.Append("  EsParaDeposito: ").Append(EsParaDeposito).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
