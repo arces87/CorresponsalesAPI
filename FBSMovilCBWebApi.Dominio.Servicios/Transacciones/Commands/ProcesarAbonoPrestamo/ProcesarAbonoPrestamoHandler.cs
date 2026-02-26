@@ -136,7 +136,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 CodigoUsuario = agente.Usuario.UserName,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 SecuencialCuentaCorresponsal = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,                
-                ValorAfectado = Math.Round(request.Valor, 2, MidpointRounding.AwayFromZero),
+                ValorAfectado = (decimal)request.Valor,
                 EsUnSoloCobroComision = true,
                 Concepto = request.Concepto,
                 NumeroPrestamo = request.NumeroPrestamo

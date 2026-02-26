@@ -41,7 +41,7 @@ namespace Corresponsales.Command.Model
         /// <param name="codigoUsuario">codigoUsuario.</param>
         /// <param name="esUnSoloCobroComision">esUnSoloCobroComision.</param>
         /// <param name="concepto">concepto.</param>
-        public EfectivizacionPrestamoRequest(int secuencialCuentaCorresponsal = default(int), string numeroPrestamo = default(string), double valorAfectado = default(double), string jsonComision = default(string), string codigoUsuario = default(string), bool esUnSoloCobroComision = default(bool), string concepto = default(string))
+        public EfectivizacionPrestamoRequest(int secuencialCuentaCorresponsal = default(int), string numeroPrestamo = default(string), decimal valorAfectado = default(decimal), string jsonComision = default(string), string codigoUsuario = default(string), bool esUnSoloCobroComision = default(bool), string concepto = default(string))
         {
             this.SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
             this.NumeroPrestamo = numeroPrestamo;
@@ -68,7 +68,7 @@ namespace Corresponsales.Command.Model
         /// Gets or Sets ValorAfectado
         /// </summary>
         [DataMember(Name = "valorAfectado", EmitDefaultValue = false)]
-        public double ValorAfectado { get; set; }
+        public decimal ValorAfectado { get; set; }
 
         /// <summary>
         /// Gets or Sets JsonComision
