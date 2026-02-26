@@ -44,7 +44,8 @@ namespace Corresponsales.Query.Model
         /// <param name="saldo">saldo.</param>
         /// <param name="disponibleParaTransaccion">disponibleParaTransaccion.</param>
         /// <param name="estadoNombre">estadoNombre.</param>
-        public CuentaDetalleConsolidadoResponse(string codigo = default(string), int secuencialCuenta = default(int), string tipoCuentaNombre = default(string), string monedaNombre = default(string), double retencion = default(double), double bloqueo = default(double), double valorNumeroParteSaldo = default(double), double saldo = default(double), double disponibleParaTransaccion = default(double), string estadoNombre = default(string))
+        /// <param name="tipoRegistroFirma">tipoRegistroFirma.</param>
+        public CuentaDetalleConsolidadoResponse(string codigo = default(string), int secuencialCuenta = default(int), string tipoCuentaNombre = default(string), string monedaNombre = default(string), double retencion = default(double), double bloqueo = default(double), double valorNumeroParteSaldo = default(double), double saldo = default(double), double disponibleParaTransaccion = default(double), string estadoNombre = default(string), string tipoRegistroFirma = default(string))
         {
             this.Codigo = codigo;
             this.SecuencialCuenta = secuencialCuenta;
@@ -56,6 +57,7 @@ namespace Corresponsales.Query.Model
             this.Saldo = saldo;
             this.DisponibleParaTransaccion = disponibleParaTransaccion;
             this.EstadoNombre = estadoNombre;
+            this.TipoRegistroFirma = tipoRegistroFirma;
         }
 
         /// <summary>
@@ -119,6 +121,12 @@ namespace Corresponsales.Query.Model
         public string EstadoNombre { get; set; }
 
         /// <summary>
+        /// Gets or Sets TipoRegistroFirma
+        /// </summary>
+        [DataMember(Name = "tipoRegistroFirma", EmitDefaultValue = true)]
+        public string TipoRegistroFirma { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -136,6 +144,7 @@ namespace Corresponsales.Query.Model
             sb.Append("  Saldo: ").Append(Saldo).Append("\n");
             sb.Append("  DisponibleParaTransaccion: ").Append(DisponibleParaTransaccion).Append("\n");
             sb.Append("  EstadoNombre: ").Append(EstadoNombre).Append("\n");
+            sb.Append("  TipoRegistroFirma: ").Append(TipoRegistroFirma).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
