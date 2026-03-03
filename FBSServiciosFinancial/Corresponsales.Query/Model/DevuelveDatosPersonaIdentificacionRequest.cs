@@ -36,10 +36,12 @@ namespace Corresponsales.Query.Model
         /// </summary>
         /// <param name="identificacion">identificacion.</param>
         /// <param name="secuencialTipoIdentificacion">secuencialTipoIdentificacion.</param>
-        public DevuelveDatosPersonaIdentificacionRequest(string identificacion = default(string), int secuencialTipoIdentificacion = default(int))
+        /// <param name="paraCrearSocio">paraCrearSocio.</param>
+        public DevuelveDatosPersonaIdentificacionRequest(string identificacion = default(string), int secuencialTipoIdentificacion = default(int), bool paraCrearSocio = default(bool))
         {
             this.Identificacion = identificacion;
             this.SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
+            this.ParaCrearSocio = paraCrearSocio;
         }
 
         /// <summary>
@@ -55,6 +57,12 @@ namespace Corresponsales.Query.Model
         public int SecuencialTipoIdentificacion { get; set; }
 
         /// <summary>
+        /// Gets or Sets ParaCrearSocio
+        /// </summary>
+        [DataMember(Name = "paraCrearSocio", EmitDefaultValue = false)]
+        public bool ParaCrearSocio { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -64,6 +72,7 @@ namespace Corresponsales.Query.Model
             sb.Append("class DevuelveDatosPersonaIdentificacionRequest {\n");
             sb.Append("  Identificacion: ").Append(Identificacion).Append("\n");
             sb.Append("  SecuencialTipoIdentificacion: ").Append(SecuencialTipoIdentificacion).Append("\n");
+            sb.Append("  ParaCrearSocio: ").Append(ParaCrearSocio).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

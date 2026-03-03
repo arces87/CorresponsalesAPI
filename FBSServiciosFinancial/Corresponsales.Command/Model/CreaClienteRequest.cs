@@ -46,7 +46,8 @@ namespace Corresponsales.Command.Model
         /// <param name="direccionDomiciliaria">direccionDomiciliaria.</param>
         /// <param name="referenciaDomiciliaria">referenciaDomiciliaria.</param>
         /// <param name="mail">mail.</param>
-        public CreaClienteRequest(int secuencialTipoIdentificacion = default(int), string identificacion = default(string), string nombres = default(string), string apellidoPaterno = default(string), string apellidoMaterno = default(string), bool esMasculino = default(bool), DateTime fechaNacimiento = default(DateTime), string telefonoDomicilio = default(string), string telefonoCelular = default(string), string direccionDomiciliaria = default(string), string referenciaDomiciliaria = default(string), string mail = default(string))
+        /// <param name="generaPrevisionSocial">generaPrevisionSocial.</param>
+        public CreaClienteRequest(int secuencialTipoIdentificacion = default(int), string identificacion = default(string), string nombres = default(string), string apellidoPaterno = default(string), string apellidoMaterno = default(string), bool esMasculino = default(bool), DateTime fechaNacimiento = default(DateTime), string telefonoDomicilio = default(string), string telefonoCelular = default(string), string direccionDomiciliaria = default(string), string referenciaDomiciliaria = default(string), string mail = default(string), bool generaPrevisionSocial = default(bool))
         {
             this.SecuencialTipoIdentificacion = secuencialTipoIdentificacion;
             this.Identificacion = identificacion;
@@ -60,6 +61,7 @@ namespace Corresponsales.Command.Model
             this.DireccionDomiciliaria = direccionDomiciliaria;
             this.ReferenciaDomiciliaria = referenciaDomiciliaria;
             this.Mail = mail;
+            this.GeneraPrevisionSocial = generaPrevisionSocial;
         }
 
         /// <summary>
@@ -135,6 +137,12 @@ namespace Corresponsales.Command.Model
         public string Mail { get; set; }
 
         /// <summary>
+        /// Gets or Sets GeneraPrevisionSocial
+        /// </summary>
+        [DataMember(Name = "generaPrevisionSocial", EmitDefaultValue = false)]
+        public bool GeneraPrevisionSocial { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -154,6 +162,7 @@ namespace Corresponsales.Command.Model
             sb.Append("  DireccionDomiciliaria: ").Append(DireccionDomiciliaria).Append("\n");
             sb.Append("  ReferenciaDomiciliaria: ").Append(ReferenciaDomiciliaria).Append("\n");
             sb.Append("  Mail: ").Append(Mail).Append("\n");
+            sb.Append("  GeneraPrevisionSocial: ").Append(GeneraPrevisionSocial).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

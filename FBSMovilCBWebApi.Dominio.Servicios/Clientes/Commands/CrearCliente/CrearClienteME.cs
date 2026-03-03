@@ -1,4 +1,4 @@
-﻿using Corresponsales.Command.Model;
+using Corresponsales.Command.Model;
 using FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands.VerificarAgente;
 using MediatR;
 
@@ -17,6 +17,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Clientes.Commands
         public string TelefonoCelular { get; set; }
         public string DireccionDomiciliaria { get; set; }
         public string ReferenciaDomiciliaria { get; set; }
+        public bool GeneraPrevisionSocial { get; set; }
         public string CodigoPais { get; set; }
         public string CodigoEstadoCivil { get; set; }
         public string CodigoDactilar { get; set; }
