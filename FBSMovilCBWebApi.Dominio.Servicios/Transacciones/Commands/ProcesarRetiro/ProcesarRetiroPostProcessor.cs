@@ -1,8 +1,11 @@
-﻿using FBS.Identidad.DAL.Modelado;
+﻿using Corresponsales.Query.Model;
+using FBS.Identidad.DAL.Modelado;
 using FBS.Identidad.Dominio.Servicios.Canales.Queries;
-using FBS.Infraestructura.Interfaces;
 using FBS.Infraestructura.Excepciones;
+using FBS.Infraestructura.Interfaces;
+using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 using FBSConsolaCBWebApi.Infraestructure.Interfaces.Corresponsales;
+using FBSConsolaCBWebApi.Infraestructure.Repositories.Corresponsales;
 using FBSMovilCBWebApi.Dominio.Servicios.Clientes.Queries;
 using FBSMovilCBWebApi.Dominio.Servicios.Logs.Commands;
 using FBSMovilCBWebApi.Dominio.Servicios.Notificaciones;
@@ -17,7 +20,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FBSConsolaCBWebApi.Infraestructure.Interfaces.Canales;
 
 namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
 {
@@ -30,6 +32,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJsonConfiguracion _jsonConfiguracion;
         private readonly IApiKeyGenerator _apiKeyGenerator;
+        private readonly IRepositorioCuenta _repositorioCuenta;
+        private readonly Corresponsales.Query.Api.ICaptacionesVistaApi _cuentaApi;
 
         public ProcesarRetiroPostProcessor(
             IMediator mediador, 
@@ -38,7 +42,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             IJsonConfiguracion jsonConfiguracion,
             IApiKeyGenerator apiKeyGenerator, 
             IRepositorioDispositivoAgente repositorioDispositivoAgente, 
-            IRepositorioDispositivo repositorioDispositivo)
+            IRepositorioDispositivo repositorioDispositivo,
+            IRepositorioCuenta repositorioCuenta,
+            Corresponsales.Query.Api.ICaptacionesVistaApi cuentaApi)
         {
             _mediador = mediador;
             _repositorioAgente = repositorioAgente;
@@ -47,6 +53,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             _apiKeyGenerator = apiKeyGenerator;
             _repositorioDispositivoAgente = repositorioDispositivoAgente;
             _repositorioDispositivo = repositorioDispositivo;
+            _repositorioCuenta = repositorioCuenta;
+            _cuentaApi = cuentaApi;
         }
         public async Task Process(ProcesarRetiroME request, AfectacionAUnCorresponsalRepositorioMS response, CancellationToken cancellationToken)
         {
@@ -62,7 +70,11 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             var fechaActual = response.FechaTransaccion.ToString("yyyy/MM/dd");
             var horaActual = response.FechaTransaccion.ToString("H:mm:ss");
 
-            PrepararCorreoElectronico(response, request, agente, jsonNegocio, valores, fechaActualEmail);
+            var cuenta = await _repositorioCuenta.GetForAgente(agente.Id.ToString());
+            DevuelveCuentaRequest cuentaAsociada = new DevuelveCuentaRequest() { SecuencialCuenta = int.Parse(cuenta.SecuencialCuenta) };
+            var respuestaCuentaAsociada = await _cuentaApi.DevuelveCuentaAsync(cuentaAsociada);
+
+            PrepararCorreoElectronico(response, request, agente, jsonNegocio, valores, fechaActualEmail, respuestaCuentaAsociada.Codigo);
 
             var valoresSMS = new Dictionary<string, string>();
 
@@ -190,7 +202,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
             }
         }
 
-        private static void PrepararCorreoElectronico(AfectacionAUnCorresponsalRepositorioMS response, ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActualEmail)
+        private static void PrepararCorreoElectronico(AfectacionAUnCorresponsalRepositorioMS response, ProcesarRetiroME request, FBSConsolaCBWebApi.DAL.Corresponsales.Agente agente, JsonNegocioMS jsonNegocio, Dictionary<string, string> valores, string fechaActualEmail, string cuentaCorresponsal)
         {
             if (jsonNegocio.Retiro.NotificarCorreoElectronico)
             {
@@ -204,14 +216,18 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                     }
                 }
 
-                var cuenta = response.NumeroCuenta.ToString();
-                cuenta = cuenta.Substring(0, 4) + "XXXXXXXX";
+                var cuentaOrigen = response.NumeroCuenta.ToString();
+                cuentaOrigen = cuentaOrigen.Substring(0, 4) + "XXXXXXXX";
+
+                var cuentaDestino = cuentaCorresponsal.Substring(0, 4) + "XXXXXXXX";
 
                 valores.Add("[:NOMBRECLIENTE:]", request.NombreCliente);
                 valores.Add("[:NOMBRECORRESPONSAL:]", agente.Usuario.NombreMostrar);
                 valores.Add("[:FECHAACTUAL:]", fechaActualEmail);
-                valores.Add("[:CUENTA:]", cuenta);
+                valores.Add("[:CUENTAORIGEN:]", cuentaOrigen);
+                valores.Add("[:CUENTADESTINO:]", cuentaDestino);
                 valores.Add("[:VALOR:]", response.Valor.ToString());
+                valores.Add("[:NTRANSACCION:]", response.NumeroTransaccion);
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Corresponsales.Command.Model;
 using Corresponsales.Query.Model;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands;
+using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries.InformacionCuotas;
 using FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Queries.ListarPrestamos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,13 @@ namespace FBSMovilCBWebApi.WebApi.Controllers
         [HttpPost("listarPrestamos", Name = "Prestamos_Listar")]
         [Produces(typeof(DevuelveInformacionDePrestamosResponse))]
         public async Task<ActionResult<DevuelveInformacionDePrestamosResponse>> ListarPrestamos([FromBody] ListarPrestamosME modelo)
+        {
+            return await _mediador.Send(modelo);
+        }
+
+        [HttpPost("informacionCuotas", Name = "Prestamos_InformacionCuotas")]
+        [Produces(typeof(NumeroCuotasValorAdelantoListaResponse))]
+        public async Task<ActionResult<NumeroCuotasValorAdelantoListaResponse>> InformacionCuotas([FromBody] InformacionCuotasME modelo)
         {
             return await _mediador.Send(modelo);
         }

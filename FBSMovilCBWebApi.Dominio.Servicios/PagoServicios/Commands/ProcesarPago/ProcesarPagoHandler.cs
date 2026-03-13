@@ -182,7 +182,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                     NumeroCuotasPensionesAlimenticiaPersona = (int)request.NumeroCuotasPensionesAlimenticiaPersona,
                     Referencia = request.Referencia,
                     Rubros = (List<RubroRequest>)request.Rubros,
-                    SecuencialCuentaCorresponsal = (int)secuencialCuenta,
+                    SecuencialCuentaDebito = (int)secuencialCuenta,
                     SecuencialResultadoTransaccion = (int)request.SecuencialResultadoTransaccion,
                     Valor = transaccion.Valor,
                     ValorTonelaje = request.ValorTonelaje

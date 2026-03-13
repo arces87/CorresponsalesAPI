@@ -150,7 +150,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
                     var porIdentificacionSocioME = new DevuelveDatosPersonaIdentificacionRequest()
                     {
                         Identificacion = request.Identificacion,
-                        SecuencialTipoIdentificacion = request.SecuencialTipoIdentificacion
+                        SecuencialTipoIdentificacion = request.SecuencialTipoIdentificacion,
+                        ParaCrearSocio = false
                     };
 
                     await _mediador.Send(new CrearLogME()

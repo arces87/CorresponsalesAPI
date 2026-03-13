@@ -46,6 +46,24 @@ namespace Corresponsales.Query.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of DevuelveInformacionDePrestamosResponse</returns>
         ApiResponse<DevuelveInformacionDePrestamosResponse> DevuelveInformacionDePrestamosWithHttpInfo(DevuelveInformacionDePrestamosRequest? devuelveInformacionDePrestamosRequest = default(DevuelveInformacionDePrestamosRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>NumeroCuotasValorAdelantoListaResponse</returns>
+        NumeroCuotasValorAdelantoListaResponse DevuelveInformacionCuotasValorACobrar(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of NumeroCuotasValorAdelantoListaResponse</returns>
+        ApiResponse<NumeroCuotasValorAdelantoListaResponse> DevuelveInformacionCuotasValorACobrarWithHttpInfo(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
@@ -80,6 +98,26 @@ namespace Corresponsales.Query.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (DevuelveInformacionDePrestamosResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<DevuelveInformacionDePrestamosResponse>> DevuelveInformacionDePrestamosWithHttpInfoAsync(DevuelveInformacionDePrestamosRequest? devuelveInformacionDePrestamosRequest = default(DevuelveInformacionDePrestamosRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of NumeroCuotasValorAdelantoListaResponse</returns>
+        System.Threading.Tasks.Task<NumeroCuotasValorAdelantoListaResponse> DevuelveInformacionCuotasValorACobrarAsync(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (NumeroCuotasValorAdelantoListaResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<NumeroCuotasValorAdelantoListaResponse>> DevuelveInformacionCuotasValorACobrarWithHttpInfoAsync(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -278,6 +316,76 @@ namespace Corresponsales.Query.Api
         ///  
         /// </summary>
         /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>NumeroCuotasValorAdelantoListaResponse</returns>
+        public NumeroCuotasValorAdelantoListaResponse DevuelveInformacionCuotasValorACobrar(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Query.Client.ApiResponse<NumeroCuotasValorAdelantoListaResponse> localVarResponse = DevuelveInformacionCuotasValorACobrarWithHttpInfo(devuelveInformacionCuotasValorACobrarRequest, operationIndex);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of NumeroCuotasValorAdelantoListaResponse</returns>
+        public Corresponsales.Query.Client.ApiResponse<NumeroCuotasValorAdelantoListaResponse> DevuelveInformacionCuotasValorACobrarWithHttpInfo(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Query.Client.RequestOptions localVarRequestOptions = new Corresponsales.Query.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Query.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Query.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = devuelveInformacionCuotasValorACobrarRequest;
+            localVarRequestOptions.Operation = "CarteraApi.DevuelveInformacionCuotasValorACobrar";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            var localVarResponse = this.Client.Post<NumeroCuotasValorAdelantoListaResponse>("/Cartera/DevuelveInformacionCuotasValorACobrar", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("DevuelveInformacionCuotasValorACobrar", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="devuelveInformacionDePrestamosRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -343,6 +451,79 @@ namespace Corresponsales.Query.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("DevuelveInformacionDePrestamos", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of NumeroCuotasValorAdelantoListaResponse</returns>
+        public async System.Threading.Tasks.Task<NumeroCuotasValorAdelantoListaResponse> DevuelveInformacionCuotasValorACobrarAsync(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Query.Client.ApiResponse<NumeroCuotasValorAdelantoListaResponse> localVarResponse = await DevuelveInformacionCuotasValorACobrarWithHttpInfoAsync(devuelveInformacionCuotasValorACobrarRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Query.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="devuelveInformacionCuotasValorACobrarRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (NumeroCuotasValorAdelantoListaResponse)</returns>
+        public async System.Threading.Tasks.Task<Corresponsales.Query.Client.ApiResponse<NumeroCuotasValorAdelantoListaResponse>> DevuelveInformacionCuotasValorACobrarWithHttpInfoAsync(DevuelveInformacionCuotasValorACobrarRequest? devuelveInformacionCuotasValorACobrarRequest = default(DevuelveInformacionCuotasValorACobrarRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Query.Client.RequestOptions localVarRequestOptions = new Corresponsales.Query.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Query.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Query.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = devuelveInformacionCuotasValorACobrarRequest;
+            localVarRequestOptions.Operation = "CarteraApi.DevuelveInformacionCuotasValorACobrar";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            var localVarResponse = await this.AsynchronousClient.PostAsync<NumeroCuotasValorAdelantoListaResponse>("/Cartera/DevuelveInformacionCuotasValorACobrar", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("DevuelveInformacionCuotasValorACobrar", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

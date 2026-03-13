@@ -149,7 +149,9 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogEnviado").Valor,
             });
 
-            var respuesta = await _prestamo.EfectivizacionPrestamoAsync(modelo);
+            var respuesta = string.Equals(request.Concepto, "adelantacuota", StringComparison.OrdinalIgnoreCase)
+                ? await _prestamo.EfectivizacionPrestamoAdelantoCuotasAsync(modelo)
+                : await _prestamo.EfectivizacionPrestamoAsync(modelo);
 
             await _mediador.Send(new CrearLogME()
             {

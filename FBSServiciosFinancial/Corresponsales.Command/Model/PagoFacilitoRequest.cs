@@ -34,7 +34,7 @@ namespace Corresponsales.Command.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="PagoFacilitoRequest" /> class.
         /// </summary>
-        /// <param name="secuencialCuentaCorresponsal">secuencialCuentaCorresponsal.</param>
+        /// <param name="secuencialCuentaDebito">secuencialCuentaCorresponsal.</param>
         /// <param name="jsonComision">jsonComision.</param>
         /// <param name="codigoUsuarioBanca">codigoUsuarioBanca.</param>
         /// <param name="esUnSoloCobroComision">esUnSoloCobroComision.</param>
@@ -49,9 +49,9 @@ namespace Corresponsales.Command.Model
         /// <param name="comisionRubro">comisionRubro.</param>
         /// <param name="rubros">rubros.</param>
         /// <param name="numeroDocumento">numeroDocumento.</param>
-        public PagoFacilitoRequest(int secuencialCuentaCorresponsal = default(int), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool esUnSoloCobroComision = default(bool), Guid idProducto = default(Guid), string referencia = default(string), double valor = default(double), string valorTonelaje = default(string), string identificacion = default(string), int numeroCuotasPensionesAlimenticiaPersona = default(int), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int secuencialResultadoTransaccion = default(int), bool comisionRubro = default(bool), List<RubroRequest> rubros = default(List<RubroRequest>), string numeroDocumento = default(string))
+        public PagoFacilitoRequest(int secuencialCuentaDebito = default(int), string jsonComision = default(string), string codigoUsuarioBanca = default(string), bool esUnSoloCobroComision = default(bool), Guid idProducto = default(Guid), string referencia = default(string), double valor = default(double), string valorTonelaje = default(string), string identificacion = default(string), int numeroCuotasPensionesAlimenticiaPersona = default(int), string codigoPagarPensionesAlimenticiaEmpresa = default(string), int secuencialResultadoTransaccion = default(int), bool comisionRubro = default(bool), List<RubroRequest> rubros = default(List<RubroRequest>), string numeroDocumento = default(string))
         {
-            this.SecuencialCuentaCorresponsal = secuencialCuentaCorresponsal;
+            this.SecuencialCuentaDebito = secuencialCuentaDebito;
             this.JsonComision = jsonComision;
             this.CodigoUsuarioBanca = codigoUsuarioBanca;
             this.EsUnSoloCobroComision = esUnSoloCobroComision;
@@ -71,8 +71,8 @@ namespace Corresponsales.Command.Model
         /// <summary>
         /// Gets or Sets SecuencialCuentaCorresponsal
         /// </summary>
-        [DataMember(Name = "secuencialCuentaCorresponsal", EmitDefaultValue = false)]
-        public int SecuencialCuentaCorresponsal { get; set; }
+        [DataMember(Name = "secuencialCuentaDebito", EmitDefaultValue = false)]
+        public int SecuencialCuentaDebito { get; set; }
 
         /// <summary>
         /// Gets or Sets JsonComision
@@ -166,7 +166,7 @@ namespace Corresponsales.Command.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class PagoFacilitoRequest {\n");
-            sb.Append("  SecuencialCuentaCorresponsal: ").Append(SecuencialCuentaCorresponsal).Append("\n");
+            sb.Append("  SecuencialCuentaCorresponsal: ").Append(SecuencialCuentaDebito).Append("\n");
             sb.Append("  JsonComision: ").Append(JsonComision).Append("\n");
             sb.Append("  CodigoUsuarioBanca: ").Append(CodigoUsuarioBanca).Append("\n");
             sb.Append("  EsUnSoloCobroComision: ").Append(EsUnSoloCobroComision).Append("\n");

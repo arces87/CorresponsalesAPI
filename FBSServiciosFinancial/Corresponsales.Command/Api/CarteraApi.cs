@@ -46,6 +46,24 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of EfectivizacionPrestamoResponse</returns>
         ApiResponse<EfectivizacionPrestamoResponse> EfectivizacionPrestamoWithHttpInfo(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>EfectivizacionPrestamoResponse</returns>
+        EfectivizacionPrestamoResponse EfectivizacionPrestamoAdelantoCuotas(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of EfectivizacionPrestamoResponse</returns>
+        ApiResponse<EfectivizacionPrestamoResponse> EfectivizacionPrestamoAdelantoCuotasWithHttpInfo(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
@@ -80,6 +98,26 @@ namespace Corresponsales.Command.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (EfectivizacionPrestamoResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<EfectivizacionPrestamoResponse>> EfectivizacionPrestamoWithHttpInfoAsync(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of EfectivizacionPrestamoResponse</returns>
+        System.Threading.Tasks.Task<EfectivizacionPrestamoResponse> EfectivizacionPrestamoAdelantoCuotasAsync(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (EfectivizacionPrestamoResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<EfectivizacionPrestamoResponse>> EfectivizacionPrestamoAdelantoCuotasWithHttpInfoAsync(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -280,6 +318,76 @@ namespace Corresponsales.Command.Api
         /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>EfectivizacionPrestamoResponse</returns>
+        public EfectivizacionPrestamoResponse EfectivizacionPrestamoAdelantoCuotas(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Command.Client.ApiResponse<EfectivizacionPrestamoResponse> localVarResponse = EfectivizacionPrestamoAdelantoCuotasWithHttpInfo(efectivizacionPrestamoRequest);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of EfectivizacionPrestamoResponse</returns>
+        public Corresponsales.Command.Client.ApiResponse<EfectivizacionPrestamoResponse> EfectivizacionPrestamoAdelantoCuotasWithHttpInfo(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0)
+        {
+            Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Command.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Command.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = efectivizacionPrestamoRequest;
+            localVarRequestOptions.Operation = "CarteraApi.EfectivizacionPrestamoAdelantoCuotas";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            var localVarResponse = this.Client.Post<EfectivizacionPrestamoResponse>("/Cartera/EfectivizacionPrestamoAdelantoCuotas", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("EfectivizacionPrestamoAdelantoCuotas", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of EfectivizacionPrestamoResponse</returns>
         public async System.Threading.Tasks.Task<EfectivizacionPrestamoResponse> EfectivizacionPrestamoAsync(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -343,6 +451,79 @@ namespace Corresponsales.Command.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("EfectivizacionPrestamo", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of EfectivizacionPrestamoResponse</returns>
+        public async System.Threading.Tasks.Task<EfectivizacionPrestamoResponse> EfectivizacionPrestamoAdelantoCuotasAsync(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Command.Client.ApiResponse<EfectivizacionPrestamoResponse> localVarResponse = await EfectivizacionPrestamoAdelantoCuotasWithHttpInfoAsync(efectivizacionPrestamoRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Corresponsales.Command.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="efectivizacionPrestamoRequest"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (EfectivizacionPrestamoResponse)</returns>
+        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<EfectivizacionPrestamoResponse>> EfectivizacionPrestamoAdelantoCuotasWithHttpInfoAsync(EfectivizacionPrestamoRequest? efectivizacionPrestamoRequest = default(EfectivizacionPrestamoRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json",
+                "text/json",
+                "application/*+json"
+            };
+
+            string[] _accepts = new string[] {
+                "text/plain",
+                "application/json",
+                "text/json"
+            };
+
+            var localVarContentType = Corresponsales.Command.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Corresponsales.Command.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = efectivizacionPrestamoRequest;
+            localVarRequestOptions.Operation = "CarteraApi.EfectivizacionPrestamoAdelantoCuotas";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
+            }
+
+            var localVarResponse = await this.AsynchronousClient.PostAsync<EfectivizacionPrestamoResponse>("/Cartera/EfectivizacionPrestamoAdelantoCuotas", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("EfectivizacionPrestamoAdelantoCuotas", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

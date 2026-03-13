@@ -122,8 +122,8 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             var transaccion = new Transaccion()
             {
                 CanalId = _jsonConfiguracion.IdCanal,
-                Estado = new FBS.DAL.Nomenclador.Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },
-                Comisiones = JsonConvert.SerializeObject(new { }), // Ajustar si hay comisiones
+                Estado = new FBS.DAL.Nomenclador.Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaRecibida").Valor) },                
+                Comisiones = JsonConvert.SerializeObject(JsonConvert.DeserializeObject<JsonNegocioMS>(agente.JsonAgente).CobroServicios.Comisiones),                                                         
                 Agente = agente,
                 Descripcion = "Pago de Servicio",
                 FechaDispositivo = DateTime.Now,
@@ -160,8 +160,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 IdUnidad = request.Request.IdUnidad,
                 ProveedorServicio = request.Request.ProveedorServicio,
                 TitularCuenta = request.Request.TitularCuenta,
-                IdentificacionTitular = request.Request.IdentificacionTitular,   
-                EmailTitular = request.Request.EmailTitular,
+                IdentificacionTitular = request.Request.IdentificacionTitular,                
                 SecuencialCuentaDebito = cuenta != null ? int.Parse(cuenta.SecuencialCuenta) : 0,
                 JsonComision = JsonConvert.SerializeObject(arregloComisiones),
                 CodigoUsuario = agente.Usuario.UserName,                
@@ -183,7 +182,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
 
             transaccion.Estado = new FBS.DAL.Nomenclador.Catalogo() { Id = new Guid(_jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdTransferenciaProcesada").Valor) };
             transaccion.SaldoCuenta = response.SaldoCuentaCorresponsal;
-            await _repositorioTransaccion.Add(transaccion);
+            await _repositorioTransaccion.Update(transaccion);            
 
             await _mediador.Send(new CrearLogME()
             {
@@ -251,12 +250,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
             if (montoTransaccionesTipoDiarias + Valor > jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones)
             {
                 throw new ExcepcionApp($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones - (montoTransaccionesTipoDiarias + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
-            }
-
-            if (cuentaAsociada && saldoActual + Valor > jsonNegocio.Limites.SaldoMaximoAgente.Value)
-            {
-                throw new ExcepcionApp($"No puede realizar la operación porque excedería el saldo máximo de la caja en: {(jsonNegocio.Limites.SaldoMaximoAgente.Value - (saldoActual + Valor)) * -1} . Su saldo máximo en caja permitido es {jsonNegocio.Limites.SaldoMaximoAgente.Value} PEN");
-            }
+            }            
 
             if (cuentaAsociada && saldoCuenta - Valor <= 0)
             {
