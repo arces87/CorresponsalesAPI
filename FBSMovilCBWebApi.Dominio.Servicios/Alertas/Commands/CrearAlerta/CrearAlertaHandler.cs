@@ -105,21 +105,21 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Alertas.Commands
                     }
                 });
 
-                var plantillaSMS = File.ReadAllText("Resources/SmsTemplate/template_alerta.txt");
-                plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", usuario)
-                        .Replace("[:TIPOALERTA:]", tipoalerta.Nombre)
-                        .Replace("[:FECHA:]", fechaActual);
+                //var plantillaSMS = File.ReadAllText("Resources/SmsTemplate/template_alerta.txt");
+                //plantillaSMS = plantillaSMS.Replace("[:NOMBREUSUARIO:]", usuario)
+                //        .Replace("[:TIPOALERTA:]", tipoalerta.Nombre)
+                //        .Replace("[:FECHA:]", fechaActual);
 
-                var mensajeSMS = new EnvioSmsRequest()
-                {
-                    CodigoUsuarioCorresponsal = usuario,
-                    MensajeTexto = plantillaSMS,
-                    NumeroIdentificacion = "",
-                    SecuencialTipoIdentificacion = 0,
-                    NumeroCelular = _user.PhoneNumber
-                };
+                //var mensajeSMS = new EnvioSmsRequest()
+                //{
+                //    CodigoUsuarioCorresponsal = usuario,
+                //    MensajeTexto = plantillaSMS,
+                //    NumeroIdentificacion = "",
+                //    SecuencialTipoIdentificacion = 0,
+                //    NumeroCelular = _user.PhoneNumber
+                //};
 
-                var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
+                //var respuesta = await _envioSMSApi.EnvioSmsAsync(mensajeSMS);
             }
             catch
             {

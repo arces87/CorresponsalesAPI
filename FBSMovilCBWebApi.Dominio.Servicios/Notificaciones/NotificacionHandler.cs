@@ -88,7 +88,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
                         MensajeTexto = notification.PlantillaSMS,
                         NumeroIdentificacion = notification.Identificacion,
                         SecuencialTipoIdentificacion = notification.TipoIdentificacion,
-                        NumeroCelular = ""
+                        NumeroCelular = notification.NumeroMovilCliente,
                     };
 
                     await _mediador.Send(new CrearLogME()

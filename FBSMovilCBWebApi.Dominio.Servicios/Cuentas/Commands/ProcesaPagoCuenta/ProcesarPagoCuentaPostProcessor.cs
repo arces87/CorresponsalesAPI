@@ -124,7 +124,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Cuentas.Commands
                     NombreDestinatario = request.NombreCliente,
                     AsuntoCorreoElectronico = "Operación Cuenta por Pagar realizada con éxito",
                     NombreUsuarioCorresponsal= agente.Usuario.UserName,
-                    NumeroCliente = 1,
+                    NumeroMovilCliente = datosCliente.Telefono,
                     SecuencialEmpresa = 1,
                     ValoresEmail = valores,
                     ValoresSms = valoresSMS,

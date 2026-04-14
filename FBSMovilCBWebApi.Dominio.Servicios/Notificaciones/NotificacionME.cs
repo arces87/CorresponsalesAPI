@@ -14,7 +14,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Notificaciones
         public int TipoIdentificacion { get; set; }
         public string CorreoElectronicoDestinatario { get; set; }
         public string AsuntoCorreoElectronico { get; set; }
-        public int? NumeroCliente { get; set; }
+        public string NumeroMovilCliente { get; set; }
         public int? SecuencialEmpresa { get; set; }
         public Dictionary<string, string> ValoresEmail { get; set; }
         public Dictionary<string, string> ValoresSms { get; set; }

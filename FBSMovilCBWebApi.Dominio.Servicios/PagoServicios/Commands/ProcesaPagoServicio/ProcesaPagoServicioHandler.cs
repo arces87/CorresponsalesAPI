@@ -252,10 +252,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.PagoServisios.Commands
                 throw new ExcepcionApp($"No puede realizar la operación porque excedería el monto máximo diario en {(jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones - (montoTransaccionesTipoDiarias + Valor)) * -1} para este tipo de transacción. Su monto máximo permitido para este tipo de transacción es de {jsonNegocio.CobroServicios.Limites.MontoMaximoDiarioDeTransacciones} PEN.");
             }            
 
-            if (cuentaAsociada && saldoCuenta - Valor <= 0)
-            {
-                throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta");
-            }
+            //if (cuentaAsociada && saldoCuenta - Valor <= 0)
+            //{
+            //    throw new ExcepcionApp("No puede realizar la operación porque no posee saldo disponible en la cuenta");
+            //}
         }
 
         private async Task<string> generarNumeroDocumentoAsync()

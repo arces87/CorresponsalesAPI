@@ -105,7 +105,7 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Transacciones.Commands
                 CorreoElectronicoDestinatario = informacionPersona.CorreoElectronico,
                 NombreDestinatario = informacionPersona.Nombres,
                 AsuntoCorreoElectronico = "Operación Abono de Préstamo realizada con éxito",
-                NumeroCliente = 1,
+                NumeroMovilCliente = informacionPersona.Telefono,
                 SecuencialEmpresa = 1,
                 ValoresEmail = valores,
                 ValoresSms = valoresSMS                

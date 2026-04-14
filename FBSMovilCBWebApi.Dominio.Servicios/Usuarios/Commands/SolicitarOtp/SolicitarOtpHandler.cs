@@ -172,7 +172,10 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
 
                     if (cliente != null)
                     {
-                        cuentaDestino = cliente.CorreoElectronico;                        
+                        cuentaDestino = cliente.CorreoElectronico;
+                        numeroMovil = cliente.Telefono;
+
+
                     }
                 }
                 catch (Exception e)
@@ -216,36 +219,36 @@ namespace FBSMovilCBWebApi.Dominio.Servicios.Usuarios.Commands
             {
                 respuestaOTP.NotificationSMSError = true;
                 respuestaOTP.NotificationSMSErrorMensaje = "No se ha podido enviar el SMS con el OTP solicitado.";
-            } 
-            //else
-            //{
-            //    try
-            //    {
-            //        var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
-            //        var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
-            //        var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, numeroMovil);
+            }
+            else
+            {
+                try
+                {
+                    var dispositivoagente = await _repositorioDispositivoAgente.GetForAgente(agente.Id.ToString());
+                    var dispositivo = await _repositorioDispositivo.Get(dispositivoagente.DispositivoId.ToString());
+                    var respuesta = await EnviarSMS(agente.Usuario.UserName, request.Identificacion, request.SecuencialTipoIdentificacion, tiempoVidaMinutos, otp, numeroMovil);
 
-            //        await _mediador.Send(new CrearLogME()
-            //        {
-            //            //JsonLog = JsonConvert.SerializeObject(respuesta),
-            //            IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
-            //            IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-            //        });
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        //JsonLog = JsonConvert.SerializeObject(respuesta),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
 
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        await _mediador.Send(new CrearLogME()
-            //        {
-            //            JsonLog = JsonConvert.SerializeObject(e.Message),
-            //            IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
-            //            IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
-            //        });
+                }
+                catch (Exception e)
+                {
+                    await _mediador.Send(new CrearLogME()
+                    {
+                        JsonLog = JsonConvert.SerializeObject(e.Message),
+                        IdTipoAccion = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdSolicitarOtp").Valor,
+                        IdEstado = _jsonConfiguracion.Parametrizaciones.FirstOrDefault(p => p.Llave == "IdLogTerminado").Valor,
+                    });
 
-            //        respuestaOTP.NotificationSMSError = true;
-            //        respuestaOTP.NotificationSMSErrorMensaje = "No se ha podido enviar el SMS con el OTP solicitado.";
-            //    }
-            //}
+                    respuestaOTP.NotificationSMSError = true;
+                    respuestaOTP.NotificationSMSErrorMensaje = "No se ha podido enviar el SMS con el OTP solicitado.";
+                }
+            }
 
             await _repositorioUsuario.SalvarOtp(request.Usuario, request.Identificacion, JsonConvert.SerializeObject(otpReferencia));
 

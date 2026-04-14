@@ -41,9 +41,21 @@ namespace Corresponsales.Query.Model
         /// <param name="saldo">saldo.</param>
         /// <param name="adjudicado">adjudicado.</param>
         /// <param name="estado">estado.</param>
-        /// <param name="valorParaEstarAlDia">saldo.</param>
-        /// <param name="valorCancelarHastaCuotaCurso">saldo.</param>
-        public InformacionPrestamoResponse(int secuencial = default(int), string codigo = default(string), string tipo = default(string), double deudaInicial = default(double), double saldo = default(double), string adjudicado = default(string), string estado = default(string), double valorParaEstarAlDia = default(double), double valorCancelarHastaCuotaCurso = default(double))
+        /// <param name="valorParaEstarAlDia">valorParaEstarAlDia.</param>
+        /// <param name="valorCancelarHastaCuotaCurso">valorCancelarHastaCuotaCurso.</param>
+        /// <param name="valorParaCancelar"></param>
+        /// <param name="numeroCuotaPendiente"></param>        
+        public InformacionPrestamoResponse(int secuencial = default(int),
+                                           string codigo = default(string),
+                                           string tipo = default(string),
+                                           double deudaInicial = default(double),
+                                           double saldo = default(double),
+                                           string adjudicado = default(string),
+                                           string estado = default(string),
+                                           double valorParaEstarAlDia = default(double),
+                                           double valorCancelarHastaCuotaCurso = default(double),
+                                           double valorParaCancelar = default(double),
+                                           int numeroCuotaPendiente = default(int))
         {
             this.Secuencial = secuencial;
             this.Codigo = codigo;
@@ -54,6 +66,8 @@ namespace Corresponsales.Query.Model
             this.Estado = estado;
             this.ValorParaEstarAlDia = valorParaEstarAlDia;
             this.ValorCancelarHastaCuotaCurso = valorCancelarHastaCuotaCurso;
+            this.ValorParaCancelar = valorParaCancelar;
+            this.NumeroCuotaPendiente = numeroCuotaPendiente;
         }
 
         /// <summary>
@@ -111,6 +125,18 @@ namespace Corresponsales.Query.Model
         public double ValorCancelarHastaCuotaCurso { get; set; }
 
         /// <summary>
+        /// Gets or Sets ValorParaCancelar
+        /// </summary>
+        [DataMember(Name = "valorParaCancelar", EmitDefaultValue = false)]
+        public double ValorParaCancelar { get; set; }
+
+        /// <summary>
+        /// Gets or Sets NumeroCuotaPendiente
+        /// </summary>
+        [DataMember(Name = "numeroCuotaPendiente", EmitDefaultValue = false)]
+        public int NumeroCuotaPendiente { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -125,8 +151,10 @@ namespace Corresponsales.Query.Model
             sb.Append("  Saldo: ").Append(Saldo).Append("\n");
             sb.Append("  Adjudicado: ").Append(Adjudicado).Append("\n");
             sb.Append("  Estado: ").Append(Estado).Append("\n");
-            sb.Append("  valorParaEstarAlDia: ").Append(Saldo).Append("\n");
-            sb.Append("  valorCancelarHastaCuotaCurso: ").Append(Saldo).Append("\n");
+            sb.Append("  valorParaEstarAlDia: ").Append(ValorParaEstarAlDia).Append("\n");
+            sb.Append("  valorCancelarHastaCuotaCurso: ").Append(ValorCancelarHastaCuotaCurso).Append("\n");
+            sb.Append("  valorParaCancelar: ").Append(ValorParaCancelar).Append("\n");
+            sb.Append("  numeroCuotaPendiente: ").Append(NumeroCuotaPendiente).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
