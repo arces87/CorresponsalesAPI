@@ -9,8 +9,6 @@ namespace FBSMovilCBWebApi.WebApi.Versionado
     {
         public static IApplicationBuilder UseSwaggerApiVersion(this IApplicationBuilder app, IWebHostEnvironment env, List<string> apiVersion)
         {
-
-            app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

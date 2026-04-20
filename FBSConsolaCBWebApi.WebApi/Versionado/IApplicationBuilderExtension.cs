@@ -9,8 +9,6 @@ namespace FBSConsolaCBWebApi.WebApi.Versionado
     {
         public static IApplicationBuilder UseSwaggerApiVersion(this IApplicationBuilder app, IWebHostEnvironment env, List<string> apiVersion)
         {
-
-            app.UseDeveloperExceptionPage();
             app.UseSwagger(o => o.SerializeAsV2 = true);
             app.UseSwaggerUI(c =>
             {

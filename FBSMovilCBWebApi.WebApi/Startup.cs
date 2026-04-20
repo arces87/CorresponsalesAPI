@@ -32,9 +32,12 @@ namespace FBSMovilCBWebApi.WebApi
     public class Startup
     {
         List<string> apiVersion = new List<string>() { "1.0", "2.0" };
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -53,38 +56,41 @@ namespace FBSMovilCBWebApi.WebApi
             services.AddDbContext<ContextoFBSConsolaCB>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("FBSMovilCBWebApi.WebApi")));
 
             #region Swagger Configuration
-            services.AddSwaggerGen(swagger =>
+            if (_env.IsDevelopment())
             {
-                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "AutorizacionFBS.Api", Version = "v1" });
-                swagger.CustomSchemaIds(type => type.FullName);
-
-                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                services.AddSwaggerGen(swagger =>
                 {
-                    Description = "Cabecera de Autorización JWT usando Bearer Ejemplo: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
-                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-                     {
-                            {
-                                new OpenApiSecurityScheme
-                                {
-                                    Reference = new OpenApiReference
-                                    {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "Bearer"
-                                    },
-                                    Scheme = "oauth2",
-                                    Name = "Bearer",
-                                    In = ParameterLocation.Header,
+                    swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "AutorizacionFBS.Api", Version = "v1" });
+                    swagger.CustomSchemaIds(type => type.FullName);
 
-                                },
-                                new List<string>()
-                            }
-                     });
-            });
+                    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "Cabecera de Autorización JWT usando Bearer Ejemplo: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer"
+                    });
+                    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                         {
+                                {
+                                    new OpenApiSecurityScheme
+                                    {
+                                        Reference = new OpenApiReference
+                                        {
+                                            Type = ReferenceType.SecurityScheme,
+                                            Id = "Bearer"
+                                        },
+                                        Scheme = "oauth2",
+                                        Name = "Bearer",
+                                        In = ParameterLocation.Header,
+
+                                    },
+                                    new List<string>()
+                                }
+                         });
+                });
+            }
 
             #endregion
 
@@ -127,7 +133,11 @@ namespace FBSMovilCBWebApi.WebApi
 
             #region Include Versioning
 
-            services.AddSwagger(apiVersion);
+            if (_env.IsDevelopment())
+            {
+                services.AddSwagger(apiVersion);
+            }
+
             services.AddApiVersioning();
 
             #endregion
@@ -145,7 +155,10 @@ namespace FBSMovilCBWebApi.WebApi
             app.UseResponseCompression();
 
             #region Versioning Swagger
-            app.UseSwaggerApiVersion(env, apiVersion);
+            if (env.IsDevelopment())
+            {
+                app.UseSwaggerApiVersion(env, apiVersion);
+            }
             #endregion
 
             if (env.IsDevelopment())
