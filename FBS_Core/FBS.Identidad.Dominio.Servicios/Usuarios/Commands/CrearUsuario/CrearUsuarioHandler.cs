@@ -111,10 +111,16 @@ namespace FBS.Identidad.Dominio.Servicios.Usuarios.Commands
                             SecuencialCuenta = request.Cuenta
                         });
 
-                    if (respuesta == null || (respuesta is System.Text.Json.JsonElement jsonElement && jsonElement.ValueKind == System.Text.Json.JsonValueKind.False))
+                    if (respuesta != null) 
                     {
-                        throw new ExcepcionApp("No se ha podido crear el usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
+                        if (respuesta.ExisteUsuario == false && respuesta.UsuarioCreado == false)
+                        {
+                            throw new ExcepcionApp("No se ha podido crear el usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
+                        }
                     }
+                    else throw new ExcepcionApp("No se ha podido crear el usuario en core financiero, por favor inténtelo más tarde.", TipoError.Error);
+
+                    
                 }
                 catch (Exception e)
                 {

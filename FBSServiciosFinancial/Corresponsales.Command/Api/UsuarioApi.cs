@@ -53,7 +53,7 @@ namespace Corresponsales.Command.Api
         /// <param name="creaUsuarioRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        Object CreaUsuario(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0);
+        CreaUsuarioResponse CreaUsuario(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0);
 
         /// <summary>
         /// 
@@ -65,7 +65,7 @@ namespace Corresponsales.Command.Api
         /// <param name="creaUsuarioRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        ApiResponse<Object> CreaUsuarioWithHttpInfo(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0);
+        ApiResponse<CreaUsuarioResponse> CreaUsuarioWithHttpInfo(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0);
         /// <summary>
         /// 
         /// </summary>
@@ -131,7 +131,7 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
-        System.Threading.Tasks.Task<Object> CreaUsuarioAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<CreaUsuarioResponse> CreaUsuarioAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// 
@@ -144,7 +144,7 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> CreaUsuarioWithHttpInfoAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<CreaUsuarioResponse>> CreaUsuarioWithHttpInfoAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// 
         /// </summary>
@@ -449,9 +449,9 @@ namespace Corresponsales.Command.Api
         /// <param name="creaUsuarioRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        public Object CreaUsuario(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0)
+        public CreaUsuarioResponse CreaUsuario(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0)
         {
-            Corresponsales.Command.Client.ApiResponse<Object> localVarResponse = CreaUsuarioWithHttpInfo(creaUsuarioRequest);
+            Corresponsales.Command.Client.ApiResponse<CreaUsuarioResponse> localVarResponse = CreaUsuarioWithHttpInfo(creaUsuarioRequest);
             return localVarResponse.Data;
         }
 
@@ -462,7 +462,7 @@ namespace Corresponsales.Command.Api
         /// <param name="creaUsuarioRequest"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public Corresponsales.Command.Client.ApiResponse<Object> CreaUsuarioWithHttpInfo(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0)
+        public Corresponsales.Command.Client.ApiResponse<CreaUsuarioResponse> CreaUsuarioWithHttpInfo(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0)
         {
             Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
 
@@ -503,7 +503,7 @@ namespace Corresponsales.Command.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/Usuario/CreaUsuario", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<CreaUsuarioResponse>("/Usuario/CreaUsuario", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("CreaUsuario", localVarResponse);
@@ -598,9 +598,9 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
-        public async System.Threading.Tasks.Task<Object> CreaUsuarioAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<CreaUsuarioResponse> CreaUsuarioAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            Corresponsales.Command.Client.ApiResponse<Object> localVarResponse = await CreaUsuarioWithHttpInfoAsync(creaUsuarioRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            Corresponsales.Command.Client.ApiResponse<CreaUsuarioResponse> localVarResponse = await CreaUsuarioWithHttpInfoAsync(creaUsuarioRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -612,7 +612,7 @@ namespace Corresponsales.Command.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<Object>> CreaUsuarioWithHttpInfoAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<Corresponsales.Command.Client.ApiResponse<CreaUsuarioResponse>> CreaUsuarioWithHttpInfoAsync(CreaUsuarioRequest? creaUsuarioRequest = default(CreaUsuarioRequest?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             Corresponsales.Command.Client.RequestOptions localVarRequestOptions = new Corresponsales.Command.Client.RequestOptions();
@@ -654,7 +654,7 @@ namespace Corresponsales.Command.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/Usuario/CreaUsuario", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<CreaUsuarioResponse>("/Usuario/CreaUsuario", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
